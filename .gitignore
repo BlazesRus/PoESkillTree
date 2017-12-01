@@ -353,3 +353,5 @@ obj
 
 # mstest test results
 TestResults
+
+vswhere.exe
