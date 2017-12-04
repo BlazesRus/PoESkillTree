@@ -152,7 +152,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,60,0,22">Str+Dex Threshold Jewels</TextBlock>
+                <TextBlock  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">Str+Dex Threshold Jewels</TextBlock>
                 <views:InventoryItemView Grid.Row="0" Grid.Column="1"
 				Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
 				Width="41" Height="38" DataContext="{Binding Jewel06}" ToolTip="Scion Jewel Slot south of starting area"/>
@@ -228,11 +228,6 @@
                 <views:InventoryItemView Grid.Row="6" Grid.Column="4"
 				Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
 				Width="41" Height="38" DataContext="{Binding Jewel20}" ToolTip="Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability"/>
-
-
-                <views:BinView Grid.Column="6" Grid.ColumnSpan="3"
-							   Grid.Row="0"
-							   HorizontalAlignment="Right" />
             </Grid>
         </Border>
 </StackPanel>
