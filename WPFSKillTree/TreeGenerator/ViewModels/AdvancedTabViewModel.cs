@@ -229,7 +229,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {L10n.Message("Trap"), 13},
             {L10n.Message("Totem"), 14},
             {L10n.Message("Flasks"), 15 },
-            {L10n.Message("Everything Else"), 16}
+            {L10n.Message("Jewel Types"), 16},
+            {L10n.Message("Tracked PseudoTotals"), 17},
+            {L10n.Message("Everything Else"), 18}
         };
 
         /// <summary>
@@ -241,7 +243,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket"
+            "+# to Jewel Socket", "+# Str Based Jewel", "+# Int Based Jewel", "+# Dex Based Jewel"
         };
 
         /// <summary>
@@ -263,7 +265,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "+# to maximum Mana",
             "+# to maximum Life",
             "+# Accuracy Rating",
-            "+# to maximum Energy Shield"
+            "+# to maximum Energy Shield",
+            "...",
+            "Jewel Socket ID: #"
         };
 
         #endregion
@@ -640,7 +644,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             return from node in SkillTree.Skillnodes.Values
                    where node.ascendancyName == null
                    from attr in SkillTree.ExpandHybridAttributes(node.Attributes)
-                   where !AttributeBlackList.Contains(attr.Key) && attr.Key.Contains("#")
+                   where !AttributeBlackList.Contains(attr.Key) && attr.Key.Contains("#") && !attr.Key.Contains("JSlot")
                    group attr by attr.Key into attrGroup
                    where attrGroup.Count() > 1
                    select attrGroup.First().Key;

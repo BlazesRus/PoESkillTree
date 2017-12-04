@@ -33,6 +33,8 @@ namespace POESKillTree.Utils.Converter
         private static readonly string Flasks = L10n.Message("Flasks");
         private static readonly string CoreAttributes = L10n.Message("Core Attributes");
         private static readonly string MiscLabel = L10n.Message("Everything Else");
+        private static readonly string JewelTypes = L10n.Message("Jewel Types");
+        private static readonly string PseudoTotal = L10n.Message("Tracked PseudoTotals");
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
@@ -236,7 +238,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Leeched", General},
             new[] {"increased Physical Damage", General},
             new[] {"Elemental Damage", General},
-            new[] {"Jewel Socket", General},
+            new[] {"Jewel Socket", JewelTypes},
             new[] {"Cast Speed", Spell},
             new[] {"Cold Damage", General},
             new[] {"Fire Damage", General},
@@ -248,6 +250,10 @@ namespace POESKillTree.Utils.Converter
             new[] {"Strength", CoreAttributes},
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
+            new[] {"Str Based Jewel", JewelTypes},
+            new[] {"Dex Based Jewel", JewelTypes},
+            new[] {"Int Based Jewel", JewelTypes},
+            new[] {"Elemental Damage with Attack Skills", Weapon},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");

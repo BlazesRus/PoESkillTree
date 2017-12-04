@@ -293,7 +293,7 @@ namespace POESKillTree.SkillTreeFiles
                         Id = nd.id,
                         Name = nd.dn,
                         //this value should not be split on '\n' as it causes the attribute list to separate nodes
-                        attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" } : nd.sd,
+                        attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" , "...", "...", "..."} : nd.sd,//Add slot for threshold jewel type into stats of Node if jewel, 4th Stat for Jewel Slot Identifier
                         Orbit = nd.o,
                         OrbitIndex = nd.oidx,
                         Icon = nd.icon,
@@ -308,7 +308,8 @@ namespace POESKillTree.SkillTreeFiles
                         passivePointsGranted = nd.passivePointsGranted,
                         ascendancyName = nd.ascendancyName,
                         IsAscendancyStart = nd.isAscendancyStart,
-                        reminderText = nd.reminderText
+                        reminderText = nd.reminderText,
+                        
                     };
                     if (nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
                     {
@@ -321,6 +322,90 @@ namespace POESKillTree.SkillTreeFiles
                     else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
                     {
                         skillNode.Type = NodeType.JewelSocket;
+						switch(skillNode.Id)//Might need to manually update this later if skilltree changes too much
+						{
+							//Int Jewels
+							case 61419://Jewel Slot directly north of Witch starting area (Jewel)
+								skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Int_Witch";
+                              break;
+							case 21984://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
+								skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Int_Scion";
+                              break;
+							case 41263://NE from center jewel slot between Witch and shadow areas
+								skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Int_WitchShadow";
+                              break;
+							case 36634://Jewel slot north-west of Scion area; At road between Templar and Witch areas
+								skillNode.attributes[1] = "+1 Int Based Jewel";
+                                skillNode.attributes[3] = "JSlot_Int_TemplarWitch";
+                                break;
+                            //Str Jewels
+                            case 28475://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Str_WarriorDuelist";
+                              break;
+                            case 33631://Jewel slot west of Scion area; At road between Marauder and Templar areas
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Str_WarriorTemplarScion";
+                              break;
+                            case 55190://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Str_FarWarTempScion";
+                              break;
+                            case 26725://Jewel slot west of Marauder area
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+								skillNode.attributes[3] = "JSlot_Str_Warrior";
+								break;
+                            //Dex Jewels
+                            case 33989://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Dex_ShadowRanger";
+                              break;
+                            case 60735://Jewel slot east of Ranger area(Jewel10)
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Dex_Ranger";
+                              break;
+                            case 34483://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                              skillNode.attributes[3] = "JSlot_Dex_RangerDuelist";
+                              break;
+                            //Hybrid Jewels
+                            case 26196://Jewel slot west of Templar starting area
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                            	skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_StrInt_Templar";
+                              break;
+                            case 6230://Scion Jewel Slot west of starting area
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                            	skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_StrInt_Scion";
+                              break;
+                            case 61834://Jewel slot east of Shadow starting area
+                              skillNode.attributes[1] = "+1 Dex Based Jewel";
+                            	skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_DexInt_Shadow";
+                              break;
+                            case 48768://Scion jewel slot east of starting area
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                            	skillNode.attributes[1] = "+1 Int Based Jewel";
+                              skillNode.attributes[3] = "JSlot_DexInt_Scion";
+                              break;
+                            case 31683://Scion Jewel Slot south of starting area
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                              skillNode.attributes[3] = "JSlot_StrDex_Scion";
+                              break;
+                            case 54127://Jewel slot south of Duelist starting area
+                            	skillNode.attributes[1] = "+1 Str Based Jewel";
+                            	skillNode.attributes[1] = "+1 Dex Based Jewel";
+                              skillNode.attributes[3] = "JSlot_StrDex_Duelist";
+                              break;
+                            default://Non-Threshold Jewel Slots
+								skillNode.attributes[3] = "Jewel Socket ID: " + skillNode.Id;
+								break;
+							}
                     }
                     else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
                     {
@@ -1406,10 +1491,10 @@ namespace POESKillTree.SkillTreeFiles
             return (from nodeId in classSpecificStartNodes let temp = GetShortestPathTo(Skillnodes[(ushort)nodeId], SkilledNodes) where !temp.Any() && Skillnodes[(ushort)nodeId].ascendancyName == null select nodeId).Any();
         }
 
-        #region ISkillTree members
+#region ISkillTree members
 
 
 
-        #endregion
+#endregion
     }
 }

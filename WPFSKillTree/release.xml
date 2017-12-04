@@ -76,9 +76,23 @@
         </Task>
     </UsingTask>
 
-    <PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'AnyCPU' "  >
+        <InstallDir>PoESkillTree</InstallDir>
+        <Platform>x64</Platform>
+        <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
+        <ZipTool>Tools\7z.exe a -tzip</ZipTool>
+        <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'x86' "  >
         <InstallDir>PoESkillTree</InstallDir>
         <Platform>x86</Platform>
+        <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
+        <ZipTool>Tools\7z.exe a -tzip</ZipTool>
+        <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'x64' "  >
+        <InstallDir>PoESkillTree</InstallDir>
+        <Platform>x64</Platform>
         <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
         <ZipTool>Tools\7z.exe a -tzip</ZipTool>
         <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>

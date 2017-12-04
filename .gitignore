@@ -355,3 +355,10 @@ obj
 TestResults
 
 vswhere.exe
+
+#Keeping ExtraOptions versions of code/GUI/etc separate from main code base (mostly for experimental changes to code base)
+#*ExtraOptions*
+#This is AlternativeTypes versions of the ExtraOptions files (only storing locally)
+*AlternativeExtraOptions*
+
+*.favdoc
