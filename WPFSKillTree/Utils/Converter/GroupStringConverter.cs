@@ -35,6 +35,7 @@ namespace POESKillTree.Utils.Converter
         private static readonly string MiscLabel = L10n.Message("Everything Else");
         private static readonly string JewelTypes = L10n.Message("Jewel Types");
         private static readonly string PseudoTotal = L10n.Message("Tracked PseudoTotals");
+        private static readonly string Hidden = L10n.Message("Hidden");
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
@@ -223,10 +224,10 @@ namespace POESKillTree.Utils.Converter
             new[] {"Melee Physical Damage", Weapon},
             new[] {"with Swords", Weapon},
             new[] {"with Wands", Weapon},
-            new[] {"Cold Damage with Weapons", Weapon},
-            new[] {"Fire Damage with Weapons", Weapon},
-            new[] {"Lightning Damage with Weapons", Weapon},
-            new[] {"Elemental Damage with Weapons", Weapon},
+            new[] {"Cold Damage with Attack Skills", Weapon},
+            new[] {"Fire Damage with Attack Skills", Weapon},
+            new[] {"Lightning Damage with Attack Skills", Weapon},
+            new[] {"Elemental Damage with Attack Skills", Weapon},
             new[] {"Physical Damage with Wands", Weapon},
             new[] {"Damage with Wands", Weapon},
             new[] {"Damage with Weapons", Weapon},
@@ -239,6 +240,9 @@ namespace POESKillTree.Utils.Converter
             new[] {"increased Physical Damage", General},
             new[] {"Elemental Damage", General},
             new[] {"Jewel Socket", JewelTypes},
+            new[] {"Str Based Jewel", JewelTypes},
+            new[] {"Dex Based Jewel", JewelTypes},
+            new[] {"Int Based Jewel", JewelTypes},
             new[] {"Cast Speed", Spell},
             new[] {"Cold Damage", General},
             new[] {"Fire Damage", General},
@@ -250,10 +254,8 @@ namespace POESKillTree.Utils.Converter
             new[] {"Strength", CoreAttributes},
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
-            new[] {"Str Based Jewel", JewelTypes},
-            new[] {"Dex Based Jewel", JewelTypes},
-            new[] {"Int Based Jewel", JewelTypes},
-            new[] {"Elemental Damage with Attack Skills", Weapon},
+            new[] {"JSlot", Hidden},
+            new[] { "Jewel Socket ID:", Hidden},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");

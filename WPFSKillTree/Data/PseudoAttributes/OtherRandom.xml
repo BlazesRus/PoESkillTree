@@ -19,8 +19,7 @@
 		<Attribute Name="#% increased Physical Damage"/>
 		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Elemental Damage with Attack Skills"  ConversionMultiplier="0.5"/>
-		<Attribute Name="#% increased Elemental Damage with Weapons"  ConversionMultiplier="0.5"/>
-		<Attribute Name="#% increased Lightning Damage with Weapons"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Area Damage"/>
 		<Attribute Name="#% increased Attack Damage" />
@@ -116,10 +115,9 @@
  	<PseudoAttribute Name="#% increased Average Wild Strike Damage with Pure Physical Weapon[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
-		<Attribute Name="#% increased Elemental Damage with Weapons" />
-		<Attribute Name="#% increased Cold Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Fire Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Lightning Damage with Weapons"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Cold Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Physical Damage" />
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.333333333"/>
@@ -131,10 +129,9 @@
 	<PseudoAttribute Name="#% increased Average Wild Strike Damage with 75% Physical Weapon[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
-		<Attribute Name="#% increased Elemental Damage with Weapons" />
-		<Attribute Name="#% increased Cold Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Fire Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Lightning Damage with Weapons"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Cold Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Physical Damage" ConversionMultiplier="0.75"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.333333333"/>
@@ -147,10 +144,9 @@
 	<PseudoAttribute Name="#% increased Average Wild Strike Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
-		<Attribute Name="#% increased Elemental Damage with Weapons" />
-		<Attribute Name="#% increased Cold Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Fire Damage with Weapons"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Lightning Damage with Weapons"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Cold Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.333333333"/>
@@ -250,7 +246,6 @@
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Projectile Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
-		<Attribute Name="#% increased Elemental Damage with Weapons" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Elemental Damage with Projectile Spells[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
@@ -262,7 +257,6 @@
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
-		<Attribute Name="#% increased Elemental Damage with Weapons" />
 	</PseudoAttribute>
 
 	<PseudoAttribute Name="#% increased Total Chaos Area of Effect Damage[Non-Tagged]" Group="Damage">
