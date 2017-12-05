@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace POESKillTree
 {
-    class PoESkillTreeGlobalSettings
+    static class PoESkillTreeGlobalSettings
     {
-
+        static POESKillTree.SkillTreeFiles.TrackedAttributes CurrentTrackedAttributes;
     }
 }

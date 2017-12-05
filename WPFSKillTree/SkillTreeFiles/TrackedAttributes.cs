@@ -7,10 +7,11 @@ namespace POESKillTree.SkillTreeFiles
 	}
 	public class TrackedAttribute
 	{
-		List <UsedAttribute> UsedAttributes;
+        string Name;
+        System.Collections.Generic.SortedSet<UsedAttribute> UsedAttributes;
 		double TotalStat=0.0;
 	}
-	public class TrackedAttributes : List <TrackedAttribute>
+	public class TrackedAttributes : System.Collections.Generic.SortedSet<TrackedAttribute>
 	{
 	
 	}

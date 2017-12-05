@@ -34,8 +34,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-	
-	<ErrorReport>prompt</ErrorReport>
+    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
@@ -75,19 +74,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\Debugx64\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <OutputPath>bin\x86\Debug\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\Releasex64\</OutputPath>
+    <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <OutputPath>bin\Debugx64\</OutputPath>
+    <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\Releasex64\</OutputPath>
+    <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
-   <PropertyGroup Label="AnyCpu Options" Condition=" '$(Platform)' =='AnyCPU' ">
+  <PropertyGroup Label="AnyCpu Options" Condition=" '$(Platform)' =='AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -246,6 +245,8 @@
     <Compile Include="Model\Items\Mods\Affix.cs" />
     <Compile Include="Model\Items\Mods\Stat.cs" />
     <Compile Include="Model\Items\Mods\StatLocalityChecker.cs" />
+    <Compile Include="PoESkillTreeGlobalSettings.cs" />
+    <Compile Include="SkillTreeFiles\TrackedAttributes.cs" />
     <Compile Include="Utils\RePoEUtils.cs" />
     <Compile Include="Model\Items\StatTranslation\Format.cs" />
     <Compile Include="Model\Items\StatTranslation\IndexHandler.cs" />
@@ -949,6 +950,7 @@
     <Content Include="Data\PseudoAttributes\Other.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Data\PseudoAttributes\OtherRandom.xml" />
     <Content Include="Data\PseudoAttributes\Speed.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

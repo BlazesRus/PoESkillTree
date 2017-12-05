@@ -255,7 +255,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
             new[] {"JSlot", Hidden},
-            new[] { "Jewel Socket ID:", Hidden},
+            new[] {"Jewel Socket ID: ", Hidden},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");

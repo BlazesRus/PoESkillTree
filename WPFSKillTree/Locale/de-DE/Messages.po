@@ -29,7 +29,7 @@ msgstr "OK"
 #: Controls\Dialogs\Views\MetroMessageBoxView.xaml:77
 #: Controls\Dialogs\Views\ValidatingInputDialogView.xaml:48
 #: ItemFilter\Views\ItemFilterEditWindow.xaml:138
-#: Views\Builds\EditBuildWindow.xaml:64 Views\Crafting\CraftingView.xaml:132
+#: Views\Builds\EditBuildWindow.xaml:64 Views\Crafting\CraftingView.xaml:133
 #: Views\Crafting\UniqueCraftingView.xaml:59
 #: Views\Equipment\SocketedGemsEditingView.xaml:187
 #: Views\Equipment\TabPicker.xaml:127
@@ -391,11 +391,11 @@ msgstr "Charaktername"
 msgid "Account name"
 msgstr "Kontoname"
 
-#: Views\Crafting\CraftingView.xaml:30
+#: Views\Crafting\CraftingView.xaml:31
 msgid "Crafting Window"
 msgstr ""
 
-#: Views\Crafting\CraftingView.xaml:127
+#: Views\Crafting\CraftingView.xaml:128
 #: Views\Crafting\UniqueCraftingView.xaml:54
 msgid "Create Item"
 msgstr "Erstelle Item"
@@ -1004,7 +1004,7 @@ msgstr "Gegenstandsliste"
 msgid "Character Sheet"
 msgstr "Charakterinformation"
 
-#: Views\MainWindow.xaml:883 SkillTreeFiles\Compute.cs:2300
+#: Views\MainWindow.xaml:883 SkillTreeFiles\Compute.cs:2302
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
 #: Utils\Converter\GroupStringConverter.cs:31
 msgid "Defense"
@@ -1130,11 +1130,11 @@ msgstr "Build ist von einer älteren Version und kann nicht importiert werden."
 msgid "Could not import build"
 msgstr "Konnte Build nicht importieren"
 
-#: SkillTreeFiles\Compute.cs:2299
+#: SkillTreeFiles\Compute.cs:2301
 msgid "Character"
 msgstr "Charakter"
 
-#: SkillTreeFiles\SkillTree.cs:1230
+#: SkillTreeFiles\SkillTree.cs:1280
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr "Manche Knoten ({unknownNodes}) sind unbekannt und wurden weggelassen."
 
@@ -1276,12 +1276,27 @@ msgid "Flasks"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
+#: Utils\Converter\GroupStringConverter.cs:36
+msgid "Jewel Types"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
+#: Utils\Converter\GroupStringConverter.cs:37
+msgid "Tracked PseudoTotals"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
 #: Utils\Converter\GroupStringConverter.cs:35
 #, fuzzy
 msgid "Everything Else"
 msgstr "Alles andere"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:603
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+#: Utils\Converter\GroupStringConverter.cs:38
+msgid "Hidden"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:607
 msgid "Advanced"
 msgstr "Erweitert"
 
