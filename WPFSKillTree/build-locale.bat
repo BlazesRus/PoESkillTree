@@ -4,7 +4,9 @@
 
 PUSHD %~dp0
 
-if NOT exist "vswhere.exe" GOTO DEFAULTBUILDLOCALE
+setlocal enableextensions enabledelayedexpansion
+
+if not exist "%~dp0vswhere.exe" GOTO DEFAULTBUILDLOCALE
 
 REM VSWhere from https://github.com/Microsoft/vswhere use to locate highest installed VS Installation
 for /f "usebackq tokens=1* delims=: " %%i in (`vswhere.exe -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop`) do (
@@ -16,7 +18,9 @@ IF "%VS2017TOOLS%" == "" GOTO DEFAULTBUILDLOCALE
 IF [%1] == [] cmd /C "%VSDir%\Common7\Tools\vsdevcmd.bat && cd ""%~dp0"" && msbuild release.xml /target:BuildLocale"
 IF NOT [%1] == [] cmd /C "%VSDir%\Common7\Tools\vsdevcmd.bat && cd ""%~dp0"" && msbuild release.xml /target:BuildAndCopyLocale /property:LocaleTargetDir=%1"
 
+GOTO END
 :DEFAULTBUILDLOCALE
+
 IF [%1] == [] cmd /C "vsdevcmd.bat && cd ""%~dp0"" && msbuild release.xml /target:BuildLocale"
 IF NOT [%1] == [] cmd /C "vsdevcmd.bat && cd ""%~dp0"" && msbuild release.xml /target:BuildAndCopyLocale /property:LocaleTargetDir=%1"
 :END
