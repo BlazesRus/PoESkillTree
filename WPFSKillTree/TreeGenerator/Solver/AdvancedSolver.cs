@@ -396,7 +396,11 @@ namespace POESKillTree.TreeGenerator.Solver
             for (var i = 0; i < _attrConstraints.Length; i++)
             {
                 var stat = _attrConstraints[i];
-                csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
+                var currentValue = totalStats[i];
+                if (currentValue < stat.Item1)//Needless checking if current value is equal or higher than target based on CalcCsv (Math.Exp(W*M*(X/T))/Math.Exp(W*M)==1.0)
+                {
+                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                }
             }
 
             // Total points spent is another csv.
@@ -416,11 +420,11 @@ namespace POESKillTree.TreeGenerator.Solver
             return Math.Max(csvs, 0);
         }
 
-        private static double CalcCsv(float x, double weight, float target)
+        private static double CalcCsv(float currentValue, double weight, float target)
         {
             // Don't go higher than the target value.
-            x = Math.Min(x, target);
-            return Math.Exp(weight * CsvWeightMultiplier * x/target) / Math.Exp(weight * CsvWeightMultiplier);
+            currentValue = Math.Min(currentValue, target);
+            return Math.Exp(weight * CsvWeightMultiplier * currentValue / target) / Math.Exp(weight * CsvWeightMultiplier);
         }
     }
 }
