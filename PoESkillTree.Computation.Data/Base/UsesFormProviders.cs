@@ -1,31 +1,30 @@
-﻿using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Forms;
+﻿using System.Collections.Generic;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Forms;
 
 namespace PoESkillTree.Computation.Data.Base
 {
     public abstract class UsesFormProviders : UsesValueProviders
     {
-        private readonly IFormProviderFactory _formProviderFactory;
-
-        protected UsesFormProviders(IProviderFactories providerFactories)
-            : base(providerFactories)
+        protected UsesFormProviders(IBuilderFactories builderFactories)
+            : base(builderFactories)
         {
-            _formProviderFactory = providerFactories.FormProviderFactory;
         }
 
-        protected IFormProvider BaseSet => _formProviderFactory.BaseSet;
-        protected IFormProvider PercentIncrease => _formProviderFactory.PercentIncrease;
-        protected IFormProvider PercentMore => _formProviderFactory.PercentMore;
-        protected IFormProvider BaseAdd => _formProviderFactory.BaseAdd;
-        protected IFormProvider PercentReduce => _formProviderFactory.PercentReduce;
-        protected IFormProvider PercentLess => _formProviderFactory.PercentLess;
-        protected IFormProvider BaseSubtract => _formProviderFactory.BaseSubtract;
-        protected IFormProvider TotalOverride => _formProviderFactory.TotalOverride;
-        protected IFormProvider MinBaseAdd => _formProviderFactory.MinBaseAdd;
-        protected IFormProvider MaxBaseAdd => _formProviderFactory.MaxBaseAdd;
-        protected IFormProvider MaximumAdd => _formProviderFactory.MaximumAdd;
-        protected IFormProvider SetFlag => _formProviderFactory.SetFlag;
-        protected IFormProvider Zero => _formProviderFactory.Zero;
-        protected IFormProvider Always => _formProviderFactory.Always;
+        public virtual IReadOnlyList<string> ReferenceNames { get; } = new string[0];
+
+        private IFormBuilders FormBuilders => BuilderFactories.FormBuilders;
+
+        protected IFormBuilder BaseSet => FormBuilders.BaseSet;
+        protected IFormBuilder PercentIncrease => FormBuilders.PercentIncrease;
+        protected IFormBuilder PercentMore => FormBuilders.PercentMore;
+        protected IFormBuilder BaseAdd => FormBuilders.BaseAdd;
+        protected IFormBuilder PercentReduce => FormBuilders.PercentReduce;
+        protected IFormBuilder PercentLess => FormBuilders.PercentLess;
+        protected IFormBuilder BaseSubtract => FormBuilders.BaseSubtract;
+        protected IFormBuilder TotalOverride => FormBuilders.TotalOverride;
+        protected IFormBuilder MinBaseAdd => FormBuilders.MinBaseAdd;
+        protected IFormBuilder MaxBaseAdd => FormBuilders.MaxBaseAdd;
+        protected IFormBuilder MaximumAdd => FormBuilders.MaximumAdd;
     }
 }

@@ -1,33 +1,42 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Matching;
-using PoESkillTree.Computation.Providers.Stats;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Matching;
+using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
 
 namespace PoESkillTree.Computation.Data
 {
     public class PoolStatMatchers : UsesMatchContext, IStatMatchers
     {
-        private readonly IMatchBuilder _matchBuilder;
+        private readonly IModifierBuilder _modifierBuilder;
 
-        public PoolStatMatchers(IProviderFactories providerFactories, 
-            IMatchContextFactory matchContextFactory, IMatchBuilder matchBuilder) 
-            : base(providerFactories, matchContextFactory)
+        public PoolStatMatchers(IBuilderFactories builderFactories, 
+            IMatchContexts matchContexts, IModifierBuilder modifierBuilder) 
+            : base(builderFactories, matchContexts)
         {
-            _matchBuilder = matchBuilder;
-            Matchers = CreateCollection().ToList();
+            _modifierBuilder = modifierBuilder;
         }
 
-        public IReadOnlyList<MatcherData> Matchers { get; }
+        public override IReadOnlyList<string> ReferenceNames { get; } =
+            new[] { "StatMatchers", nameof(PoolStatMatchers) };
 
-        private StatMatcherCollection<IPoolStatProvider> CreateCollection() =>
-            new StatMatcherCollection<IPoolStatProvider>(_matchBuilder)
+        public bool MatchesWholeLineOnly => false;
+
+        public IEnumerator<MatcherData> GetEnumerator() => 
+            new StatMatcherCollection<IPoolStatBuilder>(_modifierBuilder, ValueFactory)
             {
                 { "(maximum )?life", Life },
                 { "(maximum )?mana", Mana },
                 { "(maximum )?energy shield", EnergyShield },
-            };
+            }.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

@@ -1,19 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Moq;
 using NUnit.Framework;
+using PoESkillTree.Computation.Parsing.Builders.Values;
+using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data.Tests.Collections
 {
     internal static class MatcherCollectionHelpers
     {
-        internal static MatchBuilderStub AssertSingle(this IEnumerable<MatcherData> sut, 
+        internal static ModifierBuilderStub AssertSingle(this IEnumerable<MatcherData> sut, 
             string regex, string substitution = "")
         {
             var data = sut.Single();
             Assert.AreEqual(regex, data.Regex);
-            Assert.IsInstanceOf<MatchBuilderStub>(data.MatchBuilder);
+            Assert.IsInstanceOf<ModifierBuilderStub>(data.ModifierResult);
             Assert.AreEqual(substitution, data.MatchSubstitution);
-            return (MatchBuilderStub) data.MatchBuilder;
+            return (ModifierBuilderStub) data.ModifierResult;
+        }
+
+        internal static Func<IValueBuilder, ValueBuilder> SetupConverter(
+            this Mock<IValueBuilders> valueBuildersMock)
+        {
+            Func<IValueBuilder, ValueBuilder> converter = v => null;
+            valueBuildersMock.Setup(v => v.WrapValueConverter(converter)).Returns(converter);
+            return converter;
         }
     }
 }

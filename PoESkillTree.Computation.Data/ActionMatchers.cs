@@ -1,27 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers.Actions;
+using PoESkillTree.Computation.Parsing.Builders.Actions;
+using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
-    public class ActionMatchers : IReferencedMatchers<IActionProvider>
+    public class ActionMatchers : ReferencedMatchersBase<IActionBuilder>
     {
-        private IActionProviderFactory Action { get; }
+        private IActionBuilders Action { get; }
 
-        public ActionMatchers(IActionProviderFactory actionProviderFactory)
+        public ActionMatchers(IActionBuilders actionBuilders)
         {
-            Action = actionProviderFactory;
-
-            Matchers = CreateCollection().ToList();
+            Action = actionBuilders;
         }
 
-        public string ReferenceName { get; } = nameof(ActionMatchers);
-
-        public IReadOnlyList<ReferencedMatcherData<IActionProvider>> Matchers { get; }
-
-        private ReferencedMatcherCollection<IActionProvider> CreateCollection() =>
-            new ReferencedMatcherCollection<IActionProvider>
+        protected override IEnumerable<ReferencedMatcherData> CreateCollection() =>
+            new ReferencedMatcherCollection<IActionBuilder>
             {
                 { "kill(ed)?", Action.Kill },
                 { "block(ed)?", Action.Block },

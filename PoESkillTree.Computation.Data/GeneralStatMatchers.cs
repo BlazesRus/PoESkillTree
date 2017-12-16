@@ -1,33 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.Common.Model.Items.Enums;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Matching;
-using static PoESkillTree.Computation.Providers.Values.ValueProviderUtils;
-
-using DamageStat = PoESkillTree.Computation.Providers.Stats.IDamageStatProvider;
-using PoolStat = PoESkillTree.Computation.Providers.Stats.IPoolStatProvider;
-using FlagStat = PoESkillTree.Computation.Providers.Stats.IFlagStatProvider;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Matching;
+using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using static PoESkillTree.Computation.Parsing.Builders.Values.ValueBuilderUtils;
 
 namespace PoESkillTree.Computation.Data
 {
     public class GeneralStatMatchers : UsesMatchContext, IStatMatchers
     {
-        private readonly IMatchBuilder _matchBuilder;
+        private readonly IModifierBuilder _modifierBuilder;
 
-        public GeneralStatMatchers(IProviderFactories providerFactories, 
-            IMatchContextFactory matchContextFactory, IMatchBuilder matchBuilder) 
-            : base(providerFactories, matchContextFactory)
+        public GeneralStatMatchers(IBuilderFactories builderFactories, 
+            IMatchContexts matchContexts, IModifierBuilder modifierBuilder) 
+            : base(builderFactories, matchContexts)
         {
-            _matchBuilder = matchBuilder;
-            Matchers = CreateCollection().ToList();
+            _modifierBuilder = modifierBuilder;
         }
 
-        public IReadOnlyList<MatcherData> Matchers { get; }
+        public override IReadOnlyList<string> ReferenceNames { get; } = new[] { "StatMatchers" };
 
-        private StatMatcherCollection CreateCollection() => new StatMatcherCollection(_matchBuilder)
+        public bool MatchesWholeLineOnly => false;
+
+        public IEnumerator<MatcherData> GetEnumerator() => new StatMatcherCollection(
+            _modifierBuilder, ValueFactory)
         {
             // attributes
             { "strength", Attribute.Strength },
@@ -48,28 +49,32 @@ namespace PoESkillTree.Computation.Data
             // - damage: see also DamageStatMatchers
             { "chance to deal double damage", Damage.ChanceToDouble },
             {
-                "({DamageTypeMatchers}) damage as extra ({DamageTypeMatchers}) damage",
-                Groups[0].AsDamageType.Damage.AddAs(Groups[1].AsDamageType.Damage)
+                "({DamageTypeMatchers}) damage (gained )?as extra ({DamageTypeMatchers}) damage",
+                References[0].AsDamageType.Damage.AddAs(References[1].AsDamageType.Damage)
             },
             {
                 "wand ({DamageTypeMatchers}) damage added as ({DamageTypeMatchers}) damage",
-                Groups[0].AsDamageType.Damage.AddAs(Groups[1].AsDamageType.Damage),
+                References[0].AsDamageType.Damage.AddAs(References[1].AsDamageType.Damage),
                 Damage.With(Tags.Wand)
             },
             {
-                "({DamageTypeMatchers}) damage converted to ({DamageTypeMatchers}) damage",
-                Groups[0].AsDamageType.Damage.ConvertTo(Groups[1].AsDamageType.Damage)
+                "({DamageTypeMatchers}) damage as extra damage of a random element",
+                Reference.AsDamageType.Damage.AddAs(RandomElement.Damage)
             },
-            { "({DamageTypeMatchers}) damage taken", Group.AsDamageType.Damage.Taken },
+            {
+                "({DamageTypeMatchers}) damage converted to ({DamageTypeMatchers}) damage",
+                References[0].AsDamageType.Damage.ConvertTo(References[1].AsDamageType.Damage)
+            },
+            { "({DamageTypeMatchers}) damage taken", Reference.AsDamageType.Damage.Taken },
+            { "take ({DamageTypeMatchers}) damage", Reference.AsDamageType.Damage.Taken },
             { "damage taken", Damage.Taken },
             // - penetration
             // - crit
-            { "critical strike multiplier", CriticalStrike.Multiplier },
+            { "(global )?critical strike multiplier", CriticalStrike.Multiplier },
             { "(global )?critical strike chance", CriticalStrike.Chance },
             // - projectiles
             { "projectile speed", Projectile.Speed },
             { "arrow speed", Projectile.Speed, Damage.With(Tags.Bow) },
-            { "projectiles?", Projectile.Count },
             // - other
             { "accuracy rating", Stat.Accuracy },
             // defense
@@ -77,36 +82,37 @@ namespace PoESkillTree.Computation.Data
             { "armour", Armour },
             { "evasion( rating)?", Evasion },
             { "evasion rating and armour", ApplyOnce(Armour, Evasion) },
+            { "armour and evasion( rating)?", ApplyOnce(Armour, Evasion) },
             { "armour and energy shield", ApplyOnce(Armour, EnergyShield) },
             { "(global )?defences", ApplyOnce(Armour, Evasion, EnergyShield) },
             // - resistances
-            { "({DamageTypeMatchers}) resistance", Group.AsDamageType.Resistance },
+            { "({DamageTypeMatchers}) resistance", Reference.AsDamageType.Resistance },
             { "all elemental resistances", Elemental.Resistance },
             {
                 "maximum ({DamageTypeMatchers}) resistance",
-                Group.AsDamageType.Resistance.Maximum
+                Reference.AsDamageType.Resistance.Maximum
             },
             { "all maximum resistances", Elemental.And(Chaos).Resistance.Maximum },
             { "physical damage reduction", Physical.Resistance },
             // - leech
             {
-                @"({PoolStatMatchers}) per second to \1 Leech rate",
-                Group.As<PoolStat>().Leech.RateLimit
+                @"(?<pool>({PoolStatMatchers})) per second to \k<pool> Leech rate",
+                Reference.AsPoolStat.Leech.RateLimit
             },
             {
                 "({DamageStatMatchers}) leeched as ({PoolStatMatchers})",
-                Groups[1].As<PoolStat>().Leech.Of(Groups[0].As<DamageStat>())
+                References[1].AsPoolStat.Leech.Of(References[0].AsDamageStat)
             },
             {
                 "({DamageStatMatchers}) leeched as ({PoolStatMatchers}) and ({PoolStatMatchers})",
-                Groups[1].As<PoolStat>().Leech.Of(Groups[0].As<DamageStat>()),
-                Groups[2].As<PoolStat>().Leech.Of(Groups[0].As<DamageStat>())
+                References[1].AsPoolStat.Leech.Of(References[0].AsDamageStat),
+                References[2].AsPoolStat.Leech.Of(References[0].AsDamageStat)
             },
             {
                 "damage dealt by your totems is leeched to you as life",
                 Life.Leech.To(Self).Of(Damage), For(Entity.Totem)
             },
-            { "({PoolStatMatchers}) leeched per second", Group.As<PoolStat>().Leech.Rate },
+            { "({PoolStatMatchers}) leeched per second", Reference.AsPoolStat.Leech.Rate },
             // - block
             { "chance to block", Block.AttackChance },
             { "block chance", Block.AttackChance },
@@ -128,12 +134,12 @@ namespace PoESkillTree.Computation.Data
             { "chance to evade melee attacks", Evasion.ChanceAgainstMeleeAttacks },
             {
                 "damage is taken from ({PoolStatMatchers}) before ({PoolStatMatchers})",
-                Damage.TakenFrom(Groups[0].As<PoolStat>()).Before(Groups[1].As<PoolStat>())
+                Damage.TakenFrom(References[0].AsPoolStat).Before(References[1].AsPoolStat)
             },
             {
                 "({DamageTypeMatchers}) damage is taken from ({PoolStatMatchers}) before ({PoolStatMatchers})",
-                Groups[0].AsDamageType.Damage.TakenFrom(Groups[1].As<PoolStat>())
-                    .Before(Groups[2].As<PoolStat>())
+                References[0].AsDamageType.Damage.TakenFrom(References[1].AsPoolStat)
+                    .Before(References[2].AsPoolStat)
             },
             // speed
             { "attack speed", Skills[Keyword.Attack].Speed },
@@ -146,12 +152,12 @@ namespace PoESkillTree.Computation.Data
             },
             { "attack and cast speed", Skills.Speed },
             {
-                "attack, cast speed and movement speed",
+                "attack, cast( speed)? and movement speed",
                 ApplyOnce(Skills.Speed, Stat.MovementSpeed)
             },
             { "animation speed", Stat.AnimationSpeed },
             // regen and recharge
-            { "({PoolStatMatchers}) regeneration rate", Group.As<PoolStat>().Regen },
+            { "({PoolStatMatchers}) regeneration rate", Reference.AsPoolStat.Regen },
             { "energy shield recharge rate", EnergyShield.Recharge },
             {
                 "recovery rate of life, mana and energy shield",
@@ -159,13 +165,21 @@ namespace PoESkillTree.Computation.Data
             },
             // gain
             // charges
-            { "({ChargeTypeMatchers})", Group.AsChargeType.Amount },
-            { "maximum ({ChargeTypeMatchers})", Group.AsChargeType.Amount.Maximum },
+            { "(?<!maximum )({ChargeTypeMatchers})", Reference.AsChargeType.Amount },
+            { "(?<!while at )maximum ({ChargeTypeMatchers})", Reference.AsChargeType.Amount.Maximum },
             {
-                "chance to (gain|grant) a ({ChargeTypeMatchers})",
-                Group.AsChargeType.ChanceToGain
+                "maximum ({ChargeTypeMatchers}) and maximum ({ChargeTypeMatchers})",
+                ApplyOnce(References[0].AsChargeType.Amount.Maximum, References[1].AsChargeType.Amount.Maximum)
             },
-            { "({ChargeTypeMatchers}) duration", Group.AsChargeType.Duration },
+            {
+                "chance to (gain|grant) an? ({ChargeTypeMatchers})",
+                Reference.AsChargeType.ChanceToGain
+            },
+            {
+                "chance to (gain|grant) an? ({ChargeTypeMatchers}) and an? ({ChargeTypeMatchers})",
+                References[0].AsChargeType.ChanceToGain, References[1].AsChargeType.ChanceToGain
+            },
+            { "({ChargeTypeMatchers}) duration", Reference.AsChargeType.Duration },
             {
                 "endurance, frenzy and power charge duration",
                 Charge.Endurance.Duration, Charge.Frenzy.Duration, Charge.Power.Duration
@@ -174,16 +188,16 @@ namespace PoESkillTree.Computation.Data
             { "cooldown recovery speed", Skills.CooldownRecoverySpeed },
             {
                 "({KeywordMatchers}) cooldown recovery speed",
-                Skills[Group.AsKeyword].CooldownRecoverySpeed
+                Skills[Reference.AsKeyword].CooldownRecoverySpeed
             },
             { "mana cost( of skills)?", Skills.Cost },
             { "skill effect duration", Skills.Duration },
             { "mana reserved", Skills.Reservation },
-            { "({KeywordMatchers}) duration", Skills[Group.AsKeyword].Duration },
+            { "({KeywordMatchers}) duration", Skills[Reference.AsKeyword].Duration },
             // traps, mines, totems
             { "traps? placed at a time", Traps.CombinedInstances.Maximum },
-            { "remote mines placed at a time", Mines.CombinedInstances.Maximum },
-            { "totem summoned at a time", Totems.CombinedInstances.Maximum },
+            { "remote mines? placed at a time", Mines.CombinedInstances.Maximum },
+            { "totems? summoned at a time", Totems.CombinedInstances.Maximum },
             { "trap trigger area of effect", Stat.TrapTriggerAoE },
             { "mine detonation area of effect", Stat.MineDetonationAoE },
             { "trap throwing speed", Traps.Speed },
@@ -205,22 +219,23 @@ namespace PoESkillTree.Computation.Data
             // buffs
             {
                 "effect of buffs granted by your golems",
-                Buffs(Entity.Minion.With(Keyword.Golem)).EffectIncrease
+                Buffs(Entity.Minion.With(Keyword.Golem)).Effect
             },
             {
                 "effect of buffs granted by your elemental golems",
-                Buffs(Entity.Minion.With(Keyword.Golem, Elemental)).EffectIncrease
+                Buffs(Entity.Minion.With(Keyword.Golem, Elemental)).Effect
             },
-            { "effect of your curses", Buffs(Self).With(Keyword.Curse).EffectIncrease },
+            { "effect of your curses", Buffs(Self).With(Keyword.Curse).Effect },
             {
                 "effect of curses on you",
-                Buffs(target: Self).With(Keyword.Curse).EffectIncrease
+                Buffs(target: Self).With(Keyword.Curse).Effect
             },
             {
                 "effect of non-curse auras you cast",
-                Buffs(Self).With(Keyword.Aura).Without(Keyword.Curse).EffectIncrease
+                Buffs(Self).With(Keyword.Aura).Without(Keyword.Curse).Effect
             },
-            { "effect of fortify on you", Buff.Fortify.EffectIncrease },
+            { "chance to fortify", Buff.Fortify.ChanceOn(Self) },
+            { "effect of fortify on you", Buff.Fortify.Effect },
             { "fortify duration", Buff.Fortify.Duration },
             { "chance for attacks to maim", Buff.Maim.ChanceOn(Enemy), Damage.With(Source.Attack) },
             { "chance to taunt", Buff.Taunt.ChanceOn(Enemy) },
@@ -230,19 +245,19 @@ namespace PoESkillTree.Computation.Data
             // flags
             {
                 "chance to (gain|grant) ({FlagMatchers})",
-                Group.As<FlagStat>() // chance is handled by StatManipulationMatchers
+                Reference.AsFlagStat // chance is handled by StatManipulationMatchers
             },
-            { "({FlagMatchers}) duration", Group.As<FlagStat>().DurationIncrease },
-            { "({FlagMatchers}) effect", Group.As<FlagStat>().EffectIncrease },
+            { "({FlagMatchers}) duration", Reference.AsFlagStat.Duration },
+            { "({FlagMatchers}) effect", Reference.AsFlagStat.Effect },
             // ailments
-            { "chance to ({AilmentMatchers})(the enemy)?", Group.AsAilment.Chance },
+            { "chance to ({AilmentMatchers})( the enemy)?", Reference.AsAilment.Chance },
             {
                 "chance to freeze, shock and ignite",
                 Ailment.Freeze.Chance, Ailment.Shock.Chance, Ailment.Ignite.Chance
             },
-            { "chance to avoid being ({AilmentMatchers})", Group.AsAilment.Avoidance },
+            { "chance to avoid being ({AilmentMatchers})", Reference.AsAilment.Avoidance },
             { "chance to avoid elemental ailments", Ailment.Elemental.Select(a => a.Avoidance) },
-            { "({AilmentMatchers}) duration( on enemies)?", Group.AsAilment.Duration },
+            { "({AilmentMatchers}) duration( on enemies)?", Reference.AsAilment.Duration },
             {
                 "duration of elemental ailments on enemies",
                 Ailment.Elemental.Select(a => a.Duration)
@@ -254,20 +269,20 @@ namespace PoESkillTree.Computation.Data
             { "stun threshold", Effect.Stun.Threshold },
             { "enemy stun threshold", Enemy.Stat(Effect.Stun.Threshold) },
             { "stun duration( on enemies)?", Enemy.Stat(Effect.Stun.Duration) },
-            { "stun duration (with .*) on enemies", Enemy.Stat(Effect.Stun.Duration), "$1" },
+            { "stun duration (?<inner>with .*) on enemies", Enemy.Stat(Effect.Stun.Duration), "${inner}" },
             {
                 "chance to avoid interruption from stuns while casting",
                 Effect.Stun.ChanceToAvoidInterruptionWhileCasting
             },
             { "chance to double stun duration", Effect.Stun.Duration.ChanceToDouble },
             // flasks
-            { "effect of flasks", Flask.Effect },
+            { "effect of flasks( on you)?", Flask.Effect },
             { "flask effect duration", Flask.Duration },
             { "life recovery from flasks", Flask.LifeRecovery },
             { "mana recovery from flasks", Flask.ManaRecovery },
             { "flask charges used", Flask.ChargesUsed },
             { "flask charges gained", Flask.ChargesGained },
-            { "flask recovery speed", Flask.RecoverySpeed },
+            { "flask recovery (speed|rate)", Flask.RecoverySpeed },
             // item quantity/quality
             { "quantity of items found", Stat.ItemQuantity },
             { "rarity of items found", Stat.ItemRarity },
@@ -282,10 +297,15 @@ namespace PoESkillTree.Computation.Data
             { "knockback distance", Effect.Knockback.Distance },
             // Not really anything that can be done with them (yet), but should still be summed up
             { "character size", Stat.Unique() },
-            { "reduced reflected elemental damage taken", Stat.Unique() },
-            { "reduced reflected physical damage taken", Stat.Unique() },
-            { "damage taken gained as mana over # seconds when hit", Stat.Unique() },
+            { "reflected elemental damage taken", Stat.Unique() },
+            { "reflected physical damage taken", Stat.Unique() },
+            { "damage taken gained as mana over 4 seconds when hit", Stat.Unique() },
             { "light radius", Stat.Unique() },
-        };
+        }.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

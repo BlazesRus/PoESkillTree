@@ -1,30 +1,34 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using PoESkillTree.Common.Model.Items.Enums;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Matching;
-using PoESkillTree.Computation.Providers.Stats;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Matching;
+using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
 
 namespace PoESkillTree.Computation.Data
 {
     public class DamageStatMatchers : UsesMatchContext, IStatMatchers
     {
-        private readonly IMatchBuilder _matchBuilder;
+        private readonly IModifierBuilder _modifierBuilder;
 
-        public DamageStatMatchers(IProviderFactories providerFactories, 
-            IMatchContextFactory matchContextFactory, IMatchBuilder matchBuilder) 
-            : base(providerFactories, matchContextFactory)
+        public DamageStatMatchers(IBuilderFactories builderFactories, 
+            IMatchContexts matchContexts, IModifierBuilder modifierBuilder) 
+            : base(builderFactories, matchContexts)
         {
-            _matchBuilder = matchBuilder;
-            Matchers = CreateCollection().ToList();
+            _modifierBuilder = modifierBuilder;
         }
 
-        public IReadOnlyList<MatcherData> Matchers { get; }
+        public override IReadOnlyList<string> ReferenceNames { get; } =
+            new[] { "StatMatchers", nameof(DamageStatMatchers) };
 
-        private StatMatcherCollection<IDamageStatProvider> CreateCollection() =>
-            new StatMatcherCollection<IDamageStatProvider>(_matchBuilder)
+        public bool MatchesWholeLineOnly => false;
+
+        public IEnumerator<MatcherData> GetEnumerator() =>
+            new StatMatcherCollection<IDamageStatBuilder>(_modifierBuilder, ValueFactory)
             {
                 // unspecific
                 { "damage", Damage },
@@ -33,22 +37,22 @@ namespace PoESkillTree.Computation.Data
                 { "spell damage", Damage, Damage.With(Source.Spell) },
                 { "damage over time", Damage, Damage.With(Source.DamageOverTime) },
                 // by type
-                { "({DamageTypeMatchers}) damage", Group.AsDamageType.Damage },
+                { "({DamageTypeMatchers}) damage", Reference.AsDamageType.Damage },
                 { "damage of a random element", RandomElement.Damage },
                 // by source and type
                 { "attack physical damage", Physical.Damage, Damage.With(Source.Attack) },
                 { "physical attack damage", Physical.Damage, Damage.With(Source.Attack) },
                 {
                     "({DamageTypeMatchers}) damage to attacks",
-                    Group.AsDamageType.Damage, Damage.With(Source.Attack)
+                    Reference.AsDamageType.Damage, Damage.With(Source.Attack)
                 },
                 {
                     "({DamageTypeMatchers}) attack damage",
-                    Group.AsDamageType.Damage, Damage.With(Source.Attack)
+                    Reference.AsDamageType.Damage, Damage.With(Source.Attack)
                 },
                 {
                     "({DamageTypeMatchers}) spell damage",
-                    Group.AsDamageType.Damage, Damage.With(Source.Spell)
+                    Reference.AsDamageType.Damage, Damage.With(Source.Spell)
                 },
                 { "burning damage", Fire.Damage, Damage.With(Source.DamageOverTime) },
                 // other combinations
@@ -60,6 +64,11 @@ namespace PoESkillTree.Computation.Data
                     Physical.Damage,
                     And(Damage.With(Source.Attack), With(Skills[Keyword.Projectile]))
                 },
-            };
+            }.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

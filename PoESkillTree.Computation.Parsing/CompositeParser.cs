@@ -1,41 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using PoESkillTree.Common;
+﻿using System.Collections.Generic;
+using PoESkillTree.Computation.Parsing.Steps;
 
 namespace PoESkillTree.Computation.Parsing
 {
-    public class CompositeParser<TInnerResult, TResult> : IParser<TResult>
+    public class CompositeParser<TInnerResult> : IParser<IReadOnlyList<TInnerResult>>
     {
-        private readonly IFactory<IParsingSession<TInnerResult>> _sessionFactory;
-        private readonly Func<IReadOnlyList<TInnerResult>, TResult> _resultAggregator;
+        private readonly IStep<IParser<TInnerResult>, bool> _initialStep;
 
-        public CompositeParser(IFactory<IParsingSession<TInnerResult>> sessionFactory,
-            Func<IReadOnlyList<TInnerResult>, TResult> resultAggregator)
+        public CompositeParser(IStep<IParser<TInnerResult>, bool> initialStep)
         {
-            _sessionFactory = sessionFactory;
-            _resultAggregator = resultAggregator;
+            _initialStep = initialStep;
         }
 
-        public bool TryParse(string stat, out string remaining, out TResult result)
+        public bool TryParse(string stat, out string remaining, out IReadOnlyList<TInnerResult> result)
         {
-            var session = _sessionFactory.Create();
+            var step = _initialStep;
             remaining = stat;
             var results = new List<TInnerResult>();
-            while (!session.Completed)
+            while (!step.Completed)
             {
-                var parser = session.CurrentParser;
-                if (parser.TryParse(remaining, out remaining, out var singleResult))
+                var parser = step.Current;
+                var parserReturn = parser.TryParse(remaining, out remaining, out var singleResult);
+                if (parserReturn)
                 {
                     results.Add(singleResult);
-                    session.ParseSuccessful();
                 }
-                else
-                {
-                    session.ParseFailed();
-                }
+                step = step.Next(parserReturn);
             }
-            result = _resultAggregator(results);
-            return session.Successful;
+            result = results;
+            return step.Successful;
         }
     }
 }

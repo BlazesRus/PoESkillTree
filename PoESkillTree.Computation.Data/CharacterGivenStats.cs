@@ -1,18 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
     // see http://pathofexile.gamepedia.com/Character and Metadata/Characters/Character.ot in GGPK
     public class CharacterGivenStats : UsesStatProviders, IGivenStats
     {
-        public CharacterGivenStats(IProviderFactories providerFactories)
-            : base(providerFactories)
+        private readonly Lazy<IReadOnlyList<GivenStatData>> _lazyGivenStats;
+
+        public CharacterGivenStats(IBuilderFactories builderFactories)
+            : base(builderFactories)
         {
-            GivenStats = CreateCollection().ToList();
+            _lazyGivenStats =
+                new Lazy<IReadOnlyList<GivenStatData>>(() => CreateCollection().ToList());
         }
 
         public IReadOnlyList<string> GivenStatLines { get; } = new[]
@@ -56,7 +61,7 @@ namespace PoESkillTree.Computation.Data
             "100% of non-chaos damage is taken from energy shield before life"
         };
 
-        public IReadOnlyList<GivenStatData> GivenStats { get; }
+        public IReadOnlyList<GivenStatData> GivenStats => _lazyGivenStats.Value;
 
         private GivenStatCollection CreateCollection() => new GivenStatCollection
         {

@@ -1,23 +1,30 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using PoESkillTree.Computation.Providers.Conditions;
-using PoESkillTree.Computation.Providers.Stats;
-using PoESkillTree.Computation.Providers.Values;
+using PoESkillTree.Computation.Parsing.Builders.Conditions;
+using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Parsing.Builders.Values;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
 
 namespace PoESkillTree.Computation.Data.Collections
 {
-    public class StatMatcherCollection : StatMatcherCollection<IStatProvider>
+    public class StatMatcherCollection : StatMatcherCollection<IStatBuilder>
     {
-        public StatMatcherCollection(IMatchBuilder matchBuilder) : base(matchBuilder)
+        public StatMatcherCollection(IModifierBuilder modifierBuilder,
+            IValueBuilders valueFactory) : base(modifierBuilder, valueFactory)
         {
         }
     }
 
 
-    public class StatMatcherCollection<T> : MatcherCollection where T : class, IStatProvider
+    public class StatMatcherCollection<T> : MatcherCollection where T : class, IStatBuilder
     {
-        public StatMatcherCollection(IMatchBuilder matchBuilder) : base(matchBuilder)
+        private readonly IValueBuilders _valueFactory;
+
+        public StatMatcherCollection(IModifierBuilder modifierBuilder,
+            IValueBuilders valueFactory) : base(modifierBuilder)
         {
+            _valueFactory = valueFactory;
         }
 
         public void Add([RegexPattern] string regex, params T[] stats)
@@ -27,31 +34,32 @@ namespace PoESkillTree.Computation.Data.Collections
 
         public void Add([RegexPattern] string regex, IEnumerable<T> stats)
         {
-            var builder = MatchBuilder
+            var builder = ModifierBuilder
                 .WithStats(stats);
             Add(regex, builder);
         }
 
         public void Add([RegexPattern] string regex, T stat, string substitution = "")
         {
-            var builder = MatchBuilder
+            var builder = ModifierBuilder
                 .WithStat(stat);
             Add(regex, builder, substitution);
         }
 
-        public void Add([RegexPattern] string regex, T stat, IConditionProvider condition)
+        public void Add([RegexPattern] string regex, T stat, IConditionBuilder condition)
         {
-            var builder = MatchBuilder
+            var builder = ModifierBuilder
                 .WithStat(stat)
                 .WithCondition(condition);
             Add(regex, builder);
         }
 
-        public void Add([RegexPattern] string regex, T stat, ValueFunc converter)
+        public void Add([RegexPattern] string regex, T stat, 
+            Func<ValueBuilder, ValueBuilder> converter)
         {
-            var builder = MatchBuilder
+            var builder = ModifierBuilder
                 .WithStat(stat)
-                .WithValueConverter(converter);
+                .WithValueConverter(_valueFactory.WrapValueConverter(converter));
             Add(regex, builder);
         }
     }

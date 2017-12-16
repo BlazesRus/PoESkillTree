@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using PoESkillTree.Common.Model.Items.Enums;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Matching;
-using static PoESkillTree.Computation.Providers.Values.ValueProviderUtils;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Matching;
+using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using static PoESkillTree.Computation.Parsing.Builders.Values.ValueBuilderUtils;
 
 namespace PoESkillTree.Computation.Data
 {
@@ -14,20 +16,19 @@ namespace PoESkillTree.Computation.Data
         // These apply to the main value of the modifier (or multiple e.g. for "Adds # to # ..."),
         // not to other values like in "for # seconds".
 
-        private readonly IMatchBuilder _matchBuilder;
+        private readonly IModifierBuilder _modifierBuilder;
 
-        public ValueConversionMatchers(IProviderFactories providerFactories,
-            IMatchContextFactory matchContextFactory, IMatchBuilder matchBuilder) 
-            : base(providerFactories, matchContextFactory)
+        public ValueConversionMatchers(IBuilderFactories builderFactories,
+            IMatchContexts matchContexts, IModifierBuilder modifierBuilder) 
+            : base(builderFactories, matchContexts)
         {
-            _matchBuilder = matchBuilder;
-            Matchers = CreateCollection().ToList();
+            _modifierBuilder = modifierBuilder;
         }
 
-        public IReadOnlyList<MatcherData> Matchers { get; }
+        public bool MatchesWholeLineOnly => false;
 
-        private ValueConversionMatcherCollection CreateCollection() =>
-            new ValueConversionMatcherCollection(_matchBuilder)
+        public IEnumerator<MatcherData> GetEnumerator() => 
+            new ValueConversionMatcherCollection(_modifierBuilder, ValueFactory)
             {
                 // action
                 { "for each enemy you've killed recently", Kill.CountRecently },
@@ -46,14 +47,15 @@ namespace PoESkillTree.Computation.Data
                 // stats
                 {
                     "per # ({StatMatchers})",
-                    PerStat(stat: Group.AsStat, divideBy: Value)
+                    PerStat(stat: Reference.AsStat, divideBy: Value)
                 },
                 {
                     "per # ({StatMatchers}) ceiled",
-                    PerStatCeiled(stat: Group.AsStat, divideBy: Value)
+                    PerStatCeiled(stat: Reference.AsStat, divideBy: Value)
                 },
-                { "per ({StatMatchers})", PerStat(stat: Group.AsStat) },
-                { "per Level", PerStat(Self.Level) },
+                { "per ({StatMatchers})", PerStat(stat: Reference.AsStat) },
+                { "per grand spectrum", PerStat(stat: Stat.GrandSpectrumJewelsSocketed) },
+                { "per level", PerStat(Self.Level) },
                 // buffs
                 {
                     "per buff on you",
@@ -77,6 +79,11 @@ namespace PoESkillTree.Computation.Data
                     Traps.CombinedInstances.Value + Mines.CombinedInstances.Value
                 },
                 { "per totem", Totems.CombinedInstances.Value },
-            };
+            }.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

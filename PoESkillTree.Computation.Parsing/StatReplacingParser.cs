@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Parsing
 {
@@ -26,7 +27,10 @@ namespace PoESkillTree.Computation.Parsing
             {
                 ret &= _inner.TryParse(subStat, out var singleRemaining, out var singleResult);
                 results.Add(singleResult);
-                remainings.Add(singleRemaining);
+                if (singleRemaining != string.Empty)
+                {
+                    remainings.Add(singleRemaining);
+                }
             }
             result = results;
             remaining = string.Join("\n", remainings);

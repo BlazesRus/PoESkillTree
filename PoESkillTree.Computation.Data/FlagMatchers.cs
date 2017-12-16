@@ -1,27 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers.Stats;
+using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
-    public class FlagMatchers : IReferencedMatchers<IFlagStatProvider>
+    public class FlagMatchers : ReferencedMatchersBase<IFlagStatBuilder>
     {
-        private IFlagStatProviderFactory Flag { get; }
+        private IFlagStatBuilders Flag { get; }
 
-        public FlagMatchers(IFlagStatProviderFactory flagStatProviderFactory)
+        public FlagMatchers(IFlagStatBuilders flagStatBuilders)
         {
-            Flag = flagStatProviderFactory;
-
-            Matchers = CreateCollection().ToList();
+            Flag = flagStatBuilders;
         }
 
-        public string ReferenceName { get; } = nameof(FlagMatchers);
-
-        public IReadOnlyList<ReferencedMatcherData<IFlagStatProvider>> Matchers { get; }
-
-        private ReferencedMatcherCollection<IFlagStatProvider> CreateCollection() =>
-            new ReferencedMatcherCollection<IFlagStatProvider>
+        protected override IEnumerable<ReferencedMatcherData> CreateCollection() =>
+            new ReferencedMatcherCollection<IFlagStatBuilder>
             {
                 { "onslaught", Flag.Onslaught },
                 { "unholy might", Flag.UnholyMight },

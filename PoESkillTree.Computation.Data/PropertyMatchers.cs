@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Providers;
-using PoESkillTree.Computation.Providers.Matching;
+using PoESkillTree.Computation.Parsing.Builders;
+using PoESkillTree.Computation.Parsing.Builders.Matching;
+using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Parsing.ModifierBuilding;
 
 namespace PoESkillTree.Computation.Data
 {
@@ -13,26 +15,30 @@ namespace PoESkillTree.Computation.Data
         // "Elemental Damage: ..." needs to be replaced by up to three properties (one for each 
         // element) before it gets here.
 
-        private readonly IMatchBuilder _matchBuilder;
+        private readonly IModifierBuilder _modifierBuilder;
 
-        public PropertyMatchers(IProviderFactories providerFactories, 
-            IMatchContextFactory matchContextFactory, IMatchBuilder matchBuilder)
-            : base(providerFactories, matchContextFactory)
+        public PropertyMatchers(IBuilderFactories builderFactories, 
+            IMatchContexts matchContexts, IModifierBuilder modifierBuilder)
+            : base(builderFactories, matchContexts)
         {
-            _matchBuilder = matchBuilder;
-            Matchers = CreateCollection().ToList();
+            _modifierBuilder = modifierBuilder;
         }
 
-        public IReadOnlyList<MatcherData> Matchers { get; }
+        public bool MatchesWholeLineOnly => false;
 
-        private PropertyMatcherCollection CreateCollection() => new PropertyMatcherCollection(
-            _matchBuilder)
+        public IEnumerator<MatcherData> GetEnumerator() => new PropertyMatcherCollection(
+            _modifierBuilder, ValueFactory)
         {
             { "quality" }, // do nothing with it
             { "attacks per second", Skills.Speed },
             { "cast time", Skills.Speed, v => v.Invert },
             { "fire damage", Fire.Damage },
             { "damage effectiveness", Skills.DamageEffectiveness }
-        };
+        }.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }
