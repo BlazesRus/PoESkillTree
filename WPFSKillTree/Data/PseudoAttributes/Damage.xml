@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Damage pseudo attributes -->
 <PseudoAttributes>
-	<PseudoAttribute Name="#% increased Non-Specific Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Non-Specific Damage(Total)" Group="Damage">
 		<Attribute Name="#% increased {0} Damage">
 			<Conditions><Tag>{0}</Tag></Conditions>
 		</Attribute>
@@ -85,7 +85,7 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Physical Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Physical Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Physical Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
@@ -103,7 +103,7 @@
 			<Conditions><Tag>Duration</Tag></Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Fire Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Fire Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Fire Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
@@ -119,7 +119,7 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Cold Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Cold Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Cold Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
@@ -135,7 +135,7 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Lightning Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Lightning Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Lightning Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
@@ -160,14 +160,14 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Elemental Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Elemental Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Chaos Damage" Hidden="True" Group="Damage">
 		<Attribute Name="#% increased Chaos Damage" />
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Chaos Damage" Group="Damage">
+	<PseudoAttribute Name="#% increased Chaos Damage(Total)" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Chaos Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
