@@ -219,7 +219,11 @@ namespace POESKillTree.SkillTreeFiles
                 case 54127://Jewel slot south of Duelist starting area
                     return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel", "JSlot_StrDex_Duelist" };
                 default://Non-Threshold Jewel Slots
+#if (DEBUG)
                     return new[] { PlusJewelSocket, "Jewel Socket ID: " + skillNode.id};
+#else
+                    return new[] { PlusJewelSocket};
+#endif
             }
         }
 

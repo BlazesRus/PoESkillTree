@@ -42,7 +42,7 @@
   </PropertyGroup>
   <PropertyGroup Label="GlobalRules">
     <ErrorReport>prompt</ErrorReport>
-	<LangVersion>latest</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'AnyCPU'">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -84,7 +84,7 @@
     </Otherwise>
   </Choose>
   <!--Forcing Configuration names to stay saved-->
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
@@ -245,6 +245,7 @@
     <Compile Include="Model\Items\Mods\Affix.cs" />
     <Compile Include="Model\Items\Mods\Stat.cs" />
     <Compile Include="Model\Items\Mods\StatLocalityChecker.cs" />
+    <Compile Include="SkillTreeFiles\ConvertedJewelData.cs" />
     <Compile Include="SkillTreeFiles\PoESkillTreeGlobalSettings.cs" />
     <Compile Include="SkillTreeFiles\TrackedAttributes.cs" />
     <Compile Include="Utils\RePoEUtils.cs" />
