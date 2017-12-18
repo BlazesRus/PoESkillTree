@@ -45,6 +45,17 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
             Name = name;
             ConversionMultiplier = 1;
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PseudoAttribute"/> class from TrackedAttribute
+        /// </summary>
+        public Attribute(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
+        {
+            Name = Target.Name();
+            //Group = "Hidden";
+            //Attributes = new List<Attribute>();
+            //Attributes.Add(
+            ConversionMultiplier = 1;
+        }
 
         public override string ToString()
         {

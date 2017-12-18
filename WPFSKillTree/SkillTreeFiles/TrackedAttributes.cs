@@ -28,32 +28,33 @@ namespace POESKillTree.SkillTreeFiles
         {
             AttributeData = Attribute;
         }
-        /// <summary>
-        /// Updates the value.
-        /// </summary>
-        /// <param name="attrlist">The attrlist.</param>
-        public void UpdateValue(List<POESKillTree.ViewModels.Attribute> attrlist)
-        {
-            TotalStat = 0.0f;
-            string AttributeName;
-            float Multiplier;
-            foreach (var Attribute in AttributeData.Attributes)
-            {
-                AttributeName = Attribute.Name;
-                Multiplier = Attribute.ConversionMultiplier;
-                for (int Index = 0; Index < attrlist.Count && Multiplier != 0.0f; ++Index)
-                {
-                    if (attrlist[Index].Text == AttributeName)
-                    {
-                        TotalStat += Multiplier * attrlist[Index].Deltas[0];
-                        Multiplier = 0.0f;
-                    }
-                }
-            }
-#if(DEBUG)
-            Console.WriteLine(Name() + " tested from List<POESKillTree.ViewModels.Attribute> to have total stat of " + TotalStat);
-#endif
-        }
+
+//        /// <summary>
+//        /// Updates the value.
+//        /// </summary>
+//        /// <param name="attrlist">The attrlist.</param>
+//        public void UpdateValue(List<POESKillTree.ViewModels.Attribute> attrlist)
+//        {
+//            TotalStat = 0.0f;
+//            string AttributeName;
+//            float Multiplier;
+//            foreach (var Attribute in AttributeData.Attributes)
+//            {
+//                AttributeName = Attribute.Name;
+//                Multiplier = Attribute.ConversionMultiplier;
+//                for (int Index = 0; Index < attrlist.Count && Multiplier != 0.0f; ++Index)
+//                {
+//                    if (attrlist[Index].Text == AttributeName)
+//                    {
+//                        TotalStat += Multiplier * attrlist[Index].Deltas[0];
+//                        Multiplier = 0.0f;
+//                    }
+//                }
+//            }
+//#if(DEBUG)
+//            Console.WriteLine(Name() + " tested from List<POESKillTree.ViewModels.Attribute> to have total stat of " + TotalStat);
+//#endif
+//        }
 
         /// <summary>
         /// Updates the value.
@@ -80,34 +81,30 @@ namespace POESKillTree.SkillTreeFiles
 #endif
         }
 
-        /// <summary>
-        /// Updates the value.
-        /// </summary>
-        /// <param name="tree">The tree.</param>
-        public void UpdateValue(SkillTree tree)
-        {
-            TotalStat = 0.0f;
-            string AttributeName;
-            float Multiplier;
-            List<float> RetrievedVal;
-            foreach (var Attribute in AttributeData.Attributes)
-            {
-                AttributeName = Attribute.Name;
-                Multiplier = Attribute.ConversionMultiplier;
-                tree.SelectedAttributes.TryGetValue(AttributeName, out RetrievedVal);
-                if (RetrievedVal!=null&&RetrievedVal.Count == 1)
-                {
-                    TotalStat += Multiplier * RetrievedVal[0];
-                }
-            }
-#if(DEBUG)
-            Console.WriteLine(Name() + " tested from SkillTree to have total stat of " + TotalStat);
-#endif
-        }
-        //public POESKillTree.ViewModels.Attribute CreateAttribute()
-        //{
-        //    string AttributeName;
-        //}
+        //        /// <summary>
+        //        /// Updates the value.(Fails to correctly calculate from ControllViewModelSolveAsync)
+        //        /// </summary>
+        //        /// <param name="tree">The tree.</param>
+        //        public void UpdateValue(SkillTree tree)
+        //        {
+        //            TotalStat = 0.0f;
+        //            string AttributeName;
+        //            float Multiplier;
+        //            List<float> RetrievedVal;
+        //            foreach (var Attribute in AttributeData.Attributes)
+        //            {
+        //                AttributeName = Attribute.Name;
+        //                Multiplier = Attribute.ConversionMultiplier;
+        //                tree.SelectedAttributes.TryGetValue(AttributeName, out RetrievedVal);
+        //                if (RetrievedVal!=null&&RetrievedVal.Count == 1)
+        //                {
+        //                    TotalStat += Multiplier * RetrievedVal[0];
+        //                }
+        //            }
+        //#if(DEBUG)
+        //            Console.WriteLine(Name() + " tested from SkillTree to have total stat of " + TotalStat);
+        //#endif
+        //        }
     }
 
     public class TrackedAttributes : System.Collections.Generic.List<TrackedAttribute>
@@ -159,7 +156,6 @@ namespace POESKillTree.SkillTreeFiles
                     this[Index] = new TrackedAttribute(Attribute);
                 }
             }
-
         }
         /// <summary>
         /// Gets the name of attribute.
@@ -172,19 +168,19 @@ namespace POESKillTree.SkillTreeFiles
             return CurrentAttribute.Name();
 
         }
-        /// <summary>
-        /// Updates the stats.
-        /// </summary>
-        /// <param name="tree">The tree.</param>
-        public void UpdateStats(SkillTree tree)
-        {
-            if(Count==0){return;}
-            for (int Index=0;Index<Count;++Index)
-            {
-                this[Index].UpdateValue(tree);
-            }
 
-        }
+        ///// <summary>
+        ///// Updates the stats.(Fails to correctly calculate from ControllViewModelSolveAsync)
+        ///// </summary>
+        ///// <param name="tree">The tree.</param>
+        //public void UpdateStats(SkillTree tree)
+        //{
+        //    if(Count==0){return;}
+        //    for (int Index=0;Index<Count;++Index)
+        //    {
+        //        this[Index].UpdateValue(tree);
+        //    }
+        //}
 
         /// <summary>
         /// Updates the value.
@@ -232,25 +228,51 @@ namespace POESKillTree.SkillTreeFiles
         //    }
         //}
 
+        ///// <summary>
+        ///// Places the Tracked Attributes into attribute dictionary
+        ///// </summary>
+        ///// <param name="AttributeDic">The attribute dictionary</param>
+        ///// <param name="Target">The target.</param>
+        //public void PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic, TrackedAttribute Target)
+        //{
+        //    if (AttributeDic.ContainsKey(Target.Name()))
+        //    {
+        //        List<float> TargetValue = new List<float>(1);
+        //        TargetValue.Add(Target.TotalStat);
+        //        AttributeDic[Target.Name()] = TargetValue;
+        //    }
+        //    else
+        //    {
+        //        List<float> TargetValue = new List<float>(1);
+        //        TargetValue.Add(Target.TotalStat);
+        //        AttributeDic.Add(Target.Name(), TargetValue);
+        //    }
+        //}
+
         /// <summary>
         /// Places the Tracked Attributes into attribute dictionary
         /// </summary>
-        /// <param name="AttributeDic">The attribute dictionary</param>
-        /// <param name="Target">The target.</param>
-        public void PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic, TrackedAttribute Target)
+        /// <param name="AttributeDic">The attribute dic.</param>
+        /// <returns></returns>
+        public Dictionary<string, List<float>> PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic)
         {
-            if (AttributeDic.ContainsKey(Target.Name()))
+            if (Count == 0) { return AttributeDic; }
+            for (int Index = 0; Index < Count; ++Index)
             {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat;
-                AttributeDic[Target.Name()] = TargetValue;
+                if (AttributeDic.ContainsKey(this[Index].Name()))
+                {
+                    List<float> TargetValue = new List<float>(1);
+                    TargetValue.Add(this[Index].TotalStat);
+                    AttributeDic[this[Index].Name()] = TargetValue;
+                }
+                else
+                {
+                    List<float> TargetValue = new List<float>(1);
+                    TargetValue.Add(this[Index].TotalStat);
+                    AttributeDic.Add(this[Index].Name(), TargetValue);
+                }
             }
-            else
-            {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat;
-                AttributeDic.Add(Target.Name(), TargetValue);
-            }
+            return AttributeDic;
         }
 
         /// <summary>

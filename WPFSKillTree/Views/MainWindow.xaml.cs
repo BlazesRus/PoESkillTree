@@ -450,7 +450,7 @@ namespace POESKillTree.Views
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var controller = await ExtendedDialogManager.ShowProgressAsync(this, L10n.Message("Initialization"),
-                        L10n.Message("Initalizing window ..."));
+                        L10n.Message("Initializing window ..."));
             controller.Maximum = 1;
             controller.SetIndeterminate();
 
@@ -549,7 +549,7 @@ namespace POESKillTree.Views
             updateCanvasSize();
             recSkillTree.Fill = new VisualBrush(Tree.SkillTreeVisual);
 
-            controller.SetMessage(L10n.Message("Initalizing window ..."));
+            controller.SetMessage(L10n.Message("Initializing window ..."));
             controller.SetIndeterminate();
             await Task.Delay(1); // Give the progress dialog a chance to update
 
@@ -1250,7 +1250,13 @@ namespace POESKillTree.Views
                     }
                 }
             }
-            
+
+            if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
+            {
+                GlobalSettings.CurrentTrackedTotalStats.UpdateValue(attritemp);
+                attritemp = GlobalSettings.CurrentTrackedTotalStats.PlaceIntoAttributeDic(attritemp);
+            }
+
             foreach (var item in (attritemp.Select(InsertNumbersInAttributes)))
             {
                 var a = new Attribute(item);
@@ -1265,6 +1271,9 @@ namespace POESKillTree.Views
             cbAscType.SelectedIndex = Tree.AscType;
         }
 
+        /// <summary>
+        /// Updates the attribute list.
+        /// </summary>
         public void UpdateAttributeList()
         {
             lbAttr.SelectedIndex = -1;
@@ -1272,7 +1281,27 @@ namespace POESKillTree.Views
             var copy = Tree.HighlightedAttributes == null
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
-            
+
+            if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
+            {
+                GlobalSettings.CurrentTrackedAttributes.UpdateValue(Tree.SelectedAttributes);
+                for (int Index = 0; Index < GlobalSettings.CurrentTrackedAttributes.Count; ++Index)
+                {
+                    if (Tree.SelectedAttributes.ContainsKey(GlobalSettings.CurrentTrackedAttributes[Index].Name()))
+                    {
+                        List<float> TargetValue = new List<float>(1);
+                        TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
+                        Tree.SelectedAttributes[GlobalSettings.CurrentTrackedAttributes[Index].Name()] = TargetValue;
+                    }
+                    else
+                    {
+                        List<float> TargetValue = new List<float>(1);
+                        TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
+                        Tree.SelectedAttributes.Add(GlobalSettings.CurrentTrackedAttributes[Index].Name(), TargetValue);
+                    }
+                }
+            }
+
             foreach (var item in Tree.SelectedAttributes)
             {
                 var a = new Attribute(InsertNumbersInAttributes(item));
@@ -1312,6 +1341,9 @@ namespace POESKillTree.Views
             AscendancyTotalPoints.Content = "[" + points["AscendancyTotal"].ToString() + "]";
         }
 
+        /// <summary>
+        /// Updates the statistics.
+        /// </summary>
         public void UpdateStatistics()
         {
             _defenceList.Clear();

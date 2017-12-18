@@ -43,7 +43,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private readonly Stopwatch _reportStopwatch = new Stopwatch();
 
         /// <summary>
-        /// Token source for cancelling the solver.
+        /// Token source for canceling the solver.
         /// </summary>
         private CancellationTokenSource _cts;
 
@@ -255,7 +255,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         }
 
         /// <summary>
-        /// Executes the solver asyncronously.
+        /// Executes the solver asynchronously.
         /// </summary>
         private async Task SolveAsync()
         {
