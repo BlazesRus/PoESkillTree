@@ -67,7 +67,6 @@
       <PropertyGroup Label="DefaultDebugOptions">
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
-        <OutputType>Exe</OutputType>
         <DefineConstants>DEBUG</DefineConstants>
         <Optimize>false</Optimize>
         <UseVSHostingProcess>true</UseVSHostingProcess>
@@ -80,7 +79,6 @@
         <Optimize>true</Optimize>
         <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
         <DefineConstants>TRACE</DefineConstants>
-        <OutputType>WinExe</OutputType>
         <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
       </PropertyGroup>
     </Otherwise>

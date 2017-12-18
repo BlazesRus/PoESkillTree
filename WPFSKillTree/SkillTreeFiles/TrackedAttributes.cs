@@ -5,18 +5,33 @@ using POESKillTree.TreeGenerator.Solver;
 
 namespace POESKillTree.SkillTreeFiles
 {
-	public class TrackedAttribute
-	{
+    public class TrackedAttribute
+    {
+        /// <summary>
+        /// The attribute data
+        /// </summary>
         public PseudoAttribute AttributeData;
+        /// <summary>
+        /// Names this instance.
+        /// </summary>
+        /// <returns></returns>
         public string Name()
         {
             return AttributeData.Name;
         }
-		public float TotalStat=0.0f;
+        public float TotalStat=0.0f;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackedAttribute"/> class.
+        /// </summary>
+        /// <param name="Attribute">The attribute.</param>
         public TrackedAttribute(PseudoAttribute Attribute)
         {
             AttributeData = Attribute;
         }
+        /// <summary>
+        /// Updates the value.
+        /// </summary>
+        /// <param name="attrlist">The attrlist.</param>
         public void UpdateValue(List<POESKillTree.ViewModels.Attribute> attrlist)
         {
             TotalStat = 0.0f;
@@ -35,9 +50,15 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
-            Console.WriteLine(Name() + " tested to have total stat of " + TotalStat);
+#if(DEBUG)
+            Console.WriteLine(Name() + " tested from List<POESKillTree.ViewModels.Attribute> to have total stat of " + TotalStat);
+#endif
         }
 
+        /// <summary>
+        /// Updates the value.
+        /// </summary>
+        /// <param name="attrlist">The attrlist.</param>
         public void UpdateValue(Dictionary<string, List<float>> attrlist)
         {
             TotalStat = 0.0f;
@@ -54,31 +75,48 @@ namespace POESKillTree.SkillTreeFiles
                     TotalStat += Multiplier * RetrievedVal[0];
                 }
             }
-            Console.WriteLine(Name() + " tested to have total stat of " + TotalStat);
+#if(DEBUG)
+            Console.WriteLine(Name() + " tested from attrDictionary to have total stat of " + TotalStat);
+#endif
         }
 
+        /// <summary>
+        /// Updates the value.
+        /// </summary>
+        /// <param name="tree">The tree.</param>
         public void UpdateValue(SkillTree tree)
         {
             TotalStat = 0.0f;
             string AttributeName;
             float Multiplier;
-			List<float> RetrievedVal;
-			foreach (var Attribute in AttributeData.Attributes)
-			{
-				AttributeName = Attribute.Name;
-				Multiplier = Attribute.ConversionMultiplier;
-				tree.SelectedAttributes.TryGetValue(AttributeName, out RetrievedVal);
-				if (RetrievedVal!=null&&RetrievedVal.Count == 1)
-				{
-					TotalStat += Multiplier * RetrievedVal[0];
-				}
-			}
-            Console.WriteLine(Name() + " tested to have total stat of " + TotalStat);
+            List<float> RetrievedVal;
+            foreach (var Attribute in AttributeData.Attributes)
+            {
+                AttributeName = Attribute.Name;
+                Multiplier = Attribute.ConversionMultiplier;
+                tree.SelectedAttributes.TryGetValue(AttributeName, out RetrievedVal);
+                if (RetrievedVal!=null&&RetrievedVal.Count == 1)
+                {
+                    TotalStat += Multiplier * RetrievedVal[0];
+                }
+            }
+#if(DEBUG)
+            Console.WriteLine(Name() + " tested from SkillTree to have total stat of " + TotalStat);
+#endif
         }
+        //public POESKillTree.ViewModels.Attribute CreateAttribute()
+        //{
+        //    string AttributeName;
+        //}
     }
 
     public class TrackedAttributes : System.Collections.Generic.List<TrackedAttribute>
     {
+        /// <summary>
+        /// Gets the index of attribute.
+        /// </summary>
+        /// <param name="Name">The name of Attribute</param>
+        /// <returns></returns>
         public int GetIndexOfAttribute(string Name)
         {
             for(int Index=0;Index<this.Count;Index++)
@@ -90,10 +128,18 @@ namespace POESKillTree.SkillTreeFiles
             }
             return -1;
         }
+        /// <summary>
+        /// Adds the specified attribute.
+        /// </summary>
+        /// <param name="Attribute">The attribute.</param>
         public void Add(PseudoAttribute Attribute)
         {
             Add(new TrackedAttribute(Attribute));
         }
+        /// <summary>
+        /// Starts the tracking.
+        /// </summary>
+        /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints.</param>
         public void StartTracking(Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints)
         {
             int Index;
@@ -115,12 +161,21 @@ namespace POESKillTree.SkillTreeFiles
             }
 
         }
+        /// <summary>
+        /// Gets the name of attribute.
+        /// </summary>
+        /// <param name="Index">The index.</param>
+        /// <returns></returns>
         public string GetNameOfAttribute(int Index)
         {
             TrackedAttribute CurrentAttribute = this[Index];
             return CurrentAttribute.Name();
 
         }
+        /// <summary>
+        /// Updates the stats.
+        /// </summary>
+        /// <param name="tree">The tree.</param>
         public void UpdateStats(SkillTree tree)
         {
             if(Count==0){return;}
@@ -131,6 +186,10 @@ namespace POESKillTree.SkillTreeFiles
 
         }
 
+        /// <summary>
+        /// Updates the value.
+        /// </summary>
+        /// <param name="selectedAttributes">The selected attributes.</param>
         public void UpdateValue(Dictionary<string, List<float>> selectedAttributes)
         {
             if (Count == 0) { return; }
@@ -140,6 +199,11 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
+        /// <summary>
+        /// Gets the index of attribute.
+        /// </summary>
+        /// <param name="Attribute">The attribute.</param>
+        /// <returns></returns>
         public int GetIndexOfAttribute(PseudoAttribute Attribute)
         {
             for (int Index = 0; Index < Count; ++Index)
@@ -168,6 +232,30 @@ namespace POESKillTree.SkillTreeFiles
         //    }
         //}
 
+        /// <summary>
+        /// Places the Tracked Attributes into attribute dictionary
+        /// </summary>
+        /// <param name="AttributeDic">The attribute dictionary</param>
+        /// <param name="Target">The target.</param>
+        public void PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic, TrackedAttribute Target)
+        {
+            if (AttributeDic.ContainsKey(Target.Name()))
+            {
+                List<float> TargetValue = new List<float>(1);
+                TargetValue[0] = Target.TotalStat;
+                AttributeDic[Target.Name()] = TargetValue;
+            }
+            else
+            {
+                List<float> TargetValue = new List<float>(1);
+                TargetValue[0] = Target.TotalStat;
+                AttributeDic.Add(Target.Name(), TargetValue);
+            }
+        }
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
         public void Reset()
         {
             for (int Index = 0; Index < Count; ++Index)

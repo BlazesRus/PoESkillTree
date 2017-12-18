@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Damage pseudo attributes -->
 <PseudoAttributes>
-	<PseudoAttribute Name="#% increased Non-Specific Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Non-Specific Damage" Group="Damage">
 		<Attribute Name="#% increased {0} Damage">
 			<Conditions><Tag>{0}</Tag></Conditions>
 		</Attribute>
