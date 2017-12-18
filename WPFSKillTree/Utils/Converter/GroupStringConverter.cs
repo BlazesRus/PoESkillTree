@@ -256,6 +256,15 @@ namespace POESKillTree.Utils.Converter
             new[] {"Dexterity", CoreAttributes},
             new[] {"JSlot", Hidden},
             new[] {"Jewel Socket ID: ", Hidden},
+            new[] {"(Total)", PseudoTotal},
+            new[] {"[Non-Tagged]", PseudoTotal},
+            new[] {"Charged Dash Damage", PseudoTotal},
+            new[] {"before tags", PseudoTotal},
+            new[] {"SharedStrength", PseudoTotal},
+            new[] {"maximum Base", PseudoTotal},
+            new[] {"combined", PseudoTotal},
+            new[] {"increased Hybrid", PseudoTotal},
+            new[] {"increased Total", PseudoTotal},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
