@@ -62,27 +62,20 @@
     <PlatformTarget>x86</PlatformTarget>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <Choose>
-    <When Condition="$(Configuration.Contains('Debug')) ">
-      <PropertyGroup Label="DefaultDebugOptions">
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <DefineConstants>DEBUG</DefineConstants>
-        <Optimize>false</Optimize>
-        <UseVSHostingProcess>true</UseVSHostingProcess>
-        <Optimize>false</Optimize>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <PropertyGroup Label="DefaultReleaseOptions">
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-        <DefineConstants>TRACE</DefineConstants>
-        <AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
+  <PropertyGroup Label="DefaultDebugOptions" Condition="'$(Configuration)' == 'Debug'">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<DefineConstants>DEBUG;TRACE</DefineConstants>
+	<UseVSHostingProcess>true</UseVSHostingProcess>
+	<Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Label="DefaultReleaseOptions" Condition="'$(Configuration)' == 'Release'">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+	<DefineConstants>TRACE</DefineConstants>
+	<AllowedReferenceRelatedFileExtensions>.none</AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
   <!--Forcing Configuration names to stay saved-->
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
