@@ -205,7 +205,6 @@ namespace POESKillTree.TreeGenerator.Solver
                 var hillClimber = new HillClimber(FitnessFunction, TargetNodes, AllNodes);
                 _bestSolution = Extend(hillClimber.Improve(DnaToUsedNodes(_bestDna)));
             }
-            //GlobalSettings.CurrentTrackedAttributes.UpdateStats(_tree);
         }
 
         /// <summary>

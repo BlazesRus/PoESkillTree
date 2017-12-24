@@ -1251,7 +1251,9 @@ namespace POESKillTree.Views
                 }
             }
 
-            if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
+            attritemp = ConvertedJewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
+
+            if (GlobalSettings.CurrentTrackedTotalStats.Count != 0)
             {
                 GlobalSettings.CurrentTrackedTotalStats.UpdateValue(attritemp);
                 attritemp = GlobalSettings.CurrentTrackedTotalStats.PlaceIntoAttributeDic(attritemp);
@@ -2128,6 +2130,26 @@ namespace POESKillTree.Views
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedNodes.UnionWith(nodes);
                 Tree.HighlightedAttributes = SkillTree.GetAttributes(nodes, ctype, build.Level, build.Bandits);
+                //if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
+                //{
+                //    List<float> TargetValue;
+                //    GlobalSettings.CurrentTrackedAttributes.UpdateValue(Tree.HighlightedAttributes);
+                //    for (int Index = 0; Index < GlobalSettings.CurrentTrackedAttributes.Count; ++Index)
+                //    {
+                //        if (Tree.HighlightedAttributes.ContainsKey(GlobalSettings.CurrentTrackedAttributes[Index].Name()))
+                //        {
+                //            TargetValue = new List<float>(1);
+                //            TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
+                //            Tree.HighlightedAttributes[GlobalSettings.CurrentTrackedAttributes[Index].Name()] = TargetValue;
+                //        }
+                //        else
+                //        {
+                //            TargetValue = new List<float>(1);
+                //            TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
+                //            Tree.HighlightedAttributes.Add(GlobalSettings.CurrentTrackedAttributes[Index].Name(), TargetValue);
+                //        }
+                //    }
+                //}
             }
             else
             {

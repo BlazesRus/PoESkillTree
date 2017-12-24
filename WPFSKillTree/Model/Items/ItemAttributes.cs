@@ -80,130 +80,130 @@ namespace POESKillTree.Model.Items
             set { SetItemInSlot(value, ItemSlot.Belt); }
         }
 
-        public Item Jewel
+        public Item JSlot_Int_Witch
         {
-            get { return GetItemInSlot(ItemSlot.Jewel); }
-            set { SetItemInSlot(value, ItemSlot.Jewel); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Int_Witch); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Int_Witch); }
         }
 
-        public Item Jewel02
+        public Item JSlot_Int_Scion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel02); }
-            set { SetItemInSlot(value, ItemSlot.Jewel02); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Int_Scion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Int_Scion); }
         }
 
-        public Item Jewel03
+        public Item JSlot_Int_WitchShadow
         {
-            get { return GetItemInSlot(ItemSlot.Jewel03); }
-            set { SetItemInSlot(value, ItemSlot.Jewel03); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Int_WitchShadow); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Int_WitchShadow); }
         }
 
-        public Item Jewel04
+        public Item JSlot_DexInt_Scion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel04); }
-            set { SetItemInSlot(value, ItemSlot.Jewel04); }
+            get { return GetItemInSlot(ItemSlot.JSlot_DexInt_Scion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_DexInt_Scion); }
         }
 
-        public Item Jewel05
+        public Item JSlot_StrInt_Scion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel05); }
-            set { SetItemInSlot(value, ItemSlot.Jewel05); }
+            get { return GetItemInSlot(ItemSlot.JSlot_StrInt_Scion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_StrInt_Scion); }
         }
 
-        public Item Jewel06
+        public Item JSlot_StrDex_Scion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel06); }
-            set { SetItemInSlot(value, ItemSlot.Jewel06); }
+            get { return GetItemInSlot(ItemSlot.JSlot_StrDex_Scion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_StrDex_Scion); }
         }
 
-        public Item Jewel07
+        public Item JSlot_Neutral_Acrobatics
         {
-            get { return GetItemInSlot(ItemSlot.Jewel07); }
-            set { SetItemInSlot(value, ItemSlot.Jewel07); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Neutral_Acrobatics); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Neutral_Acrobatics); }
         }
 
-        public Item Jewel08
+        public Item JSlot_Dex_ShadowRanger
         {
-            get { return GetItemInSlot(ItemSlot.Jewel08); }
-            set { SetItemInSlot(value, ItemSlot.Jewel08); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Dex_ShadowRanger); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Dex_ShadowRanger); }
         }
 
-        public Item Jewel09
+        public Item JSlot_DexInt_Shadow
         {
-            get { return GetItemInSlot(ItemSlot.Jewel09); }
-            set { SetItemInSlot(value, ItemSlot.Jewel09); }
+            get { return GetItemInSlot(ItemSlot.JSlot_DexInt_Shadow); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_DexInt_Shadow); }
         }
 
-        public Item Jewel10
+        public Item JSlot_Dex_Ranger
         {
-            get { return GetItemInSlot(ItemSlot.Jewel10); }
-            set { SetItemInSlot(value, ItemSlot.Jewel10); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Dex_Ranger); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Dex_Ranger); }
         }
 
-        public Item Jewel11
+        public Item JSlot_Dex_RangerDuelist
         {
-            get { return GetItemInSlot(ItemSlot.Jewel11); }
-            set { SetItemInSlot(value, ItemSlot.Jewel11); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Dex_RangerDuelist); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Dex_RangerDuelist); }
         }
 
-        public Item Jewel12
+        public Item JSlot_Str_WarriorDuelist
         {
-            get { return GetItemInSlot(ItemSlot.Jewel12); }
-            set { SetItemInSlot(value, ItemSlot.Jewel12); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Str_WarriorDuelist); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Str_WarriorDuelist); }
         }
 
-        public Item Jewel13
+        public Item JSlot_Str_WarriorTemplarScion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel13); }
-            set { SetItemInSlot(value, ItemSlot.Jewel13); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Str_WarriorTemplarScion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Str_WarriorTemplarScion); }
         }
 
-        public Item Jewel14
+        public Item JSlot_Int_TemplarWitch
         {
-            get { return GetItemInSlot(ItemSlot.Jewel14); }
-            set { SetItemInSlot(value, ItemSlot.Jewel14); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Int_TemplarWitch); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Int_TemplarWitch); }
         }
 
-        public Item Jewel15
+        public Item JSlot_Str_FarWarTempScion
         {
-            get { return GetItemInSlot(ItemSlot.Jewel15); }
-            set { SetItemInSlot(value, ItemSlot.Jewel15); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Str_FarWarTempScion); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Str_FarWarTempScion); }
         }
 
-        public Item Jewel16
+        public Item JSlot_StrInt_Templar
         {
-            get { return GetItemInSlot(ItemSlot.Jewel16); }
-            set { SetItemInSlot(value, ItemSlot.Jewel16); }
+            get { return GetItemInSlot(ItemSlot.JSlot_StrInt_Templar); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_StrInt_Templar); }
         }
 
-        public Item Jewel17
+        public Item JSlot_StrDex_Duelist
         {
-            get { return GetItemInSlot(ItemSlot.Jewel17); }
-            set { SetItemInSlot(value, ItemSlot.Jewel17); }
+            get { return GetItemInSlot(ItemSlot.JSlot_StrDex_Duelist); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_StrDex_Duelist); }
         }
 
-        public Item Jewel18
+        public Item JSlot_Neutral_IronGrip
         {
-            get { return GetItemInSlot(ItemSlot.Jewel18); }
-            set { SetItemInSlot(value, ItemSlot.Jewel18); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Neutral_IronGrip); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Neutral_IronGrip); }
         }
 
-        public Item Jewel19
+        public Item JSlot_Neutral_PointBlank
         {
-            get { return GetItemInSlot(ItemSlot.Jewel19); }
-            set { SetItemInSlot(value, ItemSlot.Jewel19); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Neutral_PointBlank); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Neutral_PointBlank); }
         }
 
-        public Item Jewel20
+        public Item JSlot_Neutral_MinionInstability
         {
-            get { return GetItemInSlot(ItemSlot.Jewel20); }
-            set { SetItemInSlot(value, ItemSlot.Jewel20); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Neutral_MinionInstability); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Neutral_MinionInstability); }
         }
 
-        public Item Jewel21
+        public Item JSlot_Str_Warrior
         {
-            get { return GetItemInSlot(ItemSlot.Jewel21); }
-            set { SetItemInSlot(value, ItemSlot.Jewel21); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Str_Warrior); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Str_Warrior); }
         }
 
         public Item GetItemInSlot(ItemSlot slot)
@@ -346,8 +346,68 @@ namespace POESKillTree.Model.Items
                     case "Belt":
                         AddItem(jobj, ItemSlot.Belt);
                         break;
-                    case "Jewel":
-                        AddItem(jobj, ItemSlot.Jewel);
+                    case "JSlot_Int_Witch":
+                        AddItem(jobj, ItemSlot.JSlot_Int_Witch);
+                        break;
+                    case "JSlot_Int_Scion":
+                        AddItem(jobj, ItemSlot.JSlot_Int_Scion);
+                        break;
+                    case "JSlot_Int_WitchShadow":
+                        AddItem(jobj, ItemSlot.JSlot_Int_WitchShadow);
+                        break;
+                    case "JSlot_DexInt_Scion":
+                        AddItem(jobj, ItemSlot.JSlot_DexInt_Scion);
+                        break;
+                    case "JSlot_StrInt_Scion":
+                        AddItem(jobj, ItemSlot.JSlot_StrInt_Scion);
+                        break;
+                    case "JSlot_StrDex_Scion":
+                        AddItem(jobj, ItemSlot.JSlot_StrDex_Scion);
+                        break;
+                    case "JSlot_Neutral_Acrobatics":
+                        AddItem(jobj, ItemSlot.JSlot_Neutral_Acrobatics);
+                        break;
+                    case "JSlot_Dex_ShadowRanger":
+                        AddItem(jobj, ItemSlot.JSlot_Dex_ShadowRanger);
+                        break;
+                    case "JSlot_DexInt_Shadow":
+                        AddItem(jobj, ItemSlot.JSlot_DexInt_Shadow);
+                        break;
+                    case "JSlot_Dex_Ranger":
+                        AddItem(jobj, ItemSlot.JSlot_Dex_Ranger);
+                        break;
+                    case "JSlot_Dex_RangerDuelist":
+                        AddItem(jobj, ItemSlot.JSlot_Dex_RangerDuelist);
+                        break;
+                    case "JSlot_Str_WarriorDuelist":
+                        AddItem(jobj, ItemSlot.JSlot_Str_WarriorDuelist);
+                        break;
+                    case "JSlot_Str_WarriorTemplarScion":
+                        AddItem(jobj, ItemSlot.JSlot_Str_WarriorTemplarScion);
+                        break;
+                    case "JSlot_Int_TemplarWitch":
+                        AddItem(jobj, ItemSlot.JSlot_Int_TemplarWitch);
+                        break;
+                    case "JSlot_Str_FarWarTempScion":
+                        AddItem(jobj, ItemSlot.JSlot_Str_FarWarTempScion);
+                        break;
+                    case "JSlot_StrInt_Templar":
+                        AddItem(jobj, ItemSlot.JSlot_StrInt_Templar);
+                        break;
+                    case "JSlot_StrDex_Duelist":
+                        AddItem(jobj, ItemSlot.JSlot_StrDex_Duelist);
+                        break;
+                    case "JSlot_Neutral_IronGrip":
+                        AddItem(jobj, ItemSlot.JSlot_Neutral_IronGrip);
+                        break;
+                    case "JSlot_Neutral_PointBlank":
+                        AddItem(jobj, ItemSlot.JSlot_Neutral_PointBlank);
+                        break;
+                    case "JSlot_Neutral_MinionInstability":
+                        AddItem(jobj, ItemSlot.JSlot_Neutral_MinionInstability);
+                        break;
+                    case "JSlot_Str_Warrior":
+                        AddItem(jobj, ItemSlot.JSlot_Str_Warrior);
                         break;
                 }
             }
@@ -392,6 +452,69 @@ namespace POESKillTree.Model.Items
                         break;
                     case ItemSlot.Belt:
                         jItem["inventoryId"] = "Belt";
+                        break;
+                    case ItemSlot.JSlot_DexInt_Scion:
+                        jItem["inventoryId"] = "JSlot_DexInt_Scion";
+                        break;
+                    case ItemSlot.JSlot_DexInt_Shadow:
+                        jItem["inventoryId"] = "JSlot_DexInt_Shadow";
+                        break;
+                    case ItemSlot.JSlot_Dex_Ranger:
+                        jItem["inventoryId"] = "JSlot_Dex_Ranger";
+                        break;
+                    case ItemSlot.JSlot_Dex_RangerDuelist:
+                        jItem["inventoryId"] = "JSlot_Dex_RangerDuelist";
+                        break;
+                    case ItemSlot.JSlot_Dex_ShadowRanger:
+                        jItem["inventoryId"] = "JSlot_Dex_ShadowRanger";
+                        break;
+                    case ItemSlot.JSlot_Int_Scion:
+                        jItem["inventoryId"] = "JSlot_Int_Scion";
+                        break;
+                    case ItemSlot.JSlot_Int_TemplarWitch:
+                        jItem["inventoryId"] = "JSlot_Int_TemplarWitch";
+                        break;
+                    case ItemSlot.JSlot_Int_Witch:
+                        jItem["inventoryId"] = "JSlot_Int_Witch";
+                        break;
+                    case ItemSlot.JSlot_Int_WitchShadow:
+                        jItem["inventoryId"] = "JSlot_Int_WitchShadow";
+                        break;
+                    case ItemSlot.JSlot_Neutral_Acrobatics:
+                        jItem["inventoryId"] = "JSlot_Neutral_Acrobatics";
+                        break;
+                    case ItemSlot.JSlot_Neutral_IronGrip:
+                        jItem["inventoryId"] = "JSlot_Neutral_IronGrip";
+                        break;
+                    case ItemSlot.JSlot_Neutral_MinionInstability:
+                        jItem["inventoryId"] = "JSlot_Neutral_MinionInstability";
+                        break;
+                    case ItemSlot.JSlot_Neutral_PointBlank:
+                        jItem["inventoryId"] = "JSlot_Neutral_PointBlank";
+                        break;
+                    case ItemSlot.JSlot_StrDex_Duelist:
+                        jItem["inventoryId"] = "JSlot_StrDex_Duelist";
+                        break;
+                    case ItemSlot.JSlot_StrDex_Scion:
+                        jItem["inventoryId"] = "JSlot_StrDex_Scion";
+                        break;
+                    case ItemSlot.JSlot_StrInt_Scion:
+                        jItem["inventoryId"] = "JSlot_StrInt_Scion";
+                        break;
+                    case ItemSlot.JSlot_StrInt_Templar:
+                        jItem["inventoryId"] = "JSlot_StrInt_Templar";
+                        break;
+                    case ItemSlot.JSlot_Str_FarWarTempScion:
+                        jItem["inventoryId"] = "JSlot_Str_FarWarTempScion";
+                        break;
+                    case ItemSlot.JSlot_Str_Warrior:
+                        jItem["inventoryId"] = "JSlot_Str_Warrior";
+                        break;
+                    case ItemSlot.JSlot_Str_WarriorDuelist:
+                        jItem["inventoryId"] = "JSlot_Str_WarriorDuelist";
+                        break;
+                    case ItemSlot.JSlot_Str_WarriorTemplarScion:
+                        jItem["inventoryId"] = "JSlot_Str_WarriorTemplarScion";
                         break;
                 }
                 items.Add(jItem);

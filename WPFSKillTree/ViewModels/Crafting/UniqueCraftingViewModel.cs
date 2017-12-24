@@ -55,9 +55,25 @@ namespace POESKillTree.ViewModels.Crafting
                 .Select(ms => ms.Query().RequiredLevel)
                 .DefaultIfEmpty()
                 .Max();
-            return MsExplicits
-                .SelectMany(ms => ms.GetStatValues())
-                .ToLookup(_ => ModLocation.Explicit);
+            IEnumerable<IGrouping<ModLocation, StatIdValuePair>> NewSelf;
+            try
+            {
+                NewSelf = MsExplicits
+                    .SelectMany(ms => ms.GetStatValues())
+                    .ToLookup(_ => ModLocation.Explicit);
+            }
+            catch
+            {//Fix for creating Jewel uniques
+                NewSelf = Enumerable.Empty<IGrouping<ModLocation, StatIdValuePair>>();
+                List<IGrouping<ModLocation, StatIdValuePair>> SelfV2 = new List<IGrouping<ModLocation, StatIdValuePair>>(MsExplicits.Count);
+                foreach(var Elem in MsExplicits)
+                {
+                    //Elem.
+                }
+                //NewSelf.
+                return NewSelf;
+            }
+            return NewSelf;
         }
 
         private void MsOnPropertyChanged(object sender, PropertyChangedEventArgs e)

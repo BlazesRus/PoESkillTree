@@ -23,100 +23,92 @@ namespace PoESkillTree.Common.Model.Items.Enums
         /// <summary>
         /// Jewel Slot directly north of Witch starting area (Int Threshold Jewel Slot)
         /// </summary>
-        Jewel = 0x800,
+        JSlot_Int_Witch = 0x800,
         /// <summary>
         /// Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
         /// </summary>
-        Jewel02 = 0x1000,
+        JSlot_Int_Scion = 0x1000,
         /// <summary>
         /// NE from center jewel slot between Witch and shadow areas (Int Threshold Jewel Slot)
         /// </summary>
-        Jewel03 = 0x2000,
+        JSlot_Int_WitchShadow = 0x2000,
         /// <summary>
         /// Scion jewel slot east of starting area (Both Int and Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel04 = 0x4000,
+        JSlot_DexInt_Scion = 0x4000,
         /// <summary>
         /// Scion Jewel Slot west of starting area (Both Str and Int Threshold Jewel Slot)
         /// </summary>
-        Jewel05 = 0x8000,
+        JSlot_StrInt_Scion = 0x8000,
         /// <summary>
         /// Scion Jewel Slot south of starting area (Both Str and Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel06 = 0x10000,
+        JSlot_StrDex_Scion = 0x10000,
         /// <summary>
         /// Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel (Non-Threshold Jewel Slot)
         /// </summary>
-        Jewel07 = 0x20000,
+        JSlot_Neutral_Acrobatics = 0x20000,
         /// <summary>
         /// Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
         /// (Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel08 = 0x40000,
+        JSlot_Dex_ShadowRanger = 0x40000,
         /// <summary>
         /// Jewel slot east of Shadow starting area (Both Int and Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel09 = 0x80000,
+        JSlot_DexInt_Shadow = 0x80000,
         /// <summary>
         /// Jewel slot east of Ranger area (Dex Threshold Jewel)
         /// </summary>
-        Jewel10 = 0x100000,
+        JSlot_Dex_Ranger = 0x100000,
         /// <summary>
         /// Jewel slot south-east of Scion area; At road between Ranger and Duelist areas (Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel11 = 0x200000,
+        JSlot_Dex_RangerDuelist = 0x200000,
         /// <summary>
         /// Jewel slot south-west of Scion area; At road between Marauder and Duelist areas 
         /// (Str Threshold Jewel Slot)
         /// </summary>
-        Jewel12 = 0x400000,
+        JSlot_Str_WarriorDuelist = 0x400000,
         /// <summary>
         /// Jewel slot west of Scion area; At road between Marauder and Templar areas 
         /// (Str Threshold Jewel Slot)
         /// </summary>
-        Jewel13 = 0x800000,
+        JSlot_Str_WarriorTemplarScion = 0x800000,
         /// <summary>
         /// Jewel slot north-west of Scion area; At road between Templar and Witch areas (Int Threshold Jewel Slot)
         /// </summary>
-        Jewel14 = 0x1000000,
+        JSlot_Int_TemplarWitch = 0x1000000,
         /// <summary>
         /// Jewel slot far west of Scion area; At road between Marauder and Templar areas; 
         /// Nearest jewel slot to Resolute Technique
         /// (Str Threshold Jewel Slot)
         /// </summary>
-        Jewel15 = 0x2000000,
+        JSlot_Str_FarWarTempScion = 0x2000000,
         /// <summary>
         /// Jewel slot west of Templar starting area 
         /// (Both Int and Str Threshold Jewel Slot)
         /// </summary>
-        Jewel16 = 0x4000000,
+        JSlot_StrInt_Templar = 0x4000000,
         /// <summary>
         /// Jewel slot south of Duelist starting area (Both Str and Dex Threshold Jewel Slot)
         /// </summary>
-        Jewel17 = 0x8000000,
+        JSlot_StrDex_Duelist = 0x8000000,
         /// <summary>
         /// Jewel slot far south-west of center; Located between Marauder and Duelist areas next to Iron Grip (Non-Threshold jewel slot)
         /// </summary>
-        Jewel18 = 0x10000000,
+        JSlot_Neutral_IronGrip = 0x10000000,
         /// <summary>
         /// Jewel slot far south-east of center; Located between Duelist and Ranger areas next to Point Blank (Non-Threshold jewel slot)
         /// </summary>
-        Jewel19 = 0x20000000,
+        JSlot_Neutral_PointBlank = 0x20000000,
         /// <summary>
         /// Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability (Non-Threshold jewel slot)
         /// </summary>
-        Jewel20 = 0x40000000,
+        JSlot_Neutral_MinionInstability = 0x40000000,
         /// <summary>
         /// Jewel slot west of Marauder area (Str Threshold Jewel Slot)
         /// </summary>
-        Jewel21 = 0x80000000
-        //ExtraJewel01 = 0x100000000,
-        //ExtraJewel02 = 0x200000000,
-        //ExtraJewel03 = 0x400000000,
-        //ExtraJewel04 = 0x800000000,
-        //ExtraJewel05 = 0x1000000000,
-        //ExtraJewel06 = 0x2000000000,
-        //ExtraJewel07 = 0x4000000000,
-        //ExtraJewel08 = 0x8000000000,
+        JSlot_Str_Warrior = 0x80000000
     }
 }

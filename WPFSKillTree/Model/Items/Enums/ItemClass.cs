@@ -166,10 +166,9 @@ namespace POESKillTree.Model.Items.Enums
                 case ItemClass.Any:
                     return ItemSlot.Unequipable;
                 case ItemClass.Jewel:
-                    return ItemSlot.Jewel | ItemSlot.Jewel02 | ItemSlot.Jewel03 | ItemSlot.Jewel04 | ItemSlot.Jewel05 | ItemSlot.Jewel06 | ItemSlot.Jewel07 | ItemSlot.Jewel08 | ItemSlot.Jewel09 | ItemSlot.Jewel10 |
-                    ItemSlot.Jewel11 | ItemSlot.Jewel12 | ItemSlot.Jewel13 | ItemSlot.Jewel14 | ItemSlot.Jewel15 | ItemSlot.Jewel16 | ItemSlot.Jewel17 | ItemSlot.Jewel18 | ItemSlot.Jewel19 | ItemSlot.Jewel20 |
-                    //ItemSlot.ExtraJewel01 | ItemSlot.ExtraJewel02 | ItemSlot.ExtraJewel03| ItemSlot.ExtraJewel04 | ItemSlot.ExtraJewel05 | ItemSlot.ExtraJewel06| ItemSlot.ExtraJewel07 | ItemSlot.ExtraJewel08 | ItemSlot.ExtraJewel09 |
-                    ItemSlot.Jewel21;
+                    return ItemSlot.JSlot_Int_Witch | ItemSlot.JSlot_Int_Scion | ItemSlot.JSlot_Int_WitchShadow | ItemSlot.JSlot_DexInt_Scion | ItemSlot.JSlot_StrInt_Scion | ItemSlot.JSlot_StrDex_Scion | ItemSlot.JSlot_Neutral_Acrobatics | ItemSlot.JSlot_Dex_ShadowRanger | ItemSlot.JSlot_DexInt_Shadow | ItemSlot.JSlot_Dex_Ranger |
+                    ItemSlot.JSlot_Dex_RangerDuelist | ItemSlot.JSlot_Str_WarriorDuelist | ItemSlot.JSlot_Str_WarriorTemplarScion | ItemSlot.JSlot_Int_TemplarWitch | ItemSlot.JSlot_Str_FarWarTempScion | ItemSlot.JSlot_StrInt_Templar | ItemSlot.JSlot_StrDex_Duelist | ItemSlot.JSlot_Neutral_IronGrip | ItemSlot.JSlot_Neutral_PointBlank | ItemSlot.JSlot_Neutral_MinionInstability |
+                    ItemSlot.JSlot_Str_Warrior;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(itemClass), itemClass, null);
             }

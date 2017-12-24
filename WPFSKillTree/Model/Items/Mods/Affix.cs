@@ -97,11 +97,38 @@ namespace POESKillTree.Model.Items.Mods
             {
                 return Enumerable.Empty<IMod>();
             }
-            // for each value: query matching tiers
-            return values.EquiZip(_trees, QueryForTree)
-                // aggregate to keep only tiers that match all values of all stats
-                .Aggregate((a, n) => a.Intersect(n))
-                .OrderBy(m => m.RequiredLevel);
+
+            try//Fix for errors on creating jewel uniques
+            {
+                //for each value: query matching tiers
+                return values.EquiZip(_trees, QueryForTree)
+                    // aggregate to keep only tiers that match all values of all stats
+                    .Aggregate((a, n) => a.Intersect(n))
+                    .OrderBy(m => m.RequiredLevel);
+            }
+            catch
+            {
+                List<IMod> TreeMods = new List<IMod>(2);
+                try
+                {
+                    //Work-around for creating jewel uniques
+                    //List<Range<int>> TreeRanges = new List<Range<int>>(2);
+                    foreach (var TreeElem in _trees)
+                    {
+                        foreach (var ElemItem in TreeElem.Items)
+                        {
+                            TreeMods.Add(ElemItem.Mod);
+                            //TreeRanges.Add(ElemItem.Range);
+                        }
+                    }
+                    return (IEnumerable <IMod>)TreeMods;
+                }
+                catch
+                {
+                    return Enumerable.Empty<IMod>();
+                }
+            }
+            
         }
 
         private static IEnumerable<IMod> QueryForTree(int value, IRangeTree<int, ModWrapper> tree)

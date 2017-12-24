@@ -24,38 +24,29 @@ namespace POESKillTree.ViewModels.Equipment
         public InventoryItemViewModel Gloves { get; }
         public InventoryItemViewModel Boots { get; }
         public InventoryItemViewModel Belt { get; }
-        public InventoryItemViewModel ExtraJewel01 { get; }
-        public InventoryItemViewModel ExtraJewel02 { get; }
-        public InventoryItemViewModel ExtraJewel03 { get; }
-        public InventoryItemViewModel ExtraJewel04 { get; }
-        public InventoryItemViewModel ExtraJewel05 { get; }
-        public InventoryItemViewModel ExtraJewel06 { get; }
-        public InventoryItemViewModel ExtraJewel07 { get; }
-        public InventoryItemViewModel ExtraJewel08 { get; }
-        public InventoryItemViewModel ExtraJewel09 { get; }
 
 // Need to place in skilltree instead later
-        public InventoryItemViewModel Jewel { get; }
-        public InventoryItemViewModel Jewel02 { get; }
-        public InventoryItemViewModel Jewel03 { get; }
-        public InventoryItemViewModel Jewel04 { get; }
-        public InventoryItemViewModel Jewel05 { get; }
-        public InventoryItemViewModel Jewel06 { get; }
-        public InventoryItemViewModel Jewel07 { get; }
-        public InventoryItemViewModel Jewel08 { get; }
-        public InventoryItemViewModel Jewel09 { get; }
-        public InventoryItemViewModel Jewel10 { get; }
-        public InventoryItemViewModel Jewel11 { get; }
-        public InventoryItemViewModel Jewel12 { get; }
-        public InventoryItemViewModel Jewel13 { get; }
-        public InventoryItemViewModel Jewel14 { get; }
-        public InventoryItemViewModel Jewel15 { get; }
-        public InventoryItemViewModel Jewel16 { get; }
-        public InventoryItemViewModel Jewel17 { get; }
-        public InventoryItemViewModel Jewel18 { get; }
-        public InventoryItemViewModel Jewel19 { get; }
-        public InventoryItemViewModel Jewel20 { get; }
-        public InventoryItemViewModel Jewel21 { get; }
+        public InventoryItemViewModel JSlot_Int_Witch { get; }
+        public InventoryItemViewModel JSlot_Int_Scion { get; }
+        public InventoryItemViewModel JSlot_Int_WitchShadow { get; }
+        public InventoryItemViewModel JSlot_DexInt_Scion { get; }
+        public InventoryItemViewModel JSlot_StrInt_Scion { get; }
+        public InventoryItemViewModel JSlot_StrDex_Scion { get; }
+        public InventoryItemViewModel JSlot_Neutral_Acrobatics { get; }
+        public InventoryItemViewModel JSlot_Dex_ShadowRanger { get; }
+        public InventoryItemViewModel JSlot_DexInt_Shadow { get; }
+        public InventoryItemViewModel JSlot_Dex_Ranger { get; }
+        public InventoryItemViewModel JSlot_Dex_RangerDuelist { get; }
+        public InventoryItemViewModel JSlot_Str_WarriorDuelist { get; }
+        public InventoryItemViewModel JSlot_Str_WarriorTemplarScion { get; }
+        public InventoryItemViewModel JSlot_Int_TemplarWitch { get; }
+        public InventoryItemViewModel JSlot_Str_FarWarTempScion { get; }
+        public InventoryItemViewModel JSlot_StrInt_Templar { get; }
+        public InventoryItemViewModel JSlot_StrDex_Duelist { get; }
+        public InventoryItemViewModel JSlot_Neutral_IronGrip { get; }
+        public InventoryItemViewModel JSlot_Neutral_PointBlank { get; }
+        public InventoryItemViewModel JSlot_Neutral_MinionInstability { get; }
+        public InventoryItemViewModel JSlot_Str_Warrior { get; }
 
         public InventoryViewModel(IExtendedDialogCoordinator dialogCoordinator, EquipmentData equipmentData,
             ItemAttributes itemAttributes)
@@ -73,38 +64,29 @@ namespace POESKillTree.ViewModels.Equipment
             Gloves = CreateSlotVm(ItemSlot.Gloves);
             Boots = CreateSlotVm(ItemSlot.Boots);
             Belt = CreateSlotVm(ItemSlot.Belt);
-            //ExtraJewel = CreateSlotVm(ItemSlot.ExtraJewel01);
-            //ExtraJewel02 = CreateSlotVm(ItemSlot.ExtraJewel02);
-            //ExtraJewel03 = CreateSlotVm(ItemSlot.ExtraJewel03);
-            //ExtraJewel04 = CreateSlotVm(ItemSlot.ExtraJewel04);
-            //ExtraJewel05 = CreateSlotVm(ItemSlot.ExtraJewel05);
-            //ExtraJewel06 = CreateSlotVm(ItemSlot.ExtraJewel06);
-            //ExtraJewel07 = CreateSlotVm(ItemSlot.ExtraJewel07);
-            //ExtraJewel08 = CreateSlotVm(ItemSlot.ExtraJewel08);
-            //ExtraJewel09 = CreateSlotVm(ItemSlot.ExtraJewel09);
 
 //Need to place in SkillTree somehow later
-            Jewel = CreateSlotVm(ItemSlot.Jewel);
-            Jewel02 = CreateSlotVm(ItemSlot.Jewel02);
-            Jewel03 = CreateSlotVm(ItemSlot.Jewel03);
-            Jewel04 = CreateSlotVm(ItemSlot.Jewel04);
-            Jewel05 = CreateSlotVm(ItemSlot.Jewel05);
-            Jewel06 = CreateSlotVm(ItemSlot.Jewel06);
-            Jewel07 = CreateSlotVm(ItemSlot.Jewel07);
-            Jewel08 = CreateSlotVm(ItemSlot.Jewel08);
-            Jewel09 = CreateSlotVm(ItemSlot.Jewel09);
-            Jewel10 = CreateSlotVm(ItemSlot.Jewel10);
-            Jewel11 = CreateSlotVm(ItemSlot.Jewel11);
-            Jewel12 = CreateSlotVm(ItemSlot.Jewel12);
-            Jewel13 = CreateSlotVm(ItemSlot.Jewel13);
-            Jewel14 = CreateSlotVm(ItemSlot.Jewel14);
-            Jewel15 = CreateSlotVm(ItemSlot.Jewel15);
-            Jewel16 = CreateSlotVm(ItemSlot.Jewel16);
-            Jewel17 = CreateSlotVm(ItemSlot.Jewel17);
-            Jewel18 = CreateSlotVm(ItemSlot.Jewel18);
-            Jewel19 = CreateSlotVm(ItemSlot.Jewel19);
-            Jewel20 = CreateSlotVm(ItemSlot.Jewel20);
-            Jewel21 = CreateSlotVm(ItemSlot.Jewel21);
+            JSlot_Int_Witch = CreateSlotVm(ItemSlot.JSlot_Int_Witch);
+            JSlot_Int_Scion = CreateSlotVm(ItemSlot.JSlot_Int_Scion);
+            JSlot_Int_WitchShadow = CreateSlotVm(ItemSlot.JSlot_Int_WitchShadow);
+            JSlot_DexInt_Scion = CreateSlotVm(ItemSlot.JSlot_DexInt_Scion);
+            JSlot_StrInt_Scion = CreateSlotVm(ItemSlot.JSlot_StrInt_Scion);
+            JSlot_StrDex_Scion = CreateSlotVm(ItemSlot.JSlot_StrDex_Scion);
+            JSlot_Neutral_Acrobatics = CreateSlotVm(ItemSlot.JSlot_Neutral_Acrobatics);
+            JSlot_Dex_ShadowRanger = CreateSlotVm(ItemSlot.JSlot_Dex_ShadowRanger);
+            JSlot_DexInt_Shadow = CreateSlotVm(ItemSlot.JSlot_DexInt_Shadow);
+            JSlot_Dex_Ranger = CreateSlotVm(ItemSlot.JSlot_Dex_Ranger);
+            JSlot_Dex_RangerDuelist = CreateSlotVm(ItemSlot.JSlot_Dex_RangerDuelist);
+            JSlot_Str_WarriorDuelist = CreateSlotVm(ItemSlot.JSlot_Str_WarriorDuelist);
+            JSlot_Str_WarriorTemplarScion = CreateSlotVm(ItemSlot.JSlot_Str_WarriorTemplarScion);
+            JSlot_Int_TemplarWitch = CreateSlotVm(ItemSlot.JSlot_Int_TemplarWitch);
+            JSlot_Str_FarWarTempScion = CreateSlotVm(ItemSlot.JSlot_Str_FarWarTempScion);
+            JSlot_StrInt_Templar = CreateSlotVm(ItemSlot.JSlot_StrInt_Templar);
+            JSlot_StrDex_Duelist = CreateSlotVm(ItemSlot.JSlot_StrDex_Duelist);
+            JSlot_Neutral_IronGrip = CreateSlotVm(ItemSlot.JSlot_Neutral_IronGrip);
+            JSlot_Neutral_PointBlank = CreateSlotVm(ItemSlot.JSlot_Neutral_PointBlank);
+            JSlot_Neutral_MinionInstability = CreateSlotVm(ItemSlot.JSlot_Neutral_MinionInstability);
+            JSlot_Str_Warrior = CreateSlotVm(ItemSlot.JSlot_Str_Warrior);
         }
 
         private InventoryItemViewModel CreateSlotVm(ItemSlot slot)
@@ -126,13 +108,11 @@ namespace POESKillTree.ViewModels.Equipment
             {
                 imageName = "Helmet";
             }
-            else if(slot == ItemSlot.Jewel || slot == ItemSlot.Jewel02 || slot == ItemSlot.Jewel03 || slot == ItemSlot.Jewel04 || slot == ItemSlot.Jewel05
-            || slot == ItemSlot.Jewel06 || slot == ItemSlot.Jewel07 || slot == ItemSlot.Jewel08 || slot == ItemSlot.Jewel09 || slot == ItemSlot.Jewel10
-            || slot == ItemSlot.Jewel11 || slot == ItemSlot.Jewel12 || slot == ItemSlot.Jewel13 || slot == ItemSlot.Jewel14 || slot == ItemSlot.Jewel15
-            || slot == ItemSlot.Jewel16 || slot == ItemSlot.Jewel17 || slot == ItemSlot.Jewel18 || slot == ItemSlot.Jewel19 || slot == ItemSlot.Jewel20
-            || slot == ItemSlot.Jewel21)
-            //|| slot == ItemSlot.ExtraJewel01 || slot == ItemSlot.ExtraJewel02 || slot == ItemSlot.ExtraJewel03 || slot == ItemSlot.ExtraJewel04 || slot == ItemSlot.ExtraJewel05
-            //|| slot == ItemSlot.ExtraJewel06 || slot == ItemSlot.ExtraJewel07 || slot == ItemSlot.ExtraJewel08 || slot == ItemSlot.ExtraJewel09
+            else if(slot == ItemSlot.JSlot_Int_Witch || slot == ItemSlot.JSlot_Int_Scion || slot == ItemSlot.JSlot_Int_WitchShadow || slot == ItemSlot.JSlot_DexInt_Scion || slot == ItemSlot.JSlot_StrInt_Scion
+            || slot == ItemSlot.JSlot_StrDex_Scion || slot == ItemSlot.JSlot_Neutral_Acrobatics || slot == ItemSlot.JSlot_Dex_ShadowRanger || slot == ItemSlot.JSlot_DexInt_Shadow || slot == ItemSlot.JSlot_Dex_Ranger
+            || slot == ItemSlot.JSlot_Dex_RangerDuelist || slot == ItemSlot.JSlot_Str_WarriorDuelist || slot == ItemSlot.JSlot_Str_WarriorTemplarScion || slot == ItemSlot.JSlot_Int_TemplarWitch || slot == ItemSlot.JSlot_Str_FarWarTempScion
+            || slot == ItemSlot.JSlot_StrInt_Templar || slot == ItemSlot.JSlot_StrDex_Duelist || slot == ItemSlot.JSlot_Neutral_IronGrip || slot == ItemSlot.JSlot_Neutral_PointBlank || slot == ItemSlot.JSlot_Neutral_MinionInstability
+            || slot == ItemSlot.JSlot_Str_Warrior)
             {
                 imageName = "Jewel";
             }

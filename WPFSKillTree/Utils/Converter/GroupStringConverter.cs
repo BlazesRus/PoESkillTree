@@ -39,6 +39,22 @@ namespace POESKillTree.Utils.Converter
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
+            new[] {"(Total)", PseudoTotal},
+            new[] {"[Non-Tagged]", PseudoTotal},
+            new[] {"Charged Dash Damage", PseudoTotal},
+            new[] {"before tags", PseudoTotal},
+            new[] {"SharedStrength", PseudoTotal},
+            new[] {"maximum Base", PseudoTotal},
+            new[] {"combined", PseudoTotal},
+            new[] {"increased Hybrid", PseudoTotal},
+            new[] {"increased Total", PseudoTotal},
+            new[] {POESKillTree.SkillTreeFiles.ConvertedJewelData.FakeIntuitiveLeapSupportAttribute, Hidden },
+            new[] {"Strength from Passives in Radius is Transformed to Intelligence", Hidden },
+            new[] {"Strength from Passives in Radius is Transformed to Dexterity", Hidden },
+            new[] {"Dexterity from Passives in Radius is Transformed to Intelligence", Hidden },
+            new[] {"Dexterity from Passives in Radius is Transformed to Strength", Hidden },
+            new[] {"Intelligence from Passives in Radius is Transformed to Strength", Hidden },
+            new[] {"Intelligence from Passives in Radius is Transformed to Dexterity", Hidden },
             new[] {"Share Endurance, Frenzy and Power Charges with nearby party members", Keystone},
             new[] {"Critical Strike Chance with Claws", CriticalStrike},
             new[] {"with Claws", Weapon},
@@ -256,15 +272,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Dexterity", CoreAttributes},
             new[] {"JSlot", Hidden},
             new[] {"Jewel Socket ID: ", Hidden},
-            new[] {"(Total)", PseudoTotal},
-            new[] {"[Non-Tagged]", PseudoTotal},
-            new[] {"Charged Dash Damage", PseudoTotal},
-            new[] {"before tags", PseudoTotal},
-            new[] {"SharedStrength", PseudoTotal},
-            new[] {"maximum Base", PseudoTotal},
-            new[] {"combined", PseudoTotal},
-            new[] {"increased Hybrid", PseudoTotal},
-            new[] {"increased Total", PseudoTotal},
+            new[] {"Radius:", Hidden },
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");

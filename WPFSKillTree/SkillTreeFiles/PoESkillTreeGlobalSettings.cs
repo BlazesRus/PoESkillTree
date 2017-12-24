@@ -16,7 +16,5 @@ namespace POESKillTree
         /// The current tracked total stats(SkillTree+Item Stats)
         /// </summary>
         public static POESKillTree.SkillTreeFiles.TrackedAttributes CurrentTrackedTotalStats = new SkillTreeFiles.TrackedAttributes();
-        //public static int NodesLastTrackingUpdate = 0;
-        //public static IndexDictionary TrackedAttributeIndexes;
     }
 }
