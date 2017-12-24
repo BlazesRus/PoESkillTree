@@ -2,11 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-<<<<<<< HEAD
 using PoESkillTree.Common.Model.Items.Enums;
-=======
 using MoreLinq;
->>>>>>> refs/remotes/PoESkillTree/master
 using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
 using POESKillTree.Utils;
