@@ -118,6 +118,7 @@
     <Compile Include="Utils\Extensions\EnumerableExtensions.cs" />
     <Compile Include="Utils\Funcs.cs" />
     <Compile Include="Utils\IFactory.cs" />
+    <Compile Include="Utils\RegexCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
