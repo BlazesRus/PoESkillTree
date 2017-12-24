@@ -360,7 +360,6 @@ vswhere.exe
 *AlternativeExtraOptions*
 
 *.favdoc
-WPFSKillTree/Data/PseudoAttributes/OtherThreshold.xml
 WPFSKillTree/Data/Assets/PSLineDecoHighlighted.png
 WPFSKillTree/Data/Assets/PSPointsFrame.png
 WPFSKillTree/Data/Assets/PSStartNodeBackgroundInactive.png
