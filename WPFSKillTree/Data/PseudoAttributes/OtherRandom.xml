@@ -14,6 +14,7 @@
 		<Attribute Name="#% increased Chaos Damage"/>
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased maximum Life"/>
+		<Attribute Name="#% increased Area Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Charged Dash Damage with Phys Weapon" Group="Damage">
 		<Attribute Name="#% increased Physical Damage"/>
