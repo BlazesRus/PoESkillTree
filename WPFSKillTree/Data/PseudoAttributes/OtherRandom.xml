@@ -99,7 +99,7 @@
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased maximum Life" />
 	</PseudoAttribute>
-		<PseudoAttribute Name="#% increased Full Conversion Glacial Cascade Damage[Non-Tagged]" Group="Damage">
+	<PseudoAttribute Name="#% increased Full Conversion Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Cold Damage"/>
 		<Attribute Name="#% increased Physical Damage"/>
@@ -109,6 +109,23 @@
 	<PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+	</PseudoAttribute>
+	<!-- Physical to Lightning Conversion based on https://www.reddit.com/r/pathofexile/comments/6rjnwe/glacial_cascade_dmg_conversion_to_lightning/-->
+	<PseudoAttribute Name="#% increased Glacial Cascade Damage with Physical to Lightning Gem[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.45"/>
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Glacial Cascade Damage with Level 20 Physical to Lightning Gem with gains[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.74"/>
 		<Attribute Name="#% increased Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
@@ -222,9 +239,27 @@
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Lightning Area Damage[Non-Tagged]" Group="Damage">
+	<PseudoAttribute Name="#% increased Lightning Area Spell Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Lightning Damage"/>
+		<Attribute Name="#% increased Area Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Lightning AOE Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Lightning Damage"/>
+		<Attribute Name="#% increased Area Damage"/>
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Elemental Area Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Area Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Area Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Physical Damage"/>
 		<Attribute Name="#% increased Area Damage"/>
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Damage"/>
@@ -232,11 +267,20 @@
 	<PseudoAttribute Name="#% increased Total Lightning Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Lightning Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Fire Area of Effect Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Fire Damage" />
 		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Total Fire Spell AOE Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Fire Damage" />
+		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
  	<PseudoAttribute Name="#% increased Total Elemental Damage with Spells[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
