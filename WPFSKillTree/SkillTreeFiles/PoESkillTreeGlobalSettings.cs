@@ -9,12 +9,13 @@ namespace POESKillTree
     public static class GlobalSettings
     {
         /// <summary>
-        /// The current tracked attributes
+        /// The tracked stats
         /// </summary>
-        public static POESKillTree.SkillTreeFiles.TrackedAttributes CurrentTrackedAttributes = new SkillTreeFiles.TrackedAttributes();
+        public static SkillTreeFiles.TrackedAttributes TrackedStats = new SkillTreeFiles.TrackedAttributes();
         /// <summary>
-        /// The current tracked total stats(SkillTree+Item Stats)
+        /// The tracked stat file names
         /// </summary>
-        public static POESKillTree.SkillTreeFiles.TrackedAttributes CurrentTrackedTotalStats = new SkillTreeFiles.TrackedAttributes();
+        public static string[] TrackedStatFileNames = { "" };
+        public static string CurrentTrackedFileName = "";
     }
 }

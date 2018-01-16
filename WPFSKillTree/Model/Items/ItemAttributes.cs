@@ -206,6 +206,63 @@ namespace POESKillTree.Model.Items
             set { SetItemInSlot(value, ItemSlot.JSlot_Str_Warrior); }
         }
 
+        public Item ReturnItemByName(string SlotName)
+        {
+            switch (SlotName)
+            {
+                //Int Jewels
+                case "JSlot_Int_Witch"://Jewel Slot directly north of Witch starting area
+                    return JSlot_Int_Witch;
+                case "JSlot_Int_Scion"://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
+                    return JSlot_Int_Scion;
+                case "JSlot_Int_WitchShadow"://NE from center jewel slot between Witch and shadow areas
+                    return JSlot_Int_WitchShadow;
+                case "JSlot_Int_TemplarWitch"://Jewel slot north-west of Scion area; At road between Templar and Witch areas
+                    return JSlot_Int_TemplarWitch;
+                //Str Jewels
+                case "JSlot_Str_WarriorDuelist"://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
+                    return JSlot_Str_WarriorDuelist;
+                case "JSlot_Str_WarriorTemplarScion"://Jewel slot west of Scion area; At road between Marauder and Templar areas
+                    return JSlot_Str_WarriorTemplarScion;
+                case "JSlot_Str_FarWarTempScion"://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
+                    return JSlot_Str_FarWarTempScion;
+                case "JSlot_Str_Warrior"://Jewel slot west of Marauder area
+                    return JSlot_Str_Warrior;
+                //Dex Jewels
+                case "JSlot_Dex_ShadowRanger"://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
+                    return JSlot_Dex_ShadowRanger;
+                case "JSlot_Dex_Ranger"://Jewel slot east of Ranger area
+                    return JSlot_Dex_Ranger;
+                case "JSlot_Dex_RangerDuelist"://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
+                    return JSlot_Dex_RangerDuelist;
+                //Hybrid Jewels
+                case "JSlot_StrInt_Templar"://Jewel slot west of Templar starting area
+                    return JSlot_StrInt_Templar;
+                case "JSlot_StrInt_Scion"://Scion Jewel Slot west of starting area
+                    return JSlot_StrInt_Scion;
+                case "JSlot_DexInt_Shadow"://Jewel slot east of Shadow starting area
+                    return JSlot_DexInt_Shadow;
+                case "JSlot_DexInt_Scion"://Scion jewel slot east of starting area
+                    return JSlot_DexInt_Scion;
+                case "JSlot_StrDex_Scion"://Scion Jewel Slot south of starting area
+                    return JSlot_StrDex_Scion;
+                case "JSlot_StrDex_Duelist"://Jewel slot south of Duelist starting area
+                    return JSlot_StrDex_Duelist;
+                //Non-Threshold Jewel Slots
+                case "JSlot_Neutral_Acrobatics":
+                    return JSlot_Neutral_IronGrip;
+                case "JSlot_Neutral_PointBlank":
+                    return JSlot_Neutral_PointBlank;
+                case "JSlot_Neutral_MinionInstabilityID":
+                    return JSlot_Neutral_MinionInstability;
+                case "JSlot_Neutral_IronGrip":
+                    return JSlot_Neutral_IronGrip;
+                //Non-Threshold Jewel Slots
+                default:
+                    return null;
+            }
+        }
+
         public Item GetItemInSlot(ItemSlot slot)
         {
             return Equip.FirstOrDefault(i => i.Slot == slot);

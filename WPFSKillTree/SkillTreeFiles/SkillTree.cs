@@ -671,10 +671,9 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
-            if (GlobalSettings.CurrentTrackedTotalStats.Count != 0)
+            if (GlobalSettings.TrackedStats.Count != 0)
             {
-                GlobalSettings.CurrentTrackedTotalStats.UpdateValue(temp);
-                temp = GlobalSettings.CurrentTrackedTotalStats.PlaceIntoAttributeDic(temp);
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
             return temp;
         }
@@ -712,10 +711,9 @@ namespace POESKillTree.SkillTreeFiles
                 }
             }
 
-            if (GlobalSettings.CurrentTrackedTotalStats.Count != 0)
+            if (GlobalSettings.TrackedStats.Count != 0)
             {
-                GlobalSettings.CurrentTrackedTotalStats.UpdateValue(temp);
-                temp = GlobalSettings.CurrentTrackedTotalStats.PlaceIntoAttributeDic(temp);
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
 
             return temp;
@@ -743,11 +741,9 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
-            var StatTrackingWithoutImp = GlobalSettings.CurrentTrackedTotalStats.CloneSelf();
-            if (GlobalSettings.CurrentTrackedTotalStats.Count != 0)
+            if (GlobalSettings.TrackedStats.Count != 0)
             {
-                StatTrackingWithoutImp.UpdateValue(temp);
-                temp = StatTrackingWithoutImp.PlaceIntoAttributeDic(temp);
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
 
             return temp;

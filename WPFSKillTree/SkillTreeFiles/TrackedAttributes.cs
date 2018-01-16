@@ -1,5 +1,6 @@
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using System;
+//using System;
 using System.Collections.Generic;
 
 namespace POESKillTree.SkillTreeFiles
@@ -7,41 +8,61 @@ namespace POESKillTree.SkillTreeFiles
     public class TrackedAttribute
     {
         /// <summary>
-        /// The attribute data
+        /// Gets the name of the PseudoAttribute.
         /// </summary>
-        public PseudoAttribute AttributeData;
-
-        public float TotalStat = 0.0f;
+        public string Name { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrackedAttribute"/> class.
+        /// Gets the list of Attributes this PseudoAttribute contains.
         /// </summary>
-        /// <param name="Attribute">The attribute.</param>
-        public TrackedAttribute(PseudoAttribute Attribute)
+        public List<POESKillTree.TreeGenerator.Model.PseudoAttributes.Attribute> Attributes { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the group this PseudoAttribute belongs to.
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        // Used in group and sort descriptions.
+        public string Group { get; private set; }
+
+        /// <summary>
+        /// Creates a new PseudoAttribute with the given name and group
+        /// and an empty list of Attributes.
+        /// </summary>
+        /// <param name="name">Name (not null)</param>
+        /// <param name="group">Group (not null)</param>
+        internal TrackedAttribute(string name, string group)
         {
-            AttributeData = Attribute;
+            if (name == null) throw new System.ArgumentNullException("name");
+            if (group == null) throw new System.ArgumentNullException("group");
+            Name = name;
+            Group = group;
+            Attributes = new List<POESKillTree.TreeGenerator.Model.PseudoAttributes.Attribute>();
+        }
+
+        public TrackedAttribute(PseudoAttribute attribute)
+        {
+            this.Name = attribute.Name;
+            this.Group = attribute.Group;
+            this.Attributes = attribute.Attributes; 
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         /// <summary>
-        /// Names this instance.
-        /// </summary>
-        /// <returns></returns>
-        public string Name()
-        {
-            return AttributeData.Name;
-        }
-
-        /// <summary>
-        /// Updates the value.
+        /// Calculates updated value
         /// </summary>
         /// <param name="attrlist">The attrlist.</param>
-        public void UpdateValue(Dictionary<string, List<float>> attrlist)
+        public float CalculateValue(Dictionary<string, List<float>> attrlist)
         {
-            TotalStat = 0.0f;
+            float TotalStat = 0.0f;
             string AttributeName;
             float Multiplier;
             List<float> RetrievedVal;
-            foreach (var Attribute in AttributeData.Attributes)
+            foreach (var Attribute in Attributes)
             {
                 AttributeName = Attribute.Name;
                 Multiplier = Attribute.ConversionMultiplier;
@@ -51,9 +72,20 @@ namespace POESKillTree.SkillTreeFiles
                     TotalStat += Multiplier * RetrievedVal[0];
                 }
             }
-            //#if(DEBUG)
-            //            Console.WriteLine(Name() + " tested from attrDictionary to have total stat of " + TotalStat);
-            //#endif
+            return TotalStat;
+        }
+
+        public static implicit operator TrackedAttribute(PseudoAttribute attribute)
+        {
+            TrackedAttribute NewSelf = new TrackedAttribute(attribute);
+            return NewSelf;
+        }
+
+        public static explicit operator PseudoAttribute(TrackedAttribute self)
+        {
+            PseudoAttribute NewSelf = new PseudoAttribute(self.Name, self.Group);
+            NewSelf.Attributes = self.Attributes;
+            return NewSelf;
         }
     }
 
@@ -83,7 +115,7 @@ namespace POESKillTree.SkillTreeFiles
         {
             for (int Index = 0; Index < this.Count; Index++)
             {
-                if (this[Index].Name() == Name)
+                if (this[Index].Name == Name)
                 {
                     return Index;
                 }
@@ -99,7 +131,7 @@ namespace POESKillTree.SkillTreeFiles
         {
             for (int Index = 0; Index < Count; ++Index)
             {
-                if (this[Index].Name() == Attribute.Name)
+                if (this[Index].Name == Attribute.Name)
                 {
                     return Index;
                 }
@@ -115,7 +147,22 @@ namespace POESKillTree.SkillTreeFiles
         public string GetNameOfAttribute(int Index)
         {
             TrackedAttribute CurrentAttribute = this[Index];
-            return CurrentAttribute.Name();
+            return CurrentAttribute.Name;
+        }
+
+        /// <summary>
+        /// Creates the attribute dictionary.
+        /// </summary>
+        /// <param name="AttributeDic">The attribute dic.</param>
+        /// <returns></returns>
+        public Dictionary<string, float> CreateAttributeDictionary(Dictionary<string, List<float>> AttributeDic)
+        {
+            Dictionary<string, float> AttributeTotals = new Dictionary<string, float>(this.Count);
+            for (int Index = 0; Index < Count; ++Index)
+            {
+                AttributeTotals.Add(this[Index].Name, this[Index].CalculateValue(AttributeDic));
+            }
+            return AttributeTotals;
         }
 
         /// <summary>
@@ -126,48 +173,34 @@ namespace POESKillTree.SkillTreeFiles
         public Dictionary<string, List<float>> PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic)
         {
             if (Count == 0) { return AttributeDic; }
-            for (int Index = 0; Index < Count; ++Index)
+            Dictionary<string, float> AttributeTotals = CreateAttributeDictionary(AttributeDic);
+            foreach(var Element in AttributeTotals.Keys)
             {
-                if (AttributeDic.ContainsKey(this[Index].Name()))
+                if (AttributeDic.ContainsKey(Element))
                 {
                     List<float> TargetValue = new List<float>(1);
-                    TargetValue.Add(this[Index].TotalStat);
-                    AttributeDic[this[Index].Name()] = TargetValue;
+                    TargetValue.Add(AttributeTotals[Element]);
+                    AttributeDic[Element] = TargetValue;
                 }
                 else
                 {
                     List<float> TargetValue = new List<float>(1);
-                    TargetValue.Add(this[Index].TotalStat);
-                    AttributeDic.Add(this[Index].Name(), TargetValue);
+                    TargetValue.Add(AttributeTotals[Element]);
+                    AttributeDic.Add(Element, TargetValue);
                 }
             }
             return AttributeDic;
         }
 
         /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public void Reset()
-        {
-            for (int Index = 0; Index < Count; ++Index)
-            {
-                this[Index].TotalStat = 0.0f;
-            }
-        }
-
-        /// <summary>
         /// Starts the tracking.
         /// </summary>
         /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints.</param>
-        public void StartTracking(Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints)
+        public void StartTracking(Dictionary<PseudoAttribute, System.Tuple<float, double>> pseudoAttributeConstraints)
         {
             int Index;
             foreach (var Attribute in pseudoAttributeConstraints.Keys)//Don't need target value and weight
             {
-                if (this.Count != 0)
-                {
-                    this.Reset();
-                }
                 Index = GetIndexOfAttribute(Attribute);
                 if (Index == -1)
                 {
@@ -189,7 +222,7 @@ namespace POESKillTree.SkillTreeFiles
             if (Count == 0) { return; }
             for (int Index = 0; Index < Count; ++Index)
             {
-                this[Index].UpdateValue(selectedAttributes);
+                this[Index].CalculateValue(selectedAttributes);
             }
         }
 
@@ -210,7 +243,7 @@ namespace POESKillTree.SkillTreeFiles
                 int indexFound = -1;
                 for (int Index = 0; Index < Count && indexFound == -1; ++Index)
                 {
-                    if (this[Index].Name() == IndexKey)
+                    if (this[Index].Name == IndexKey)
                     {
                         indexFound = Index;
                     }
@@ -238,7 +271,7 @@ namespace POESKillTree.SkillTreeFiles
                 int indexFound = -1;
                 for (int Index = 0; Index < Count && indexFound == -1; ++Index)
                 {
-                    if (this[Index].Name() == IndexKey)
+                    if (this[Index].Name == IndexKey)
                     {
                         indexFound = Index;
                     }
@@ -270,14 +303,14 @@ namespace POESKillTree.SkillTreeFiles
                 int indexFound = -1;
                 for (int Index = 0; Index < Count && indexFound == -1; ++Index)
                 {
-                    if (this[Index].Name() == IndexKey)
+                    if (this[Index].Name == IndexKey)
                     {
                         indexFound = Index;
                     }
                 }
                 if (indexFound != -1)
                 {
-                    return this[indexFound].AttributeData;
+                    return (PseudoAttribute)this[indexFound];
                 }
                 else
                 {
@@ -289,14 +322,14 @@ namespace POESKillTree.SkillTreeFiles
                 int indexFound = -1;
                 for (int Index = 0; Index < Count && indexFound == -1; ++Index)
                 {
-                    if (this[Index].Name() == IndexKey)
+                    if (this[Index].Name == IndexKey)
                     {
                         indexFound = Index;
                     }
                 }
                 if (indexFound != -1)
                 {
-                    this[indexFound].AttributeData = value;
+                    this[indexFound] = value;
                 }
                 else
                 {
@@ -304,158 +337,5 @@ namespace POESKillTree.SkillTreeFiles
                 }
             }
         }
-
-        ///// <summary>
-        ///// Updates the stats.(Fails to correctly calculate from ControllViewModelSolveAsync)
-        ///// </summary>
-        ///// <param name="tree">The tree.</param>
-        //public void UpdateStats(SkillTree tree)
-        //{
-        //    if(Count==0){return;}
-        //    for (int Index=0;Index<Count;++Index)
-        //    {
-        //        this[Index].UpdateValue(tree);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Places the Tracked Attributes into attribute dictionary
-        ///// </summary>
-        ///// <param name="AttributeDic">The attribute dictionary</param>
-        ///// <param name="Target">The target.</param>
-        //public void PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic, TrackedAttribute Target)
-        //{
-        //    if (AttributeDic.ContainsKey(Target.Name()))
-        //    {
-        //        List<float> TargetValue = new List<float>(1);
-        //        TargetValue.Add(Target.TotalStat);
-        //        AttributeDic[Target.Name()] = TargetValue;
-        //    }
-        //    else
-        //    {
-        //        List<float> TargetValue = new List<float>(1);
-        //        TargetValue.Add(Target.TotalStat);
-        //        AttributeDic.Add(Target.Name(), TargetValue);
-        //    }
-        //}
-        ///// <summary>
-        ///// Places the Tracked Attributes into attribute dictionary
-        ///// </summary>
-        ///// <param name="AttributeDic">The attribute dic.</param>
-        ///// <returns></returns>
-        //public List<POESKillTree.ViewModels.Attribute> PlaceIntoAttributeDic(List<POESKillTree.ViewModels.Attribute> AttributeDic)
-        //{
-        //    if (Count == 0) { return AttributeDic; }
-        //    for (int Index = 0; Index < Count; ++Index)
-        //    {
-        //        //if (AttributeDic.ContainsKey(this[Index].Name()))
-        //        //{
-        //        //    List<float> TargetValue = new List<float>(1);
-        //        //    TargetValue.Add(this[Index].TotalStat);
-        //        //    AttributeDic[this[Index].Name()] = TargetValue;
-        //        //}
-        //        //else
-        //        //{
-        //        //    List<float> TargetValue = new List<float>(1);
-        //        //    TargetValue.Add(this[Index].TotalStat);
-        //        //    AttributeDic.Add(this[Index].Name(), TargetValue);
-        //        //}
-        //    }
-        //    return AttributeDic;
-        //}
-
-        //private const string AttributeKey = "Attribute";
-        //private const string TargetValueKey = "TargetValue";
-        //private const string WeightKey = "Weight";
-
-        //private readonly TreeGenerator.ViewModels.AdvancedTabViewModel _vm;
-
-        //private var attr = attrToken.ToObject<string>();
-
-        //
-
-        //private var newConstraints = new List<AttributeConstraint>();
-        //private var obj = element as JObject;
-        ////IReadOnlyList<ISetting> SubSettings;
-        ////JObject LoadedData = _persistentData.CurrentBuild.AdditionalData;
-        ////JToken token;
-        //////if (!LoadedData.TryGetValue(Key, out token) || !(token is JObject))
-        //////{
-        //////	Reset();
-        //////	return;
-        //////}
-        ////SubSettings.ForEach(s => s.LoadFrom((JObject)token));
-        //private Newtonsoft.Json.Linq.JToken token;
-        //private new AttributeConstraint(attr)
-        //{
-        //    TargetValue = targetToken.ToObject<float>(),
-        //    Weight = weightToken.ToObject<int>()
-        //}
-        //private const string AttributeKey = "Attribute";
-        //private const string TargetValueKey = "TargetValue";
-        //private const string WeightKey = "Weight";
-        //public void StartTrackingFromSave(Newtonsoft.Json.Linq.JObject LoadedData)//_persistentData.CurrentBuild.AdditionalData;
-        //{
-        //    //var obj = element as Newtonsoft.Json.Linq.JObject;
-        //    Newtonsoft.Json.Linq.JToken attrToken, targetToken, weightToken;
-        //    TreeGenerator.ViewModels.AdvancedTabViewModel _vm;
-        //    var newConstraints = new List<AttributeConstraint>();
-        //    //AttributeConstraint
-        //    //_vm.ClearAttributeConstraints();
-        //    if (LoadedData.TryGetValue(nameof(AttributeConstraints), out token) && token.Any())
-        //    {
-        //        foreach (var element in token)
-        //        {
-        //            if (obj == null)
-        //                continue;
-        //            if (!obj.TryGetValue(AttributeKey, out attrToken)
-        //                || !obj.TryGetValue(TargetValueKey, out targetToken)
-        //                || !obj.TryGetValue(WeightKey, out weightToken))
-        //                continue;
-        //            newConstraints.Add();
-
-        //            _vm._addedAttributes.Add(attr);
-        //        }
-
-        //        _vm.AttributesView.Refresh();
-        //        _vm.AttributesView.MoveCurrentToFirst();
-        //        _vm.NewAttributeConstraint.Data = _vm.AttributesView.CurrentItem as string;
-        //        _vm.AttributeConstraints.AddRange(newConstraints);
-        //    }
-
-        //    _vm.ClearPseudoAttributeConstraints();
-        //    if (LoadedData.TryGetValue(nameof(PseudoAttributeConstraints), out token) && token.Any())
-        //    {
-        //        var pseudoDict = _vm._pseudoAttributes.ToDictionary(p => p.Name);
-
-        //        var newConstraints = new List<PseudoAttributeConstraint>();
-        //        foreach (var element in token)
-        //        {
-        //            var obj = element as JObject;
-        //            if (obj == null)
-        //                continue;
-        //            JToken attrToken, targetToken, weightToken;
-        //            if (!obj.TryGetValue(AttributeKey, out attrToken)
-        //                || !obj.TryGetValue(TargetValueKey, out targetToken)
-        //                || !obj.TryGetValue(WeightKey, out weightToken))
-        //                continue;
-
-        //            PseudoAttribute attr;
-        //            if (!pseudoDict.TryGetValue(attrToken.ToObject<string>(), out attr))
-        //                continue;
-        //            newConstraints.Add(new PseudoAttributeConstraint(attr)
-        //            {
-        //                TargetValue = targetToken.ToObject<float>(),
-        //                Weight = weightToken.ToObject<int>()
-        //            });
-        //            _vm._addedPseudoAttributes.Add(attr);
-        //        }
-
-        //        _vm.PseudoAttributesView.Refresh();
-        //        _vm.PseudoAttributesView.MoveCurrentToFirst();
-        //        _vm.NewPseudoAttributeConstraint.Data = _vm.PseudoAttributesView.CurrentItem as PseudoAttribute;
-        //        _vm.PseudoAttributeConstraints.AddRange(newConstraints);
-        //    }
-        //}
     }
 }

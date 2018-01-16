@@ -42,17 +42,17 @@ namespace POESKillTree.Model
         /// </summary>
         public void Add(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
         {
-            if (ContainsKey(Target.Name()))
+            if (ContainsKey(Target.Name))
             {
                 List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat+ this[Target.Name()][0];
-                this[Target.Name()] = TargetValue;
+                TargetValue[0] = Target.CalculateValue(this)+ this[Target.Name][0];
+                this[Target.Name] = TargetValue;
             }
             else
             {
                 List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat;
-                Add(Target.Name(), TargetValue);
+                TargetValue[0] = Target.CalculateValue(this);
+                Add(Target.Name, TargetValue);
             }
         }
 
@@ -61,17 +61,17 @@ namespace POESKillTree.Model
         /// </summary>
         public void Set(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
         {
-            if (ContainsKey(Target.Name()))
+            if (ContainsKey(Target.Name))
             {
                 List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat;
-                this[Target.Name()] = TargetValue;
+                TargetValue[0] = Target.CalculateValue(this);
+                this[Target.Name] = TargetValue;
             }
             else
             {
                 List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.TotalStat;
-                Add(Target.Name(), TargetValue);
+                TargetValue[0] = Target.CalculateValue(this);
+                Add(Target.Name, TargetValue);
             }
         }
 

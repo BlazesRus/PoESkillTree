@@ -65,7 +65,6 @@ namespace POESKillTree.ViewModels.Equipment
             Boots = CreateSlotVm(ItemSlot.Boots);
             Belt = CreateSlotVm(ItemSlot.Belt);
 
-//Need to place in SkillTree somehow later
             JSlot_Int_Witch = CreateSlotVm(ItemSlot.JSlot_Int_Witch);
             JSlot_Int_Scion = CreateSlotVm(ItemSlot.JSlot_Int_Scion);
             JSlot_Int_WitchShadow = CreateSlotVm(ItemSlot.JSlot_Int_WitchShadow);

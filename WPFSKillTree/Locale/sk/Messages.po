@@ -21,7 +21,7 @@ msgstr ""
 #: Controls\Dialogs\Views\MetroMessageBoxView.xaml:71
 #: Controls\Dialogs\Views\ValidatingInputDialogView.xaml:41
 #: Views\Builds\EditBuildWindow.xaml:59 Views\Equipment\TabPicker.xaml:122
-#: Controls\Dialogs\ExtendedDialogManager.cs:80
+#: Controls\Dialogs\ExtendedDialogManager.cs:117
 msgid "OK"
 msgstr "OK"
 
@@ -33,8 +33,8 @@ msgstr "OK"
 #: Views\Crafting\UniqueCraftingView.xaml:59
 #: Views\Equipment\SocketedGemsEditingView.xaml:187
 #: Views\Equipment\TabPicker.xaml:127
-#: Controls\Dialogs\ExtendedDialogManager.cs:79
-#: Controls\Dialogs\ExtendedDialogManager.cs:91
+#: Controls\Dialogs\ExtendedDialogManager.cs:116
+#: Controls\Dialogs\ExtendedDialogManager.cs:128
 #: TreeGenerator\ViewModels\ControllerViewModel.cs:118
 #: TreeGenerator\ViewModels\ControllerViewModel.cs:364
 msgid "Cancel"
@@ -172,7 +172,7 @@ msgstr "Spustiť"
 msgid "Reset settings"
 msgstr "Resetovať nastavenia"
 
-#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177 Views\MainWindow.xaml:759
+#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177 Views\MainWindow.xaml:768
 msgid "Attributes"
 msgstr "Atribúty"
 
@@ -433,11 +433,11 @@ msgstr "Odkaz na údaje predmetov:"
 
 #: Views\Equipment\DownloadItemsWindow.xaml:45
 #: Views\Equipment\DownloadStashWindow.xaml:62
-#: Views\Equipment\DownloadStashWindow.xaml:110
+#: Views\Equipment\DownloadStashWindow.xaml:111
 msgid "Open in Browser"
 msgstr "Otvoriť v prehliadači"
 
-#: Views\Equipment\DownloadItemsWindow.xaml:51
+#: Views\Equipment\DownloadItemsWindow.xaml:52
 msgid "Item data:"
 msgstr "Údaje predmetov:"
 
@@ -461,27 +461,27 @@ msgstr "Liga"
 msgid "Link to stash tab list:"
 msgstr "Odkaz na zoznam Stash záložiek:"
 
-#: Views\Equipment\DownloadStashWindow.xaml:71
+#: Views\Equipment\DownloadStashWindow.xaml:72
 msgid "Load stash tab list from clipboard"
 msgstr "Načítať zoznam Stash záložiek zo Schránky"
 
-#: Views\Equipment\DownloadStashWindow.xaml:76
+#: Views\Equipment\DownloadStashWindow.xaml:77
 msgid "Select a stash tab and click 'Open in browser' below"
 msgstr "Zvoľte Stash záložku a stlačte „Otvoriť v prehliadači“ nižšie"
 
-#: Views\Equipment\DownloadStashWindow.xaml:77
+#: Views\Equipment\DownloadStashWindow.xaml:78
 msgid "This will open a page in your default Web-browser containing the item data of the selected stash."
 msgstr "Týmto sa otvorí stránka vo Vašom prehliadači obsahujúca údaje predmetov zvolenej Stash záložky."
 
-#: Views\Equipment\DownloadStashWindow.xaml:78
+#: Views\Equipment\DownloadStashWindow.xaml:79
 msgid "Copy the contents of that page and click 'Load stash tab'."
 msgstr "Skopírujte obsah danej stránky a stlačte „Načítať Stash záložku“."
 
-#: Views\Equipment\DownloadStashWindow.xaml:105
+#: Views\Equipment\DownloadStashWindow.xaml:106
 msgid "Link to stash tab:"
 msgstr "Odkaz na Stash záložku:"
 
-#: Views\Equipment\DownloadStashWindow.xaml:119
+#: Views\Equipment\DownloadStashWindow.xaml:121
 msgid "Load stash tab from clipboard"
 msgstr "Načítať Stash záložku zo Schránky"
 
@@ -922,114 +922,120 @@ msgid "C_ross-tag highlighted Nodes"
 msgstr "Označiť zvýraznené uzly preškrtnutím"
 
 #: Views\MainWindow.xaml:552
+#, fuzzy
+msgid "Load Tracked Stat"
+msgstr "Načítať strom"
+
+#: Views\MainWindow.xaml:561
 msgid "_Help"
 msgstr "_Pomocník"
 
-#: Views\MainWindow.xaml:556
+#: Views\MainWindow.xaml:565
 msgid "_Links"
 msgstr "O_dkazy"
 
-#: Views\MainWindow.xaml:563
+#: Views\MainWindow.xaml:572
 msgid "_Path of Exile Website"
 msgstr "_Path of Exile stránka"
 
-#: Views\MainWindow.xaml:568
+#: Views\MainWindow.xaml:577
 msgid "Path of Exile _Wiki"
 msgstr "Path of Exile _Wiki"
 
-#: Views\MainWindow.xaml:574
+#: Views\MainWindow.xaml:583
 msgid "View _Help"
 msgstr "Zobraziť _pomocníka"
 
-#: Views\MainWindow.xaml:582
+#: Views\MainWindow.xaml:591
 msgid "Hot_keys"
 msgstr "_Klávesové skratky"
 
-#: Views\MainWindow.xaml:590
+#: Views\MainWindow.xaml:599
 msgid "Check for _Updates"
 msgstr "Skontrolovať _aktualizácie"
 
-#: Views\MainWindow.xaml:598
+#: Views\MainWindow.xaml:607
 msgid "_About PoESkillTree"
 msgstr "_O PoESkillTree"
 
-#: Views\MainWindow.xaml:611
+#: Views\MainWindow.xaml:620
 msgid "Skill Tree"
 msgstr "Strom zručností"
 
-#: Views\MainWindow.xaml:617
+#: Views\MainWindow.xaml:626
 msgid "Equipment"
 msgstr "Vybavenie"
 
-#: Views\MainWindow.xaml:633
+#: Views\MainWindow.xaml:642
 #, fuzzy
 msgid "Bandit"
 msgstr "Baditi"
 
-#: Views\MainWindow.xaml:647
+#: Views\MainWindow.xaml:656
 msgid "Level"
 msgstr "Level"
 
-#: Views\MainWindow.xaml:654
+#: Views\MainWindow.xaml:663
 msgid "Used Passive Skill Points"
 msgstr "Použité pasívne body"
 
-#: Views\MainWindow.xaml:659
+#: Views\MainWindow.xaml:668
 msgid "Used Ascendancy Skill Points"
 msgstr "Použité Ascendancy body"
 
-#: Views\MainWindow.xaml:666
+#: Views\MainWindow.xaml:675
 msgid "Total Passive Skill Points"
 msgstr "Celkovo pasívnych bodov"
 
-#: Views\MainWindow.xaml:671
+#: Views\MainWindow.xaml:680
 msgid "Total Ascendancy Skill Points"
 msgstr "Celkovo Ascendancy bodov"
 
-#: Views\MainWindow.xaml:726
+#: Views\MainWindow.xaml:735
 #, fuzzy
 msgid "Craft new unique"
 msgstr "Vyrobiť nový predmet"
 
-#: Views\MainWindow.xaml:730
+#: Views\MainWindow.xaml:739
 msgid "Craft new item"
 msgstr "Vyrobiť nový predmet"
 
-#: Views\MainWindow.xaml:748
+#: Views\MainWindow.xaml:757
 msgid "Saved Builds"
 msgstr "Uložené zostavy"
 
-#: Views\MainWindow.xaml:782
+#: Views\MainWindow.xaml:791
 msgid "Passive Attributes"
 msgstr "Pasívne atribúty"
 
-#: Views\MainWindow.xaml:799
+#: Views\MainWindow.xaml:808
 msgid "Item Attributes"
 msgstr "Atribúty predmetov"
 
-#: Views\MainWindow.xaml:818
+#: Views\MainWindow.xaml:827
 msgid "Total Attributes"
 msgstr "Atribúty celkovo"
 
-#: Views\MainWindow.xaml:835
+#: Views\MainWindow.xaml:844
 msgid "ItemList"
 msgstr "Údaje predmetov"
 
-#: Views\MainWindow.xaml:877
+#: Views\MainWindow.xaml:886
 msgid "Character Sheet"
 msgstr "Postava"
 
-#: Views\MainWindow.xaml:883 SkillTreeFiles\Compute.cs:2302
+#: Views\MainWindow.xaml:892 SkillTreeFiles\Compute.cs:2302
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
 #: Utils\Converter\GroupStringConverter.cs:31
+#: ViewModels\TrackedStatsMenuModel.cs:566
 msgid "Defense"
 msgstr "Obrana"
 
-#: Views\MainWindow.xaml:900
+#: Views\MainWindow.xaml:909
 msgid "Offense"
 msgstr "Útok"
 
-#: Views\MainWindow.xaml:943 Views\MainWindow.xaml:946
+#: Views\MainWindow.xaml:952 Views\MainWindow.xaml:955
 #, fuzzy
 msgid "Skill tree link"
 msgstr "Odkaz stromu:"
@@ -1051,7 +1057,7 @@ msgstr "Jazyk"
 msgid "Build save path"
 msgstr "Názov zostavy"
 
-#: Views\SettingsMenuWindow.xaml:100
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:128
 msgid "Change..."
 msgstr ""
 
@@ -1095,19 +1101,37 @@ msgstr "Resetovať Ascendancy strom zručností"
 msgid "Reset selected bandits"
 msgstr "Resetovať zvolené odmeny banditov"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:57
+#: Views\TrackedStatsMenu.xaml:113
+msgid "TrackedStats Path"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:136
+msgid "Load Tracked Stat File Names"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:147
+#, fuzzy
+msgid "Load Tracked Stats from file"
+msgstr "Načítať strom"
+
+#: Views\TrackedStatsMenu.xaml:152
+#, fuzzy
+msgid "Reset Tracking"
+msgstr "Resetovať nastavenia"
+
+#: Controls\Dialogs\ExtendedDialogManager.cs:94
 msgid "Confirmation"
 msgstr "Potvrdenie"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:62
+#: Controls\Dialogs\ExtendedDialogManager.cs:99
 msgid "Error"
 msgstr "Chyba"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:67
+#: Controls\Dialogs\ExtendedDialogManager.cs:104
 msgid "Warning"
 msgstr "Upozornenie"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:72
+#: Controls\Dialogs\ExtendedDialogManager.cs:109
 msgid "Information"
 msgstr "Informácia"
 
@@ -1149,7 +1173,7 @@ msgstr ""
 msgid "Character"
 msgstr "Postava"
 
-#: SkillTreeFiles\SkillTree.cs:1280
+#: SkillTreeFiles\SkillTree.cs:1301
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1201,112 +1225,137 @@ msgstr "Nepodporovaný typ podmienky v atribúte {0} pseudo-atribútu {1}"
 msgid "Empty not condition in attribute {0} in pseudo attribute {1}"
 msgstr "Prázdna podmienka negácie v atribúte {0} pseudo-atribútu {1}"
 
-#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:244
+#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:246
+#, fuzzy, csharp-format
+msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute with AttributeGroup"
+msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
+
+#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:257
 msgid "A PseudoAttribute is nested in itself or nesting depth is too high"
 msgstr "Pseudo-atribút je vnorený sám v sebe, alebo hĺbka vnorenia je príliš veľká"
 
-#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:254
+#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:267
 #, csharp-format
 msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"
 msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:204
+#: ViewModels\TrackedStatsMenuModel.cs:603
 msgid "Popular"
 msgstr "Populárne"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:213
 #: Utils\Converter\GroupStringConverter.cs:34
+#: ViewModels\TrackedStatsMenuModel.cs:561
 msgid "Core Attributes"
 msgstr "Základné atribúty"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:214
 #: Utils\Converter\GroupStringConverter.cs:30
+#: ViewModels\TrackedStatsMenuModel.cs:562
 msgid "General"
 msgstr "Všeobecné"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
 #: Utils\Converter\GroupStringConverter.cs:19
+#: ViewModels\TrackedStatsMenuModel.cs:563
 msgid "Keystone"
 msgstr "Kľúčové"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
 #: Utils\Converter\GroupStringConverter.cs:21
+#: ViewModels\TrackedStatsMenuModel.cs:564
 msgid "Charges"
 msgstr "Náboje"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:219
 #: Utils\Converter\GroupStringConverter.cs:29
+#: ViewModels\TrackedStatsMenuModel.cs:567
 msgid "Block"
 msgstr "Blokovanie"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
 #: Utils\Converter\GroupStringConverter.cs:28
+#: ViewModels\TrackedStatsMenuModel.cs:568
 msgid "Shield"
 msgstr "Štít"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
 #: Utils\Converter\GroupStringConverter.cs:20
+#: ViewModels\TrackedStatsMenuModel.cs:570
 msgid "Weapon"
 msgstr "Zbraň"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:223
 #: Utils\Converter\GroupStringConverter.cs:32
+#: ViewModels\TrackedStatsMenuModel.cs:571
 msgid "Spell"
 msgstr "Kúzlo"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
 #: Utils\Converter\GroupStringConverter.cs:27
+#: ViewModels\TrackedStatsMenuModel.cs:572
 msgid "Critical Strike"
 msgstr "Kritický úder"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
 #: Utils\Converter\GroupStringConverter.cs:26
+#: ViewModels\TrackedStatsMenuModel.cs:574
 msgid "Aura"
 msgstr "Aura"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:227
 #: Utils\Converter\GroupStringConverter.cs:25
+#: ViewModels\TrackedStatsMenuModel.cs:575
 msgid "Curse"
 msgstr "Prekliatie"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
 #: Utils\Converter\GroupStringConverter.cs:22
+#: ViewModels\TrackedStatsMenuModel.cs:576
 msgid "Minion"
 msgstr "Minion"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
 #: Utils\Converter\GroupStringConverter.cs:23
+#: ViewModels\TrackedStatsMenuModel.cs:577
 msgid "Trap"
 msgstr "Pasca"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
 #: Utils\Converter\GroupStringConverter.cs:24
+#: ViewModels\TrackedStatsMenuModel.cs:578
 msgid "Totem"
 msgstr "Totem"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
 #: Utils\Converter\GroupStringConverter.cs:33
-#: ItemFilter\Model\FilterManager.cs:564
+#: ItemFilter\Model\FilterManager.cs:567
+#: ViewModels\TrackedStatsMenuModel.cs:579
 msgid "Flasks"
 msgstr "Fľaše"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:36
+#: ViewModels\TrackedStatsMenuModel.cs:580
 msgid "Jewel Types"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:37
+#: ViewModels\TrackedStatsMenuModel.cs:581
 msgid "Tracked PseudoTotals"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
 #: Utils\Converter\GroupStringConverter.cs:35
+#: ViewModels\TrackedStatsMenuModel.cs:582
 msgid "Everything Else"
 msgstr "Ostatné"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
 #: Utils\Converter\GroupStringConverter.cs:38
+#: ViewModels\TrackedStatsMenuModel.cs:583
 msgid "Hidden"
 msgstr ""
 
@@ -1435,19 +1484,19 @@ msgstr ""
 msgid "Currency"
 msgstr "Platidlo"
 
-#: ItemFilter\Model\FilterManager.cs:383
+#: ItemFilter\Model\FilterManager.cs:386
 msgid "Recipes"
 msgstr "Recepty"
 
-#: ItemFilter\Model\FilterManager.cs:390
+#: ItemFilter\Model\FilterManager.cs:393
 msgid "Any Normal item which vendor trades for Scroll Fragment."
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:401
+#: ItemFilter\Model\FilterManager.cs:404
 msgid "Any Magic item which vendor trades for Transmutation Shard, Alteration Shard or Alchemy Shard."
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:413
+#: ItemFilter\Model\FilterManager.cs:416
 msgid ""
 "A single Normal weapon with 20% quality.\n"
 "Weapons with a total of at least 40% quality."
@@ -1455,26 +1504,26 @@ msgstr ""
 "Jedna Normal zbraň s 20% kvalitou.\n"
 "Zbrane s celkovou kvalitou aspoň 40%."
 
-#: ItemFilter\Model\FilterManager.cs:461
+#: ItemFilter\Model\FilterManager.cs:464
 msgid ""
 "1 Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
 "1 Any Map"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:534
+#: ItemFilter\Model\FilterManager.cs:537
 msgid "Gems"
 msgstr "Drahokamy"
 
-#: ItemFilter\Model\FilterManager.cs:757
+#: ItemFilter\Model\FilterManager.cs:760
 msgid "Miscellaneous"
 msgstr "Rôzne"
 
-#: ItemFilter\Model\FilterManager.cs:868
+#: ItemFilter\Model\FilterManager.cs:884
 #, fuzzy
 msgid "Crafting"
 msgstr "Okno výroby"
 
-#: ItemFilter\Model\FilterManager.cs:986
+#: ItemFilter\Model\FilterManager.cs:1002
 msgid "Chancing"
 msgstr "Riskovanie"
 
@@ -1682,6 +1731,7 @@ msgid "Restart is needed"
 msgstr "Reštart je potrebný"
 
 #: ViewModels\SettingsMenuViewModel.cs:67
+#: ViewModels\TrackedStatsMenuModel.cs:459
 msgid ""
 "Select the directory where builds will be stored.\n"
 "It will be created if it does not yet exist."
@@ -1692,6 +1742,23 @@ msgid ""
 "There are unsaved builds. Do you want to save them before changing build directory?\n"
 "\n"
 "If you cancel, the build directory will not be changed."
+msgstr ""
+
+#: ViewModels\TrackedStatsMenuModel.cs:129
+#, fuzzy
+msgid "Tracked Stat Settings"
+msgstr "Resetovať nastavenia"
+
+#: ViewModels\TrackedStatsMenuModel.cs:458
+msgid "Select TrackedStat directory"
+msgstr ""
+
+#: ViewModels\TrackedStatsMenuModel.cs:525
+msgid "Select Tracked FilePath first."
+msgstr ""
+
+#: ViewModels\TrackedStatsMenuModel.cs:526
+msgid "Tracked Stats FilePath needed inputed first"
 msgstr ""
 
 #: Views\Builds\EditBuildWindow.xaml.cs:16
@@ -1724,7 +1791,8 @@ msgid "Initialization"
 msgstr "Inicializácia"
 
 #: Views\MainWindow.xaml.cs:453 Views\MainWindow.xaml.cs:552
-msgid "Initalizing window ..."
+#, fuzzy
+msgid "Initializing window ..."
 msgstr "Inicializácia okna ..."
 
 #: Views\MainWindow.xaml.cs:480
@@ -1775,7 +1843,7 @@ msgstr[2] "{0}, {1} bodov"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Vaša zostava musí obsahovať aspoň jeden uzol pre vytvorenie snímky"
 
-#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2040
+#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2110
 msgid "An error occurred while copying to Clipboard."
 msgstr "Nastala chyba počas kopírovania do Schránky."
 
@@ -1791,104 +1859,104 @@ msgstr "Sťahujem údaje stromu zručností ..."
 msgid "An error occurred while downloading assets."
 msgstr "Nastala chyba počas sťahovania údajov."
 
-#: Views\MainWindow.xaml.cs:1038
+#: Views\MainWindow.xaml.cs:1041
 msgid "Checking for updates"
 msgstr "Kontrola aktualizácií"
 
-#: Views\MainWindow.xaml.cs:1043
+#: Views\MainWindow.xaml.cs:1046
 msgid "You have the latest version!"
 msgstr "Máte najnovšiu verziu!"
 
-#: Views\MainWindow.xaml.cs:1048
+#: Views\MainWindow.xaml.cs:1051
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Aktualizácia pre {0} ({1}) je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1051
+#: Views\MainWindow.xaml.cs:1054
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Po dokončení sťahovania bude aplikácia zatvorená, aby mohla aktualizácia prebehnúť."
 
-#: Views\MainWindow.xaml.cs:1052
+#: Views\MainWindow.xaml.cs:1055
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Nová verzia {0} je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1055
+#: Views\MainWindow.xaml.cs:1058
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Nová verzia aplikácie bude nainštalovaná súbežne s predchádzajúcimi verziami."
 
-#: Views\MainWindow.xaml.cs:1059
+#: Views\MainWindow.xaml.cs:1062
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Upozornenie: Toto je predbežná verzia, ktorá môže obsahovať chyby!"
 
-#: Views\MainWindow.xaml.cs:1063
+#: Views\MainWindow.xaml.cs:1066
 msgid "Do you want to download and install the update?"
 msgstr "Chcete stiahnuť a nainštalovať aktualizáciu?"
 
-#: Views\MainWindow.xaml.cs:1064
+#: Views\MainWindow.xaml.cs:1067
 msgid "Do you want to download and install the new version?"
 msgstr "Chcete stiahnuť a nainštalovať novú verziu?"
 
-#: Views\MainWindow.xaml.cs:1066
+#: Views\MainWindow.xaml.cs:1069
 msgid "Continue installation?"
 msgstr "Pokračovať s inštaláciou?"
 
-#: Views\MainWindow.xaml.cs:1077
+#: Views\MainWindow.xaml.cs:1080
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Nastala chyba pri pokuse kontaktovať lokáciu pre aktualizácie."
 
-#: Views\MainWindow.xaml.cs:1085
+#: Views\MainWindow.xaml.cs:1088
 msgid "Downloading latest version"
 msgstr "Sťahujem najnovšiu verziu"
 
-#: Views\MainWindow.xaml.cs:1100 Views\MainWindow.xaml.cs:1115
+#: Views\MainWindow.xaml.cs:1103 Views\MainWindow.xaml.cs:1118
 msgid "An error occurred during the download operation."
 msgstr "Nastala chyba počas sťahovania."
 
-#: Views\MainWindow.xaml.cs:1128
+#: Views\MainWindow.xaml.cs:1131
 msgid "An error occurred while attempting to start the installation."
 msgstr "Nastala chyba pri pokuse spustiť inštaláciu."
 
-#: Views\MainWindow.xaml.cs:1771
+#: Views\MainWindow.xaml.cs:1841
 msgid "An error occurred while attempting to load item data."
 msgstr "Nastala chyba pri pokuse načítať údaje predmetov."
 
-#: Views\MainWindow.xaml.cs:1865 Views\MainWindow.xaml.cs:1908
+#: Views\MainWindow.xaml.cs:1935 Views\MainWindow.xaml.cs:1978
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Nastala chyba pri pokuse načítať strom zručností z URL."
 
-#: Views\MainWindow.xaml.cs:1887
+#: Views\MainWindow.xaml.cs:1957
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1888
+#: Views\MainWindow.xaml.cs:1958
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1889
+#: Views\MainWindow.xaml.cs:1959
 #, fuzzy
 msgid "Replace Bandits settings"
 msgstr "Resetovať nastavenia"
 
-#: Views\MainWindow.xaml.cs:1915
+#: Views\MainWindow.xaml.cs:1985
 #, fuzzy
 msgid "Current: "
 msgstr "Platidlo"
 
-#: Views\MainWindow.xaml.cs:1916
+#: Views\MainWindow.xaml.cs:1986
 #, fuzzy
 msgid "Loaded: "
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:2020
+#: Views\MainWindow.xaml.cs:2090
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Vytváranie Po_EUrl odkazu"
 
-#: Views\MainWindow.xaml.cs:2026
+#: Views\MainWindow.xaml.cs:2096
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Nastala chyba pri pokuse kontaktovať PoEUrl lokáciu."
 
-#: Views\MainWindow.xaml.cs:2036
+#: Views\MainWindow.xaml.cs:2106
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "PoEUrl odkaz bol skopírovaný do Schránky."
 

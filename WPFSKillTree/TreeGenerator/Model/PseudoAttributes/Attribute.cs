@@ -50,10 +50,7 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         /// </summary>
         public Attribute(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
         {
-            Name = Target.Name();
-            //Group = "Hidden";
-            //Attributes = new List<Attribute>();
-            //Attributes.Add(
+            Name = Target.Name;
             ConversionMultiplier = 1;
         }
 

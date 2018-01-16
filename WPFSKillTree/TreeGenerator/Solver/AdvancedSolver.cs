@@ -412,7 +412,6 @@ namespace POESKillTree.TreeGenerator.Solver
                 // If it is lower, apply it as a logarithmic factor.
                 csvs *= 1 + UsedNodeCountFactor * Math.Log(totalPoints + 1 - usedNodeCount);
             }
-
             // Make sure the fitness is not < 0 (can't happen with the current implementation anyway).
             return Math.Max(csvs, 0);
         }

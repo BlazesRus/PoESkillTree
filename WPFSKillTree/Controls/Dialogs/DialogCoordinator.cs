@@ -6,6 +6,7 @@ using MahApps.Metro.Controls.Dialogs;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs.Views;
 using POESKillTree.Controls.Dialogs.ViewModels;
+using POESKillTree.ViewModels;
 
 namespace POESKillTree.Controls.Dialogs
 {
@@ -39,6 +40,12 @@ namespace POESKillTree.Controls.Dialogs
         {
             var metroWindow = GetMetroWindow(context);
             return metroWindow.Invoke(() => metroWindow.ShowDialogAsync(viewModel, view, onShown));
+        }
+		
+        protected Task ShowTrackedStatDialogAsync<T>(object context, TrackedStatsMenuModel viewModel, BaseMetroDialog view, Action onShown = null)
+        {
+            var metroWindow = GetMetroWindow(context);
+            return metroWindow.Invoke(() => metroWindow.ShowTrackedStatDialogAsync(viewModel, view, onShown));
         }
 
         public Task<MessageBoxResult> ShowQuestionAsync(object context, string message, string details = null,

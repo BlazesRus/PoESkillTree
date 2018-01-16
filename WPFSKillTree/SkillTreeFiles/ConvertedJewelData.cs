@@ -20,6 +20,70 @@ namespace POESKillTree.SkillTreeFiles
     public class ConvertedJewelData
     {
         /// <summary>
+        /// Jewels the name of the slot.
+        /// </summary>
+        /// <param name="NodeId">The node identifier.</param>
+        /// <returns></returns>
+        public static string JewelSlotName(int NodeId)
+        {
+            string JewelName;
+            switch (NodeId)
+            {
+                //Int Jewels
+                case JSlot_Int_WitchID://Jewel Slot directly north of Witch starting area
+                    JewelName = "JSlot_Int_Witch"; break;
+                case JSlot_Int_ScionID://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
+                    JewelName = "JSlot_Int_Scion"; break;
+                case JSlot_Int_WitchShadowID://NE from center jewel slot between Witch and shadow areas
+                    JewelName = "JSlot_Int_WitchShadow"; break;
+                case JSlot_Int_TemplarWitchID://Jewel slot north-west of Scion area; At road between Templar and Witch areas
+                    JewelName = "JSlot_Int_TemplarWitch"; break;
+                //Str Jewels
+                case JSlot_Str_WarriorDuelistID://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
+                    JewelName = "JSlot_Str_WarriorDuelist"; break;
+                case JSlot_Str_WarriorTemplarScionID://Jewel slot west of Scion area; At road between Marauder and Templar areas
+                    JewelName = "JSlot_Str_WarriorTemplarScion"; break;
+                case JSlot_Str_FarWarTempScionID://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
+                    JewelName = "JSlot_Str_FarWarTempScion"; break;
+                case JSlot_Str_WarriorID://Jewel slot west of Marauder area
+                    JewelName = "JSlot_Str_Warrior"; break;
+                //Dex Jewels
+                case JSlot_Dex_ShadowRangerID://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
+                    JewelName = "JSlot_Dex_ShadowRanger"; break;
+                case JSlot_Dex_RangerID://Jewel slot east of Ranger area(Jewel10)
+                    JewelName = "JSlot_Dex_Ranger"; break;
+                case JSlot_Dex_RangerDuelistID://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
+                    JewelName = "JSlot_Dex_RangerDuelist"; break;
+                //Hybrid Jewels
+                case JSlot_StrInt_TemplarID://Jewel slot west of Templar starting area
+                    JewelName = "JSlot_StrInt_Templar"; break;
+                case JSlot_StrInt_ScionID://Scion Jewel Slot west of starting area
+                    JewelName = "JSlot_StrInt_Scion"; break;
+                case JSlot_DexInt_ShadowID://Jewel slot east of Shadow starting area
+                    JewelName = "JSlot_DexInt_Shadow"; break;
+                case JSlot_DexInt_ScionID://Scion jewel slot east of starting area
+                    JewelName = "JSlot_DexInt_Scion"; break;
+                case JSlot_StrDex_ScionID://Scion Jewel Slot south of starting area
+                    JewelName = "JSlot_StrDex_Scion"; break;
+                case JSlot_StrDex_DuelistID://Jewel slot south of Duelist starting area
+                    JewelName = "JSlot_StrDex_Duelist"; break;
+                //Non-Threshold Jewel Slots
+                case JSlot_Neutral_AcrobaticsID:
+                    JewelName = "JSlot_Neutral_IronGrip"; break;
+                case JSlot_Neutral_PointBlankID:
+                    JewelName = "JSlot_Neutral_PointBlank"; break;
+                case JSlot_Neutral_MinionInstabilityID:
+                    JewelName = "JSlot_Neutral_MinionInstability"; break;
+                case JSlot_Neutral_IronGripID:
+                    JewelName = "JSlot_Neutral_IronGrip"; break;
+                default:
+                    JewelName = "JSlot_"+NodeId;
+                    break;
+            }
+            return JewelName;
+        }
+
+        /// <summary>
         /// Jewel Slot directly north of Witch starting area
         /// </summary>
         public const ushort JSlot_Int_WitchID = 61419;

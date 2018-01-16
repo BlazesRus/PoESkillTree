@@ -14,6 +14,7 @@ namespace POESKillTree.Model.Serialization
     public abstract class AbstractPersistentData : Notifier, IPersistentData
     {
         private Options _options = new Options();
+        private TrackedStatOptions _TrackedStatOptions = new TrackedStatOptions();
         private PoEBuild _currentBuild;
         private IBuild _selectedBuild;
         private EquipmentData _equipmentData;
@@ -49,6 +50,12 @@ namespace POESKillTree.Model.Serialization
         {
             get { return _equipmentData; }
             set { SetProperty(ref _equipmentData, value); }
+        }
+
+        public TrackedStatOptions TrackedStatOptions
+        {
+            get { return _TrackedStatOptions; }
+            set { SetProperty(ref _TrackedStatOptions, value); }
         }
 
         public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);

@@ -1013,9 +1013,12 @@ namespace POESKillTree.Views
 
         private async void Menu_OpenSettings(object sender, RoutedEventArgs e)
         {
-            await this.ShowDialogAsync(
-                new SettingsMenuViewModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel),
-                new SettingsMenuWindow());
+            await this.ShowDialogAsync(new SettingsMenuViewModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel), new SettingsMenuWindow());
+        }
+
+        private async void Menu_LoadTrackedStats(object sender, RoutedEventArgs e)
+        {
+            await this.ShowTrackedStatDialogAsync(new TrackedStatsMenuModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel, Tree), new TrackedStatsMenu());
         }
 
         private async void Menu_OpenHotkeys(object sender, RoutedEventArgs e)
@@ -1253,10 +1256,9 @@ namespace POESKillTree.Views
 
             attritemp = ConvertedJewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
 
-            if (GlobalSettings.CurrentTrackedTotalStats.Count != 0)
+            if (GlobalSettings.TrackedStats.Count != 0)
             {
-                GlobalSettings.CurrentTrackedTotalStats.UpdateValue(attritemp);
-                attritemp = GlobalSettings.CurrentTrackedTotalStats.PlaceIntoAttributeDic(attritemp);
+                attritemp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(attritemp);
             }
 
             foreach (var item in (attritemp.Select(InsertNumbersInAttributes)))
@@ -1284,22 +1286,22 @@ namespace POESKillTree.Views
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
 
-            if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
+            if (GlobalSettings.TrackedStats.Count != 0)
             {
-                GlobalSettings.CurrentTrackedAttributes.UpdateValue(Tree.SelectedAttributes);
-                for (int Index = 0; Index < GlobalSettings.CurrentTrackedAttributes.Count; ++Index)
+                Dictionary<string, float> AttributeTotals = GlobalSettings.TrackedStats.CreateAttributeDictionary(Tree.SelectedAttributes);
+                foreach (var Element in AttributeTotals.Keys)
                 {
-                    if (Tree.SelectedAttributes.ContainsKey(GlobalSettings.CurrentTrackedAttributes[Index].Name()))
+                    if (Tree.SelectedAttributes.ContainsKey(Element))
                     {
                         List<float> TargetValue = new List<float>(1);
-                        TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
-                        Tree.SelectedAttributes[GlobalSettings.CurrentTrackedAttributes[Index].Name()] = TargetValue;
+                        TargetValue.Add(AttributeTotals[Element]);
+                        Tree.SelectedAttributes[Element] = TargetValue;
                     }
                     else
                     {
                         List<float> TargetValue = new List<float>(1);
-                        TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
-                        Tree.SelectedAttributes.Add(GlobalSettings.CurrentTrackedAttributes[Index].Name(), TargetValue);
+                        TargetValue.Add(AttributeTotals[Element]);
+                        Tree.SelectedAttributes.Add(Element, TargetValue);
                     }
                 }
             }
@@ -1619,6 +1621,32 @@ namespace POESKillTree.Views
             {
                 Tree.DrawAscendancyButton("Highlight");
             }
+            //else if(node!= null&& node.Type== NodeType.JewelSocket)
+            //{//Display info for current socketed Jewel if equipped
+            //    int ID = node.Id;
+            //    string SlotName = ConvertedJewelData.JewelSlotName(ID);
+            //    string ToolTipinfo = "JewelSlotName:" + SlotName;
+            //    Item EquippedJewel = ItemAttributes.ReturnItemByName(SlotName);
+            //    if (EquippedJewel != null)
+            //    {
+            //        ToolTipinfo += "\n " + EquippedJewel.Name + " equipped inside slot.";
+            //        bool HasMods = false;
+            //        foreach (var attriStat in EquippedJewel.Mods)
+            //        {
+            //            if(HasMods==false)
+            //            {
+            //                ToolTipinfo += "\nJewel stats:\n{";
+            //                HasMods = true;
+            //            }
+            //            ToolTipinfo += attriStat.CreateModString();
+            //        }
+            //        if(HasMods)
+            //        {
+            //            ToolTipinfo += "\n}\n";
+            //        }
+            //    }
+            //    sp.Children.Add(ToolTipinfo);
+            //}
             else
             {
                 _sToolTip.Tag = false;
@@ -1677,6 +1705,35 @@ namespace POESKillTree.Views
                         points--;
                     sp.Children.Add(new Separator());
                     sp.Children.Add(new TextBlock { Text = "Points to skill node: " + points });
+                }
+                if (node.Type == NodeType.JewelSocket)
+                {
+                    int ID = node.Id;
+                    string SlotName = ConvertedJewelData.JewelSlotName(ID);
+                    sp.Children.Add(new Separator());
+#if(DEBUG)
+                    sp.Children.Add(new TextBlock { Text = "JewelSlotName: " + SlotName });
+#endif
+
+                    Item EquippedJewel = ItemAttributes.ReturnItemByName(SlotName);
+                    if (EquippedJewel != null)
+                    {
+                        sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
+                        bool HasMods = false;
+                        foreach (var attriStat in EquippedJewel.Mods)
+                        {
+                            if (HasMods == false)
+                            {
+                                sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
+                                HasMods = true;
+                            }
+                            sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
+                        }
+                        if (!PersistentData.Options.ChangeSummaryEnabled)
+                        {
+                            sp.Children.Add(new Separator());
+                            }
+                    }
                 }
 
                 //Change summary, activated with ctrl
@@ -2202,6 +2259,8 @@ namespace POESKillTree.Views
 
             NoAsyncTaskRunning = true;
         }
+
+        public ICommand OpenTreeGeneratorCommand { get; }
 
         private async Task<TResult> AwaitAsyncTask<TResult>(string infoText, Task<TResult> task)
         {
