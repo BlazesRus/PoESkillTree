@@ -274,12 +274,12 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        static public Dictionary<string, List<float>> JewelBasedStatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel InventoryViewModel, SkillTree Tree)
+        static public Dictionary<string, List<float>> JewelBasedStatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
         {
             float AreaStats;
             ushort NodeID = ConvertedJewelData.JSlot_DexInt_ScionID;
             SkillNode CurrentNode = SkillTree.Skillnodes[NodeID];
-            POESKillTree.Model.Items.Item CurrentJewelData = InventoryViewModel.JSlot_DexInt_Scion.Item;
+            POESKillTree.Model.Items.Item CurrentJewelData = ItemInfo.JSlot_DexInt_Scion.Item;
 
             for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
             {
@@ -289,65 +289,65 @@ namespace POESKillTree.SkillTreeFiles
                     {
                         case 1:
                             NodeID = ConvertedJewelData.JSlot_DexInt_ShadowID;
-                            CurrentJewelData = InventoryViewModel.JSlot_DexInt_Shadow.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_DexInt_Shadow.Item; break;
                         case 2:
                             NodeID = ConvertedJewelData.JSlot_Dex_RangerDuelistID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Dex_RangerDuelist.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Dex_RangerDuelist.Item; break;
                         case 3:
                             NodeID = ConvertedJewelData.JSlot_Dex_RangerID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Dex_Ranger.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Dex_Ranger.Item; break;
                         case 4:
                             NodeID = ConvertedJewelData.JSlot_Dex_ShadowRangerID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Dex_ShadowRanger.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Dex_ShadowRanger.Item; break;
                         case 5:
                             NodeID = ConvertedJewelData.JSlot_Int_ScionID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Int_Scion.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Int_Scion.Item; break;
                         case 6:
                             NodeID = ConvertedJewelData.JSlot_Int_TemplarWitchID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Int_TemplarWitch.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Int_TemplarWitch.Item; break;
                         case 7:
                             NodeID = ConvertedJewelData.JSlot_Int_WitchID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Int_Witch.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Int_Witch.Item; break;
                         case 8:
                             NodeID = ConvertedJewelData.JSlot_Int_WitchShadowID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Int_WitchShadow.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Int_WitchShadow.Item; break;
                         case 9:
                             NodeID = ConvertedJewelData.JSlot_StrDex_DuelistID;
-                            CurrentJewelData = InventoryViewModel.JSlot_StrDex_Duelist.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_StrDex_Duelist.Item; break;
                         case 10:
                             NodeID = ConvertedJewelData.JSlot_StrDex_ScionID;
-                            CurrentJewelData = InventoryViewModel.JSlot_StrDex_Scion.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_StrDex_Scion.Item; break;
                         case 11:
                             NodeID = ConvertedJewelData.JSlot_StrInt_ScionID;
-                            CurrentJewelData = InventoryViewModel.JSlot_StrInt_Scion.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_StrInt_Scion.Item; break;
                         case 12:
                             NodeID = ConvertedJewelData.JSlot_StrInt_TemplarID;
-                            CurrentJewelData = InventoryViewModel.JSlot_StrInt_Templar.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_StrInt_Templar.Item; break;
                         case 13:
                             NodeID = ConvertedJewelData.JSlot_Str_FarWarTempScionID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Str_FarWarTempScion.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Str_FarWarTempScion.Item; break;
                         case 14:
                             NodeID = ConvertedJewelData.JSlot_Str_WarriorDuelistID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Str_WarriorDuelist.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Str_WarriorDuelist.Item; break;
                         case 15:
                             NodeID = ConvertedJewelData.JSlot_Str_WarriorID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Str_Warrior.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Str_Warrior.Item; break;
                         case 16:
                             NodeID = ConvertedJewelData.JSlot_Str_WarriorTemplarScionID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Str_WarriorTemplarScion.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Str_WarriorTemplarScion.Item; break;
                         //Non-Threshold Jewel Slots below
                         case 17:
                             NodeID = ConvertedJewelData.JSlot_Neutral_AcrobaticsID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Neutral_Acrobatics.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Neutral_Acrobatics.Item; break;
                         case 18:
                             NodeID = ConvertedJewelData.JSlot_Neutral_IronGripID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Neutral_IronGrip.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Neutral_IronGrip.Item; break;
                         case 19:
                             NodeID = ConvertedJewelData.JSlot_Neutral_MinionInstabilityID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Neutral_MinionInstability.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Neutral_MinionInstability.Item; break;
                         case 20:
                             NodeID = ConvertedJewelData.JSlot_Neutral_PointBlankID;
-                            CurrentJewelData = InventoryViewModel.JSlot_Neutral_PointBlank.Item; break;
+                            CurrentJewelData = ItemInfo.JSlot_Neutral_PointBlank.Item; break;
                     }
                     if (NodeID == 0)
                     {

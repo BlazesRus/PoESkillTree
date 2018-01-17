@@ -8,6 +8,7 @@ using POESKillTree.Model.Items;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Views;
 using POESKillTree.Utils;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -26,20 +27,14 @@ namespace POESKillTree.TreeGenerator.ViewModels
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
 
-        private ItemAttributes _ItemInfo;
+        private InventoryViewModel _ItemInfo;
 
-        public ItemAttributes ItemInfo
+        public InventoryViewModel ItemInfo
         {
             get { return _ItemInfo; }
             set
             {
-                SetProperty(ref _ItemInfo, value, () =>
-                {
-                    if (value == null)//Create new Empty ItemAttributes instead of nullifying
-                    {
-                        SetProperty(ref _ItemInfo, new ItemAttributes());
-                    }
-                });
+                SetProperty(ref _ItemInfo, value);
             }
         }
 
@@ -67,7 +62,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// <param name="skillTree">The skill tree.</param>
         /// <param name="itemInfo">The item information.</param>
         public TreeGeneratorInteraction(ISettingsDialogCoordinator dialogCoordinator, IPersistentData persistentData,
-            SkillTree skillTree, ItemAttributes itemInfo=null)
+            SkillTree skillTree, InventoryViewModel itemInfo=null)
         {
             _persistentData = persistentData;
             _dialogCoordinator = dialogCoordinator;

@@ -565,7 +565,7 @@ namespace POESKillTree.Views
             BuildsControlViewModel = new BuildsControlViewModel(ExtendedDialogCoordinator.Instance, PersistentData, Tree);
             UpdateTreeComparison();
             TreeGeneratorInteraction =
-                new TreeGeneratorInteraction(SettingsDialogCoordinator.Instance, PersistentData, Tree, ItemAttributes);
+                new TreeGeneratorInteraction(SettingsDialogCoordinator.Instance, PersistentData, Tree, InventoryViewModel);
             TreeGeneratorInteraction.RunFinished += (o, args) =>
             {
                 UpdateUI();

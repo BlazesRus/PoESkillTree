@@ -21,6 +21,7 @@ using POESKillTree.TreeGenerator.Settings;
 using POESKillTree.TreeGenerator.Solver;
 using POESKillTree.Utils.Converter;
 using POESKillTree.Utils.Extensions;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -372,7 +373,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
 
-        private ItemAttributes _ItemInfo;
+        private InventoryViewModel _ItemInfo;
 
         /// <summary>
         /// Gets or sets the item information from SkillTree (used to enable working TreePlusItemsMode code).
@@ -380,18 +381,12 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// <value>
         /// The item information.
         /// </value>
-        public ItemAttributes ItemInfo
+        public InventoryViewModel ItemInfo
         {
             get { return _ItemInfo; }
             set
             {
-                SetProperty(ref _ItemInfo, value, () =>
-                {
-                    if (value == null)//Create new Empty ItemAttributes instead of nullifying
-                    {
-                        SetProperty(ref _ItemInfo, new ItemAttributes());
-                    }
-                });
+                SetProperty(ref _ItemInfo, value);
             }
         }
 
@@ -580,7 +575,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
         /// <param name="itemInfo">The item attributes passed from SkillTree</param>
         /// <param name="runCallback">The action that is called when RunCommand is executed.</param>
-        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext, ItemAttributes itemInfo,
+        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext, InventoryViewModel itemInfo,
             Action<GeneratorTabViewModel> runCallback)
             : base(tree, dialogCoordinator, dialogContext, 3, runCallback)
         {
