@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
+using POESKillTree.Model.Items;
 using POESKillTree.Model.JsonSettings;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Model;
@@ -371,6 +372,29 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
 
+        private ItemAttributes _ItemInfo;
+
+        /// <summary>
+        /// Gets or sets the item information from SkillTree (used to enable working TreePlusItemsMode code).
+        /// </summary>
+        /// <value>
+        /// The item information.
+        /// </value>
+        public ItemAttributes ItemInfo
+        {
+            get { return _ItemInfo; }
+            set
+            {
+                SetProperty(ref _ItemInfo, value, () =>
+                {
+                    if (value == null)//Create new Empty ItemAttributes instead of nullifying
+                    {
+                        SetProperty(ref _ItemInfo, new ItemAttributes());
+                    }
+                });
+            }
+        }
+
         /// <summary>
         /// WeaponClass used for pseudo attribute calculations.
         /// </summary>
@@ -552,10 +576,11 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// Instantiates a new AdvancedTabViewModel.
         /// </summary>
         /// <param name="tree">The (not null) SkillTree instance to operate on.</param>
-        /// <param name="dialogCoordinator">The <see cref="IDialogCoordinator"/> used to display dialogs.</param>
-        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator"/>.</param>
+        /// <param name="dialogCoordinator">The <see cref="IDialogCoordinator" /> used to display dialogs.</param>
+        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
+        /// <param name="itemInfo">The item attributes passed from SkillTree</param>
         /// <param name="runCallback">The action that is called when RunCommand is executed.</param>
-        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext,
+        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext, ItemAttributes itemInfo,
             Action<GeneratorTabViewModel> runCallback)
             : base(tree, dialogCoordinator, dialogContext, 3, runCallback)
         {
@@ -567,6 +592,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 () => WeaponClassIsTwoHanded = WeaponClass.Value.IsTwoHanded());
             OffHand = new LeafSetting<OffHand>(nameof(OffHand), Model.PseudoAttributes.OffHand.Shield);
             Tags = new LeafSetting<Tags>(nameof(Tags), Model.PseudoAttributes.Tags.None);
+            ItemInfo = itemInfo;
 
             tree.PropertyChanged += (sender, args) =>
             {
@@ -810,7 +836,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
+                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, ItemInfo));
             GlobalSettings.TrackedStats.StartTracking(pseudoConstraints);
             return Task.FromResult<ISolver>(solver);
         }

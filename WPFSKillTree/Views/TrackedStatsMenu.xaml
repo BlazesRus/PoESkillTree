@@ -96,58 +96,56 @@
     <StackPanel Orientation="Vertical">
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition MinWidth="50"/>
+                <ColumnDefinition MinWidth="50"/>
+                <ColumnDefinition MinWidth="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TrackedStats Path" />
+                </Label.Content>
+            </Label>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TrackedStatOptions.StatTrackingSavePath}"
+                           VerticalAlignment="Center"
+                           ToolTip="{Binding TrackedStatOptions.StatTrackingSavePath}"/>
+            <Button Grid.Row="0" Grid.Column="2"
+                        Command="{Binding ChangeStatTrackingPathCommand}">
+                <Button.Content>
+                    <l:Catalog Message="Change..." />
+                </Button.Content>
+            </Button>
+        </Grid>
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50"/>
+                <ColumnDefinition MinWidth="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
-
-            <Label Style="{StaticResource SettingLabel}"
-                   Grid.Row="0" Grid.Column="0">
-                <Label.Content>
-                    <l:Catalog Message="TrackedStats Path" />
-                </Label.Content>
-            </Label>
-            <Grid Grid.Row="0" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition MinWidth="50" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding TrackingOptions.StatTrackingSavePath}"
-                           VerticalAlignment="Center"
-                           Margin="0 0 5 0"
-                           ToolTip="{Binding TrackingOptions.StatTrackingSavePath}"/>
-                <Button Grid.Column="1"
-                        Command="{Binding ChangeStatTrackingPathCommand}">
-                    <Button.Content>
-                        <l:Catalog Message="Change..." />
-                    </Button.Content>
-                </Button>
-            </Grid>
-
-            <Button Grid.Row="1" Grid.Column="1"
-                        Command="{Binding LoadTrackedStatFileNames}" Grid.ColumnSpan="2" Margin="0,0,95,0">
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding LoadTrackedStatFileNames}">
                 <Button.Content>
                     <l:Catalog Message="Load Tracked Stat File Names" />
                 </Button.Content>
             </Button>
 
-            <ComboBox Grid.Row="2" DataContext="{Binding TrackingOptions.TrackingFileList,NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-            VerticalAlignment="Center" Margin="0,4,95,4"
-                           ToolTip="Select Target TrackedStats file" Grid.ColumnSpan="2"/>
+            <ComboBox Grid.Row="1" DataContext="{Binding TrackingList,NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+            VerticalAlignment="Center" ToolTip="Select Target TrackedStats file" Grid.ColumnSpan="2"/>
 
-            <Button Grid.Row="3"
-                        Command="{Binding LoadTrackedStats}" Grid.ColumnSpan="2" Margin="0,0,95,0">
+            <Button Grid.Row="2"
+                        Command="{Binding LoadTrackedStats}">
                 <Button.Content>
                     <l:Catalog Message="Load Tracked Stats from file" />
                 </Button.Content>
             </Button>
-            <Button Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,95,0" Click="ResetTracking">
+            <Button Grid.Row="3" Click="ResetTracking">
                 <Button.Content>
                     <l:Catalog Message="Reset Tracking" />
                 </Button.Content>

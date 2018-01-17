@@ -235,37 +235,42 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         {
             foreach (var pseudo in pseudos)
             {
-                if (pseudo.Name.Contains("(Total)"))//Needed to allow (Total) versions of Normal Attributes
+                var nestedNames = new Queue<string>(_nestedPseudosDict[pseudo.Name]);
+                var depth = 0;
+                while (nestedNames.Count != 0)
                 {
+                    if (depth++ > 100)
+                    {
+                        throw new PseudoAttributeDataInvalidException(L10n.Message("A PseudoAttribute is nested in itself or nesting depth is too high"));
+                    }
+                    var name = nestedNames.Dequeue();
+                    // Add Attributes of current nested one to top level PseudoAttribute.
                     try
                     {
-                        pseudo.Attributes.AddRange(_pseudoNameDict[pseudo.Name].Attributes);
+                        pseudo.Attributes.AddRange(_pseudoNameDict[name].Attributes);
                     }
                     catch (KeyNotFoundException e)
                     {
-                        throw new PseudoAttributeDataInvalidException(string.Format(L10n.Message("Nested PseudoAttribute {0} does not exist as top level PseudoAttribute with AttributeGroup"), pseudo.Name), e);
-                    }
-                }
-                else
-                {
-                    var nestedNames = new Queue<string>(_nestedPseudosDict[pseudo.Name]);
-                    var depth = 0;
-                    while (nestedNames.Count != 0)
-                    {
-                        if (depth++ > 100)
+                        if (pseudo.Name.Contains("(Total)"))//Needed to allow (Total) versions of Normal Attributes
                         {
-                            throw new PseudoAttributeDataInvalidException(L10n.Message("A PseudoAttribute is nested in itself or nesting depth is too high"));
+                            var Elements = _pseudoNameDict[pseudo.Name].Attributes;
+                            foreach(var Elem in Elements)//Force add non-existing attributes to current list
+                            {
+                                if(!pseudo.Attributes.Contains(Elem))
+                                {
+                                    pseudo.Attributes.Add(Elem);
+                                }
+                            }
                         }
-                        var name = nestedNames.Dequeue();
-                        // Add Attributes of current nested one to top level PseudoAttribute.
-                        try
-                        {
-                            pseudo.Attributes.AddRange(_pseudoNameDict[name].Attributes);
-                        }
-                        catch (KeyNotFoundException e)
+                        else
                         {
                             throw new PseudoAttributeDataInvalidException(string.Format(L10n.Message("Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"), name), e);
                         }
+
+                    }
+
+                    if(_nestedPseudosDict.ContainsKey(name))
+                    {
                         // Enqueue pseudo attributes nested in this one.
                         foreach (var newName in _nestedPseudosDict[name])
                         {

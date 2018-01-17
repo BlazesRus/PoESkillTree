@@ -25,8 +25,13 @@ namespace POESKillTree.Views
         ///// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         //private static void OnValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         //{
-
         //}
+
+        public string[] TrackingList
+        {
+            get { return POESKillTree.GlobalSettings.TrackedStatFileNames; }
+            set => POESKillTree.GlobalSettings.TrackedStatFileNames = value;
+        }
 
         public TrackedStatsMenu()
         {

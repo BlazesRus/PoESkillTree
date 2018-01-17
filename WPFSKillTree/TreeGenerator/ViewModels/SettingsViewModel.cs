@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using POESKillTree.Model.Items;
 using POESKillTree.Model.JsonSettings;
 using POESKillTree.SkillTreeFiles;
 
@@ -18,6 +19,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private readonly object _dialogContext;
 
         private SkillTree Tree { get; }
+
+        public ItemAttributes ItemInfo;
 
         /// <summary>
         /// Gets or sets the observable collection of <see cref="GeneratorTabViewModel"/> contained in
@@ -42,11 +45,13 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// Constructs a new SettingsViewModel that operates on the given skill tree.
         /// </summary>
         /// <param name="tree">The skill tree to operate on. (not null)</param>
-        /// <param name="dialogCoordinator"></param>
-        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator"/>.</param>
-        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, object dialogContext)
+        /// <param name="dialogCoordinator">The dialog coordinator.</param>
+        /// <param name="itemAttributes">The item attributes.</param>
+        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
+        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, ItemAttributes itemInfo, object dialogContext)
         {
             Tree = tree;
+            ItemInfo = itemInfo;
             _dialogCoordinator = dialogCoordinator;
             _dialogContext = dialogContext;
 
@@ -56,7 +61,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             Tabs = new ObservableCollection<GeneratorTabViewModel>
             {
                 new SteinerTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback),
-                new AdvancedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback),
+                new AdvancedTabViewModel(Tree, _dialogCoordinator, _dialogContext, ItemInfo, runCallback),
                 new AutomatedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback)
             };
             SubSettings = new ISetting[] {SelectedTabIndex}.Union(Tabs).ToArray();

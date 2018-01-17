@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using POESKillTree.Model.Items;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.Settings
 {
@@ -32,6 +34,11 @@ namespace POESKillTree.TreeGenerator.Settings
         /// Weight must be between 0 and 1 (both inclusive).
         /// </summary>
         public readonly Dictionary<PseudoAttribute, Tuple<float, double>> PseudoAttributeConstraints;
+
+        /// <summary>
+        /// The item information equipped in skilltree
+        /// </summary>
+        public readonly ItemAttributes ItemInfo;
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculation.
@@ -70,7 +77,8 @@ namespace POESKillTree.TreeGenerator.Settings
             Dictionary<string, float> initialAttributes,
             Dictionary<string, Tuple<float, double>> attributeConstraints,
             Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints,
-            WeaponClass weaponClass, Tags tags, OffHand offHand)
+            WeaponClass weaponClass, Tags tags, OffHand offHand,
+            ItemAttributes itemInfo)
             : base(baseSettings)
         {
             if (totalPoints < 0) throw new ArgumentOutOfRangeException(nameof(totalPoints), totalPoints, "must be >= 0");
@@ -82,6 +90,7 @@ namespace POESKillTree.TreeGenerator.Settings
             AttributeConstraints = attributeConstraints ?? new Dictionary<string, Tuple<float, double>>();
             PseudoAttributeConstraints = pseudoAttributeConstraints ?? new Dictionary<PseudoAttribute, Tuple<float, double>>();
             InitialAttributes = initialAttributes ?? new Dictionary<string, float>();
+            ItemInfo = itemInfo;
 
             if (AttributeConstraints.Values.Any(tuple => tuple.Item2 < 0 || tuple.Item2 > 1))
                 throw new ArgumentException("Weights need to be between 0 and 1", "attributeConstraints");

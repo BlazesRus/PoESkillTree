@@ -11,12 +11,12 @@ namespace POESKillTree.Controls.Dialogs
         public string DefaultPath { get; set; } = AppData.ProgramDirectory;
 
         /// <summary>
-        /// Gets or sets whether the path is intepreted as a directory and not a file. Default is false.
+        /// Gets or sets whether the path is interpreted as a directory and not a file. Default is false.
         /// </summary>
         public bool IsFolderPicker { get; set; }
 
         /// <summary>
-        /// Gets or sets a relative sub path of the selected path that is required to be creatable.
+        /// Gets or sets a relative sub path of the selected path that is required to be createable.
         /// Only allowed to be non-null if <see name="IsFolderPicker"/> is true. Default is null.
         /// </summary>
         public string ValidationSubPath { get; set; }

@@ -219,7 +219,7 @@
                                                  Value="{Binding NewAttributeConstraint.TargetValue}"/>
                     <Slider Grid.Column="2" Grid.Row="1" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
                             Value="{Binding NewAttributeConstraint.Weight}"
-                            Minimum="{Binding NewAttributeConstraint.MinWeight}" Maximum="{Binding NewAttributeConstraint.MaxWeight}"/>
+                            Minimum="{Binding NonGenericTargetWeightConstraint.MinWeight}" Maximum="{Binding NonGenericTargetWeightConstraint.MaxWeight}"/>
                     <Label Grid.Column="3" Grid.Row="1" Content="{Binding NewAttributeConstraint.Weight}" Margin="2,4" ContentStringFormat="{}{0}%" />
                     <Button Grid.Column="4" Grid.Row="1" Margin="2,4" Command="{Binding AddAttributeConstraintCommand}" IsDefault="True">
                         <l:Catalog Message="Add"/>
@@ -312,7 +312,7 @@
                                                  Value="{Binding NewPseudoAttributeConstraint.TargetValue}"/>
                     <Slider Grid.Column="2" Grid.Row="0" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
                             Value="{Binding NewPseudoAttributeConstraint.Weight}"
-                            Minimum="{Binding NewPseudoAttributeConstraint.MinWeight}" Maximum="{Binding NewPseudoAttributeConstraint.MaxWeight}"/>
+                            Minimum="{Binding NonGenericTargetWeightConstraint.MinWeight}" Maximum="{Binding NonGenericTargetWeightConstraint.MaxWeight}"/>
                     <Label Grid.Column="3" Grid.Row="0" Content="{Binding NewPseudoAttributeConstraint.Weight}" Margin="2,4" ContentStringFormat="{}{0}%" />
                     <Button Grid.Column="4" Grid.Row="0" Margin="2,4" Command="{Binding AddPseudoConstraintCommand}" IsDefault="True">
                         <l:Catalog Message="Add"/>
@@ -373,7 +373,7 @@
 
             <!-- 'Tree + gear' mode not yet implemented -->
             <!--<TabItem metroControls:ControlsHelper.HeaderFontSize="15"
-                     IsEnabled="False" ToolTipService.ShowOnDisabled="True">
+                     IsEnabled="True" ToolTipService.ShowOnDisabled="True">
                 <TabItem.Header>
                     <l:Catalog Message="Combined Attributes"/>
                 </TabItem.Header>
@@ -417,7 +417,7 @@
                     <metroControls:ToggleSwitch Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="5,0,0,5"
                                                 HorizontalAlignment="Center"
                                                 IsChecked="{Binding TreePlusItemsMode.Value}"
-                                                Visibility="Collapsed">
+                                                Visibility="Visible">
                         <metroControls:ToggleSwitch.OnLabel>
                             <l:Catalog Message="Tree + Items"/>
                         </metroControls:ToggleSwitch.OnLabel>

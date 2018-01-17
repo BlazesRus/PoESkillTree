@@ -87,7 +87,7 @@ namespace POESKillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -262,7 +262,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     var name = attr.Name;
                     if (ContainsWildcardRegex.IsMatch(name))
                     {
-                        // Wildcards are resolverd by searching the skill tree attributes for each attribute
+                        // Wildcards are resolved by searching the skill tree attributes for each attribute
                         // that matches the attribute name ('{number}' replaced by '(.*)' for matching) and
                         // evaluating the attribute for each of those replacements.
                         if (!resolvedWildcardNames.ContainsKey(name))

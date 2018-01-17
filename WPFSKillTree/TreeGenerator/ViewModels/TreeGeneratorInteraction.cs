@@ -4,6 +4,7 @@ using System.Windows.Input;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Localization;
 using POESKillTree.Model;
+using POESKillTree.Model.Items;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Views;
 using POESKillTree.Utils;
@@ -25,6 +26,23 @@ namespace POESKillTree.TreeGenerator.ViewModels
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
 
+        private ItemAttributes _ItemInfo;
+
+        public ItemAttributes ItemInfo
+        {
+            get { return _ItemInfo; }
+            set
+            {
+                SetProperty(ref _ItemInfo, value, () =>
+                {
+                    if (value == null)//Create new Empty ItemAttributes instead of nullifying
+                    {
+                        SetProperty(ref _ItemInfo, new ItemAttributes());
+                    }
+                });
+            }
+        }
+
         public SkillTree SkillTree
         {
             private get { return _skillTree; }
@@ -34,18 +52,26 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 {
                     if (_treeGeneratorViewModel != null)
                         _treeGeneratorViewModel.RunFinished -= ViewModelRunFinished;
-                    _treeGeneratorViewModel = new SettingsViewModel(SkillTree, SettingsDialogCoordinator.Instance, this);
+                    _treeGeneratorViewModel = new SettingsViewModel(SkillTree, SettingsDialogCoordinator.Instance, ItemInfo, this);
                     _treeGeneratorViewModel.RunFinished += ViewModelRunFinished;
                     LoadSettings();
                 });
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TreeGeneratorInteraction"/> class.
+        /// </summary>
+        /// <param name="dialogCoordinator">The dialog coordinator.</param>
+        /// <param name="persistentData">The persistent data.</param>
+        /// <param name="skillTree">The skill tree.</param>
+        /// <param name="itemInfo">The item information.</param>
         public TreeGeneratorInteraction(ISettingsDialogCoordinator dialogCoordinator, IPersistentData persistentData,
-            SkillTree skillTree)
+            SkillTree skillTree, ItemAttributes itemInfo=null)
         {
             _persistentData = persistentData;
             _dialogCoordinator = dialogCoordinator;
+            ItemInfo = itemInfo;
             SkillTree = skillTree;
 
             OpenTreeGeneratorCommand = new AsyncRelayCommand(OpenTreeGenerator);
