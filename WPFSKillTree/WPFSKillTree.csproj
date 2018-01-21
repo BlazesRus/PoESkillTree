@@ -238,7 +238,6 @@
     <Compile Include="Model\Items\Mods\Affix.cs" />
     <Compile Include="Model\Items\Mods\Stat.cs" />
     <Compile Include="Model\Items\Mods\StatLocalityChecker.cs" />
-    <Compile Include="Model\TrackedStatOptions.cs" />
     <Compile Include="SkillTreeFiles\ConvertedJewelData.cs" />
     <Compile Include="SkillTreeFiles\PoESkillTreeGlobalSettings.cs" />
     <Compile Include="SkillTreeFiles\TrackedAttributes.cs" />

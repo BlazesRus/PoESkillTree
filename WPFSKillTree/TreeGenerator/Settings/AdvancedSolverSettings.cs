@@ -38,7 +38,7 @@ namespace POESKillTree.TreeGenerator.Settings
         /// <summary>
         /// The item information equipped in skilltree
         /// </summary>
-        public readonly ItemAttributes ItemInfo;
+        public readonly InventoryViewModel ItemInfo;
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculation.
@@ -78,7 +78,7 @@ namespace POESKillTree.TreeGenerator.Settings
             Dictionary<string, Tuple<float, double>> attributeConstraints,
             Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints,
             WeaponClass weaponClass, Tags tags, OffHand offHand,
-            ItemAttributes itemInfo)
+            InventoryViewModel itemInfo)
             : base(baseSettings)
         {
             if (totalPoints < 0) throw new ArgumentOutOfRangeException(nameof(totalPoints), totalPoints, "must be >= 0");

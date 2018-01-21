@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using POESKillTree.Model.Items;
 using POESKillTree.Model.JsonSettings;
 using POESKillTree.SkillTreeFiles;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -20,7 +21,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
 
         private SkillTree Tree { get; }
 
-        public ItemAttributes ItemInfo;
+        public InventoryViewModel ItemInfo;
 
         /// <summary>
         /// Gets or sets the observable collection of <see cref="GeneratorTabViewModel"/> contained in
@@ -48,7 +49,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// <param name="dialogCoordinator">The dialog coordinator.</param>
         /// <param name="itemAttributes">The item attributes.</param>
         /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
-        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, ItemAttributes itemInfo, object dialogContext)
+        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, InventoryViewModel itemInfo, object dialogContext)
         {
             Tree = tree;
             ItemInfo = itemInfo;

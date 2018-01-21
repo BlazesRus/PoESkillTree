@@ -1018,7 +1018,7 @@ namespace POESKillTree.Views
 
         private async void Menu_LoadTrackedStats(object sender, RoutedEventArgs e)
         {
-            await this.ShowTrackedStatDialogAsync(new TrackedStatsMenuModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel, Tree), new TrackedStatsMenu());
+            await this.ShowDialogAsync(new TrackedStatsMenuModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel), new TrackedStatViews.TrackedStatsMenu());
         }
 
         private async void Menu_OpenHotkeys(object sender, RoutedEventArgs e)

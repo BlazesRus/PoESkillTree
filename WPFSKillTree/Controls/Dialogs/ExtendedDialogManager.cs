@@ -52,37 +52,6 @@ namespace POESKillTree.Controls.Dialogs
             return result;
         }
 
-        ///// <summary>
-        ///// Sets up the connection between view and viewModel, shows the view as a metro dialog,
-        ///// calls <paramref name="onShown"/> and waits for the dialog to be closed.
-        ///// </summary>
-
-        public static async Task<T> ShowTrackedStatDialogAsync<T>(this MetroWindow window, CloseableViewModel<T> viewModel, BaseMetroDialog view, Action onShown = null)
-        {        //public static async Task<object> ShowTrackedStatDialogAsync(this MetroWindow window, TrackedStatsMenuModel viewModel, BaseMetroDialog view, Action onShown = null)
-            view.DataContext = viewModel;
-
-            // Non-default buttons not in the dialog as they would be pressed instead of a dialog button on enter.
-            var oldDefaults = window.FindVisualChildren<Button>().Where(b => b.IsDefault).ToList();
-            oldDefaults.ForEach(b => b.IsDefault = false);
-            // Save old keyboard focus.
-            var oldFocus = Keyboard.FocusedElement;
-
-            await window.ShowMetroDialogAsync(view, new MetroDialogSettings { AnimateShow = false });
-            // Focus the first focusable element in the view
-            var element = view.FindVisualChildren<UIElement>().FirstOrDefault(e => e.Focusable);
-            element?.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => Keyboard.Focus(element)));
-            onShown?.Invoke();
-
-            var result = await viewModel.WaitForCloseAsync();
-            await window.HideMetroDialogAsync(view, new MetroDialogSettings { AnimateHide = false });
-
-            // Restore IsDefault and keyboard focus.
-            oldDefaults.ForEach(b => b.IsDefault = true);
-            Keyboard.Focus(oldFocus);
-
-            return result;
-        }
-
         public static Task<MessageBoxResult> ShowQuestionAsync(this MetroWindow window, string message,
             string details = null, string title = null, MessageBoxButton buttons = MessageBoxButton.YesNo,
             MessageBoxImage image = MessageBoxImage.Question)

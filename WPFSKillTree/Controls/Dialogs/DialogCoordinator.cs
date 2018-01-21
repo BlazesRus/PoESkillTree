@@ -41,12 +41,6 @@ namespace POESKillTree.Controls.Dialogs
             var metroWindow = GetMetroWindow(context);
             return metroWindow.Invoke(() => metroWindow.ShowDialogAsync(viewModel, view, onShown));
         }
-		
-        protected Task ShowTrackedStatDialogAsync<T>(object context, TrackedStatsMenuModel viewModel, BaseMetroDialog view, Action onShown = null)
-        {
-            var metroWindow = GetMetroWindow(context);
-            return metroWindow.Invoke(() => metroWindow.ShowTrackedStatDialogAsync(viewModel, view, onShown));
-        }
 
         public Task<MessageBoxResult> ShowQuestionAsync(object context, string message, string details = null,
             string title = null, MessageBoxButton buttons = MessageBoxButton.YesNo,

@@ -14,7 +14,7 @@ namespace POESKillTree.Model
     public interface IPersistentData : INotifyPropertyChanged, INotifyPropertyChanging
     {
         Options Options { get; }
-        TrackedStatOptions TrackedStatOptions { get; }
+        string StatTrackingSavePath { get; set; }
         PoEBuild CurrentBuild { get; set; }
         IBuild SelectedBuild { get; set; }
         BuildFolder RootBuild { get; }
