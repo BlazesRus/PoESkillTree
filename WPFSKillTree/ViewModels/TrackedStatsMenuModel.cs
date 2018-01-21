@@ -55,14 +55,6 @@ namespace POESKillTree.ViewModels
             }
         }
 
-        //#region Menu Binding Properties
-        //public ObservableCollection<StringData> SourceList
-        //{
-        //    get;
-        //    set;
-        //}
-        //#endregion Menu Binding Properties
-
         #region ICommand Initialization
 
         /// <summary>

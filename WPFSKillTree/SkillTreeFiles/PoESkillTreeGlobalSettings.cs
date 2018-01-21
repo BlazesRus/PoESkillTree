@@ -19,27 +19,6 @@ namespace POESKillTree
         public static SkillTreeFiles.TrackedAttributes TrackedStats = new SkillTreeFiles.TrackedAttributes();
 
         /// <summary>
-        /// The tracking list (Shared between TrackedStatsMenu and TrackedStatsMenuModel etc)
-        /// </summary>
-        public static ObservableCollection<StringData> TrackingList = new ObservableCollection<StringData>();
-
-        public static string FallbackValue = "CurrentTrackedAttributes.txt";
-
-        private static string _CurrentTrackedFile = FallbackValue;
-
-        public static string CurrentTrackedFile
-        {
-            get { return _CurrentTrackedFile; }
-            set
-            {
-                if (value != "" && value != null && value != CurrentTrackedFile)
-                {
-                    _CurrentTrackedFile = value;
-                }
-            }
-        }
-
-        /// <summary>
         /// The default tracking directory
         /// </summary>
         public static string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);

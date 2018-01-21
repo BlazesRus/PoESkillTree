@@ -81,7 +81,7 @@
 
             <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
             DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue"
-            SelectedValue="{Binding GlobalSettings.CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}}" />
+            SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}}" />
 
             <Button Grid.Row="2" Click="LoadTrackedStats">
                 <Button.Content>

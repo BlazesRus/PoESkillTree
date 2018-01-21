@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Linq;
+using POESKillTree.Utils;
 
 namespace POESKillTree.TrackedStatViews
 {
@@ -22,7 +23,13 @@ namespace POESKillTree.TrackedStatViews
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var str = value as string;
-            return string.IsNullOrEmpty(str) ? GlobalSettings.FallbackValue : str;
+            if(GlobalSettings.StatTrackingSavePath==null)
+            {
+                string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
+                GlobalSettings.DefaultTrackingDir = DefaultTrackingDir;
+                return string.IsNullOrEmpty(str) ? Path.Combine(DefaultTrackingDir, "CurrentTrackedAttributes.txt") : str;
+            }
+            return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -195,14 +202,41 @@ namespace POESKillTree.TrackedStatViews
             }
         }
 
+        /// <summary>
+        /// The tracking list
+        /// </summary>
+        private static ObservableCollection<StringData> _TrackingList = new ObservableCollection<StringData>();
+
+        /// <summary>
+        /// The tracking list
+        /// </summary>
+        /// <value>
+        /// The tracking list
+        /// </value>
         public ObservableCollection<StringData> SourceList
         {
-            get { return GlobalSettings.TrackingList; }
+            get { return _TrackingList; }
             set
             {
                 if (value != null && value != SourceList)
                 {
-                    GlobalSettings.TrackingList = value; NotifyPropertyChanged("SourceList");
+                    _TrackingList = value; NotifyPropertyChanged("SourceList");
+                }
+            }
+        }
+
+        public static string FallbackValue = GlobalSettings.StatTrackingSavePath == null? Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar+ "CurrentTrackedAttributes.txt") : Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
+
+        private static string _CurrentTrackedFile = FallbackValue;
+
+        public static string CurrentTrackedFile
+        {
+            get { return _CurrentTrackedFile; }
+            set
+            {
+                if (value != "" && value != null && value != CurrentTrackedFile)
+                {
+                    _CurrentTrackedFile = value;
                 }
             }
         }
@@ -210,7 +244,6 @@ namespace POESKillTree.TrackedStatViews
         public TrackedStatsMenu()
         {
             InitializeComponent();
-            SourceList = new ObservableCollection<StringData>();
             SourceList.Add("CurrentTrackedAttributes.txt");
             this.DataContext = this;
             this.Loaded += new RoutedEventHandler(OnLoad);
@@ -352,25 +385,21 @@ namespace POESKillTree.TrackedStatViews
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void LoadTrackedStats(object sender, RoutedEventArgs e)
         {
-            if (GlobalSettings.CurrentTrackedFile != "")
+            if (CurrentTrackedFile != "")
             {
-                string TargetFile;
-                if (GlobalSettings.CurrentTrackedFile == GlobalSettings.FallbackValue)
-                {
-                    TargetFile = Path.Combine(StatTrackingSavePath, GlobalSettings.FallbackValue);
-                }
-                else
-                {
-                    TargetFile = GlobalSettings.CurrentTrackedFile;
-                }
+                string TargetFile = CurrentTrackedFile;
                 string[] TrackedAttributeNames = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
 
                 PseudoAttributeLoader Loader = new PseudoAttributeLoader();
-                foreach (PseudoAttribute item in Loader.LoadPseudoAttributes())
+                List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
+                foreach (PseudoAttribute item in PsList)
                 {
-                    if (TrackedAttributeNames.Any(s => TargetFile.Contains(s)) && GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)
+                    if(GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
                     {
-                        GlobalSettings.TrackedStats.Add(item);
+                        if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
+                        {
+                            GlobalSettings.TrackedStats.Add(item);
+                        }
                     }
                 }
             }

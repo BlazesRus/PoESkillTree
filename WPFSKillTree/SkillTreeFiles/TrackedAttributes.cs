@@ -113,7 +113,7 @@ namespace POESKillTree.SkillTreeFiles
         /// <returns></returns>
         public int GetIndexOfAttribute(string Name)
         {
-            for (int Index = 0; Index < this.Count; Index++)
+            for (int Index = 0; Index < this.Count; ++Index)
             {
                 if (this[Index].Name == Name)
                 {
@@ -122,6 +122,7 @@ namespace POESKillTree.SkillTreeFiles
             }
             return -1;
         }
+
         /// <summary>
         /// Gets the index of attribute.
         /// </summary>
