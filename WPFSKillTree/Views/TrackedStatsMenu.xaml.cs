@@ -340,7 +340,6 @@ namespace POESKillTree.TrackedStatViews
             {
                 FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile);
             }
-            
             await WriteFileAsync(FileToSaveTo, StatsToSave);
         }
 
