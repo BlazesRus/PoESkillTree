@@ -82,9 +82,8 @@
             <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
             DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue"
             SelectedValue="{Binding GlobalSettings.CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}}" />
-            
-            <Button Grid.Row="2"
-                        Command="{Binding LoadTrackedStats}">
+
+            <Button Grid.Row="2" Click="LoadTrackedStats">
                 <Button.Content>
                     <l:Catalog Message="Load Tracked Stats from file" />
                 </Button.Content>
@@ -111,32 +110,6 @@
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TrackedStatSaveFile,NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                            VerticalAlignment="Center"
                            ToolTip="{Binding TrackedStatSaveFile}" />
-        </Grid>
-        <Grid Margin="20 0 5 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="30" />
-                <ColumnDefinition MinWidth="100" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-
-            <!--<ComboBox ItemsSource="{StaticResource ComboBoxTester}" DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue"
-            SelectedValue="{Binding GlobalSettings.CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToNullConverter}}"/>-->
-            <!--<Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
-                <Label.Content>
-                    <l:Catalog Message="TrackedStats Path" />
-                </Label.Content>
-            </Label>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TrackedStatOptions.StatTrackingSavePath}" VerticalAlignment="Center"
-            ToolTip="{Binding TrackedStatOptions.StatTrackingSavePath}" />
-            <Label Style="{StaticResource SettingLabel}" Grid.Row="1" Grid.Column="0">
-                <Label.Content>
-                    <l:Catalog Message="TrackedStats Path" />
-                </Label.Content>
-            </Label>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TrackedStatOptions.StatTrackingSavePath}" VerticalAlignment="Center"
-            ToolTip="{Binding TrackedStatOptions.StatTrackingSavePath}" />-->
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>

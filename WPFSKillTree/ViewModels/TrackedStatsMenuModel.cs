@@ -1,78 +1,23 @@
-﻿using MoreLinq;
-using Newtonsoft.Json.Linq;
-using POESKillTree.Common.ViewModels;
+﻿using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
 using POESKillTree.Model;
-using POESKillTree.Model.JsonSettings;
 using POESKillTree.Model.Serialization;
-using POESKillTree.SkillTreeFiles;
 using POESKillTree.TrackedStatViews;
 using POESKillTree.TreeGenerator.Model;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
-using POESKillTree.Utils.Converter;
-using POESKillTree.Utils.Extensions;
 using POESKillTree.ViewModels.Builds;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace POESKillTree.ViewModels
 {
     // Some aliases to make things clearer without the need of extra classes.
-    using AttributeConstraint = TargetWeightConstraint<string>;
-    using PseudoAttributeConstraint = TargetWeightConstraint<PseudoAttribute>;
 
     public class TrackedStatsMenuModel : CloseableViewModel, INotifyPropertyChanged, INotifyPropertyChanging
     {
-        private static class AsyncFileCommands
-        {
-            /// <summary>
-            /// This is the same default buffer size as
-            /// <see cref="StreamReader"/> and <see cref="FileStream"/>.
-            /// </summary>
-            private const int DefaultBufferSize = 4096;
-
-            /// <summary>
-            /// Indicates that
-            /// 1. The file is to be used for asynchronous reading.
-            /// 2. The file is to be accessed sequentially from beginning to end.
-            /// </summary>
-            private const FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
-
-            public static Task<string[]> ReadAllLinesAsync(string path)
-            {
-                return ReadAllLinesAsync(path, Encoding.UTF8);
-            }
-
-            public static async Task<string[]> ReadAllLinesAsync(string path, Encoding encoding)
-            {
-                var lines = new List<string>();
-
-                // Open the FileStream with the same FileMode, FileAccess
-                // and FileShare as a call to File.OpenText would've done.
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions))
-                using (var reader = new StreamReader(stream, encoding))
-                {
-                    string line;
-                    while ((line = await reader.ReadLineAsync()) != null)
-                    {
-                        lines.Add(line);
-                    }
-                }
-
-                return lines.ToArray();
-            }
-        }
-
         private readonly IPersistentData _persistentData;
         private readonly IDialogCoordinator _dialogCoordinator;
         private readonly BuildsControlViewModel _buildsControlViewModel;
@@ -110,25 +55,15 @@ namespace POESKillTree.ViewModels
             }
         }
 
-        #region Menu Binding Properties
-
-        public ObservableCollection<StringData> SourceList
-        {
-            get;
-            set;
-        }
-
-        #endregion Menu Binding Properties
+        //#region Menu Binding Properties
+        //public ObservableCollection<StringData> SourceList
+        //{
+        //    get;
+        //    set;
+        //}
+        //#endregion Menu Binding Properties
 
         #region ICommand Initialization
-
-        /// <summary>
-        /// Gets the load tracked stats command.
-        /// </summary>
-        /// <value>
-        /// The load tracked stats command.
-        /// </value>
-        public ICommand LoadTrackedStatsCommand { get; }
 
         /// <summary>
         /// Gets the change stat tracking path command.
@@ -156,7 +91,6 @@ namespace POESKillTree.ViewModels
             DisplayName = L10n.Message("Tracked Stat Settings");
 
             ChangeStatTrackingPathCommand = new AsyncRelayCommand(ChangeStatTrackingPath);
-            LoadTrackedStatsCommand = new AsyncRelayCommand(LoadTrackedStats);
 
             Options.PropertyChanged += OptionsOnPropertyChanged;
         }
@@ -193,40 +127,6 @@ namespace POESKillTree.ViewModels
                 return;
 
             StatTrackingSavePath = path;
-        }
-
-        /// <summary>
-        /// Loads the tracked stats.
-        /// </summary>
-        /// <returns></returns>
-        private async Task LoadTrackedStats()
-        {
-            if (GlobalSettings.CurrentTrackedFile != "")
-            {
-                string TargetFile;
-                if(GlobalSettings.CurrentTrackedFile==GlobalSettings.FallbackValue)
-                {
-                    TargetFile = Path.Combine(StatTrackingSavePath, GlobalSettings.FallbackValue);
-                }
-                else
-                {
-                    TargetFile = GlobalSettings.CurrentTrackedFile;
-                }
-                string[] TrackedAttributeNames = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
-
-                PseudoAttributeLoader Loader = new PseudoAttributeLoader();
-                foreach (PseudoAttribute item in Loader.LoadPseudoAttributes())
-                {
-                    if (TrackedAttributeNames.Any(s => TargetFile.Contains(s)) && GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)
-                    {
-                        GlobalSettings.TrackedStats.Add(item);
-                    }
-                }
-            }
-            else
-            {
-                await _dialogCoordinator.ShowInfoAsync(this, L10n.Message("Need to select Tracked File in ComboBox."), title: L10n.Message("No Tracked File Currently Selected"));
-            }
         }
 
         #endregion TrackingCommand Code
