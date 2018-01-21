@@ -23,7 +23,7 @@ namespace POESKillTree
         /// </summary>
         public static string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
         /// <summary>
-        /// The stat tracking save path
+        /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
         /// </summary>
         public static string StatTrackingSavePath = DefaultTrackingDir;
     }

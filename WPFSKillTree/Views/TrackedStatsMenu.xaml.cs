@@ -177,7 +177,7 @@ namespace POESKillTree.TrackedStatViews
     /// </summary>
     public partial class TrackedStatsMenu : INotifyPropertyChanged
     {
-        private string _TrackedStatSaveFile;
+        private string _TrackedStatSaveFile= "CurrentTrackedAttributes.txt";
 
         public string TrackedStatSaveFile
         {
@@ -327,7 +327,20 @@ namespace POESKillTree.TrackedStatViews
                     StatsToSave += "\n" + stat.Name;
                 }
             }
-            string FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile);
+            string FileToSaveTo;
+            if(TrackedStatSaveFile.Contains(Path.DirectorySeparatorChar))
+            {
+                FileToSaveTo = TrackedStatSaveFile;
+            }
+            else if(!TrackedStatSaveFile.Contains("."))
+            {
+                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile+".txt");
+            }
+            else
+            {
+                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile);
+            }
+            
             await WriteFileAsync(FileToSaveTo, StatsToSave);
         }
 
