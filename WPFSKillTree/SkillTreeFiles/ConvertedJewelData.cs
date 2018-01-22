@@ -515,7 +515,7 @@ namespace POESKillTree.SkillTreeFiles
                         }
                     }
                     else if (CurrentJewelData.Name == "Energised Armour")
-                    {//
+                    {
                         AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Energy Shield", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
@@ -550,15 +550,15 @@ namespace POESKillTree.SkillTreeFiles
                     else if (CurrentJewelData.Name == "Fireborn")
                     {
                         AreaStats = 0.0f;
-                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes);
+                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Elemental Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Cold Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Chaos Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Physical Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Lightning Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
                         if (AreaStats != 0.0f)
                         {
@@ -574,8 +574,8 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Might in All Forms")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
-                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
+                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
                         if (AreaStats != 0.0f)
                         {
                             if (attrlist.ContainsKey("#% increased Melee Damage Bonus(from Might in All Forms)"))
@@ -584,7 +584,7 @@ namespace POESKillTree.SkillTreeFiles
                             }
                             else
                             {
-                                attrlist["#% increased Melee Damage Bonus(from Might in All Forms)"].Add(, new List<float>(1) { AreaStats });
+                                attrlist.Add("#% increased Melee Damage Bonus(from Might in All Forms)", new List<float>(1) { AreaStats });
                             }
                         }
                     }
@@ -829,15 +829,15 @@ namespace POESKillTree.SkillTreeFiles
                     else if (CurrentJewelData.Name == "Fireborn")
                     {
                         AreaStats = 0.0f;
-                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes);
+                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Elemental Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Cold Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Chaos Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Physical Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes);
+                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Lightning Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
                         if (AreaStats != 0)
                         {
@@ -853,8 +853,8 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Might in All Forms")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
-                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
+                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
                         if (AreaStats != 0)
                         {
                             if (attrlist.ContainsKey("#% increased Melee Damage Bonus(from Might in All Forms)"))
@@ -864,6 +864,22 @@ namespace POESKillTree.SkillTreeFiles
                             else
                             {
                                 attrlist.Add("#% increased Melee Damage Bonus(from Might in All Forms)",AreaStats);
+                            }
+                        }
+                    }
+                    else if (CurrentJewelData.Name == "Anatomical Knowledge")
+                    {
+                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Large");
+                        AreaStats /= 3.0f;
+                        if (AreaStats != 0.0f)
+                        {
+                            if (attrlist.ContainsKey("+# to maximum Life"))
+                            {
+                                attrlist["+# to maximum Life"] += AreaStats;
+                            }
+                            else
+                            {
+                                attrlist.Add("+# to maximum Life", AreaStats );
                             }
                         }
                     }
