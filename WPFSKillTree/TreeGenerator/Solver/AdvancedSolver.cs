@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using POESKillTree.SkillTreeFiles;
+﻿using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Algorithm.Model;
 using POESKillTree.TreeGenerator.Genetic;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.TreeGenerator.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace POESKillTree.TreeGenerator.Solver
 {
@@ -15,6 +15,26 @@ namespace POESKillTree.TreeGenerator.Solver
     /// </summary>
     public class AdvancedSolver : AbstractGeneticSolver<AdvancedSolverSettings>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private class ConstraintValues
+        {
+            public float TargetValue;
+            public double Weight;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+            /// </summary>
+            /// <param name="targetValue">The target value.</param>
+            /// <param name="weight">The weight.</param>
+            public ConstraintValues(float targetValue, double weight)
+            {
+                TargetValue = targetValue;
+                Weight = weight;
+            }
+        }
+
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
         /// into the applicable attributes and their conversion multiplier.
@@ -49,6 +69,7 @@ namespace POESKillTree.TreeGenerator.Solver
         {
             get { return 200; }
         }
+
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -82,20 +103,24 @@ namespace POESKillTree.TreeGenerator.Solver
         /// Maps indexes of constraints (both attribute and pseudo attribute constraints) to their {Target, Weight}-Tuple.
         /// </summary>
         private Tuple<float, double>[] _attrConstraints;
+
         /// <summary>
         /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
+
         /// <summary>
         /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
+
         /// <summary>
         /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.
         /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
+
         /// <summary>
         /// Dictionary that saves which nodes (represented by their id) are travel nodes.
         /// </summary>
@@ -116,10 +141,12 @@ namespace POESKillTree.TreeGenerator.Solver
         {
             get
             {
+#pragma warning disable DF0022 // Marks indisposed objects assigned to a property, originated in an object creation.
                 return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
+                    (int)(PopMultiplier * SearchSpace.Count),
                     SearchSpace.Count,
                     maxMutateClusterSize: MaxMutateClusterSize);
+#pragma warning restore DF0022 // Marks indisposed objects assigned to a property, originated in an object creation.
             }
         }
 
@@ -163,7 +190,7 @@ namespace POESKillTree.TreeGenerator.Solver
             foreach (var kvPair in attrConstraints)
             {
                 _attrConstraints[i] = kvPair.Value;
-                _attrNameLookup[kvPair.Key] = new List<int> {i};
+                _attrNameLookup[kvPair.Key] = new List<int> { i };
                 _attrConversionMultipliers[Tuple.Create(kvPair.Key, i)] = 1;
                 i++;
             }
@@ -178,7 +205,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     }
                     else
                     {
-                        _attrNameLookup[tuple.Item1] = new List<int> {i};
+                        _attrNameLookup[tuple.Item1] = new List<int> { i };
                     }
                     _attrConversionMultipliers[Tuple.Create(tuple.Item1, i)] = tuple.Item2;
                 }
@@ -253,7 +280,7 @@ namespace POESKillTree.TreeGenerator.Solver
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-            
+
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
@@ -393,17 +420,50 @@ namespace POESKillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            for (var i = 0; i < _attrConstraints.Length; i++)
+            if(Settings.TreePlusItemsMode)
             {
-                var stat = _attrConstraints[i];
-                var currentValue = totalStats[i];
-                csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                string StatName;
+                Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
+                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+                int attrIndex;
+                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
+                {
+                    attrIndex = ConversionKey.Item2;
+                    StatName = ConversionKey.Item1;
+                    var stat = _attrConstraints[attrIndex];
+                    ConstraintDictionary.Add(StatName, new ConstraintValues(stat.Item1, stat.Item2));
+                    var currentValue = totalStats[attrIndex];
+                    StatTotals.Add(StatName, currentValue);
+                }
+                StatTotals = ConvertedJewelData.JewelBasedStatUpdater(StatTotals,Settings.ItemInfo, Settings.TreeInfo);
+                Dictionary<string, float> ItemStatTotals = Settings.ItemInfo.CalculateTotalSingleAttributes();
+                float StatTotal;
+                ConstraintValues StatConstraint;
+                foreach (var keyName in StatTotals.Keys)
+                {
+                    StatTotal = StatTotals[keyName];
+                    if(ItemStatTotals.ContainsKey(keyName))
+                    {
+                        StatTotal += ItemStatTotals[keyName];
+                    }
+                    StatConstraint = ConstraintDictionary[keyName];
+                    csvs *= CalcCsv(StatTotal, StatConstraint.Weight, StatConstraint.TargetValue);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < _attrConstraints.Length; i++)
+                {
+                    var stat = _attrConstraints[i];
+                    var currentValue = totalStats[i];
+                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                }
             }
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }
@@ -420,7 +480,7 @@ namespace POESKillTree.TreeGenerator.Solver
         {
             // Don't go higher than the target value.
             //currentValue = Math.Min(currentValue, target);
-            if(currentValue>=target)//Needless checking if current value is equal or higher than target based on CalcCsv (Math.Exp(W*M*(X/T))/Math.Exp(W*M)==1.0)
+            if (currentValue >= target)//Needless checking if current value is equal or higher than target based on CalcCsv (Math.Exp(W*M*(X/T))/Math.Exp(W*M)==1.0)
             {
                 return 1.0;
             }

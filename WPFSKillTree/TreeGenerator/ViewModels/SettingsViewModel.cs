@@ -19,8 +19,17 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private readonly ISettingsDialogCoordinator _dialogCoordinator;
         private readonly object _dialogContext;
 
-        private SkillTree Tree { get; }
+        /// <summary>
+        /// Gets the tree.
+        /// </summary>
+        /// <value>
+        /// The tree.
+        /// </value>
+        public SkillTree Tree { get; }
 
+        /// <summary>
+        /// The item information
+        /// </summary>
         public InventoryViewModel ItemInfo;
 
         /// <summary>
