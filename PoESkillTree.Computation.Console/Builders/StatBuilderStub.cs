@@ -1,12 +1,12 @@
-﻿using PoESkillTree.Computation.Parsing.Builders;
-using PoESkillTree.Computation.Parsing.Builders.Buffs;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Builders.Entities;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
+﻿using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Buffs;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Builders.Entities;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Skills;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -45,27 +45,27 @@ namespace PoESkillTree.Computation.Console.Builders
         public IBuffBuilder ForXSeconds(IValueBuilder seconds) =>
             (IBuffBuilder) Create<IEffectBuilder, IStatBuilder, IValueBuilder>(
                 (s, r) => new BuffBuilderStub(s, r),
-                This, seconds, 
+                This, seconds,
                 (o1, o2) => $"{o1} as Buff for {o2} seconds");
 
         public IBuffBuilder AsBuff =>
             (IBuffBuilder) Create<IEffectBuilder, IStatBuilder>(
                 (s, r) => new BuffBuilderStub(s, r),
-                This, 
+                This,
                 o => $"{o} as Buff");
 
         public IFlagStatBuilder AsAura(params IEntityBuilder[] affectedEntities) =>
-            CreateFlagStat(This, affectedEntities, 
+            CreateFlagStat(This, affectedEntities,
                 (o1, os) => $"{o1} as Aura affecting [{string.Join(", ", os)}]");
 
         public IFlagStatBuilder AddTo(ISkillBuilderCollection skills) =>
-            CreateFlagStat(This, (IBuilderCollection<ISkillBuilder>) skills, 
+            CreateFlagStat(This, (IBuilderCollection<ISkillBuilder>) skills,
                 (o1, o2) => $"{o1} added to skills {o2}");
 
         public IFlagStatBuilder AddTo(IEffectBuilder effect) =>
             CreateFlagStat(This, effect, (o1, o2) => $"{o1} added to effect {o2}");
 
-        public virtual IStatBuilder WithCondition(IConditionBuilder condition) => 
+        public virtual IStatBuilder WithCondition(IConditionBuilder condition) =>
             CreateStat(This, condition, (s, c) => $"{s} ({c})");
 
         public IStatBuilder Resolve(ResolveContext context) =>

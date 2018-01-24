@@ -1,5 +1,5 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Damage;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
+﻿using PoESkillTree.Computation.Common.Builders.Damage;
+using PoESkillTree.Computation.Common.Builders.Resolving;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
@@ -7,15 +7,13 @@ namespace PoESkillTree.Computation.Console.Builders
     {
         private readonly Resolver<IDamageSourceBuilder> _resolver;
 
-        public DamageSourceBuilderStub(string stringRepresentation,
-            Resolver<IDamageSourceBuilder> resolver) 
+        public DamageSourceBuilderStub(string stringRepresentation, Resolver<IDamageSourceBuilder> resolver)
             : base(stringRepresentation)
         {
             _resolver = resolver;
         }
 
-        public IDamageSourceBuilder Resolve(ResolveContext context) =>
-            _resolver(this, context);
+        public IDamageSourceBuilder Resolve(ResolveContext context) => _resolver(this, context);
     }
 
 

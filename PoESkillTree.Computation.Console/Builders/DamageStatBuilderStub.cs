@@ -1,16 +1,16 @@
 ﻿using PoESkillTree.Common.Model.Items.Enums;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Damage;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Damage;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
     public class DamageStatBuilderStub : StatBuilderStub, IDamageStatBuilder
     {
-        public DamageStatBuilderStub(string stringRepresentation, Resolver<IStatBuilder> resolver) 
+        public DamageStatBuilderStub(string stringRepresentation, Resolver<IStatBuilder> resolver)
             : base(stringRepresentation, resolver)
         {
         }
@@ -46,8 +46,8 @@ namespace PoESkillTree.Computation.Console.Builders
         {
             private readonly Resolver<IDamageTakenConversionBuilder> _resolver;
 
-            public DamageTakenConversionBuilder(string stringRepresentation,
-                Resolver<IDamageTakenConversionBuilder> resolver) 
+            public DamageTakenConversionBuilder(
+                string stringRepresentation, Resolver<IDamageTakenConversionBuilder> resolver)
                 : base(stringRepresentation)
             {
                 _resolver = resolver;

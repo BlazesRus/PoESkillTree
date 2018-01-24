@@ -1,20 +1,23 @@
 ﻿using System;
-using PoESkillTree.Computation.Parsing.Builders;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Values;
+using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Values;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
     public abstract class BuilderCollectionStub<T> : BuilderStub, IBuilderCollection<T>
     {
+        /// <summary>
+        /// Dummy element of type <typeparamref name="T"/> used as parameter to predicates.
+        /// </summary>
         protected T DummyElement { get; }
 
         private readonly Resolver<IBuilderCollection<T>> _resolver;
 
-        protected BuilderCollectionStub(T dummyElement, string stringRepresentation, 
-            Resolver<IBuilderCollection<T>> resolver)
+        protected BuilderCollectionStub(
+            T dummyElement, string stringRepresentation, Resolver<IBuilderCollection<T>> resolver)
             : base(stringRepresentation)
         {
             DummyElement = dummyElement;
@@ -41,7 +44,6 @@ namespace PoESkillTree.Computation.Console.Builders
             return CreateCondition(This, condition, StringRepresentation);
         }
 
-        public IBuilderCollection<T> Resolve(ResolveContext context) =>
-            _resolver(this, context);
+        public IBuilderCollection<T> Resolve(ResolveContext context) => _resolver(this, context);
     }
 }

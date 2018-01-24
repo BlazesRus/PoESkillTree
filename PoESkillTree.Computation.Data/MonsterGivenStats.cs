@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
-    // see https://pathofexile.gamepedia.com/Monster and Metadata/Monsters/Monster.ot in GGPK
-    public class MonsterGivenStats : UsesStatProviders, IGivenStats
+    /// <summary>
+    /// Given stats of all monsters.
+    /// </summary>
+    /// <remarks>
+    /// See https://pathofexile.gamepedia.com/Monster and Metadata/Monsters/Monster.ot in GGPK.
+    /// </remarks>
+    public class MonsterGivenStats : UsesStatBuilders, IGivenStats
     {
         private readonly Lazy<IReadOnlyList<GivenStatData>> _lazyGivenStats;
 
         public MonsterGivenStats(IBuilderFactories builderFactories) : base(builderFactories)
         {
-            _lazyGivenStats =
-                new Lazy<IReadOnlyList<GivenStatData>>(() => CreateCollection().ToList());
+            _lazyGivenStats = new Lazy<IReadOnlyList<GivenStatData>>(() => CreateCollection().ToList());
         }
 
         public IReadOnlyList<string> GivenStatLines { get; } = new[]
@@ -70,7 +74,7 @@ namespace PoESkillTree.Computation.Data
             { BaseSet, Totems.CombinedInstances.Maximum, 1 },
             // - buffs
             { BaseSet, Buffs(target: Self).With(Keyword.Curse).CombinedLimit, 1 },
-            // movement speed
+            // - movement speed
             { BaseSet, Stat.MovementSpeed.Maximum, 128 },
         };
     }

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
-using PoESkillTree.Computation.Parsing.Data;
-using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using PoESkillTree.Computation.Common.Builders.Modifiers;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
+using PoESkillTree.Computation.Common.Data;
+using PoESkillTree.Computation.Common.Parsing;
 using PoESkillTree.Computation.Parsing.Referencing;
 
 namespace PoESkillTree.Computation.Parsing.Tests
@@ -14,60 +15,64 @@ namespace PoESkillTree.Computation.Parsing.Tests
     public class ResolvingParserTest
     {
         [Test(ExpectedResult = false)]
-        public bool TryParseReturnsFalseIfInnerReturnsFalse()
+        public bool TryParseReturnsFailureIfInnerReturnsFailure()
         {
             var sut = CreateFailingSut();
 
-            return sut.TryParse(FailingStat, out var _, out var _);
+            var (actual, _, _) = sut.Parse(FailingStat);
+
+            return actual;
         }
 
         [TestCase("failRemaining")]
-        public void TryParseOutputsInnerRemainingIfInnerReturnsFalse(string remaining)
+        public void TryParseReturnsInnerRemainingIfInnerReturnsFailure(string remaining)
         {
             var sut = CreateFailingSut(remaining);
 
-            var _ = sut.TryParse(FailingStat, out var actual, out var _);
+            var (_, actual, _) = sut.Parse(FailingStat);
 
             Assert.AreEqual(remaining, actual);
         }
 
         [Test]
-        public void TryParseOutputsCorrectResultIfInnerReturnsFalse()
+        public void TryParseReturnsCorrectResultIfInnerReturnsFailure()
         {
-            var parseResult = new MatcherDataParseResult(DefaultModifierResult, null);
+            var parseResult = new MatcherDataParseResult(DefaultModifier, null);
             var sut = CreateFailingSut(result: parseResult);
 
-            var _ = sut.TryParse(FailingStat, out var _, out var actual);
+            var (_, _, actual) = sut.Parse(FailingStat);
 
-            Assert.AreSame(DefaultModifierResult, actual);
+            Assert.AreSame(DefaultModifier, actual);
         }
 
         [Test(ExpectedResult = true)]
-        public bool TryParseReturnsTrueIfInnerReturnsTrue()
+        public bool TryParseReturnsSuccessIfInnerReturnsSuccess()
         {
             var sut = CreateSuccessfulSut();
 
-            return sut.TryParse(SuccessfulStat, out var _, out var _);
+            var (actual, _, _) = sut.Parse(SuccessfulStat);
+
+            return actual;
         }
 
         [TestCase("remaining")]
-        public void TryParseOutputsInnerRemainingIfInnerReturnsTrue(string remaining)
+        public void TryParseReturnsInnerRemainingIfInnerReturnsSuccess(string remaining)
         {
             var sut = CreateSuccessfulSut(remaining);
 
-            var _ = sut.TryParse(SuccessfulStat, out var actual, out var _);
+            var (_, actual, _) = sut.Parse(SuccessfulStat);
 
             Assert.AreEqual(remaining, actual);
         }
 
         [Test]
-        public void TryParseReturnsCorrectResultIfInnerReturnsTrueAndNoGroups()
+        public void TryParseReturnsCorrectResultIfInnerReturnsFailureAndNoGroups()
         {
             var sut = CreateSuccessfulSut();
 
-            var _ = sut.TryParse(SuccessfulStat, out var _, out var actual);
+            var (_, _, actual) = sut.Parse(SuccessfulStat);
 
-            Assert.AreSame(ResolvedModifierResult, actual);
+            Assert.AreSame(ResolvedModifier, actual);
         }
 
         [Test]
@@ -86,7 +91,7 @@ namespace PoESkillTree.Computation.Parsing.Tests
                 ("r2", 2, "p2"),
             };
             const string rootReferencedMatch = "rootMatch";
-            var rootReferencedModifierResult = Mock.Of<IModifierResult>();
+            var rootReferencedModifier = Mock.Of<IIntermediateModifier>();
             var nestedReferences = new[]
             {
                 ("r3", 3, "p3"),
@@ -94,29 +99,30 @@ namespace PoESkillTree.Computation.Parsing.Tests
                 ("r5", 5, "p5"),
             };
             const string nestedReferencedMatch = "nestedMatch";
-            var nestedReferencedModifierResult = Mock.Of<IModifierResult>();
+            var nestedReferencedModifier = Mock.Of<IIntermediateModifier>();
 
-            var remaining = "";
-            var result = new MatcherDataParseResult(DefaultModifierResult, groups);
+            var result = new MatcherDataParseResult(DefaultModifier, groups);
             var innerParser = Mock.Of<IParser<MatcherDataParseResult>>(p =>
-                p.TryParse(SuccessfulStat, out remaining, out result) == true);
+                p.Parse(SuccessfulStat) == new ParseResult<MatcherDataParseResult>(true, "", result));
 
             var rootReferencedMatcherData = new ReferencedMatcherData("", rootReferencedMatch);
-            var rootMatcherData = new MatcherData("", rootReferencedModifierResult);
+            var rootMatcherData = new MatcherData("", rootReferencedModifier);
             var nestedReferencedMatcherData = new ReferencedMatcherData("", nestedReferencedMatch);
-            var nestedMatcherData = new MatcherData("", nestedReferencedModifierResult);
+            var nestedMatcherData = new MatcherData("", nestedReferencedModifier);
             var referenceManager = Mock.Of<IReferenceToMatcherDataResolver>(m =>
                 m.TryGetReferencedMatcherData("r0", 0, out rootReferencedMatcherData) &&
                 m.TryGetMatcherData("r1", 1, out rootMatcherData) &&
-                m.TryGetReferencedMatcherData("r5", 5, out nestedReferencedMatcherData) &&
-                m.TryGetMatcherData("r3", 3, out nestedMatcherData));
+                m.TryGetReferencedMatcherData("r2", 2, out rootReferencedMatcherData) &&
+                m.TryGetMatcherData("r3", 3, out nestedMatcherData) &&
+                m.TryGetReferencedMatcherData("r4", 4, out nestedReferencedMatcherData) &&
+                m.TryGetReferencedMatcherData("r5", 5, out nestedReferencedMatcherData));
 
             var rootResolvedBuilder = Mock.Of<IStatBuilder>();
             var rootReferenceConverters = new[]
             {
                 new ReferenceConverter(rootReferencedMatch),
                 new ReferenceConverter(rootResolvedBuilder),
-                new ReferenceConverter(null),
+                new ReferenceConverter(rootReferencedMatch),
             };
             var context = new ResolveContext(
                 new ResolvedMatchContext<IValueBuilder>(rootValues),
@@ -126,19 +132,19 @@ namespace PoESkillTree.Computation.Parsing.Tests
             var nestedReferenceConverters = new[]
             {
                 new ReferenceConverter(nestedResolvedBuilder),
-                new ReferenceConverter(null),
+                new ReferenceConverter(nestedReferencedMatch),
                 new ReferenceConverter(nestedReferencedMatch),
             };
             var nestedContext = new ResolveContext(
                 new ResolvedMatchContext<IValueBuilder>(nestedValues),
                 new ResolvedMatchContext<IReferenceConverter>(nestedReferenceConverters));
             var twiceNestedContext = new ResolveContext(
-                new ResolvedMatchContext<IValueBuilder>(new IValueBuilder[0]), 
+                new ResolvedMatchContext<IValueBuilder>(new IValueBuilder[0]),
                 new ResolvedMatchContext<IReferenceConverter>(new IReferenceConverter[0]));
-            var modifierResultResolver = Mock.Of<IModifierResultResolver>(r =>
-                r.Resolve(result.ModifierResult, context) == ResolvedModifierResult &&
-                r.ResolveToReferencedBuilder(rootReferencedModifierResult, nestedContext) == rootResolvedBuilder &&
-                r.ResolveToReferencedBuilder(nestedReferencedModifierResult, twiceNestedContext) == nestedResolvedBuilder);
+            var modifierResolver = Mock.Of<IIntermediateModifierResolver>(r =>
+                r.Resolve(result.Modifier, context) == ResolvedModifier &&
+                r.ResolveToReferencedBuilder(rootReferencedModifier, nestedContext) == rootResolvedBuilder &&
+                r.ResolveToReferencedBuilder(nestedReferencedModifier, twiceNestedContext) == nestedResolvedBuilder);
 
             var regexGroupParser = Mock.Of<IRegexGroupParser>(p =>
                 p.ParseValues(groups, "") == rootValues &&
@@ -146,45 +152,63 @@ namespace PoESkillTree.Computation.Parsing.Tests
                 p.ParseValues(groups, "p1") == nestedValues &&
                 p.ParseReferences(groups.Keys, "p1") == nestedReferences);
 
-            var sut = new ResolvingParser(innerParser, referenceManager, modifierResultResolver, regexGroupParser);
+            var sut = new ResolvingParser(innerParser, referenceManager, modifierResolver, regexGroupParser);
 
-            var _ = sut.TryParse(SuccessfulStat, out var _, out var actual);
+            var (_, _, actual) = sut.Parse(SuccessfulStat);
 
-            Assert.AreSame(ResolvedModifierResult, actual);
+            Assert.AreSame(ResolvedModifier, actual);
+        }
+
+        [Test]
+        public void TryParseThrowsOnUnknownReference()
+        {
+            var groups = new Dictionary<string, string>();
+            var references = new[] { ("r0", 0, "p0") };
+            var result = new MatcherDataParseResult(DefaultModifier, groups);
+            var innerParser = Mock.Of<IParser<MatcherDataParseResult>>(p =>
+                p.Parse(SuccessfulStat) == new ParseResult<MatcherDataParseResult>(true, "", result));
+            var regexGroupParser = Mock.Of<IRegexGroupParser>(p =>
+                p.ParseValues(groups, "") == new IValueBuilder[0] &&
+                p.ParseReferences(groups.Keys, "") == references);
+
+            var sut = new ResolvingParser(innerParser, Mock.Of<IReferenceToMatcherDataResolver>(),
+                Mock.Of<IIntermediateModifierResolver>(), regexGroupParser);
+
+            Assert.Throws<ParseException>(() => sut.Parse(SuccessfulStat));
         }
 
         private const string FailingStat = "fail";
         private const string SuccessfulStat = "success";
 
-        private static readonly IModifierResult DefaultModifierResult = Mock.Of<IModifierResult>();
-        private static readonly IModifierResult ResolvedModifierResult = Mock.Of<IModifierResult>();
+        private static readonly IIntermediateModifier DefaultModifier = Mock.Of<IIntermediateModifier>();
+        private static readonly IIntermediateModifier ResolvedModifier = Mock.Of<IIntermediateModifier>();
 
-        private static IParser<IModifierResult> CreateFailingSut(
+        private static IParser<IIntermediateModifier> CreateFailingSut(
             string remaining = "", MatcherDataParseResult result = null)
         {
             var innerParser = Mock.Of<IParser<MatcherDataParseResult>>(p =>
-                p.TryParse(FailingStat, out remaining, out result) == false);
+                p.Parse(FailingStat) == new ParseResult<MatcherDataParseResult>(false, remaining, result));
 
             return new ResolvingParser(innerParser, null, null, null);
         }
 
-        private static IParser<IModifierResult> CreateSuccessfulSut(
+        private static IParser<IIntermediateModifier> CreateSuccessfulSut(
             string remaining = "")
         {
-            var result = new MatcherDataParseResult(DefaultModifierResult, new Dictionary<string, string>());
+            var result = new MatcherDataParseResult(DefaultModifier, new Dictionary<string, string>());
             var innerParser = Mock.Of<IParser<MatcherDataParseResult>>(p =>
-                p.TryParse(SuccessfulStat, out remaining, out result) == true);
+                p.Parse(SuccessfulStat) == new ParseResult<MatcherDataParseResult>(true, remaining, result));
             var context = new ResolveContext(
                 new ResolvedMatchContext<IValueBuilder>(new IValueBuilder[0]),
                 new ResolvedMatchContext<IReferenceConverter>(new IReferenceConverter[0]));
-            var modifierResultResolver = Mock.Of<IModifierResultResolver>(r =>
-                r.Resolve(result.ModifierResult, context) == ResolvedModifierResult);
+            var modifierResultResolver = Mock.Of<IIntermediateModifierResolver>(r =>
+                r.Resolve(result.Modifier, context) == ResolvedModifier);
             var regexGroupParser = Mock.Of<IRegexGroupParser>();
 
             return new ResolvingParser(innerParser, null, modifierResultResolver, regexGroupParser);
         }
 
-        private static T[] MockMany<T>() where T: class => 
+        private static T[] MockMany<T>() where T : class =>
             new[] { Mock.Of<T>(), Mock.Of<T>(), Mock.Of<T>() };
     }
 }

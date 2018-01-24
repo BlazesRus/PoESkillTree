@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// <see cref="IReferencedMatchers"/> implementation for <see cref="IFlagStatBuilder"/>s.
+    /// </summary>
     public class FlagMatchers : ReferencedMatchersBase<IFlagStatBuilder>
     {
         private IFlagStatBuilders Flag { get; }

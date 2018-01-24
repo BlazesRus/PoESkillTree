@@ -21,7 +21,7 @@ msgstr ""
 #: Controls\Dialogs\Views\MetroMessageBoxView.xaml:71
 #: Controls\Dialogs\Views\ValidatingInputDialogView.xaml:41
 #: Views\Builds\EditBuildWindow.xaml:59 Views\Equipment\TabPicker.xaml:122
-#: Controls\Dialogs\ExtendedDialogManager.cs:117
+#: Controls\Dialogs\ExtendedDialogManager.cs:82
 msgid "OK"
 msgstr "OK"
 
@@ -33,8 +33,8 @@ msgstr "OK"
 #: Views\Crafting\UniqueCraftingView.xaml:59
 #: Views\Equipment\SocketedGemsEditingView.xaml:187
 #: Views\Equipment\TabPicker.xaml:127
-#: Controls\Dialogs\ExtendedDialogManager.cs:116
-#: Controls\Dialogs\ExtendedDialogManager.cs:128
+#: Controls\Dialogs\ExtendedDialogManager.cs:81
+#: Controls\Dialogs\ExtendedDialogManager.cs:93
 #: TreeGenerator\ViewModels\ControllerViewModel.cs:118
 #: TreeGenerator\ViewModels\ControllerViewModel.cs:364
 msgid "Cancel"
@@ -1025,9 +1025,8 @@ msgid "Character Sheet"
 msgstr "Postava"
 
 #: Views\MainWindow.xaml:892 SkillTreeFiles\Compute.cs:2302
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
 #: Utils\Converter\GroupStringConverter.cs:31
-#: ViewModels\TrackedStatsMenuModel.cs:566
 msgid "Defense"
 msgstr "Obrana"
 
@@ -1057,7 +1056,7 @@ msgstr "Jazyk"
 msgid "Build save path"
 msgstr "Názov zostavy"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:128
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:61
 msgid "Change..."
 msgstr ""
 
@@ -1101,37 +1100,43 @@ msgstr "Resetovať Ascendancy strom zručností"
 msgid "Reset selected bandits"
 msgstr "Resetovať zvolené odmeny banditov"
 
-#: Views\TrackedStatsMenu.xaml:113
-msgid "TrackedStats Path"
-msgstr ""
+#: Views\TrackedStatsMenu.xaml:52
+#, fuzzy
+msgid "TrackedStats Path:"
+msgstr "Resetovať nastavenia"
 
-#: Views\TrackedStatsMenu.xaml:136
+#: Views\TrackedStatsMenu.xaml:78
 msgid "Load Tracked Stat File Names"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:147
+#: Views\TrackedStatsMenu.xaml:88
 #, fuzzy
 msgid "Load Tracked Stats from file"
 msgstr "Načítať strom"
 
-#: Views\TrackedStatsMenu.xaml:152
+#: Views\TrackedStatsMenu.xaml:93
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "Resetovať nastavenia"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:94
+#: Views\TrackedStatsMenu.xaml:107
+#, fuzzy
+msgid "Save Tracked Stats to FileName:"
+msgstr "Načítať strom"
+
+#: Controls\Dialogs\ExtendedDialogManager.cs:59
 msgid "Confirmation"
 msgstr "Potvrdenie"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:99
+#: Controls\Dialogs\ExtendedDialogManager.cs:64
 msgid "Error"
 msgstr "Chyba"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:104
+#: Controls\Dialogs\ExtendedDialogManager.cs:69
 msgid "Warning"
 msgstr "Upozornenie"
 
-#: Controls\Dialogs\ExtendedDialogManager.cs:109
+#: Controls\Dialogs\ExtendedDialogManager.cs:74
 msgid "Information"
 msgstr "Informácia"
 
@@ -1225,12 +1230,7 @@ msgstr "Nepodporovaný typ podmienky v atribúte {0} pseudo-atribútu {1}"
 msgid "Empty not condition in attribute {0} in pseudo attribute {1}"
 msgstr "Prázdna podmienka negácie v atribúte {0} pseudo-atribútu {1}"
 
-#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:246
-#, fuzzy, csharp-format
-msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute with AttributeGroup"
-msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
-
-#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:257
+#: TreeGenerator\Model\PseudoAttributes\PseudoAttributeLoader.cs:244
 msgid "A PseudoAttribute is nested in itself or nesting depth is too high"
 msgstr "Pseudo-atribút je vnorený sám v sebe, alebo hĺbka vnorenia je príliš veľká"
 
@@ -1239,127 +1239,107 @@ msgstr "Pseudo-atribút je vnorený sám v sebe, alebo hĺbka vnorenia je príli
 msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"
 msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:204
-#: ViewModels\TrackedStatsMenuModel.cs:603
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:206
 msgid "Popular"
 msgstr "Populárne"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:213
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
 #: Utils\Converter\GroupStringConverter.cs:34
-#: ViewModels\TrackedStatsMenuModel.cs:561
 msgid "Core Attributes"
 msgstr "Základné atribúty"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:214
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
 #: Utils\Converter\GroupStringConverter.cs:30
-#: ViewModels\TrackedStatsMenuModel.cs:562
 msgid "General"
 msgstr "Všeobecné"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:217
 #: Utils\Converter\GroupStringConverter.cs:19
-#: ViewModels\TrackedStatsMenuModel.cs:563
 msgid "Keystone"
 msgstr "Kľúčové"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
 #: Utils\Converter\GroupStringConverter.cs:21
-#: ViewModels\TrackedStatsMenuModel.cs:564
 msgid "Charges"
 msgstr "Náboje"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:219
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:221
 #: Utils\Converter\GroupStringConverter.cs:29
-#: ViewModels\TrackedStatsMenuModel.cs:567
 msgid "Block"
 msgstr "Blokovanie"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
 #: Utils\Converter\GroupStringConverter.cs:28
-#: ViewModels\TrackedStatsMenuModel.cs:568
 msgid "Shield"
 msgstr "Štít"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
 #: Utils\Converter\GroupStringConverter.cs:20
-#: ViewModels\TrackedStatsMenuModel.cs:570
 msgid "Weapon"
 msgstr "Zbraň"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:223
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:225
 #: Utils\Converter\GroupStringConverter.cs:32
-#: ViewModels\TrackedStatsMenuModel.cs:571
 msgid "Spell"
 msgstr "Kúzlo"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
 #: Utils\Converter\GroupStringConverter.cs:27
-#: ViewModels\TrackedStatsMenuModel.cs:572
 msgid "Critical Strike"
 msgstr "Kritický úder"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
 #: Utils\Converter\GroupStringConverter.cs:26
-#: ViewModels\TrackedStatsMenuModel.cs:574
 msgid "Aura"
 msgstr "Aura"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:227
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
 #: Utils\Converter\GroupStringConverter.cs:25
-#: ViewModels\TrackedStatsMenuModel.cs:575
 msgid "Curse"
 msgstr "Prekliatie"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
 #: Utils\Converter\GroupStringConverter.cs:22
-#: ViewModels\TrackedStatsMenuModel.cs:576
 msgid "Minion"
 msgstr "Minion"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
 #: Utils\Converter\GroupStringConverter.cs:23
-#: ViewModels\TrackedStatsMenuModel.cs:577
 msgid "Trap"
 msgstr "Pasca"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:24
-#: ViewModels\TrackedStatsMenuModel.cs:578
 msgid "Totem"
 msgstr "Totem"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:33
 #: ItemFilter\Model\FilterManager.cs:567
-#: ViewModels\TrackedStatsMenuModel.cs:579
 msgid "Flasks"
 msgstr "Fľaše"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
 #: Utils\Converter\GroupStringConverter.cs:36
-#: ViewModels\TrackedStatsMenuModel.cs:580
 msgid "Jewel Types"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
 #: Utils\Converter\GroupStringConverter.cs:37
-#: ViewModels\TrackedStatsMenuModel.cs:581
 msgid "Tracked PseudoTotals"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
 #: Utils\Converter\GroupStringConverter.cs:35
-#: ViewModels\TrackedStatsMenuModel.cs:582
 msgid "Everything Else"
 msgstr "Ostatné"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:237
 #: Utils\Converter\GroupStringConverter.cs:38
-#: ViewModels\TrackedStatsMenuModel.cs:583
 msgid "Hidden"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:607
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:636
 msgid "Advanced"
 msgstr "Pokročilé"
 
@@ -1419,11 +1399,11 @@ msgstr "_Označené uzly"
 msgid "Please tag non-skilled nodes by right-clicking them."
 msgstr "Prosím označte nevycvičené uzly pomocou kliknutia pravým tlačidlom."
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:66
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:87
 msgid "The Skill Tree Generator is already open"
 msgstr "Generátor stromu zručností je už otverný"
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:81
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:102
 msgid "Could not open Skill Tree Generator"
 msgstr "Nepodarilo sa otvoriť generátor stromu zručností"
 
@@ -1731,7 +1711,7 @@ msgid "Restart is needed"
 msgstr "Reštart je potrebný"
 
 #: ViewModels\SettingsMenuViewModel.cs:67
-#: ViewModels\TrackedStatsMenuModel.cs:459
+#: ViewModels\TrackedStatsMenuModel.cs:115
 msgid ""
 "Select the directory where builds will be stored.\n"
 "It will be created if it does not yet exist."
@@ -1744,21 +1724,13 @@ msgid ""
 "If you cancel, the build directory will not be changed."
 msgstr ""
 
-#: ViewModels\TrackedStatsMenuModel.cs:129
+#: ViewModels\TrackedStatsMenuModel.cs:83
 #, fuzzy
 msgid "Tracked Stat Settings"
 msgstr "Resetovať nastavenia"
 
-#: ViewModels\TrackedStatsMenuModel.cs:458
+#: ViewModels\TrackedStatsMenuModel.cs:114
 msgid "Select TrackedStat directory"
-msgstr ""
-
-#: ViewModels\TrackedStatsMenuModel.cs:525
-msgid "Select Tracked FilePath first."
-msgstr ""
-
-#: ViewModels\TrackedStatsMenuModel.cs:526
-msgid "Tracked Stats FilePath needed inputed first"
 msgstr ""
 
 #: Views\Builds\EditBuildWindow.xaml.cs:16
@@ -1843,7 +1815,7 @@ msgstr[2] "{0}, {1} bodov"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Vaša zostava musí obsahovať aspoň jeden uzol pre vytvorenie snímky"
 
-#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2110
+#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2131
 msgid "An error occurred while copying to Clipboard."
 msgstr "Nastala chyba počas kopírovania do Schránky."
 
@@ -1917,48 +1889,52 @@ msgstr "Nastala chyba počas sťahovania."
 msgid "An error occurred while attempting to start the installation."
 msgstr "Nastala chyba pri pokuse spustiť inštaláciu."
 
-#: Views\MainWindow.xaml.cs:1841
+#: Views\MainWindow.xaml.cs:1862
 msgid "An error occurred while attempting to load item data."
 msgstr "Nastala chyba pri pokuse načítať údaje predmetov."
 
-#: Views\MainWindow.xaml.cs:1935 Views\MainWindow.xaml.cs:1978
+#: Views\MainWindow.xaml.cs:1956 Views\MainWindow.xaml.cs:1999
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Nastala chyba pri pokuse načítať strom zručností z URL."
 
-#: Views\MainWindow.xaml.cs:1957
+#: Views\MainWindow.xaml.cs:1978
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1958
+#: Views\MainWindow.xaml.cs:1979
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1959
+#: Views\MainWindow.xaml.cs:1980
 #, fuzzy
 msgid "Replace Bandits settings"
 msgstr "Resetovať nastavenia"
 
-#: Views\MainWindow.xaml.cs:1985
+#: Views\MainWindow.xaml.cs:2006
 #, fuzzy
 msgid "Current: "
 msgstr "Platidlo"
 
-#: Views\MainWindow.xaml.cs:1986
+#: Views\MainWindow.xaml.cs:2007
 #, fuzzy
 msgid "Loaded: "
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:2090
+#: Views\MainWindow.xaml.cs:2111
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Vytváranie Po_EUrl odkazu"
 
-#: Views\MainWindow.xaml.cs:2096
+#: Views\MainWindow.xaml.cs:2117
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Nastala chyba pri pokuse kontaktovať PoEUrl lokáciu."
 
-#: Views\MainWindow.xaml.cs:2106
+#: Views\MainWindow.xaml.cs:2127
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "PoEUrl odkaz bol skopírovaný do Schránky."
+
+#, fuzzy
+#~ msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute with AttributeGroup"
+#~ msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
 
 #~ msgid "Data used in character calculations are from"
 #~ msgstr "Údaje použité vo výpočtoch postavy pochádzajú z"

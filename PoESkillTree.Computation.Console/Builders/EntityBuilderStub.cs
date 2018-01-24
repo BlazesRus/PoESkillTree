@@ -1,10 +1,8 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Damage;
-using PoESkillTree.Computation.Parsing.Builders.Entities;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
+﻿using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Entities;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Skills;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -13,27 +11,16 @@ namespace PoESkillTree.Computation.Console.Builders
     {
         private readonly Resolver<IEntityBuilder> _resolver;
 
-        public EntityBuilderStub(string stringRepresentation, Resolver<IEntityBuilder> resolver) 
+        public EntityBuilderStub(string stringRepresentation, Resolver<IEntityBuilder> resolver)
             : base(stringRepresentation)
         {
             _resolver = resolver;
         }
 
+        public static EntityBuilderStub Self() => new EntityBuilderStub("Self", (c, _) => c);
+        public static EntityBuilderStub Any() => new EntityBuilderStub("Any Entity", (c, _) => c);
+
         protected IEntityBuilder This => this;
-
-        public IConditionBuilder
-            HitByInPastXSeconds(IDamageTypeBuilder damageType, IValueBuilder seconds) =>
-            CreateCondition(This, (IKeywordBuilder) damageType, seconds,
-                (o1, o2, o3) => $"{o1} hit by {o2} Damage in the past {o3} seconds");
-
-        public IConditionBuilder
-            HitByInPastXSeconds(IDamageTypeBuilder damageType, double seconds) =>
-            CreateCondition(This, (IKeywordBuilder) damageType,
-                (o1, o2) => $"{o1} hit by {o2} Damage in the past {seconds} seconds");
-
-        public IConditionBuilder HitByRecently(IDamageTypeBuilder damageType) =>
-            CreateCondition(This, (IKeywordBuilder) damageType,
-                (o1, o2) => $"{o1} hit by {o2} Damage recently");
 
         public IDamageStatBuilder Stat(IDamageStatBuilder stat) =>
             CreateDamageStat(This, (IStatBuilder) stat, (o1, o2) => $"{o2} for {o1}");
@@ -57,31 +44,22 @@ namespace PoESkillTree.Computation.Console.Builders
 
     public class EntityBuildersStub : IEntityBuilders
     {
-        public ISelfBuilder Self => new SelfBuilderStub();
+        public IEntityBuilder Self => EntityBuilderStub.Self();
         public IEnemyBuilder Enemy => new EnemyBuilderStub();
         public IEntityBuilder Ally => new EntityBuilderStub("Ally", (c, _) => c);
-        public IEntityBuilder Character => new EntityBuilderStub("Character", (c, _) => c);
+        public IEntityBuilder ModifierSource => new EntityBuilderStub("Modifier Source", (c, _) => c);
 
         public ISkillEntityBuilder Totem => new SkillEntityBuilderStub("Totem", (c, _) => c);
 
         public ISkillEntityBuilder Minion => new SkillEntityBuilderStub("Minion", (c, _) => c);
 
-        public IEntityBuilder Any => new EntityBuilderStub("Any Entity", (c, _) => c);
-    }
-
-
-    public class SelfBuilderStub : EntityBuilderStub, ISelfBuilder
-    {
-        public SelfBuilderStub() 
-            : base("Self", (c, _) => c)
-        {
-        }
+        public IEntityBuilder Any => EntityBuilderStub.Any();
     }
 
 
     public class EnemyBuilderStub : EntityBuilderStub, IEnemyBuilder
     {
-        public EnemyBuilderStub() 
+        public EnemyBuilderStub()
             : base("Enemy", (c, _) => c)
         {
         }
@@ -102,19 +80,19 @@ namespace PoESkillTree.Computation.Console.Builders
 
     public class SkillEntityBuilderStub : EntityBuilderStub, ISkillEntityBuilder
     {
-        public SkillEntityBuilderStub(string stringRepresentation, 
-            Resolver<IEntityBuilder> resolver) 
+        public SkillEntityBuilderStub(string stringRepresentation,
+            Resolver<IEntityBuilder> resolver)
             : base(stringRepresentation, resolver)
         {
         }
 
-        private static IEntityBuilder Construct(string stringRepresentation, 
+        private static IEntityBuilder Construct(string stringRepresentation,
             Resolver<IEntityBuilder> resolver)
             => new SkillEntityBuilderStub(stringRepresentation, resolver);
 
         public ISkillEntityBuilder With(IKeywordBuilder keyword) =>
             (ISkillEntityBuilder) Create(
-                Construct, This, keyword, 
+                Construct, This, keyword,
                 (o1, o2) => $"{o1} with {o2}");
 
         public ISkillEntityBuilder With(params IKeywordBuilder[] keywords) =>

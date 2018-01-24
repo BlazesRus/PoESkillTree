@@ -1,38 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// Provides a collection of <see cref="StatReplacerData"/>. Mostly handles keystones, they often contain multiple
+    /// stats in a single translation. Besides splitting stats, some parts are also replaced by formulations that can
+    /// be parsed without adding a new matcher.
+    /// </summary>
+    /// <remarks>
+    /// Regex patterns here are different from the patterns in matchers. These don't support expansion (no value
+    /// placeholders, no references to other matchers) but allow referencing groups by index.
+    /// </remarks>
     public class StatReplacers
     {
-        // These simply replace a stat line that would get thrown into the matchers with another
-        // Reduces redundant handling in some cases and allows elegantly solving other cases
-        // As opposed to the matchers, values are not replaced by # placeholders here
-
         public IReadOnlyList<StatReplacerData> Replacers { get; } = new StatReplacerCollection
         {
             {
-                // Grand Spectrum
+                // Grand Spectrum: Add an additional stat line that increases the Grand Spectrum counter.
                 @"(.+) per grand spectrum",
                 "grand spectrum", "$0"
             },
             {
                 // Corrupted Energy Cobalt Jewel
-                @"(with \d corrupted items Equipped:) (\d+% of chaos damage does not bypass energy shield), and (\d+% of physical damage bypasses energy shield)",
+                @"(with \d corrupted items equipped): (\d+% of chaos damage does not bypass energy shield), and (\d+% of physical damage bypasses energy shield)",
                 "$1 $2", "$1 $3"
             },
             // keystones
-            // (some need to be manually split, others are renamed to need no further custom handling)
             {
                 // Acrobatics
                 @"(\d+% chance to dodge attacks)\. (\d+% less armour and energy shield), (\d+% less chance to block spells and attacks)",
                 "$1", "$2", "$3"
             },
             {
-                // Eldritch Battery, second stat
-                "energy shield protects mana instead of life",
+                // Eldritch Battery
+                "(Spend Energy Shield before Mana for Skill Costs) energy shield protects mana instead of life",
+                "$1",
                 "100% of non-chaos damage is taken from energy shield before mana",
                 "-100% of non-chaos damage is taken from energy shield before life"
             },
@@ -59,7 +64,7 @@ namespace PoESkillTree.Computation.Data
             {
                 // Vaal Pact
                 @"life leeched per second is doubled\. (maximum life leech rate is doubled)\. (life regeneration has no effect)\.",
-                "100% increased life leeched per second", "$1", "$2"
+                "100% more life leeched per second", "$1", "$2"
             },
             {
                 // Ancestral Bond

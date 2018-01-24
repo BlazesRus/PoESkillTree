@@ -4,17 +4,24 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using MoreLinq;
+using PoESkillTree.Computation.Common.Data;
+using PoESkillTree.Computation.Common.Parsing;
+using PoESkillTree.Computation.Console.Builders;
+using PoESkillTree.Computation.Data;
+using PoESkillTree.Computation.Data.Steps;
 using PoESkillTree.Computation.Parsing;
 
 namespace PoESkillTree.Computation.Console
 {
     public static class Program
     {
+        /// <summary>
+        /// Console program prompting the user to enter commands in a loop. Supports parsing single stat lines
+        /// and timing the parsing of many stat lines.
+        /// </summary>
         public static void Main(string[] args)
         {
-            var compositionRoot = new CompositionRoot();
-
-            var parser = compositionRoot.CreateParser();
+            var parser = CreateParser();
 
             System.Console.WriteLine("Enter a stat line to be parsed (or 'benchmark' to time stat parsing)");
             System.Console.Write("> ");
@@ -37,11 +44,25 @@ namespace PoESkillTree.Computation.Console
             }
         }
 
-        private static void Parse(IParser<IReadOnlyList<Modifier>> parser, string statLine)
+        public static IParser CreateParser()
+        {
+            return new Parser<ParsingStep>(CreateParsingData(), new BuilderFactories());
+        }
+
+        public static IParsingData<ParsingStep> CreateParsingData()
+        {
+            return new ParsingData(new BuilderFactories(), new MatchContextsStub(), new SkillMatchers());
+        }
+
+        /// <summary>
+        /// Parses the given stat using the given parser and writes results to the console.
+        /// </summary>
+        private static void Parse(IParser parser, string statLine)
         {
             try
             {
-                if (!parser.TryParse(statLine, out var remaining, out var result))
+                var (success, remaining, result) = parser.Parse(statLine);
+                if (!success)
                 {
                     System.Console.WriteLine($"Not recognized: '{remaining}' could not be parsed.");
                 }
@@ -53,10 +74,14 @@ namespace PoESkillTree.Computation.Console
             }
         }
 
-        private static void Benchmark(IParser<IReadOnlyList<Modifier>> parser)
+        /// <summary>
+        /// Reads stat lines from a file, runs them through the parser, times the parsing and writes the timing
+        /// results to the console..
+        /// </summary>
+        private static void Benchmark(IParser parser)
         {
             var stopwatch = Stopwatch.StartNew();
-            parser.TryParse("Made-up", out var _, out var _);
+            parser.Parse("Made-up");
             stopwatch.Stop();
             System.Console.WriteLine($"Initialization (parsing 1 made-up stat):\n  {stopwatch.ElapsedMilliseconds} ms");
             stopwatch.Reset();
@@ -80,7 +105,7 @@ namespace PoESkillTree.Computation.Console
                 foreach (var line in batch)
                 {
                     stopwatch.Start();
-                    var parsable = parser.TryParse(line, out var _, out var _);
+                    var (parsable, _, _) = parser.Parse(line);
                     stopwatch.Stop();
                     batchSize++;
                     if (parsable)
@@ -121,12 +146,17 @@ namespace PoESkillTree.Computation.Console
                 $"  {distinctSuccessCounter}/{distinct.Count} ({distinctSuccessCounter * 100.0 / distinct.Count:F1}%)");
         }
 
-        // For CPU profiling without the output overhead of Benchmark()
-        private static void Profile(IParser<IReadOnlyList<Modifier>> parser)
+        /// <summary>
+        /// Reads stat lines from a file and runs them through the parser.
+        /// </summary>
+        /// <remarks>
+        /// For CPU profiling without the output overhead of Benchmark()
+        /// </remarks>
+        private static void Profile(IParser parser)
         {
             foreach (var line in ReadStatLines())
             {
-                parser.TryParse(line, out var _, out var _);
+                parser.Parse(line);
             }
         }
 

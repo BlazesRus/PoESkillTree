@@ -1,11 +1,17 @@
 using System;
 using JetBrains.Annotations;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
-using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using PoESkillTree.Computation.Common.Builders.Modifiers;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
 
 namespace PoESkillTree.Computation.Data.Collections
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Collection of <see cref="Common.Data.MatcherData"/> for parsing properties that 
+    /// allows collection initialization syntax for adding entries.
+    /// </summary>
+    /// <remarks>No property parsing happens yet, take this class with a grain of salt.</remarks>
     public class PropertyMatcherCollection : MatcherCollection
     {
         private readonly IValueBuilders _valueFactory;
@@ -26,8 +32,7 @@ namespace PoESkillTree.Computation.Data.Collections
             Add(regex, ModifierBuilder.WithStat(stat));
         }
 
-        public void Add([RegexPattern] string regex, IStatBuilder stat, 
-            Func<ValueBuilder, ValueBuilder> converter)
+        public void Add([RegexPattern] string regex, IStatBuilder stat, Func<ValueBuilder, ValueBuilder> converter)
         {
             var builder = ModifierBuilder
                 .WithStat(stat)

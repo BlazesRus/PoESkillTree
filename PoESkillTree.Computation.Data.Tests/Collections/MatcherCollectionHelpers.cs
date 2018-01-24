@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using PoESkillTree.Computation.Parsing.Builders.Values;
-using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Common.Builders.Values;
+using PoESkillTree.Computation.Common.Data;
 
 namespace PoESkillTree.Computation.Data.Tests.Collections
 {
@@ -15,9 +15,9 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
         {
             var data = sut.Single();
             Assert.AreEqual(regex, data.Regex);
-            Assert.IsInstanceOf<ModifierBuilderStub>(data.ModifierResult);
+            Assert.IsInstanceOf<ModifierBuilderStub>(data.Modifier);
             Assert.AreEqual(substitution, data.MatchSubstitution);
-            return (ModifierBuilderStub) data.ModifierResult;
+            return (ModifierBuilderStub) data.Modifier;
         }
 
         internal static Func<IValueBuilder, ValueBuilder> SetupConverter(

@@ -1,13 +1,13 @@
 ﻿using System;
 using PoESkillTree.Common.Model.Items.Enums;
-using PoESkillTree.Computation.Parsing.Builders;
-using PoESkillTree.Computation.Parsing.Builders.Actions;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Entities;
-using PoESkillTree.Computation.Parsing.Builders.Equipment;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Actions;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Entities;
+using PoESkillTree.Computation.Common.Builders.Equipment;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Skills;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -16,7 +16,7 @@ namespace PoESkillTree.Computation.Console.Builders
     {
         private readonly Resolver<ISkillBuilder> _resolver;
 
-        public SkillBuilderStub(string stringRepresentation, Resolver<ISkillBuilder> resolver) 
+        public SkillBuilderStub(string stringRepresentation, Resolver<ISkillBuilder> resolver)
             : base(stringRepresentation)
         {
             _resolver = resolver;
@@ -24,9 +24,9 @@ namespace PoESkillTree.Computation.Console.Builders
 
         private ISkillBuilder This => this;
 
-        public IActionBuilder<ISelfBuilder, IEntityBuilder> Cast =>
-            (ISelfToAnyActionBuilder) Create<IActionBuilder, ISkillBuilder>(
-                (s, r) => new SelfToAnyActionBuilderStub(s, r),
+        public IActionBuilder Cast =>
+            Create<IActionBuilder, ISkillBuilder>(
+                ActionBuilderStub.SelfToAny,
                 This, o => $"{o} cast");
 
         public IStatBuilder Instances =>
@@ -61,11 +61,11 @@ namespace PoESkillTree.Computation.Console.Builders
     }
 
 
-    public class SkillBuilderCollectionStub : BuilderCollectionStub<ISkillBuilder>, 
+    public class SkillBuilderCollectionStub : BuilderCollectionStub<ISkillBuilder>,
         ISkillBuilderCollection
     {
-        public SkillBuilderCollectionStub(string stringRepresentation,
-            Resolver<IBuilderCollection<ISkillBuilder>> resolver) 
+        public SkillBuilderCollectionStub(
+            string stringRepresentation, Resolver<IBuilderCollection<ISkillBuilder>> resolver)
             : base(new SkillBuilderStub("Skill", (c, _) => c), stringRepresentation, resolver)
         {
         }
@@ -74,7 +74,7 @@ namespace PoESkillTree.Computation.Console.Builders
 
         public ISkillBuilderCollection this[params IKeywordBuilder[] keywords] =>
             (ISkillBuilderCollection) Create(
-                (s, r) => new SkillBuilderCollectionStub(s, r), 
+                (s, r) => new SkillBuilderCollectionStub(s, r),
                 This, keywords,
                 (o1, os) => $"{o1}.Where(has keywords [{string.Join(", ", os)}])");
 
@@ -90,7 +90,7 @@ namespace PoESkillTree.Computation.Console.Builders
                 This, slot,
                 (o1, o2) => $"{o1}.Where(is socketed in {o2})");
 
-        public ISkillBuilderCollection Where(Func<ISkillBuilder, IConditionBuilder> predicate) => 
+        public ISkillBuilderCollection Where(Func<ISkillBuilder, IConditionBuilder> predicate) =>
             (ISkillBuilderCollection) Create(
                 (s, r) => new SkillBuilderCollectionStub(s, r),
                 This, predicate(DummyElement),
@@ -123,9 +123,9 @@ namespace PoESkillTree.Computation.Console.Builders
         public IFlagStatBuilder ApplyStatsToEntity(IEntityBuilder entity) =>
             CreateFlagStat(This, entity, (o1, o2) => $"apply stats of {o1} to {o2}");
 
-        public IActionBuilder<ISelfBuilder, IEntityBuilder> Cast =>
-            (ISelfToAnyActionBuilder) Create<IActionBuilder, IBuilderCollection<ISkillBuilder>>(
-                (s, r) => new SelfToAnyActionBuilderStub(s, r),
+        public IActionBuilder Cast =>
+            Create<IActionBuilder, IBuilderCollection<ISkillBuilder>>(
+                ActionBuilderStub.SelfToAny,
                 This, o => $"{o} cast");
     }
 
@@ -140,7 +140,7 @@ namespace PoESkillTree.Computation.Console.Builders
 
         public ISkillBuilderCollection Combine(params ISkillBuilder[] skills) =>
             (ISkillBuilderCollection) Create<IBuilderCollection<ISkillBuilder>, ISkillBuilder>(
-                (s, r) => new SkillBuilderCollectionStub(s, r), 
+                (s, r) => new SkillBuilderCollectionStub(s, r),
                 skills,
                 os => $"[{string.Join(", ", os)}]");
 

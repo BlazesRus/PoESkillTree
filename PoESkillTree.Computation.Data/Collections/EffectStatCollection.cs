@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Data;
 
 namespace PoESkillTree.Computation.Data.Collections
 {
+    /// <summary>
+    /// Collection of <see cref="EffectStatData"/> that allows collection initialization syntax for adding entries.
+    /// </summary>
     public class EffectStatCollection : IEnumerable<EffectStatData>
     {
         private readonly List<EffectStatData> _data = new List<EffectStatData>();

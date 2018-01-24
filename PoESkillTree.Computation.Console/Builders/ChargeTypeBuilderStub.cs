@@ -1,6 +1,7 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Charges;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+﻿using PoESkillTree.Computation.Common.Builders.Actions;
+using PoESkillTree.Computation.Common.Builders.Charges;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -9,8 +10,7 @@ namespace PoESkillTree.Computation.Console.Builders
     {
         private readonly Resolver<IChargeTypeBuilder> _resolver;
 
-        public ChargeTypeBuilderStub(string stringRepresentation, 
-            Resolver<IChargeTypeBuilder> resolver) 
+        public ChargeTypeBuilderStub(string stringRepresentation, Resolver<IChargeTypeBuilder> resolver)
             : base(stringRepresentation)
         {
             _resolver = resolver;
@@ -24,8 +24,10 @@ namespace PoESkillTree.Computation.Console.Builders
 
         public IStatBuilder ChanceToGain => CreateStat(This, o => $"{o} chance to gain");
 
-        public IChargeTypeBuilder Resolve(ResolveContext context) =>
-            _resolver(this, context);
+        public IActionBuilder GainAction =>
+            Create<IActionBuilder, IChargeTypeBuilder>(ActionBuilderStub.SelfToAny, this, b => $"gaining a {b}");
+
+        public IChargeTypeBuilder Resolve(ResolveContext context) => _resolver(this, context);
     }
 
 

@@ -14,64 +14,59 @@ namespace PoESkillTree.Computation.Parsing.Tests
             Assert.IsInstanceOf<IParser<string>>(sut);
         }
 
-        [Test]
-        public void TryParsePassesResultOnUnchanged()
-        {
-            var innerMock = new Mock<IParser<string>>();
-            var result = "result";
-            string _;
-            innerMock.Setup(p => p.TryParse("stat", out _, out result));
-            var sut = new StatNormalizingParser<string>(innerMock.Object);
-
-            sut.TryParse("stat", out var _, out var actual);
-
-            Assert.AreEqual("result", actual);
-        }
-
-        [Test]
-        public void TryParsePassesRemainingOnUnchanged()
-        {
-            var innerMock = new Mock<IParser<string>>();
-            var remaining = "remaining";
-            string _;
-            innerMock.Setup(p => p.TryParse("stat", out remaining, out _));
-            var sut = new StatNormalizingParser<string>(innerMock.Object);
-
-            sut.TryParse("stat", out var actual, out var _);
-
-            Assert.AreEqual("remaining", actual);
-        }
-
         [TestCase(true, ExpectedResult = true)]
         [TestCase(false, ExpectedResult = false)]
-        public bool TryParseReturnsInnerReturn(bool innerReturn)
+        public bool TryParsePassesSuccessfullyParsed(bool innerSuccess)
         {
-            var innerMock = new Mock<IParser<string>>();
-            string _;
-            innerMock.Setup(p => p.TryParse("stat", out _, out _))
-                .Returns(innerReturn);
-            var sut = new StatNormalizingParser<string>(innerMock.Object);
+            var inner = Mock.Of<IParser<string>>(p =>
+                p.Parse("stat") == new ParseResult<string>(innerSuccess, default, default));
+            var sut = new StatNormalizingParser<string>(inner);
 
-            var actual = sut.TryParse("stat", out var _, out var _);
+            var (actual, _, _) = sut.Parse("stat");
 
             return actual;
         }
 
-        [TestCase("StAt In wEirD CaseS", "stat in weird cases")]
+        [Test]
+        public void TryParsePassesRemainingd()
+        {
+            const string expected = "remaining";
+            var inner = Mock.Of<IParser<string>>(p =>
+                p.Parse("stat") == new ParseResult<string>(default, expected, default));
+            var sut = new StatNormalizingParser<string>(inner);
+
+            var (_, actual, _) = sut.Parse("stat");
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void TryParsePassesResul()
+        {
+            const string expected = "result";
+            var inner = Mock.Of<IParser<string>>(p =>
+                p.Parse("stat") == new ParseResult<string>(default, default, expected));
+            var sut = new StatNormalizingParser<string>(inner);
+
+            var (_, _, actual) = sut.Parse("stat");
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase("StAt In wEirD CaseS", "StAt In wEirD CaseS")]
         [TestCase(" white-space enclosed ", "white-space enclosed")]
         [TestCase("many\n  \t spaces", "many spaces")]
         [TestCase(" \n\t\r", "")]
-        [TestCase(" A\n lot Of\t\t pOinTleSS   White-space\t",
-            "a lot of pointless white-space")]
+        [TestCase(" A\n lot Of\t\t pointless   White-space\t",
+            "A lot Of pointless White-space")]
         public void TryParseNormalizesStat(string input, string expected)
         {
             var innerMock = new Mock<IParser<string>>();
             var sut = new StatNormalizingParser<string>(innerMock.Object);
 
-            sut.TryParse(input, out var _, out var _);
+            sut.Parse(input);
 
-            string _;
-            innerMock.Verify(p => p.TryParse(expected, out _, out _));
+            innerMock.Verify(p => p.Parse(expected));
         }
     }
 }

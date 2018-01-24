@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
+using PoESkillTree.Computation.Common.Builders.Forms;
+using PoESkillTree.Computation.Common.Builders.Values;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders.Forms;
-using PoESkillTree.Computation.Parsing.Builders.Values;
 
 namespace PoESkillTree.Computation.Data.Tests.Collections
 {
@@ -49,8 +49,8 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
 
             var data = _sut.Single();
             Assert.AreEqual("regex", data.Regex);
-            Assert.IsInstanceOf<ModifierBuilderStub>(data.ModifierResult);
-            var builder = (ModifierBuilderStub) data.ModifierResult;
+            Assert.IsInstanceOf<ModifierBuilderStub>(data.Modifier);
+            var builder = (ModifierBuilderStub) data.Modifier;
             Assert.That(builder.Forms, Has.Exactly(1).SameAs(form));
             Assert.AreEqual(1, builder.Values.Count());
             Assert.AreSame(value, builder.Values.Single());
@@ -67,8 +67,8 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
 
             var data = _sut.Single();
             Assert.AreEqual("regex", data.Regex);
-            Assert.IsInstanceOf<ModifierBuilderStub>(data.ModifierResult);
-            var builder = (ModifierBuilderStub) data.ModifierResult;
+            Assert.IsInstanceOf<ModifierBuilderStub>(data.Modifier);
+            var builder = (ModifierBuilderStub) data.Modifier;
             Assert.That(builder.Forms, Has.Exactly(1).SameAs(form));
             Assert.AreEqual(1, builder.Values.Count());
             Assert.AreSame(value, builder.Values.Single());

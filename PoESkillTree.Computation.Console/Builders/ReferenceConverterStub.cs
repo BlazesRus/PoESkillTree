@@ -1,11 +1,11 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Actions;
-using PoESkillTree.Computation.Parsing.Builders.Charges;
-using PoESkillTree.Computation.Parsing.Builders.Damage;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Builders.Equipment;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+﻿using PoESkillTree.Computation.Common.Builders.Actions;
+using PoESkillTree.Computation.Common.Builders.Charges;
+using PoESkillTree.Computation.Common.Builders.Damage;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Builders.Equipment;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Skills;
+using PoESkillTree.Computation.Common.Builders.Stats;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
@@ -18,6 +18,10 @@ namespace PoESkillTree.Computation.Console.Builders
         {
             _resolver = resolver;
         }
+
+        /*
+         * When the objects returned by these properties are resolved, the new objects are retrieved from the context.
+         */
 
         public IDamageTypeBuilder AsDamageType =>
             new DamageTypeBuilderStub($"{this}.AsDamageType", (_, context) => Resolve(context).AsDamageType);
@@ -34,8 +38,8 @@ namespace PoESkillTree.Computation.Console.Builders
         public IItemSlotBuilder AsItemSlot =>
             new ItemSlotBuilderStub($"{this}.AsItemSlot", (_, context) => Resolve(context).AsItemSlot);
 
-        public ISelfToAnyActionBuilder AsAction =>
-            new SelfToAnyActionBuilderStub($"{this}.AsAction", (_, context) => Resolve(context).AsAction);
+        public IActionBuilder AsAction =>
+            ActionBuilderStub.SelfToAny($"{this}.AsAction", (_, context) => Resolve(context).AsAction);
 
         public IStatBuilder AsStat =>
             new StatBuilderStub($"{this}.AsStat", (_, context) => Resolve(context).AsStat);

@@ -1,9 +1,9 @@
-﻿using PoESkillTree.Computation.Parsing.Builders;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Entities;
-using PoESkillTree.Computation.Parsing.Builders.Equipment;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
+﻿using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Entities;
+using PoESkillTree.Computation.Common.Builders.Equipment;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Skills;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -12,7 +12,7 @@ namespace PoESkillTree.Computation.Console.Builders
     {
         private readonly Resolver<IConditionBuilder> _resolver;
 
-        public ConditionBuilderStub(string stringRepresentation, Resolver<IConditionBuilder> resolver) 
+        public ConditionBuilderStub(string stringRepresentation, Resolver<IConditionBuilder> resolver)
             : base(stringRepresentation)
         {
             _resolver = resolver;
@@ -51,7 +51,7 @@ namespace PoESkillTree.Computation.Console.Builders
         public IConditionBuilder BaseValueComesFrom(IEquipmentBuilder equipment) =>
             CreateCondition(equipment, o => $"If base value comes from {o}");
 
-        public IConditionBuilder Unique(string name = "$0") =>
+        public IConditionBuilder Unique(string name) =>
             CreateCondition(name);
 
         public IConditionBuilder True =>

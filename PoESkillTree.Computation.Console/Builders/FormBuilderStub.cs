@@ -1,5 +1,5 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Forms;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
+﻿using PoESkillTree.Computation.Common.Builders.Forms;
+using PoESkillTree.Computation.Common.Builders.Resolving;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
@@ -13,15 +13,13 @@ namespace PoESkillTree.Computation.Console.Builders
             _resolver = resolver;
         }
 
-        public IFormBuilder Resolve(ResolveContext context) =>
-            _resolver(this, context);
+        public IFormBuilder Resolve(ResolveContext context) => _resolver(this, context);
     }
 
 
     public class FormBuildersStub : IFormBuilders
     {
-        private static IFormBuilder Create(string s)
-            => new FormBuilderStub(s, (c, _) => c);
+        private static IFormBuilder Create(string s) => new FormBuilderStub(s, (c, _) => c);
 
         public IFormBuilder BaseSet => Create("Base set");
         public IFormBuilder PercentIncrease => Create("Percent increase");
@@ -31,8 +29,8 @@ namespace PoESkillTree.Computation.Console.Builders
         public IFormBuilder PercentLess => Create("Percent less");
         public IFormBuilder BaseSubtract => Create("Base subtract");
         public IFormBuilder TotalOverride => Create("Total override");
+        public IFormBuilder BaseOverride => Create("Base override");
         public IFormBuilder MinBaseAdd => Create("Minimum base add");
         public IFormBuilder MaxBaseAdd => Create("Maximum base add");
-        public IFormBuilder MaximumAdd => Create("Maximum add");
     }
 }

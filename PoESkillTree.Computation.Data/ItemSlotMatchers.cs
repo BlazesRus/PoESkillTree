@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.Common.Model.Items.Enums;
+using PoESkillTree.Computation.Common.Builders.Equipment;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Base;
-using PoESkillTree.Computation.Parsing.Builders.Equipment;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// <see cref="IReferencedMatchers"/> implementation for <see cref="IItemSlotBuilder"/>s.
+    /// </summary>
     public class ItemSlotMatchers : ReferencedMatchersBase<IItemSlotBuilder>
     {
         private readonly IItemSlotBuilders _itemSlotBuilders;

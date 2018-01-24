@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using PoESkillTree.Computation.Common.Builders.Actions;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders.Actions;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// <see cref="IReferencedMatchers"/> implementation for <see cref="IActionBuilder"/>s.
+    /// </summary>
     public class ActionMatchers : ReferencedMatchersBase<IActionBuilder>
     {
         private IActionBuilders Action { get; }

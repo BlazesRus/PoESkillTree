@@ -10,11 +10,27 @@ namespace PoESkillTree.Computation.IntegrationTests
         [Test]
         public void ReferencesAreValid()
         {
-            var compositionRoot = new CompositionRoot();
-            var referencedMatchers = compositionRoot.ReferencedMatchers;
-            var statMatchers = compositionRoot.StatMatchers;
+            var parsingData = Program.CreateParsingData();
+            var referencedMatchers = parsingData.ReferencedMatchers;
+            var statMatchers = parsingData.StatMatchers;
 
             Assert.DoesNotThrow(() => ReferenceValidator.Validate(referencedMatchers, statMatchers));
+        }
+
+        [Test]
+        public void ReferencedMatchersHaveCorrectlyTypedData()
+        {
+            var parsingData = Program.CreateParsingData();
+            var referencedMatchers = parsingData.ReferencedMatchers;
+
+            foreach (var matchers in referencedMatchers)
+            {
+                var type = matchers.MatchType;
+                foreach (var data in matchers)
+                {
+                    Assert.IsInstanceOf(type, data.Match);
+                }
+            }
         }
     }
 }

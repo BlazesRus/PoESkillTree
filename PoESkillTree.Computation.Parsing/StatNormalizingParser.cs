@@ -2,10 +2,14 @@
 
 namespace PoESkillTree.Computation.Parsing
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Decorating parser that normalizes the input stat before passing it to the decorated parser.
+    /// <para>Normalizing means converting trimming and replacing all whitespace sequences by a single space.
+    /// </para>
+    /// </summary>
     public class StatNormalizingParser<TResult> : IParser<TResult>
     {
-        private static readonly Regex WhitespaceRegex = new Regex(@"\s+");
-
         private readonly IParser<TResult> _inner;
 
         public StatNormalizingParser(IParser<TResult> inner)
@@ -13,11 +17,10 @@ namespace PoESkillTree.Computation.Parsing
             _inner = inner;
         }
 
-        public bool TryParse(string stat, out string remaining, out TResult result)
+        public ParseResult<TResult> Parse(string stat)
         {
-            var processed = stat.ToLowerInvariant().Trim();
-            processed = WhitespaceRegex.Replace(processed, " ");
-            return _inner.TryParse(processed, out remaining, out result);
+            var processed = Regex.Replace(stat.Trim(), @"\s+", " ");
+            return _inner.Parse(processed);
         }
     }
 }

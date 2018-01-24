@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Data;
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// <see cref="IReferencedMatchers"/> implementation for <see cref="IAilmentBuilder"/>s.
+    /// </summary>
     public class AilmentMatchers : ReferencedMatchersBase<IAilmentBuilder>
     {
         private IAilmentBuilders Ailment { get; }

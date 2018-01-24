@@ -1,11 +1,11 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Actions;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+﻿using PoESkillTree.Computation.Common.Builders.Actions;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
 {
-    public class StatBuildersStub :  IStatBuilders
+    public class StatBuildersStub : IStatBuilders
     {
         public IStatBuilder Armour => CreateStat("Armour");
 
@@ -24,7 +24,7 @@ namespace PoESkillTree.Computation.Console.Builders
         public IStatBuilder ItemQuantity => CreateStat("Item Quantity");
         public IStatBuilder ItemRarity => CreateStat("Item Rarity");
 
-        public IStatBuilder PrimordialJewelsSocketed => CreateStat("Socketed Primoridal jewels");
+        public IStatBuilder PrimordialJewelsSocketed => CreateStat("Socketed Primordial jewels");
         public IStatBuilder GrandSpectrumJewelsSocketed => CreateStat("Socketed Grand Spectrum jewels");
 
         public IStatBuilder RampageStacks => CreateStat("Rampage Stacks");
@@ -40,7 +40,7 @@ namespace PoESkillTree.Computation.Console.Builders
         public IStatBuilder ApplyOnce(params IStatBuilder[] stats) =>
             CreateStat(stats, os => $"ApplyOnce({string.Join(", ", os)})");
 
-        public IStatBuilder Unique(string name = "$0") => CreateStat(name);
+        public IStatBuilder Unique(string name) => CreateStat(name);
     }
 
 
@@ -75,7 +75,7 @@ namespace PoESkillTree.Computation.Console.Builders
     }
 
 
-    public class GemStatBuildersStub :  IGemStatBuilders
+    public class GemStatBuildersStub : IGemStatBuilders
     {
         public IStatBuilder IncreaseLevel(bool onlySupportGems = false) =>
             CreateStat(onlySupportGems ? "Level of socketed support gems" : "Level of socketed gems");
@@ -89,8 +89,7 @@ namespace PoESkillTree.Computation.Console.Builders
 
         public IStatBuilder PierceCount => CreateStat("Projectile pierce count");
 
-        public ISelfToAnyActionBuilder Pierce =>
-            new SelfToAnyActionBuilderStub("Projectile pierce", (c, _) => c);
+        public IActionBuilder Pierce => ActionBuilderStub.SelfToAny("Projectile pierce", (c, _) => c);
 
         public IStatBuilder ChainCount => CreateStat("Projectile chain count");
         public IStatBuilder TravelDistance => CreateStat("Projectile travel distance");

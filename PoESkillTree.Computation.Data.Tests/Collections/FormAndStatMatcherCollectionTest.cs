@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Forms;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
 using PoESkillTree.Computation.Data.Collections;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Forms;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
 
 namespace PoESkillTree.Computation.Data.Tests.Collections
 {
@@ -123,29 +123,12 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
 
             var data = _sut.Single();
             Assert.AreEqual(Regex, data.Regex);
-            Assert.IsInstanceOf<ModifierBuilderStub>(data.ModifierResult);
-            var builder = (ModifierBuilderStub) data.ModifierResult;
+            Assert.IsInstanceOf<ModifierBuilderStub>(data.Modifier);
+            var builder = (ModifierBuilderStub) data.Modifier;
             Assert.That(builder.Forms, Has.Exactly(1).SameAs(form));
             Assert.That(builder.Values, Has.Exactly(1).SameAs(value));
             Assert.That(builder.Stats, Has.Exactly(1).SameAs(stat));
             Assert.AreEqual("substitution", data.MatchSubstitution);
-        }
-
-        [Test]
-        public void AddWithConverter()
-        {
-            var form = Mock.Of<IFormBuilder>();
-            var value = new ValueBuilder(Mock.Of<IValueBuilder>());
-            var stat = Mock.Of<IStatBuilder>();
-            var converter = _valueFactory.SetupConverter();
-
-            _sut.Add(Regex, form, value, stat, converter);
-
-            var builder = _sut.AssertSingle(Regex);
-            Assert.That(builder.Forms, Has.Exactly(1).SameAs(form));
-            Assert.That(builder.Values, Has.Exactly(1).SameAs(value));
-            Assert.That(builder.Stats, Has.Exactly(1).SameAs(stat));
-            Assert.AreSame(converter, builder.ValueConverter);
         }
 
         [Test]
@@ -173,16 +156,14 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
             var value = Mock.Of<IValueBuilder>();
             var valueBuilder = new ValueBuilder(value);
             _valueFactory.Setup(v => v.Create(5)).Returns(value);
-            var converter = _valueFactory.SetupConverter();
 
             _sut.Add(Regex, form, 5, stat);
             _sut.Add(Regex, form, valueBuilder, stat, stat);
             _sut.Add(Regex, form, 5, new[] {stat, stat});
             _sut.Add(Regex, form, valueBuilder, stat, "substitution");
-            _sut.Add(Regex, form, valueBuilder, stat, converter);
             _sut.Add(Regex, (form, form), (valueBuilder, valueBuilder), stat);
 
-            Assert.AreEqual(6, _sut.Count());
+            Assert.AreEqual(5, _sut.Count());
         }
     }
 }

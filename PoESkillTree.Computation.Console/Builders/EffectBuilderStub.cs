@@ -1,8 +1,8 @@
-﻿using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Effects;
-using PoESkillTree.Computation.Parsing.Builders.Entities;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
+﻿using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Effects;
+using PoESkillTree.Computation.Common.Builders.Entities;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Stats;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -50,8 +50,7 @@ namespace PoESkillTree.Computation.Console.Builders
 
     public abstract class AvoidableEffectBuilderStub : EffectBuilderStub, IAvoidableEffectBuilder
     {
-        protected AvoidableEffectBuilderStub(string stringRepresentation, 
-            Resolver<IEffectBuilder> resolver) 
+        protected AvoidableEffectBuilderStub(string stringRepresentation, Resolver<IEffectBuilder> resolver) 
             : base(stringRepresentation, resolver)
         {
         }

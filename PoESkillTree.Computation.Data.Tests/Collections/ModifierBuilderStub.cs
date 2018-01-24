@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Forms;
-using PoESkillTree.Computation.Parsing.Builders.Stats;
-using PoESkillTree.Computation.Parsing.Builders.Values;
-using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Forms;
+using PoESkillTree.Computation.Common.Builders.Modifiers;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
 
 namespace PoESkillTree.Computation.Data.Tests.Collections
 {
-    internal class ModifierBuilderStub : IModifierBuilder, IModifierResult
+    internal class ModifierBuilderStub : IModifierBuilder, IIntermediateModifier
     {
         internal IEnumerable<IConditionBuilder> Conditions { get; private set; }
         internal IEnumerable<IFormBuilder> Forms { get; private set; }
         internal IEnumerable<IStatBuilder> Stats { get; private set; }
         internal IEnumerable<IValueBuilder> Values { get; private set; }
 
-        public IReadOnlyList<ModifierResultEntry> Entries => throw new InvalidOperationException();
+        public IReadOnlyList<IntermediateModifierEntry> Entries => throw new InvalidOperationException();
 
         public Func<IStatBuilder, IStatBuilder> StatConverter { get; private set; }
         public Func<IValueBuilder, IValueBuilder> ValueConverter { get; private set; }
@@ -130,7 +130,7 @@ namespace PoESkillTree.Computation.Data.Tests.Collections
             return ret;
         }
 
-        public IModifierResult Build()
+        public IIntermediateModifier Build()
         {
             return this;
         }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using PoESkillTree.Computation.Parsing.Data;
-using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using PoESkillTree.Computation.Common.Builders.Modifiers;
+using PoESkillTree.Computation.Common.Data;
 
 namespace PoESkillTree.Computation.Parsing.Tests
 {
@@ -16,11 +16,13 @@ namespace PoESkillTree.Computation.Parsing.Tests
         [TestCase("abc", ExpectedResult = true)]
         [TestCase("xabx", ExpectedResult = true)]
         [TestCase("a", ExpectedResult = false)]
-        public bool TryParseReturnsCorrectResult(string stat)
+        public bool TryParseReturnsCorrectSuccessfullyParsed(string stat)
         {
             var sut = DefaultSut;
 
-            return sut.TryParse(stat, out var _, out var _);
+            var (actual, _, _) = sut.Parse(stat);
+
+            return actual;
         }
 
         [TestCase("ac", ExpectedResult = "")]
@@ -29,13 +31,13 @@ namespace PoESkillTree.Computation.Parsing.Tests
         [TestCase("test a b stuff", ExpectedResult = "test  stuff")]
         [TestCase("abc", ExpectedResult = "ac")]
         [TestCase("xabx", ExpectedResult = "xax")]
-        public string TryParseOutputsCorrectRemaining(string stat)
+        public string TryParseReturnsCorrectRemaining(string stat)
         {
             var sut = DefaultSut;
 
-            sut.TryParse(stat, out var remaining, out var _);
+            var (_, actual, _) = sut.Parse(stat);
 
-            return remaining;
+            return actual;
         }
 
         [TestCase("ac", 0)]
@@ -44,19 +46,20 @@ namespace PoESkillTree.Computation.Parsing.Tests
         [TestCase("test a b stuff", 1)]
         [TestCase("abc", 2)]
         [TestCase("xabx", 2)]
-        public void TryParseOutputsCorrectModifierBuilder(string stat, int matcherDataIndex)
+        public void TryParseReturnsCorrectModififer(string stat, int matcherDataIndex)
         {
-            var expected = DefaultMatcherData[matcherDataIndex].ModifierResult;
+            var expected = DefaultMatcherData[matcherDataIndex].Modifier;
             var sut = DefaultSut;
 
-            sut.TryParse(stat, out var _, out var result);
+            var (_, _, result) = sut.Parse(stat);
 
-            Assert.AreEqual(expected, result.ModifierResult);
+            var actual = result.Modifier;
+            Assert.AreEqual(expected, actual);
         }
 
         [TestCase("ac", new[] {"ac", "c"})]
         [TestCase("a c", new[] {"a c", " c"})]
-        public void TryParseOutputsCorrectGroups(string stat, string[] groups)
+        public void TryParseReturnsCorrectGroups(string stat, string[] groups)
         {
             var expected = new Dictionary<string, string>
             {
@@ -66,23 +69,24 @@ namespace PoESkillTree.Computation.Parsing.Tests
             };
             var sut = DefaultSut;
 
-            sut.TryParse(stat, out var _, out var result);
+            var (_, _, result) = sut.Parse(stat);
 
-            CollectionAssert.AreEqual(expected, result.Groups);
+            var actual = result.RegexGroups;
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestCase("a b", "a b")]
         [TestCase("test a b stuff", "a b")]
         [TestCase("abc", "ab")]
         [TestCase("xabx", "ab")]
-        public void TryParseOutputsOnlFullGroupCorrectly(string stat, string fullGroup)
+        public void TryParseReturnsCorrectFullGrouo(string stat, string fullGroup)
         {
             var sut = DefaultSut;
 
-            sut.TryParse(stat, out var _, out var result);
-            var groups = result.Groups;
+            var (_, _, result) = sut.Parse(stat);
 
-            Assert.That(groups, Has.Exactly(1).Items.EqualTo(new KeyValuePair<string, string>("0", fullGroup)));
+            var actual = result.RegexGroups;
+            Assert.That(actual, Has.Exactly(1).Items.EqualTo(new KeyValuePair<string, string>("0", fullGroup)));
         }
 
         private static readonly MatcherData[] DefaultMatcherData =
@@ -96,7 +100,7 @@ namespace PoESkillTree.Computation.Parsing.Tests
 
         private static MatcherData CreateMatcherData(string regex, string matchSubstitution = "")
         {
-            var modifierResult = Mock.Of<IModifierResult>();
+            var modifierResult = Mock.Of<IIntermediateModifier>();
             return new MatcherData(regex, modifierResult, matchSubstitution);
         }
     }

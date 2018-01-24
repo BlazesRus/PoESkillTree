@@ -1,11 +1,14 @@
 using PoESkillTree.Computation.Data.Base;
 using PoESkillTree.Computation.Data.Collections;
 using System.Collections.Generic;
-using PoESkillTree.Computation.Parsing.Builders.Skills;
-using PoESkillTree.Computation.Parsing.Data;
+using PoESkillTree.Computation.Common.Builders.Skills;
+using PoESkillTree.Computation.Common.Data;
 
 namespace PoESkillTree.Computation.Data
 {
+    /// <summary>
+    /// <see cref="IReferencedMatchers"/> implementation for <see cref="IKeywordBuilder"/>s.
+    /// </summary>
     public class KeywordMatchers : ReferencedMatchersBase<IKeywordBuilder>
     {
         private IKeywordBuilders Keyword { get; }

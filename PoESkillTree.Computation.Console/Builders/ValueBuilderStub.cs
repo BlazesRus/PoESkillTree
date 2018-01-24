@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using PoESkillTree.Computation.Parsing.Builders.Conditions;
-using PoESkillTree.Computation.Parsing.Builders.Matching;
-using PoESkillTree.Computation.Parsing.Builders.Values;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Resolving;
+using PoESkillTree.Computation.Common.Builders.Values;
 using static PoESkillTree.Computation.Console.Builders.BuilderFactory;
 
 namespace PoESkillTree.Computation.Console.Builders
@@ -52,9 +52,9 @@ namespace PoESkillTree.Computation.Console.Builders
         public IValueBuilder AsDivisor(double dividend) =>
             CreateValue(This, o => $"({dividend} / {o})");
 
-        public IValueBuilder Rounded => CreateValue(This, o => $"Round({o})");
-        public IValueBuilder Floored => CreateValue(This, o => $"Floor({o})");
-        public IValueBuilder Ceiled => CreateValue(This, o => $"Ceil({o})");
+        public IValueBuilder Round => CreateValue(This, o => $"Round({o})");
+        public IValueBuilder Floor => CreateValue(This, o => $"Floor({o})");
+        public IValueBuilder Ceiling => CreateValue(This, o => $"Ceiling({o})");
 
         public IValueBuilder Resolve(ResolveContext context) =>
             _resolver(this, context);
@@ -102,8 +102,7 @@ namespace PoESkillTree.Computation.Console.Builders
                         (current, _) => current);
                 }
 
-                return new ConditionalValueBuilder($"{this} else if ({value})",
-                    (_, context) => Resolve(context));
+                return new ConditionalValueBuilder($"{this} else if ({value})", (_, context) => Resolve(context));
             }
 
             public IConditionalValueBuilder Then(double value)
@@ -115,8 +114,7 @@ namespace PoESkillTree.Computation.Console.Builders
                         (current, _) => current);
                 }
 
-                return new ConditionalValueBuilder($"{this} else if ({value})",
-                    (_, context) => Resolve(context));
+                return new ConditionalValueBuilder($"{this} else if ({value})", (_, context) => Resolve(context));
             }
 
             public IThenBuilder Resolve(ResolveContext context) =>
@@ -128,9 +126,7 @@ namespace PoESkillTree.Computation.Console.Builders
         {
             private readonly Resolver<IConditionalValueBuilder> _resolver;
 
-            public ConditionalValueBuilder(
-                string stringRepresentation,
-                Resolver<IConditionalValueBuilder> resolver)
+            public ConditionalValueBuilder(string stringRepresentation, Resolver<IConditionalValueBuilder> resolver)
                 : base(stringRepresentation)
             {
                 _resolver = resolver;

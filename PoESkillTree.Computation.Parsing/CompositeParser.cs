@@ -1,34 +1,54 @@
-﻿using System.Collections.Generic;
-using PoESkillTree.Computation.Parsing.Steps;
+﻿using System;
+using System.Collections.Generic;
+using PoESkillTree.Computation.Common.Data;
 
 namespace PoESkillTree.Computation.Parsing
 {
-    public class CompositeParser<TInnerResult> : IParser<IReadOnlyList<TInnerResult>>
+    /// <inheritdoc />
+    /// <summary>
+    /// Parser that uses <see cref="IStepper{TStep}"/>s to add results of multiple parsers (one for each step) into
+    /// a list until a completed step is reached.
+    /// <para> The <see cref="IStepper{TStep}"/> is used like a state machine. At each step, the parser for the
+    /// current step is executed and the returned value is used as a (boolean) state transition.
+    /// </para>
+    /// <para> The results of successful parses are added to a list that is returned at the end. The output remaining of 
+    /// one step serves as the input stat of the next. The last step's remaining is used as the method's output.
+    /// <see cref="Parse"/> returns <see cref="ParseResult{T}.SuccessfullyParsed"/> if the Stepper ends in a success
+    /// step.
+    /// </para>
+    /// </summary>
+    public class CompositeParser<TInnerResult, TStep> : IParser<IReadOnlyList<TInnerResult>>
     {
-        private readonly IStep<IParser<TInnerResult>, bool> _initialStep;
+        private readonly IStepper<TStep> _stepper;
+        private readonly Func<TStep, IParser<TInnerResult>> _stepToParserFunc;
 
-        public CompositeParser(IStep<IParser<TInnerResult>, bool> initialStep)
+        public CompositeParser(IStepper<TStep> stepper, Func<TStep, IParser<TInnerResult>> stepToParserFunc)
         {
-            _initialStep = initialStep;
+            _stepper = stepper;
+            _stepToParserFunc = stepToParserFunc;
         }
 
-        public bool TryParse(string stat, out string remaining, out IReadOnlyList<TInnerResult> result)
+        public ParseResult<IReadOnlyList<TInnerResult>> Parse(string stat)
         {
-            var step = _initialStep;
-            remaining = stat;
+            var step = _stepper.InitialStep;
+            var remaining = stat;
             var results = new List<TInnerResult>();
-            while (!step.Completed)
+            while (!_stepper.IsTerminal(step))
             {
-                var parser = step.Current;
-                var parserReturn = parser.TryParse(remaining, out remaining, out var singleResult);
-                if (parserReturn)
+                var (innerSuccess, innerRemaining, innerResult) = _stepToParserFunc(step).Parse(remaining);
+                remaining = innerRemaining;
+                if (innerSuccess)
                 {
-                    results.Add(singleResult);
+                    results.Add(innerResult);
+                    step = _stepper.NextOnSuccess(step);
                 }
-                step = step.Next(parserReturn);
+                else
+                {
+                    step = _stepper.NextOnFailure(step);
+                }
             }
-            result = results;
-            return step.Successful;
+
+            return (_stepper.IsSuccess(step), remaining, results);
         }
     }
 }

@@ -1,18 +1,28 @@
 ﻿using System.Collections.Generic;
-using PoESkillTree.Computation.Parsing.ModifierBuilding;
+using PoESkillTree.Computation.Common.Builders.Modifiers;
 
 namespace PoESkillTree.Computation.Parsing
 {
+    /// <summary>
+    /// The parsing result type used as output of <see cref="MatcherDataParser"/>.
+    /// </summary>
     public class MatcherDataParseResult
     {
-        public MatcherDataParseResult(IModifierResult modifierResult, IReadOnlyDictionary<string, string> groups)
+        public MatcherDataParseResult(IIntermediateModifier modifier, IReadOnlyDictionary<string, string> regexGroups)
         {
-            ModifierResult = modifierResult;
-            Groups = groups;
+            Modifier = modifier;
+            RegexGroups = regexGroups;
         }
 
-        public IModifierResult ModifierResult { get; }
+        /// <summary>
+        /// <see cref="Common.Data.MatcherData.Modifier"/> of the matched <see cref="Common.Data.MatcherData"/>
+        /// </summary>
+        public IIntermediateModifier Modifier { get; }
 
-        public IReadOnlyDictionary<string, string> Groups { get; }
+        /// <summary>
+        /// Regex group names of the matched <see cref="Common.Data.MatcherData"/>'s
+        /// <see cref="Common.Data.MatcherData.Regex"/> and their captured substrings.
+        /// </summary>
+        public IReadOnlyDictionary<string, string> RegexGroups { get; }
     }
 }

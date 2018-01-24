@@ -1,30 +1,26 @@
 ﻿using System.Collections.Generic;
+using PoESkillTree.Common.Utils.Extensions;
 
 namespace PoESkillTree.Computation.Parsing
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Decorating parser that caches results.
+    /// </summary>
     public class CachingParser<T> : IParser<T>
     {
         private readonly IParser<T> _decoratedParser;
 
-        private readonly Dictionary<string, (bool ret, string remaining, T result)> _cache =
-            new Dictionary<string, (bool ret, string remaining, T result)>();
+        private readonly Dictionary<string, ParseResult<T>> _cache = new Dictionary<string, ParseResult<T>>();
 
         public CachingParser(IParser<T> decoratedParser)
         {
             _decoratedParser = decoratedParser;
         }
 
-        public bool TryParse(string stat, out string remaining, out T result)
+        public ParseResult<T> Parse(string stat)
         {
-            if (_cache.TryGetValue(stat, out var cached))
-            {
-                result = cached.result;
-                remaining = cached.remaining;
-                return cached.ret;
-            }
-            var ret = _decoratedParser.TryParse(stat, out remaining, out result);
-            _cache[stat] = (ret, remaining, result);
-            return ret;
+            return _cache.GetOrAdd(stat, _decoratedParser.Parse);
         }
     }
 }
