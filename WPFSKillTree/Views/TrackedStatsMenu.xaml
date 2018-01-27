@@ -1,31 +1,29 @@
-﻿<dialogs:CloseableBaseDialog
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="POESKillTree.TrackedStatViews.TrackedStatsMenu">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>-->
+<dialogs:CloseableBaseDialog
     x:Class="POESKillTree.TrackedStatViews.TrackedStatsMenu"
+    xmlns:local="clr-namespace:POESKillTree.TrackedStatViews"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:l="clr-namespace:POESKillTree.Localization.XAML" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:viewModels="clr-namespace:POESKillTree.ViewModels"
     xmlns:dialogs="clr-namespace:POESKillTree.Controls.Dialogs"
+    xmlns:model="clr-namespace:POESKillTree.Model"
     xmlns:converter="clr-namespace:POESKillTree.Utils.Converter"
-    xmlns:local="clr-namespace:POESKillTree.TrackedStatViews"
-    MaxContentWidth="550">
+    d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
+    MaxContentWidth="750">
     <ContentControl.Resources>
-        <!--<ObjectDataProvider ObjectInstance="{x:Type Brushes}"
-                            MethodName="GetProperties"
-                            x:Key="Brushes" />-->
-        <!--<Style x:Key="BrushComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
-            <Setter Property="ItemsSource" Value="{Binding Source={StaticResource Brushes}}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="SelectedValuePath" Value="Name" />
-            <Setter Property="DisplayMemberPath" Value="Name" />
-            <Setter Property="Foreground" Value="{Binding SelectedValue, RelativeSource={RelativeSource Self}}" />
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                        <Setter Property="Foreground" Value="{Binding Name}" />
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>-->
         <Style x:Key="SectionLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Height" Value="30" />

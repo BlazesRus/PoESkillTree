@@ -1088,7 +1088,7 @@ msgstr ""
 msgid "Build save path"
 msgstr "Название билда"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:61
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:59
 msgid "Change..."
 msgstr ""
 
@@ -1137,25 +1137,26 @@ msgstr "Сбросить пассивные навыки"
 msgid "Reset selected bandits"
 msgstr "Выберите сохраненный билд"
 
-#: Views\TrackedStatsMenu.xaml:52
+#: Views\TrackedStatsMenu.xaml:50
 #, fuzzy
 msgid "TrackedStats Path:"
 msgstr "Загрузить"
 
-#: Views\TrackedStatsMenu.xaml:78
+#: Views\TrackedStatsMenu.xaml:76
+#, fuzzy
 msgid "Load Tracked Stat File Names"
-msgstr ""
+msgstr "Загрузить"
 
-#: Views\TrackedStatsMenu.xaml:88
+#: Views\TrackedStatsMenu.xaml:86
 #, fuzzy
 msgid "Load Tracked Stats from file"
 msgstr "Загрузить"
 
-#: Views\TrackedStatsMenu.xaml:93
+#: Views\TrackedStatsMenu.xaml:91
 msgid "Reset Tracking"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:107
+#: Views\TrackedStatsMenu.xaml:105
 #, fuzzy
 msgid "Save Tracked Stats to FileName:"
 msgstr "Загрузить"

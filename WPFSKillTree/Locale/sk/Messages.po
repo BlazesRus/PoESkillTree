@@ -1056,7 +1056,7 @@ msgstr "Jazyk"
 msgid "Build save path"
 msgstr "Názov zostavy"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:61
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:59
 msgid "Change..."
 msgstr ""
 
@@ -1100,26 +1100,27 @@ msgstr "Resetovať Ascendancy strom zručností"
 msgid "Reset selected bandits"
 msgstr "Resetovať zvolené odmeny banditov"
 
-#: Views\TrackedStatsMenu.xaml:52
+#: Views\TrackedStatsMenu.xaml:50
 #, fuzzy
 msgid "TrackedStats Path:"
 msgstr "Resetovať nastavenia"
 
-#: Views\TrackedStatsMenu.xaml:78
+#: Views\TrackedStatsMenu.xaml:76
+#, fuzzy
 msgid "Load Tracked Stat File Names"
-msgstr ""
+msgstr "Načítať strom"
 
-#: Views\TrackedStatsMenu.xaml:88
+#: Views\TrackedStatsMenu.xaml:86
 #, fuzzy
 msgid "Load Tracked Stats from file"
 msgstr "Načítať strom"
 
-#: Views\TrackedStatsMenu.xaml:93
+#: Views\TrackedStatsMenu.xaml:91
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "Resetovať nastavenia"
 
-#: Views\TrackedStatsMenu.xaml:107
+#: Views\TrackedStatsMenu.xaml:105
 #, fuzzy
 msgid "Save Tracked Stats to FileName:"
 msgstr "Načítať strom"

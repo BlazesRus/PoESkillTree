@@ -557,6 +557,9 @@
     <Compile Include="Views\Equipment\DownloadItemsWindow.xaml.cs">
       <DependentUpon>DownloadItemsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TrackedStatsMenu.xaml.cs">
+      <DependentUpon>TrackedStatsMenu.xaml</DependentUpon>
+    </Compile>
     <Page Include="Contrib\Monotone\Styles\ExtendedWPFToolkit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -756,8 +759,7 @@
     <Compile Include="SkillTreeFiles\TrackedAttributes.cs" />
     <Compile Include="ViewModels\TrackedStatsMenuModel.cs" />
     <Page Include="Views\TrackedStatsMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

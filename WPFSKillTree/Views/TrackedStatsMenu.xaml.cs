@@ -1,4 +1,6 @@
-﻿using POESKillTree.TreeGenerator.Model.PseudoAttributes;
+﻿//using Xamarin.Forms;
+//using Xamarin.Forms.Xaml;
+using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +25,7 @@ namespace POESKillTree.TrackedStatViews
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var str = value as string;
-            if(GlobalSettings.StatTrackingSavePath==null)
+            if (GlobalSettings.StatTrackingSavePath == null)
             {
                 string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
                 GlobalSettings.DefaultTrackingDir = DefaultTrackingDir;
@@ -77,7 +79,6 @@ namespace POESKillTree.TrackedStatViews
             return lines.ToArray();
         }
     }
-
 
     public class StringData : INotifyPropertyChanged
     {
@@ -172,18 +173,21 @@ namespace POESKillTree.TrackedStatViews
         #endregion Operator Functionality
     }
 
+
+    //    [XamlCompilation(XamlCompilationOptions.Compile)]
+    //    public partial class TrackedStatsMenu : ContentPage
     /// <summary>
     /// Interaction logic for TrackedStatsMenu.xaml
     /// </summary>
     public partial class TrackedStatsMenu : INotifyPropertyChanged
     {
-        private string _TrackedStatSaveFile= "CurrentTrackedAttributes.txt";
+        private string _TrackedStatSaveFile = "CurrentTrackedAttributes.txt";
 
         public string TrackedStatSaveFile
         {
             get
             {
-                if(_TrackedStatSaveFile==null)
+                if (_TrackedStatSaveFile == null)
                 {
                     return "CurrentTrackedAttributes.txt";
                 }
@@ -225,7 +229,7 @@ namespace POESKillTree.TrackedStatViews
             }
         }
 
-        public static string FallbackValue = GlobalSettings.StatTrackingSavePath == null? Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar+ "CurrentTrackedAttributes.txt") : Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
+        public static string FallbackValue = GlobalSettings.StatTrackingSavePath == null ? Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt") : Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
 
         private static string _CurrentTrackedFile = FallbackValue;
 
@@ -328,13 +332,13 @@ namespace POESKillTree.TrackedStatViews
                 }
             }
             string FileToSaveTo;
-            if(TrackedStatSaveFile.Contains(Path.DirectorySeparatorChar))
+            if (TrackedStatSaveFile.Contains(Path.DirectorySeparatorChar))
             {
                 FileToSaveTo = TrackedStatSaveFile;
             }
-            else if(!TrackedStatSaveFile.Contains("."))
+            else if (!TrackedStatSaveFile.Contains("."))
             {
-                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile+".txt");
+                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile + ".txt");
             }
             else
             {
@@ -378,7 +382,7 @@ namespace POESKillTree.TrackedStatViews
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void LoadTrackedStatFileNamesAsync(object sender, RoutedEventArgs e)
-        { 
+        {
             //SLightly async version of Getting files from http://writeasync.net/?p=2621
             // Avoid blocking the caller for the initial enumerate call.
             await Task.Yield();
@@ -406,7 +410,7 @@ namespace POESKillTree.TrackedStatViews
                 List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
                 foreach (PseudoAttribute item in PsList)
                 {
-                    if(GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
+                    if (GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
                     {
                         if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
                         {
