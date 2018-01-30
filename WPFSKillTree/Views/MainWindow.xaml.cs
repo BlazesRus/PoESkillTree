@@ -1208,6 +1208,7 @@ namespace POESKillTree.Views
             UpdateStatistics();
             UpdateClass();
             UpdatePoints();
+            IntuitiveLeapCheckup();
         }
 
         public void UpdateAllAttributeList()
@@ -1335,6 +1336,17 @@ namespace POESKillTree.Views
                     a.Missing = true;
                     _attiblist.Add(a);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Apply removal of Intuitive Leap supported jewels
+        /// </summary>
+        public void IntuitiveLeapCheckup()
+        {
+            if(GlobalSettings.RemovingIntLeapJewels!=0)
+            {
+
             }
         }
 

@@ -221,7 +221,7 @@ namespace POESKillTree.SkillTreeFiles
         /// Applies the fake Intuitive Leap Support attribute to nodes in effected area
         /// </summary>
         /// <param name="TargetNode">The target node.</param>
-        static public void ApplyIntuitizeLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
+        static public void ApplyIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
         {
             List<float> BlankList = new List<float>(1);
             BlankList.Add(1.0f);
@@ -252,7 +252,7 @@ namespace POESKillTree.SkillTreeFiles
         /// Removes the fake Intuitive Leap Support attribute to nodes in effected area
         /// </summary>
         /// <param name="TargetNode">The target node.</param>
-        static public void RemoveIntuitizeLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
+        static public void RemoveIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
         {
             string[] ExtendedAttribute;
             int attributeSize;
@@ -388,37 +388,37 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        /// <summary>
-        /// Applies Intuitive Leap support during Attribute-Display mode
-        /// </summary>
-        /// <param name="ItemInfo">The item information.</param>
-        /// <param name="Tree">The tree.</param>
-        static public void IntuitizeLeapUpdater(InventoryViewModel ItemInfo, SkillTree Tree)
-        {
-            ushort NodeID;
-            SkillNode CurrentNode;
-            POESKillTree.Model.Items.Item CurrentJewelData;
-            JewelUpdateData updateData;
+        ///// <summary>
+        ///// Applies Intuitive Leap support during Attribute-Display mode
+        ///// </summary>
+        ///// <param name="ItemInfo">The item information.</param>
+        ///// <param name="Tree">The tree.</param>
+        //static public void IntuitizeLeapUpdater(InventoryViewModel ItemInfo, SkillTree Tree)
+        //{
+        //    ushort NodeID;
+        //    SkillNode CurrentNode;
+        //    POESKillTree.Model.Items.Item CurrentJewelData;
+        //    JewelUpdateData updateData;
 
-            for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
-            {
-                updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
-                NodeID = updateData.NodeID;
-                CurrentNode = updateData.CurrentNode;
-                CurrentJewelData = updateData.CurrentJewelData;
-                if (Tree.SkilledNodes.Contains(CurrentNode))
-                {
-                    if (CurrentJewelData == null)//Jewel Not Equipped
-                    {
-                        continue;
-                    }
-                    if (CurrentJewelData.Name == "Intuitive Leap")
-                    {
-                        ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
-                    }
-                }
-            }
-        }
+        //    for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
+        //    {
+        //        updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
+        //        NodeID = updateData.NodeID;
+        //        CurrentNode = updateData.CurrentNode;
+        //        CurrentJewelData = updateData.CurrentJewelData;
+        //        if (Tree.SkilledNodes.Contains(CurrentNode))
+        //        {
+        //            if (CurrentJewelData == null)//Jewel Not Equipped
+        //            {
+        //                continue;
+        //            }
+        //            if (CurrentJewelData.Name == "Intuitive Leap")
+        //            {
+        //                ConvertedJewelData.ApplyIntuitiveLeapSupport(CurrentNode);
+        //            }
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Updates stats based on Unique Jewels Slotted
@@ -454,7 +454,7 @@ namespace POESKillTree.SkillTreeFiles
                     //}
                     if (CurrentJewelData.Name == "Intuitive Leap")
                     {
-                        ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
+                        ConvertedJewelData.ApplyIntuitiveLeapSupport(CurrentNode);
                     }
                     else if (CurrentJewelData.Name == "Brute Force Solution")
                     {
