@@ -1034,7 +1034,7 @@ msgstr "語言"
 msgid "Build save path"
 msgstr "流派儲存路徑"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:59
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:48
 msgid "Change..."
 msgstr "變更..."
 
@@ -1078,24 +1078,24 @@ msgstr ""
 msgid "Reset selected bandits"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:50
+#: Views\TrackedStatsMenu.xaml:39
 msgid "TrackedStats Path:"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:76
+#: Views\TrackedStatsMenu.xaml:65
 msgid "Load Tracked Stat File Names"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:86
+#: Views\TrackedStatsMenu.xaml:75
 msgid "Load Tracked Stats from file"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:91
+#: Views\TrackedStatsMenu.xaml:80
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "重置設定"
 
-#: Views\TrackedStatsMenu.xaml:105
+#: Views\TrackedStatsMenu.xaml:94
 msgid "Save Tracked Stats to FileName:"
 msgstr ""
 

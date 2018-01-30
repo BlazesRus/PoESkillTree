@@ -1039,7 +1039,7 @@ msgstr "Sprache"
 msgid "Build save path"
 msgstr "Speicherpfad für Builds"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:59
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:48
 msgid "Change..."
 msgstr "Ändern..."
 
@@ -1083,27 +1083,27 @@ msgstr "Setze 'Ascendancy' Fähigkeitenbaum zurück"
 msgid "Reset selected bandits"
 msgstr "Setze ausgewählte Banditen zurück"
 
-#: Views\TrackedStatsMenu.xaml:50
+#: Views\TrackedStatsMenu.xaml:39
 #, fuzzy
 msgid "TrackedStats Path:"
 msgstr "Ersetze Einstellungen für Banditen"
 
-#: Views\TrackedStatsMenu.xaml:76
+#: Views\TrackedStatsMenu.xaml:65
 #, fuzzy
 msgid "Load Tracked Stat File Names"
 msgstr "Lade Fähigkeitenbaum"
 
-#: Views\TrackedStatsMenu.xaml:86
+#: Views\TrackedStatsMenu.xaml:75
 #, fuzzy
 msgid "Load Tracked Stats from file"
 msgstr "Lade Fähigkeitenbaum"
 
-#: Views\TrackedStatsMenu.xaml:91
+#: Views\TrackedStatsMenu.xaml:80
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "Einstellungen zurücksetzen"
 
-#: Views\TrackedStatsMenu.xaml:105
+#: Views\TrackedStatsMenu.xaml:94
 #, fuzzy
 msgid "Save Tracked Stats to FileName:"
 msgstr "Lade Fähigkeitenbaum"

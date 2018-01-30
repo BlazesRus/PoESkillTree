@@ -1013,7 +1013,9 @@ namespace POESKillTree.Views
 
         private async void Menu_OpenSettings(object sender, RoutedEventArgs e)
         {
-            await this.ShowDialogAsync(new SettingsMenuViewModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel), new SettingsMenuWindow());
+            await this.ShowDialogAsync(
+                new SettingsMenuViewModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel),
+                new SettingsMenuWindow());
         }
 
         private async void Menu_LoadTrackedStats(object sender, RoutedEventArgs e)
@@ -1621,32 +1623,6 @@ namespace POESKillTree.Views
             {
                 Tree.DrawAscendancyButton("Highlight");
             }
-            //else if(node!= null&& node.Type== NodeType.JewelSocket)
-            //{//Display info for current socketed Jewel if equipped
-            //    int ID = node.Id;
-            //    string SlotName = ConvertedJewelData.JewelSlotName(ID);
-            //    string ToolTipinfo = "JewelSlotName:" + SlotName;
-            //    Item EquippedJewel = ItemAttributes.ReturnItemByName(SlotName);
-            //    if (EquippedJewel != null)
-            //    {
-            //        ToolTipinfo += "\n " + EquippedJewel.Name + " equipped inside slot.";
-            //        bool HasMods = false;
-            //        foreach (var attriStat in EquippedJewel.Mods)
-            //        {
-            //            if(HasMods==false)
-            //            {
-            //                ToolTipinfo += "\nJewel stats:\n{";
-            //                HasMods = true;
-            //            }
-            //            ToolTipinfo += attriStat.CreateModString();
-            //        }
-            //        if(HasMods)
-            //        {
-            //            ToolTipinfo += "\n}\n";
-            //        }
-            //    }
-            //    sp.Children.Add(ToolTipinfo);
-            //}
             else
             {
                 _sToolTip.Tag = false;
@@ -2187,26 +2163,6 @@ namespace POESKillTree.Views
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedNodes.UnionWith(nodes);
                 Tree.HighlightedAttributes = SkillTree.GetAttributes(nodes, ctype, build.Level, build.Bandits);
-                //if (GlobalSettings.CurrentTrackedAttributes.Count != 0)
-                //{
-                //    List<float> TargetValue;
-                //    GlobalSettings.CurrentTrackedAttributes.UpdateValue(Tree.HighlightedAttributes);
-                //    for (int Index = 0; Index < GlobalSettings.CurrentTrackedAttributes.Count; ++Index)
-                //    {
-                //        if (Tree.HighlightedAttributes.ContainsKey(GlobalSettings.CurrentTrackedAttributes[Index].Name()))
-                //        {
-                //            TargetValue = new List<float>(1);
-                //            TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
-                //            Tree.HighlightedAttributes[GlobalSettings.CurrentTrackedAttributes[Index].Name()] = TargetValue;
-                //        }
-                //        else
-                //        {
-                //            TargetValue = new List<float>(1);
-                //            TargetValue.Add(GlobalSettings.CurrentTrackedAttributes[Index].TotalStat);
-                //            Tree.HighlightedAttributes.Add(GlobalSettings.CurrentTrackedAttributes[Index].Name(), TargetValue);
-                //        }
-                //    }
-                //}
             }
             else
             {
@@ -2259,8 +2215,6 @@ namespace POESKillTree.Views
 
             NoAsyncTaskRunning = true;
         }
-
-        public ICommand OpenTreeGeneratorCommand { get; }
 
         private async Task<TResult> AwaitAsyncTask<TResult>(string infoText, Task<TResult> task)
         {
