@@ -193,7 +193,7 @@ namespace POESKillTree.SkillTreeFiles
                 case "Medium":
                     JewelRadius = 1200;
                     break;
-                case "Small"://Large
+                case "Small":
                     JewelRadius = 800;
                     break;
                 default://"Large"
@@ -237,7 +237,6 @@ namespace POESKillTree.SkillTreeFiles
                 attributeSize = CurrentNode.attributes.Length;
                 if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute) && attributeSize != 0) //&& CurrentNode.ascendancyName =="")
                 {
-                    CurrentNode.Attributes.Add(FakeIntuitiveLeapSupportAttribute, BlankList);
                     ExtendedAttribute = new string[attributeSize + 1];
                     for (int index = 0; index < attributeSize; ++index)
                     {
@@ -245,6 +244,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     ExtendedAttribute[attributeSize] = "+1 IntuitiveLeapSupports";
                     CurrentNode.attributes = ExtendedAttribute;
+                    CurrentNode.Attributes.Add(FakeIntuitiveLeapSupportAttribute, BlankList);
                 }
             }
         }
@@ -295,6 +295,12 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
+        /// <summary>
+        /// Jewels the based stat initial update.
+        /// </summary>
+        /// <param name="JewelIndex">Index of the jewel.</param>
+        /// <param name="ItemInfo">The item information.</param>
+        /// <returns></returns>
         static public JewelUpdateData JewelBasedStatInitialUpdate(int JewelIndex, InventoryViewModel ItemInfo)
         {
             ushort NodeID;
@@ -383,6 +389,38 @@ namespace POESKillTree.SkillTreeFiles
         }
 
         /// <summary>
+        /// Applies Intuitive Leap support during Attribute-Display mode
+        /// </summary>
+        /// <param name="ItemInfo">The item information.</param>
+        /// <param name="Tree">The tree.</param>
+        static public void IntuitizeLeapUpdater(InventoryViewModel ItemInfo, SkillTree Tree)
+        {
+            ushort NodeID;
+            SkillNode CurrentNode;
+            POESKillTree.Model.Items.Item CurrentJewelData;
+            JewelUpdateData updateData;
+
+            for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
+            {
+                updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
+                NodeID = updateData.NodeID;
+                CurrentNode = updateData.CurrentNode;
+                CurrentJewelData = updateData.CurrentJewelData;
+                if (Tree.SkilledNodes.Contains(CurrentNode))
+                {
+                    if (CurrentJewelData == null)//Jewel Not Equipped
+                    {
+                        continue;
+                    }
+                    if (CurrentJewelData.Name == "Intuitive Leap")
+                    {
+                        ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
         /// <param name="attrlist">The attrlist.</param>
@@ -416,7 +454,7 @@ namespace POESKillTree.SkillTreeFiles
                     //}
                     if (CurrentJewelData.Name == "Intuitive Leap")
                     {
-                        //ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
+                        ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
                     }
                     else if (CurrentJewelData.Name == "Brute Force Solution")
                     {
@@ -604,58 +642,198 @@ namespace POESKillTree.SkillTreeFiles
                             }
                         }
                     }
-                    //else if (CurrentJewelData.Name == "Cold Steel")
-                    //{
-                    //    float ColdDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
-                    //    if (ColdDamageTotal != 0) { attrlist["#% increased Cold Damage"][0] -= ColdDamageTotal; }
-                    //    float ColdDamageTotalWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Weapons", Tree.SkilledNodes);
-                    //    if (ColdDamageTotalWeap != 0) { attrlist["#% increased Cold Damage with Weapons"][0] -= ColdDamageTotalWeap; }
-                    //    float ColdDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
-                    //    if (ColdDamageTotalTwoWeap != 0) { attrlist["#% increased Cold Damage with Two Handed Melee Weapons"][0] -= ColdDamageTotalTwoWeap; }
-                    //    //float ColdDamageTotalOneWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with One Handed Melee Weapons", Tree.SkilledNodes);
-                    //    //if (ColdDamageTotalOneWeap != 0) { attrlist["#% increased Cold Damage with One Handed Melee Weapons"][0] -= ColdDamageTotalOneWeap; }
-                    //    float PhysDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes);
-                    //    if (PhysDamageTotal != 0) { attrlist["#% increased Physical Damage"][0] -= PhysDamageTotal; }
-                    //    float PhysDamageTotalWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Weapons", Tree.SkilledNodes);
-                    //    if (PhysDamageTotalWeap != 0) { attrlist["#% increased Physical Damage with Weapons"][0] -= PhysDamageTotalWeap; }
-                    //    float PhysDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
-                    //    if (PhysDamageTotalTwoWeap != 0) { attrlist["#% increased Physical Damage with Two Handed Melee Weapons"][0] -= PhysDamageTotalTwoWeap; }
-                    //    float PhysDamageTotalDual = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
-                    //    if (PhysDamageTotalDual != 0) { attrlist["#% increased Physical Weapon Damage while Dual Wielding"][0] -= PhysDamageTotalDual; }
-                    //    float PhysDamageMelee = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
-                    //    if (PhysDamageMelee != 0) { attrlist["#% increased Melee Physical Damage"][0] -= PhysDamageMelee; }
-                    //    float PhysDamageShield = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
-                    //    if (PhysDamageShield != 0) { attrlist["#% increased Melee Physical Damage while holding a Shield"][0] -= PhysDamageShield; }
-                    //    float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
-                    //    if (PhysDamageMace != 0) { attrlist["#% increased Melee Physical Damage while holding a Shield"][0] -= PhysDamageMace; }
-                    //    float PhysDamageStaves = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
-                    //    if (PhysDamageStaves != 0) { attrlist["#% increased Physical Damage with Staves"][0] -= PhysDamageMace; }
-                    //    //float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
-                    //    //if (PhysDamageMace != 0) { attrlist["#% increased Melee Physical Damage while holding a Shield"][0] -= PhysDamageShield; }
-                    //    if (ColdDamageTotal != 0)
-                    //    {
-                    //        if (attrlist.ContainsKey("#% increased Physical Damage"))
-                    //        {
-                    //            attrlist["#% increased Physical Damage"][0] += ColdDamageTotal;
-                    //        }
-                    //        else
-                    //        {
-                    //            attrlist["#% increased Physical Damage"].Add(ColdDamageTotal);
-                    //        }
-                    //    }
-                    //    if (PhysDamageTotal != 0)
-                    //    {
-                    //        if (attrlist.ContainsKey("#% increased Cold Damage"))
-                    //        {
-                    //            attrlist["#% increased Cold Damage"][0] += PhysDamageTotal;
-                    //        }
-                    //        else
-                    //        {
-                    //            attrlist["#% increased Cold Damage"].Add(PhysDamageTotal);
-                    //        }
-                    //    }
-                    //}
+                    else if (CurrentJewelData.Name == "Cold Steel")
+                    {
+                        float ColdDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        if (ColdDamageTotal != 0) { attrlist["#% increased Cold Damage"][0] -= ColdDamageTotal; }
+                        float ColdDamageTotalAttacks = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
+                        if (ColdDamageTotalAttacks != 0) { attrlist["#% increased Cold Damage with Attack Skills"][0] -= ColdDamageTotalAttacks; }
 
+                        float PhysDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes);
+                        if (PhysDamageTotal != 0) { attrlist["#% increased Physical Damage"][0] -= PhysDamageTotal; }
+
+                        float PhysDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
+                        if (PhysDamageTotalTwoWeap != 0) { attrlist["#% increased Physical Damage with Two Handed Melee Weapons"][0] -= PhysDamageTotalTwoWeap; }
+                        float PhysDamageTotalOneWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
+                        if (PhysDamageTotalOneWeap != 0) { attrlist["#% increased Physical Damage with One Handed Melee Weapons"][0] -= PhysDamageTotalOneWeap; }
+                        float PhysDamageTotalDual = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
+                        if (PhysDamageTotalDual != 0) { attrlist["#% increased Physical Weapon Damage while Dual Wielding"][0] -= PhysDamageTotalDual; }
+                        float PhysDamageMelee = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
+                        if (PhysDamageMelee != 0) { attrlist["#% increased Melee Physical Damage"][0] -= PhysDamageMelee; }
+                        float PhysDamageShield = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
+                        if (PhysDamageShield != 0) { attrlist["#% increased Physical Damage while holding a Shield"][0] -= PhysDamageShield; }
+                        float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
+                        if (PhysDamageMace != 0) { attrlist["#% increased Physical Damage with Maces"][0] -= PhysDamageMace; }
+                        float PhysDamageStaves = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
+                        if (PhysDamageStaves != 0) { attrlist["#% increased Physical Damage with Staves"][0] -= PhysDamageMace; }
+                        float PhysDamageSwords = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
+                        if (PhysDamageSwords != 0) { attrlist["#% increased Physical Damage with Swords"][0] -= PhysDamageSwords; }
+                        float PhysDamageDaggers = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
+                        if (PhysDamageDaggers != 0) { attrlist["#% increased Physical Damage with Daggers"][0] -= PhysDamageDaggers; }
+                        float PhysDamageClaws = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
+                        if (PhysDamageClaws != 0) { attrlist["#% increased Physical Damage with Claws"][0] -= PhysDamageClaws; }
+                        float PhysDamageBows = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
+                        if (PhysDamageBows != 0) { attrlist["#% increased Physical Damage with Bows"][0] -= PhysDamageBows; }
+
+                        if (ColdDamageTotal != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Physical Damage"))
+                            {
+                                attrlist["#% increased Physical Damage"][0] += ColdDamageTotal;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Physical Damage", new List<float>(1) { ColdDamageTotal });
+                            }
+                        }
+                        if (PhysDamageTotal != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage"))
+                            {
+                                attrlist["#% increased Cold Damage"][0] += PhysDamageTotal;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage", new List<float>(1) { PhysDamageTotal });
+                            }
+                        }
+                        if (ColdDamageTotalAttacks != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Physical Damage with Attack Skills"))
+                            {
+                                attrlist["#% increased Physical Damage with Attack Skills"][0] += ColdDamageTotalAttacks;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Physical Damage with Attack Skills", new List<float>(1) { ColdDamageTotalAttacks });
+                            }
+                        }
+                        if (PhysDamageTotalTwoWeap != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Two Handed Melee Weapons"))
+                            {
+                                attrlist["#% increased Cold Damage with Two Handed Melee Weapons"][0] += PhysDamageTotalTwoWeap;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Two Handed Melee Weapons", new List<float>(1) { PhysDamageTotalTwoWeap });
+                            }
+                        }
+                        if (PhysDamageTotalOneWeap != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with One Handed Melee Weapons"))
+                            {
+                                attrlist["#% increased Cold Damage with One Handed Melee Weapons"][0] += PhysDamageTotalOneWeap;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with One Handed Melee Weapons", new List<float>(1) { PhysDamageTotalOneWeap });
+                            }
+                        }
+                        if (PhysDamageTotalDual != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Weapon Damage while Dual Wielding"))
+                            {
+                                attrlist["#% increased Cold Weapon Damage while Dual Wielding"][0] += PhysDamageTotalDual;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Weapon Damage while Dual Wielding", new List<float>(1) { PhysDamageTotalDual });
+                            }
+                        }
+                        if (PhysDamageMelee != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Melee Cold Damage"))
+                            {
+                                attrlist["#% increased Melee Cold Damage"][0] += PhysDamageMelee;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Melee Cold Damage", new List<float>(1) { PhysDamageMelee });
+                            }
+                        }
+                        if (PhysDamageShield != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage while holding a Shield"))
+                            {
+                                attrlist["#% increased Cold Damage while holding a Shield"][0] += PhysDamageShield;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage while holding a Shield", new List<float>(1) { PhysDamageShield });
+                            }
+                        }
+                        if (PhysDamageMace != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Maces"))
+                            {
+                                attrlist["#% increased Cold Damage with Maces"][0] += PhysDamageMace;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Maces", new List<float>(1) { PhysDamageMace });
+                            }
+                        }
+                        if (PhysDamageStaves != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Staves"))
+                            {
+                                attrlist["#% increased Cold Damage with Staves"][0] += PhysDamageStaves;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Staves", new List<float>(1) { PhysDamageStaves });
+                            }
+                        }
+                        if (PhysDamageSwords != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Swords"))
+                            {
+                                attrlist["#% increased Cold Damage with Swords"][0] += PhysDamageSwords;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Swords", new List<float>(1) { PhysDamageSwords });
+                            }
+                        }
+                        if (PhysDamageDaggers != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Daggers"))
+                            {
+                                attrlist["#% increased Cold Damage with Daggers"][0] += PhysDamageDaggers;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Daggers", new List<float>(1) { PhysDamageDaggers });
+                            }
+                        }
+                        if (PhysDamageClaws != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Claws"))
+                            {
+                                attrlist["#% increased Cold Damage with Claws"][0] += PhysDamageClaws;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Claws", new List<float>(1) { PhysDamageClaws });
+                            }
+                        }
+                        if (PhysDamageBows != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Bows"))
+                            {
+                                attrlist["#% increased Cold Damage with Bows"][0] += PhysDamageBows;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Bows", new List<float>(1) { PhysDamageBows });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string JewelData = CurrentJewelData.Name;
+                    }
                 }
             }
             return attrlist;
@@ -688,15 +866,7 @@ namespace POESKillTree.SkillTreeFiles
                     {
                         continue;
                     }
-                    //else
-                    //{
-                    //    //Change Node Image to match Jewel
-                    //    //CurrentNode.Icon = CurrentJewelData.Image.ToString();
-                    //}
-                    if (CurrentJewelData.Name == "Intuitive Leap")
-                    {
-                        //ConvertedJewelData.ApplyIntuitizeLeapSupport(CurrentNode);
-                    }
+                    if (CurrentJewelData.Name == "Intuitive Leap"){}
                     else if (CurrentJewelData.Name == "Brute Force Solution")
                     {
                         AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
@@ -880,6 +1050,194 @@ namespace POESKillTree.SkillTreeFiles
                             else
                             {
                                 attrlist.Add("+# to maximum Life", AreaStats );
+                            }
+                        }
+                    }
+                    else if (CurrentJewelData.Name == "Cold Steel")
+                    {
+                        float ColdDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        if (ColdDamageTotal != 0) { attrlist["#% increased Cold Damage"] -= ColdDamageTotal; }
+                        float ColdDamageTotalAttacks = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
+                        if (ColdDamageTotalAttacks != 0) { attrlist["#% increased Cold Damage with Attack Skills"] -= ColdDamageTotalAttacks; }
+
+                        float PhysDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage", Tree.SkilledNodes);
+                        if (PhysDamageTotal != 0) { attrlist["#% increased Physical Damage"] -= PhysDamageTotal; }
+
+                        float PhysDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
+                        if (PhysDamageTotalTwoWeap != 0) { attrlist["#% increased Physical Damage with Two Handed Melee Weapons"] -= PhysDamageTotalTwoWeap; }
+                        float PhysDamageTotalOneWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
+                        if (PhysDamageTotalOneWeap != 0) { attrlist["#% increased Physical Damage with One Handed Melee Weapons"] -= PhysDamageTotalOneWeap; }
+                        float PhysDamageTotalDual = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
+                        if (PhysDamageTotalDual != 0) { attrlist["#% increased Physical Weapon Damage while Dual Wielding"] -= PhysDamageTotalDual; }
+                        float PhysDamageMelee = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
+                        if (PhysDamageMelee != 0) { attrlist["#% increased Melee Physical Damage"] -= PhysDamageMelee; }
+                        float PhysDamageShield = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
+                        if (PhysDamageShield != 0) { attrlist["#% increased Physical Damage while holding a Shield"] -= PhysDamageShield; }
+                        float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
+                        if (PhysDamageMace != 0) { attrlist["#% increased Physical Damage with Maces"] -= PhysDamageMace; }
+                        float PhysDamageStaves = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
+                        if (PhysDamageStaves != 0) { attrlist["#% increased Physical Damage with Staves"] -= PhysDamageMace; }
+                        float PhysDamageSwords = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
+                        if (PhysDamageSwords != 0) { attrlist["#% increased Physical Damage with Swords"] -= PhysDamageSwords; }
+                        float PhysDamageDaggers = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
+                        if (PhysDamageDaggers != 0) { attrlist["#% increased Physical Damage with Daggers"] -= PhysDamageDaggers; }
+                        float PhysDamageClaws = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
+                        if (PhysDamageClaws != 0) { attrlist["#% increased Physical Damage with Claws"] -= PhysDamageClaws; }
+                        float PhysDamageBows = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
+                        if (PhysDamageBows != 0) { attrlist["#% increased Physical Damage with Bows"] -= PhysDamageBows; }
+
+                        if (ColdDamageTotal != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Physical Damage"))
+                            {
+                                attrlist["#% increased Physical Damage"] += ColdDamageTotal;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Physical Damage",ColdDamageTotal);
+                            }
+                        }
+                        if (PhysDamageTotal != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage"))
+                            {
+                                attrlist["#% increased Cold Damage"] += PhysDamageTotal;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage",PhysDamageTotal);
+                            }
+                        }
+                        if (ColdDamageTotalAttacks != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Physical Damage with Attack Skills"))
+                            {
+                                attrlist["#% increased Physical Damage with Attack Skills"] += ColdDamageTotalAttacks;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Physical Damage with Attack Skills",ColdDamageTotalAttacks);
+                            }
+                        }
+                        if (PhysDamageTotalTwoWeap != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Two Handed Melee Weapons"))
+                            {
+                                attrlist["#% increased Cold Damage with Two Handed Melee Weapons"] += PhysDamageTotalTwoWeap;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Two Handed Melee Weapons",PhysDamageTotalTwoWeap);
+                            }
+                        }
+                        if (PhysDamageTotalOneWeap != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with One Handed Melee Weapons"))
+                            {
+                                attrlist["#% increased Cold Damage with One Handed Melee Weapons"] += PhysDamageTotalOneWeap;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with One Handed Melee Weapons",PhysDamageTotalOneWeap);
+                            }
+                        }
+                        if (PhysDamageTotalDual != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Weapon Damage while Dual Wielding"))
+                            {
+                                attrlist["#% increased Cold Weapon Damage while Dual Wielding"] += PhysDamageTotalDual;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Weapon Damage while Dual Wielding",PhysDamageTotalDual);
+                            }
+                        }
+                        if (PhysDamageMelee != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Melee Cold Damage"))
+                            {
+                                attrlist["#% increased Melee Cold Damage"] += PhysDamageMelee;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Melee Cold Damage",PhysDamageMelee);
+                            }
+                        }
+                        if (PhysDamageShield != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage while holding a Shield"))
+                            {
+                                attrlist["#% increased Cold Damage while holding a Shield"] += PhysDamageShield;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage while holding a Shield",PhysDamageShield);
+                            }
+                        }
+                        if (PhysDamageMace != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Maces"))
+                            {
+                                attrlist["#% increased Cold Damage with Maces"] += PhysDamageMace;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Maces",PhysDamageMace);
+                            }
+                        }
+                        if (PhysDamageStaves != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Staves"))
+                            {
+                                attrlist["#% increased Cold Damage with Staves"] += PhysDamageStaves;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Staves",PhysDamageStaves);
+                            }
+                        }
+                        if (PhysDamageSwords != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Swords"))
+                            {
+                                attrlist["#% increased Cold Damage with Swords"] += PhysDamageSwords;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Swords",PhysDamageSwords);
+                            }
+                        }
+                        if (PhysDamageDaggers != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Daggers"))
+                            {
+                                attrlist["#% increased Cold Damage with Daggers"] += PhysDamageDaggers;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Daggers",PhysDamageDaggers);
+                            }
+                        }
+                        if (PhysDamageClaws != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Claws"))
+                            {
+                                attrlist["#% increased Cold Damage with Claws"] += PhysDamageClaws;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Claws",PhysDamageClaws);
+                            }
+                        }
+                        if (PhysDamageBows != 0)
+                        {
+                            if (attrlist.ContainsKey("#% increased Cold Damage with Bows"))
+                            {
+                                attrlist["#% increased Cold Damage with Bows"] += PhysDamageBows;
+                            }
+                            else
+                            {
+                                attrlist.Add("#% increased Cold Damage with Bows",PhysDamageBows);
                             }
                         }
                     }
