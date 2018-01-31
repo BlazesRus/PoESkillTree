@@ -48,16 +48,16 @@ namespace PoESkillTree.Computation.Core.Tests
         [Test]
         public void UpdateCallsInjectedModifierCollectionCorrectly()
         {
-            var addedModifiers = NodeHelper.MockManyModifiers();
-            var removedModifiers = NodeHelper.MockManyModifiers();
+            var addedModifiers = NodeHelper.MockManyModifiers(); 
+            var removedModifiers = NodeHelper.MockManyModifiers(); 
             var modifierCollectionMock = new Mock<IModifierCollection>();
             var sut = CreateSut(
                 null, Mock.Of<ISuspendableEvents>(), modifierCollectionMock.Object, Mock.Of<ICalculationGraphPruner>());
 
             sut.Update(new CalculatorUpdate(addedModifiers, removedModifiers));
 
-            addedModifiers.ForEach(m => modifierCollectionMock.Verify(c => c.AddModifier(m)));
-            removedModifiers.ForEach(m => modifierCollectionMock.Verify(c => c.RemoveModifier(m)));
+            addedModifiers.ForEach(m => modifierCollectionMock.Verify(c => c.AddModifier(m))); 
+            removedModifiers.ForEach(m => modifierCollectionMock.Verify(c => c.RemoveModifier(m))); 
         }
 
         private static Calculator CreateSut(
