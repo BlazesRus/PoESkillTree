@@ -5,7 +5,6 @@ namespace PoESkillTree.Computation.Core
 {
     /*
        TODO: Complete implementation of ICalculator
-       - ICalculationGraph implementation(s) (see INodeRepository.cs)
        - Usage from Console and/or integration tests (not using Data and Parsing, just example implementation of some builders)
        - Support for multiple paths and other "specialties"/behaviors in stat subgraphs (see "Stat subgraphs")
        (see the thoughts below and the thoughts scattered around in other files for details)
@@ -57,6 +56,7 @@ namespace PoESkillTree.Computation.Core
      *     be accessible by the client side view (ICalculator.NodeRepository). The graph internal and real client
      *     side references can then be determined by simply subtracting 1 from the count that would normally be used.
      *   - IExternalStatRegistry needs to be suspended/resumed in ICalculator.Update()
+     *   - The data type must be specified.
      * -> Support needs to be implemented for:
      *    - A general concept of paths
      *    - Separating paths by Modifier.Source (which also does not yet exist) by default
@@ -84,7 +84,7 @@ namespace PoESkillTree.Computation.Core
      *   This would mostly be relevant for boolean stats. Maybe things like ranges could also be specified.
      */
 
-    public interface ICalculationNode : IDisposable
+    public interface ICalculationNode
     {
         // Gets the node's value based on its child nodes. It is calculated lazily.
         NodeValue? Value { get; }
