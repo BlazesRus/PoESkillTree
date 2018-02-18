@@ -3,7 +3,7 @@
 	<PseudoAttribute Name="#% increased Ethereal Knives Damage with Herald of Ash[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.15"/>
 	    <Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.15"/>
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Projectile Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Damage"/>
@@ -17,7 +17,7 @@
 		<Attribute Name="#% increased Area Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Charged Dash Damage with Phys Weapon" Group="Damage">
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Elemental Damage with Attack Skills"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.5"/>
@@ -34,7 +34,7 @@
 		<Attribute Name="+# to Strength" ConversionMultiplier=".2"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Charged Dash Damage with Tagged Phys Weapon" Group="Damage">
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<PseudoAttribute Name="raw #% increased Elemental Damage"  ConversionMultiplier="0.5"/>
 		<PseudoAttribute Name="raw #% increased Lightning Damage"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Area Damage"/>
@@ -102,14 +102,14 @@
 	<PseudoAttribute Name="#% increased Full Conversion Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Cold Damage"/>
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 	</PseudoAttribute>
@@ -118,7 +118,7 @@
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.45"/>
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 	</PseudoAttribute>
@@ -126,7 +126,7 @@
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.74"/>
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 	</PseudoAttribute>
@@ -136,7 +136,7 @@
 		<Attribute Name="#% increased Cold Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Physical Damage" />
+		<Attribute Name="#% increased Global Physical Damage" />
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.333333333"/>
@@ -150,7 +150,7 @@
 		<Attribute Name="#% increased Cold Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Lightning Damage with Attack Skills"  ConversionMultiplier="0.333333333"/>
-		<Attribute Name="#% increased Physical Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Global Physical Damage" ConversionMultiplier="0.75"/>
 		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.333333333"/>
@@ -175,7 +175,7 @@
 	
 	<PseudoAttribute Name="#% increased Bleed DOT before tags" Group="Damage">
 		<Attribute Name="#% increased Damage over Time" />
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Physical Damage over Time"/>
 		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
@@ -194,7 +194,7 @@
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Bleed DOT before tags with Level 20 Melee Splash" Group="Damage">
 		<Attribute Name="#% increased Damage over Time" />
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Physical Damage over Time"/>
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.74" />
@@ -259,7 +259,7 @@
 		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Physical Area Spell Damage[Non-Tagged]" Group="Damage">
-		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage"/>
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Damage"/>
