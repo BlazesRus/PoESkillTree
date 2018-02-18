@@ -1513,7 +1513,7 @@
     <Attribute Name="Damage Effectiveness: #%">
       <ValueForLevel From="1" To="30">200</ValueForLevel>
     </Attribute>
-    <Attribute Name="#% increased Physical Damage">
+    <Attribute Name="#% increased Global Physical Damage">
       <ValuePerQuality>1</ValuePerQuality>
     </Attribute>
     <Attribute Name="Throws a Trap which uses this Skill when Triggered">
@@ -5613,7 +5613,7 @@
       <Value Level="29">118</Value>
       <Value Level="30">119</Value>
     </Attribute>
-    <Attribute Name="#% increased Physical Damage">
+    <Attribute Name="#% increased Global Physical Damage">
       <ValuePerQuality>1</ValuePerQuality>
     </Attribute>
     <Attribute Name="Deals #% of Base Attack Damage">
