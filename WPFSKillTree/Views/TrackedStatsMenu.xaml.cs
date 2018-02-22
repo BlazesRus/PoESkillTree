@@ -25,13 +25,18 @@ namespace POESKillTree.TrackedStatViews
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var str = value as string;
-            if (GlobalSettings.StatTrackingSavePath == null)
-            {
-                string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
-                GlobalSettings.DefaultTrackingDir = DefaultTrackingDir;
-                return string.IsNullOrEmpty(str) ? Path.Combine(DefaultTrackingDir, "CurrentTrackedAttributes.txt") : str;
-            }
-            return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
+            //if (GlobalSettings.StatTrackingSavePath == null)
+            //{
+            //    string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
+            //    GlobalSettings.DefaultTrackingDir = DefaultTrackingDir;
+            //    return string.IsNullOrEmpty(str) ? Path.Combine(DefaultTrackingDir, "CurrentTrackedAttributes.txt") : str;
+            //}
+            //else
+            //{
+            //    return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
+            //}
+            string ReturnVal = str ?? (GlobalSettings.StatTrackingSavePath != null? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt"): Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt"));
+            return ReturnVal;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -387,9 +392,16 @@ namespace POESKillTree.TrackedStatViews
             // Avoid blocking the caller for the initial enumerate call.
             await Task.Yield();
             SourceList.Clear();// = new ObservableCollection<string>();
-            foreach (string file in Directory.EnumerateFiles(StatTrackingSavePath))
+            if (Directory.Exists(StatTrackingSavePath))
             {
-                SourceList.Add(file);
+                foreach (string file in Directory.EnumerateFiles(StatTrackingSavePath))
+                {
+                    SourceList.Add(file);
+                }
+            }
+            else
+            {//Create Directory if doesn't exist
+                Directory.CreateDirectory(StatTrackingSavePath);
             }
             this.TrackingList.ItemsSource = SourceList;
         }
@@ -404,19 +416,26 @@ namespace POESKillTree.TrackedStatViews
             if (CurrentTrackedFile != "")
             {
                 string TargetFile = CurrentTrackedFile;
-                string[] TrackedAttributeNames = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
-
-                PseudoAttributeLoader Loader = new PseudoAttributeLoader();
-                List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
-                foreach (PseudoAttribute item in PsList)
+                if (File.Exists(TargetFile))
                 {
-                    if (GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
+                    string[] TrackedAttributeNames = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
+
+                    PseudoAttributeLoader Loader = new PseudoAttributeLoader();
+                    List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
+                    foreach (PseudoAttribute item in PsList)
                     {
-                        if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
+                        if (GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
                         {
-                            GlobalSettings.TrackedStats.Add(item);
+                            if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
+                            {
+                                GlobalSettings.TrackedStats.Add(item);
+                            }
                         }
                     }
+                }
+                else
+                {//Create Blank file if doesn't exist yet
+                    using (var myFile = File.Create(TargetFile)){}//Creating new file and auto-disposing of FileStream
                 }
             }
         }
