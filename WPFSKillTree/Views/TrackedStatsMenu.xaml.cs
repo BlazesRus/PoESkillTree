@@ -186,35 +186,10 @@ namespace POESKillTree.TrackedStatViews
     /// </summary>
     public partial class TrackedStatsMenu : INotifyPropertyChanged
     {
-        private string _TrackedStatSaveFile = "CurrentTrackedAttributes.txt";
-
-        public string TrackedStatSaveFile
-        {
-            get
-            {
-                if (_TrackedStatSaveFile == null)
-                {
-                    return "CurrentTrackedAttributes.txt";
-                }
-                else
-                {
-                    return _TrackedStatSaveFile;
-                }
-            }
-            set
-            {
-                if (value != "" && value != null && value != _TrackedStatSaveFile)
-                {
-                    _TrackedStatSaveFile = value;
-                    NotifyPropertyChanged("TrackedStatSaveFile");
-                }
-            }
-        }
-
         /// <summary>
         /// The tracking list
         /// </summary>
-        private static ObservableCollection<StringData> _TrackingList = new ObservableCollection<StringData>();
+        private ObservableCollection<StringData> _TrackingList = new ObservableCollection<StringData>();
 
         /// <summary>
         /// The tracking list
@@ -236,9 +211,9 @@ namespace POESKillTree.TrackedStatViews
 
         public static string FallbackValue = GlobalSettings.StatTrackingSavePath == null ? Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt") : Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
 
-        private static string _CurrentTrackedFile = FallbackValue;
+        private string _CurrentTrackedFile = FallbackValue;
 
-        public static string CurrentTrackedFile
+        public string CurrentTrackedFile
         {
             get { return _CurrentTrackedFile; }
             set
@@ -246,6 +221,7 @@ namespace POESKillTree.TrackedStatViews
                 if (value != "" && value != null && value != CurrentTrackedFile)
                 {
                     _CurrentTrackedFile = value;
+                    NotifyPropertyChanged("CurrentTrackedFile");
                 }
             }
         }
@@ -253,7 +229,6 @@ namespace POESKillTree.TrackedStatViews
         public TrackedStatsMenu()
         {
             InitializeComponent();
-            SourceList.Add("CurrentTrackedAttributes.txt");
             this.DataContext = this;
             this.Loaded += new RoutedEventHandler(OnLoad);
         }
@@ -297,7 +272,23 @@ namespace POESKillTree.TrackedStatViews
         {
             byte[] encodedText = Encoding.ASCII.GetBytes(text);//ASCII instead of Unicode to prevent placing null after each character(https://stackoverflow.com/questions/14181866/converting-string-to-byte-creates-zero-character)
 
-            using (FileStream sourceStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+            using (FileStream sourceStream = new FileStream(filePath, FileMode.Truncate, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+            {
+                await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
+            };
+        }
+
+        /// <summary>
+        /// Create new file, then writes the text asynchronous into file (Based from https://stackoverflow.com/questions/11774827/writing-to-a-file-asynchronously)
+        /// </summary>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="text">The text.</param>
+        /// <returns></returns>
+        public static async Task WriteNewFileAsync(string filePath, string text)
+        {
+            byte[] encodedText = Encoding.ASCII.GetBytes(text);//ASCII instead of Unicode to prevent placing null after each character(https://stackoverflow.com/questions/14181866/converting-string-to-byte-creates-zero-character)
+
+            using (FileStream sourceStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
             {
                 await sourceStream.WriteAsync(encodedText, 0, encodedText.Length);
             };
@@ -336,20 +327,28 @@ namespace POESKillTree.TrackedStatViews
                     StatsToSave += "\n" + stat.Name;
                 }
             }
+            if (!Directory.Exists(StatTrackingSavePath)) { Directory.CreateDirectory(StatTrackingSavePath); }
             string FileToSaveTo;
-            if (TrackedStatSaveFile.Contains(Path.DirectorySeparatorChar))
+            if (CurrentTrackedFile.Contains(Path.DirectorySeparatorChar))
             {
-                FileToSaveTo = TrackedStatSaveFile;
+                FileToSaveTo = CurrentTrackedFile;
             }
-            else if (!TrackedStatSaveFile.Contains("."))
+            else if (!CurrentTrackedFile.Contains("."))
             {
-                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile + ".txt");
+                FileToSaveTo = Path.Combine(StatTrackingSavePath, CurrentTrackedFile + ".txt");
             }
-            else
+            else//Local Path inside StatTracking Directory
             {
-                FileToSaveTo = Path.Combine(GlobalSettings.StatTrackingSavePath, TrackedStatSaveFile);
+                FileToSaveTo = Path.Combine(StatTrackingSavePath, CurrentTrackedFile);
             }
-            await WriteFileAsync(FileToSaveTo, StatsToSave);
+            if (File.Exists(FileToSaveTo))
+            {
+                await WriteFileAsync(FileToSaveTo, StatsToSave);
+            }
+            else//Create New file if doesn't Exist
+            {
+                await WriteNewFileAsync(FileToSaveTo, StatsToSave);
+            }
         }
 
         /// <summary>
@@ -435,6 +434,7 @@ namespace POESKillTree.TrackedStatViews
                 }
                 else
                 {//Create Blank file if doesn't exist yet
+                    if (!Directory.Exists(StatTrackingSavePath)){Directory.CreateDirectory(StatTrackingSavePath);}
                     using (var myFile = File.Create(TargetFile)){}//Creating new file and auto-disposing of FileStream
                 }
             }

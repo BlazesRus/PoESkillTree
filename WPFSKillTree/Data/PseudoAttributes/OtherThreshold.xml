@@ -13,6 +13,11 @@
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Life with Life Jewels Minus Int Threshold" Group="Defense">
 		<Attribute Name="#% increased maximum Life" />
+		<Attribute Name="+# Jewel Socket" ConversionMultiplier="7.0" />
+		<Attribute Name="+# Int Based Jewel" ConversionMultiplier="-7.0" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Hybrid Life/ES with Life Jewels Minus Int Threshold" Group="Defense">
+		<Attribute Name="#% increased maximum Life" />
 		<Attribute Name="#% increased maximum Energy Shield" />
 		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.2" />
 		<Attribute Name="+# Jewel Socket" ConversionMultiplier="7.0" />

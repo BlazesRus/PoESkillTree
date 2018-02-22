@@ -27,10 +27,11 @@
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition MinWidth="400" />
+                <ColumnDefinition MinWidth="600" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
 
@@ -48,6 +49,14 @@
                     <l:Catalog Message="Change..." />
                 </Button.Content>
             </Button>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TargetFile:" />
+                </Label.Content>
+            </Label>
+            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+            Text="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}" 
+            ToolTip="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
@@ -62,17 +71,17 @@
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Grid.Column="0" Click="LoadTrackedStatFileNamesAsync">
                 <Button.Content>
-                    <l:Catalog Message="Load Tracked Stat File Names" />
+                    <l:Catalog Message="Load File Names From TrackedStats Directory" />
                 </Button.Content>
             </Button>
 
             <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
             DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue"
-            SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}}" />
+            SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button Grid.Row="2" Click="LoadTrackedStats">
                 <Button.Content>
-                    <l:Catalog Message="Load Tracked Stats from file" />
+                    <l:Catalog Message="Load Tracked Stats from Target File" />
                 </Button.Content>
             </Button>
             <Button Grid.Row="3" Click="ResetTracking">
@@ -80,23 +89,11 @@
                     <l:Catalog Message="Reset Tracking" />
                 </Button.Content>
             </Button>
-        </Grid>
-        <Grid Margin="20 0 5 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="30" />
-                <ColumnDefinition MinWidth="30" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0" Click="SaveTrackedStats">
+            <Button Grid.Row="4" Click="SaveTrackedStats">
                 <Button.Content>
-                    <l:Catalog Message="Save Tracked Stats to FileName:" />
+                    <l:Catalog Message="Save Tracked Stats to Target File" />
                 </Button.Content>
             </Button>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding TrackedStatSaveFile,NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                           VerticalAlignment="Center"
-                           ToolTip="{Binding TrackedStatSaveFile}" />
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>
