@@ -14,6 +14,9 @@ namespace POESKillTree.SkillTreeFiles
 
     public class SkillNode
     {
+        public const string DefaultJewelImage = "Art/2DArt/SkillIcons/passives/MasteryBlank.png";
+        public const string DefaultJewelKey = "normal_Art/2DArt/SkillIcons/passives/MasteryBlank.png";
+        public string JewelKey { get => Icon==""? DefaultJewelKey : "normal_" + Icon; }
         public static float[] SkillsPerOrbit = {1, 6, 12, 12, 40};
         public static float[] OrbitRadii = {0, 81.5f, 163, 326, 489};
         public Dictionary<string, IReadOnlyList<float>> Attributes;
@@ -63,6 +66,68 @@ namespace POESKillTree.SkillTreeFiles
                 switch (Type)
                 {
                     case NodeType.JewelSocket:
+                        if(Icon=="")//Set to use default key if icon is set to blank for whatever reason
+                        {
+                            return JewelKey;
+                        }
+                        else if(Icon!= DefaultJewelImage)
+                        {
+                            //Int Jewels
+                            if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Int_WitchID)//Jewel Slot directly north of Witch starting area
+                            { return "JSlotIcon_Int_Witch"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Int_ScionID)//Jewel slot far NE of Scion Starting Area;} Nearest Jewel to CI area (Int Threshold Jewel Slot)
+                            { return "JSlotIcon_Int_Scion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Int_WitchShadowID)//NE from center jewel slot between Witch and shadow areas
+                            { return "JSlotIcon_Int_WitchShadow"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Int_TemplarWitchID)//Jewel slot north-west of Scion area;} At road between Templar and Witch areas
+                            { return "JSlotIcon_Int_TemplarWitch"; }
+                            //Str Jewels
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Str_WarriorDuelistID)//Jewel slot south-west of Scion area;} At road between Marauder and Duelist areas
+                            { return "JSlotIcon_Str_WarriorDuelist"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Str_WarriorTemplarScionID)//Jewel slot west of Scion area;} At road between Marauder and Templar areas
+                            { return "JSlotIcon_Str_WarriorTemplarScion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Str_FarWarTempScionID)//Jewel slot far west of Scion area;} At road between Marauder and Templar areas;} Nearest jewel slot to Resolute Technique
+                            { return "JSlotIcon_Str_FarWarTempScion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Str_WarriorID)//Jewel slot west of Marauder area
+                            { return "JSlotIcon_Str_Warrior"; }
+                            //Dex Jewels
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Dex_ShadowRangerID)//Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area);} Nearest jewel slot to Charisma passive node
+                            { return "JSlotIcon_Dex_ShadowRanger"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Dex_RangerID)//Jewel slot east of Ranger area(Jewel10)
+                            { return "JSlotIcon_Dex_Ranger"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Dex_RangerDuelistID)//Jewel slot south-east of Scion area;} At road between Ranger and Duelist areas
+                            { return "JSlotIcon_Dex_RangerDuelist"; }
+                            //Hybrid Jewels
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_StrInt_TemplarID)//Jewel slot west of Templar starting area
+                            { return "JSlotIcon_StrInt_Templar"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_StrInt_ScionID)//Scion Jewel Slot west of starting area
+                            { return "JSlotIcon_StrInt_Scion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_DexInt_ShadowID)//Jewel slot east of Shadow starting area
+                            { return "JSlotIcon_DexInt_Shadow"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_DexInt_ScionID)//Scion jewel slot east of starting area
+                            { return "JSlotIcon_DexInt_Scion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_StrDex_ScionID)//Scion Jewel Slot south of starting area
+                            { return "JSlotIcon_StrDex_Scion"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_StrDex_DuelistID)//Jewel slot south of Duelist starting area
+                            { return "JSlotIcon_StrDex_Duelist"; }
+                            //Non-Threshold Jewel Slots
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_AcrobaticsID)
+                            { return "JSlotIcon_Neutral_IronGrip"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_PointBlankID)
+                            { return "JSlotIcon_Neutral_PointBlank"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_MinionInstabilityID)
+                            { return "JSlotIcon_Neutral_MinionInstability"; }
+                            else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_IronGripID)
+                            { return "JSlotIcon_Neutral_IronGrip"; }
+                            else
+                            {
+                                return JewelKey;
+                            }
+                        }
+                        else
+                        {
+                            return "normal_" + Icon;
+                        }
                     case NodeType.Normal:
                         iconPrefix = "normal";
                         break;

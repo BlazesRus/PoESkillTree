@@ -18,7 +18,7 @@ namespace POESKillTree.SkillTreeFiles
     /// <summary>
     /// 
     /// </summary>
-    public class ConvertedJewelData
+    public static class ConvertedJewelData
     {
         /// <summary>
         /// Jewels the name of the slot.
@@ -177,6 +177,7 @@ namespace POESKillTree.SkillTreeFiles
         /// The fake intuitive leap support attribute
         /// </summary>
         public static readonly string FakeIntuitiveLeapSupportAttribute = "+# IntuitiveLeapSupports";
+
         /// <summary>
         /// Calculates the total of target attribute inside jewel area.
         /// </summary>
@@ -256,6 +257,10 @@ namespace POESKillTree.SkillTreeFiles
         {
             string[] ExtendedAttribute;
             int attributeSize;
+            int NewAttributeSize;
+            int NewIndex;
+            string CurrentAttri;
+            string SupportName = "+1 IntuitiveLeapSupports";
             Vector2D nodePosition = TargetNode.Position;
             SkillNode CurrentNode;
             IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
@@ -263,13 +268,23 @@ namespace POESKillTree.SkillTreeFiles
             foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
-                attributeSize = CurrentNode.attributes.Length;
                 if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))
                 {
                     CurrentNode.Attributes.Remove(FakeIntuitiveLeapSupportAttribute);
-                    ExtendedAttribute = new string[attributeSize];
-                    int index = CurrentNode.attributes.Length - 1;
-                    Array.Copy(CurrentNode.attributes, CurrentNode.attributes.Length, ExtendedAttribute, CurrentNode.attributes.Length - 1, 0);
+                    attributeSize = CurrentNode.attributes.Length;
+                    NewAttributeSize = attributeSize - 1;
+                    ExtendedAttribute = new string[NewAttributeSize];
+                    NewIndex = 0;
+                    for (int index = 0; index < attributeSize; ++index)
+                    {
+                        CurrentAttri = CurrentNode.attributes[index];
+                        if(CurrentAttri!= SupportName)
+                        {
+                            ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
+                            ++NewIndex;
+                        }
+                    }
+                    Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
                     CurrentNode.attributes = ExtendedAttribute;
                 }
             }
@@ -445,10 +460,22 @@ namespace POESKillTree.SkillTreeFiles
                 {
                     if (CurrentJewelData == null)//Jewel Not Equipped
                     {
+                        if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
+                        {
+                            RemoveIntuitiveLeapSupport(CurrentNode);
+                        }
+                        //if(CurrentNode.Icon != CurrentNode.DefaultJewelImage)
+                        //{
+                        //    CurrentNode.Icon = CurrentNode.DefaultJewelImage;
+                        //}
                         continue;
                     }
                     //else
-                    //{
+                    //{//Update Jewel Slot Appearance
+                    //    string CurrentJewelIcon = CurrentJewelData.Image.ToString();
+                    //    string CurrentNodeIcon = CurrentNode.Icon;
+                    //    string CurrentNodeIconKey = CurrentNode.IconKey;
+                    //    //CurrentNode.Icon = CurrentJewelIcon;
                     //    //Change Node Image to match Jewel
                     //    //CurrentNode.Icon = CurrentJewelData.Image.ToString();
                     //}
@@ -468,7 +495,7 @@ namespace POESKillTree.SkillTreeFiles
                             }
                             else
                             {
-                                attrlist.Add("+# to Intelligence",new List<float>(1) { AreaStats});
+                                attrlist.Add("+# to Intelligence", new List<float>(1) { AreaStats });
                             }
                         }
                     }
@@ -835,7 +862,15 @@ namespace POESKillTree.SkillTreeFiles
                         string JewelData = CurrentJewelData.Name;
                     }
                 }
+                else//SkillNode not active
+                {
+                    if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
+                    {
+                        RemoveIntuitiveLeapSupport(CurrentNode);
+                    }
+                }
             }
+
             return attrlist;
         }
 
