@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Linq;
 using POESKillTree.Utils;
+using System.Windows.Controls;
 
 namespace POESKillTree.TrackedStatViews
 {
@@ -233,18 +234,6 @@ namespace POESKillTree.TrackedStatViews
             this.Loaded += new RoutedEventHandler(OnLoad);
         }
 
-        //void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    //Force binding changes to TrackingList
-        //    this.TrackingList.ItemsSource = SourceList;
-        //}
-
-        //void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    //Force binding changes to TrackingList
-        //    this.TrackingList.ItemsSource = SourceList;
-        //}
-
         /// <summary>
         /// Called when [load].
         /// </summary>
@@ -417,7 +406,38 @@ namespace POESKillTree.TrackedStatViews
                 string TargetFile = CurrentTrackedFile;
                 if (File.Exists(TargetFile))
                 {
-                    string[] TrackedAttributeNames = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
+                    string[] LoadedFileData = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
+                    string[] TrackedAttributeNames = new string[LoadedFileData.Length];
+                    int index = 0;
+                    string TempString;
+                    bool PotentialLineComment = false;
+                    foreach (var Line in LoadedFileData)//Filter out unneeded info from lines in file(enables to have C#/C++ style line comments and attributes inside parenthesis
+                    {
+                        TempString = "";
+                        PotentialLineComment = false;
+                        foreach (var Elem in Line)
+                        {
+                            if(PotentialLineComment==false&&Elem=='/')
+                            {
+                                PotentialLineComment = true;
+                            }
+                            else if(PotentialLineComment&&Elem=='/')
+                            {
+                                PotentialLineComment = false;
+                                return;
+                            }
+                            if(Elem!='"')
+                            {
+                                TempString += Elem;
+                            }
+                        }
+                        if(PotentialLineComment)
+                        {
+                            TempString += "/";
+                        }
+                        TrackedAttributeNames[index] = TempString;
+                        ++index;
+                    }
 
                     PseudoAttributeLoader Loader = new PseudoAttributeLoader();
                     List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
@@ -438,6 +458,13 @@ namespace POESKillTree.TrackedStatViews
                     using (var myFile = File.Create(TargetFile)){}//Creating new file and auto-disposing of FileStream
                 }
             }
+        }
+
+        private void TrackingList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            ComboBox self = (ComboBox)sender;
+            StringData CurrentItem = (StringData)self.SelectedItem;
+            CurrentTrackedFile = (string)CurrentItem;
         }
     }
 }

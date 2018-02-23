@@ -76,7 +76,7 @@
             </Button>
 
             <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
-            DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue"
+            DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue" SelectionChanged="TrackingList_SelectionChanged"
             SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button Grid.Row="2" Click="LoadTrackedStats">
