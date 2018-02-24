@@ -36,7 +36,7 @@ namespace POESKillTree.TrackedStatViews
             //{
             //    return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
             //}
-            string ReturnVal = str ?? (GlobalSettings.StatTrackingSavePath != null? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt"): Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt"));
+            StringData ReturnVal = (str ?? (GlobalSettings.StatTrackingSavePath != null? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt"): Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt")));
             return ReturnVal;
         }
 
@@ -179,6 +179,19 @@ namespace POESKillTree.TrackedStatViews
         #endregion Operator Functionality
     }
 
+    public sealed class StringDataAsString : IValueConverter
+    {
+        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var str = value as StringData;
+            return (string)str;
+        }
+
+        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 
     //    [XamlCompilation(XamlCompilationOptions.Compile)]
     //    public partial class TrackedStatsMenu : ContentPage
@@ -227,20 +240,6 @@ namespace POESKillTree.TrackedStatViews
             }
         }
 
-        public StringData CurrentTrackedFileData
-        {
-            get { return _CurrentTrackedFile; }
-            set
-            {
-                string CurVal = (string)value;
-                if (CurVal != "" && CurVal != null && CurVal != CurrentTrackedFile)
-                {
-                    _CurrentTrackedFile = CurVal;
-                    NotifyPropertyChanged("CurrentTrackedFileData");
-                }
-            }
-        }
-
         public TrackedStatsMenu()
         {
             InitializeComponent();
@@ -257,7 +256,8 @@ namespace POESKillTree.TrackedStatViews
         {
             this.TrackingList.DataContext = this.DataContext;
             this.TrackingList.ItemsSource = SourceList;
-            //this.SourceList.CollectionChanged += this.OnCollectionChanged;
+            this.TrackedFileText.DataContext = this.DataContext;
+            if (this.TrackedFileText.Text == "" || this.TrackedFileText.Text == null) { this.TrackedFileText.Text = CurrentTrackedFile; }//Force Text to have value if fails to bind properly
         }
 
         /// <summary>
@@ -393,7 +393,7 @@ namespace POESKillTree.TrackedStatViews
             //SLightly async version of Getting files from http://writeasync.net/?p=2621
             // Avoid blocking the caller for the initial enumerate call.
             await Task.Yield();
-            SourceList.Clear();// = new ObservableCollection<string>();
+            SourceList.Clear();
             if (Directory.Exists(StatTrackingSavePath))
             {
                 foreach (string file in Directory.EnumerateFiles(StatTrackingSavePath))
@@ -479,13 +479,13 @@ namespace POESKillTree.TrackedStatViews
             ComboBox self = (ComboBox)sender;
             StringData CurrentItem = (StringData)self.SelectedItem;
             CurrentTrackedFile = (string)CurrentItem;
-            CurrentTrackedFileData = CurrentItem;
+            this.TrackedFileText.Text = CurrentTrackedFile; //Force Text to have value
         }
 
         private void TrackedFileText_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox self = (TextBox)sender;
-            CurrentTrackedFile = self.Text;
+            if (self.Text != null && self.Text != "") { CurrentTrackedFile = self.Text; }
         }
     }
 }

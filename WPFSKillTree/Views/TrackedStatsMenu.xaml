@@ -11,7 +11,7 @@
     xmlns:model="clr-namespace:POESKillTree.Model"
     xmlns:converter="clr-namespace:POESKillTree.Utils.Converter"
     d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
-    MaxContentWidth="750">
+    MaxContentWidth="780">
     <ContentControl.Resources>
         <Style x:Key="SectionLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -22,13 +22,14 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <local:EmptyStringToFallbackvalue x:Key="EmptyStringToFallbackvalue"/>
+        <local:StringDataAsString x:Key="StringDataAsString"/>
     </ContentControl.Resources>
     <StackPanel Orientation="Vertical">
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition MinWidth="525" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition MinWidth="540" />
+                <ColumnDefinition MinWidth="200" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
@@ -43,7 +44,7 @@
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StatTrackingSavePath}"
                            VerticalAlignment="Center"
                            ToolTip="{Binding StatTrackingSavePath}" />
-            <Button Grid.Row="0" Grid.Column="2"
+            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
                         Command="{Binding ChangeStatTrackingPathCommand}">
                 <Button.Content>
                     <l:Catalog Message="Change..." />
@@ -54,8 +55,8 @@
                     <l:Catalog Message="TargetFile:" />
                 </Label.Content>
             </Label>
-            <TextBox Name="TrackedFileText" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
-            Text="{Binding CurrentTrackedFileData, Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue},UpdateSourceTrigger=PropertyChanged}" TextChanged="TrackedFileText_TextChanged"/>
+            <TextBox Name="TrackedFileText" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Left"
+            Text="{Binding CurrentTrackedFile, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TrackedFileText_TextChanged"/>
         </Grid>
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
@@ -93,15 +94,6 @@
                     <l:Catalog Message="Save Tracked Stats to Target File" />
                 </Button.Content>
             </Button>
-        </Grid>
-        <Grid Margin="20 0 5 0" Name="TestGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="50" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" />
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>
