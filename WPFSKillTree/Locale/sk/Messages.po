@@ -1056,7 +1056,7 @@ msgstr "Jazyk"
 msgid "Build save path"
 msgstr "Názov zostavy"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:48
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:49
 msgid "Change..."
 msgstr ""
 
@@ -1100,29 +1100,33 @@ msgstr "Resetovať Ascendancy strom zručností"
 msgid "Reset selected bandits"
 msgstr "Resetovať zvolené odmeny banditov"
 
-#: Views\TrackedStatsMenu.xaml:39
+#: Views\TrackedStatsMenu.xaml:40
 #, fuzzy
 msgid "TrackedStats Path:"
 msgstr "Resetovať nastavenia"
 
-#: Views\TrackedStatsMenu.xaml:65
+#: Views\TrackedStatsMenu.xaml:54
 #, fuzzy
-msgid "Load Tracked Stat File Names"
+msgid "TargetFile:"
+msgstr "Cieľ"
+
+#: Views\TrackedStatsMenu.xaml:73
+msgid "Load File Names From TrackedStats Directory"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:83
+#, fuzzy
+msgid "Load Tracked Stats from Target File"
 msgstr "Načítať strom"
 
-#: Views\TrackedStatsMenu.xaml:75
-#, fuzzy
-msgid "Load Tracked Stats from file"
-msgstr "Načítať strom"
-
-#: Views\TrackedStatsMenu.xaml:80
+#: Views\TrackedStatsMenu.xaml:88
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "Resetovať nastavenia"
 
-#: Views\TrackedStatsMenu.xaml:94
+#: Views\TrackedStatsMenu.xaml:93
 #, fuzzy
-msgid "Save Tracked Stats to FileName:"
+msgid "Save Tracked Stats to Target File"
 msgstr "Načítať strom"
 
 #: Controls\Dialogs\ExtendedDialogManager.cs:59
@@ -1816,7 +1820,7 @@ msgstr[2] "{0}, {1} bodov"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Vaša zostava musí obsahovať aspoň jeden uzol pre vytvorenie snímky"
 
-#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2131
+#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2119
 msgid "An error occurred while copying to Clipboard."
 msgstr "Nastala chyba počas kopírovania do Schránky."
 
@@ -1832,106 +1836,110 @@ msgstr "Sťahujem údaje stromu zručností ..."
 msgid "An error occurred while downloading assets."
 msgstr "Nastala chyba počas sťahovania údajov."
 
-#: Views\MainWindow.xaml.cs:1041
+#: Views\MainWindow.xaml.cs:1043
 msgid "Checking for updates"
 msgstr "Kontrola aktualizácií"
 
-#: Views\MainWindow.xaml.cs:1046
+#: Views\MainWindow.xaml.cs:1048
 msgid "You have the latest version!"
 msgstr "Máte najnovšiu verziu!"
 
-#: Views\MainWindow.xaml.cs:1051
+#: Views\MainWindow.xaml.cs:1053
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Aktualizácia pre {0} ({1}) je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1054
+#: Views\MainWindow.xaml.cs:1056
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Po dokončení sťahovania bude aplikácia zatvorená, aby mohla aktualizácia prebehnúť."
 
-#: Views\MainWindow.xaml.cs:1055
+#: Views\MainWindow.xaml.cs:1057
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Nová verzia {0} je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1058
+#: Views\MainWindow.xaml.cs:1060
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Nová verzia aplikácie bude nainštalovaná súbežne s predchádzajúcimi verziami."
 
-#: Views\MainWindow.xaml.cs:1062
+#: Views\MainWindow.xaml.cs:1064
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Upozornenie: Toto je predbežná verzia, ktorá môže obsahovať chyby!"
 
-#: Views\MainWindow.xaml.cs:1066
+#: Views\MainWindow.xaml.cs:1068
 msgid "Do you want to download and install the update?"
 msgstr "Chcete stiahnuť a nainštalovať aktualizáciu?"
 
-#: Views\MainWindow.xaml.cs:1067
+#: Views\MainWindow.xaml.cs:1069
 msgid "Do you want to download and install the new version?"
 msgstr "Chcete stiahnuť a nainštalovať novú verziu?"
 
-#: Views\MainWindow.xaml.cs:1069
+#: Views\MainWindow.xaml.cs:1071
 msgid "Continue installation?"
 msgstr "Pokračovať s inštaláciou?"
 
-#: Views\MainWindow.xaml.cs:1080
+#: Views\MainWindow.xaml.cs:1082
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Nastala chyba pri pokuse kontaktovať lokáciu pre aktualizácie."
 
-#: Views\MainWindow.xaml.cs:1088
+#: Views\MainWindow.xaml.cs:1090
 msgid "Downloading latest version"
 msgstr "Sťahujem najnovšiu verziu"
 
-#: Views\MainWindow.xaml.cs:1103 Views\MainWindow.xaml.cs:1118
+#: Views\MainWindow.xaml.cs:1105 Views\MainWindow.xaml.cs:1120
 msgid "An error occurred during the download operation."
 msgstr "Nastala chyba počas sťahovania."
 
-#: Views\MainWindow.xaml.cs:1131
+#: Views\MainWindow.xaml.cs:1133
 msgid "An error occurred while attempting to start the installation."
 msgstr "Nastala chyba pri pokuse spustiť inštaláciu."
 
-#: Views\MainWindow.xaml.cs:1862
+#: Views\MainWindow.xaml.cs:1850
 msgid "An error occurred while attempting to load item data."
 msgstr "Nastala chyba pri pokuse načítať údaje predmetov."
 
-#: Views\MainWindow.xaml.cs:1956 Views\MainWindow.xaml.cs:1999
+#: Views\MainWindow.xaml.cs:1944 Views\MainWindow.xaml.cs:1987
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Nastala chyba pri pokuse načítať strom zručností z URL."
 
-#: Views\MainWindow.xaml.cs:1978
+#: Views\MainWindow.xaml.cs:1966
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1979
+#: Views\MainWindow.xaml.cs:1967
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1980
+#: Views\MainWindow.xaml.cs:1968
 #, fuzzy
 msgid "Replace Bandits settings"
 msgstr "Resetovať nastavenia"
 
-#: Views\MainWindow.xaml.cs:2006
+#: Views\MainWindow.xaml.cs:1994
 #, fuzzy
 msgid "Current: "
 msgstr "Platidlo"
 
-#: Views\MainWindow.xaml.cs:2007
+#: Views\MainWindow.xaml.cs:1995
 #, fuzzy
 msgid "Loaded: "
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:2111
+#: Views\MainWindow.xaml.cs:2099
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Vytváranie Po_EUrl odkazu"
 
-#: Views\MainWindow.xaml.cs:2117
+#: Views\MainWindow.xaml.cs:2105
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Nastala chyba pri pokuse kontaktovať PoEUrl lokáciu."
 
-#: Views\MainWindow.xaml.cs:2127
+#: Views\MainWindow.xaml.cs:2115
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "PoEUrl odkaz bol skopírovaný do Schránky."
+
+#, fuzzy
+#~ msgid "Load Tracked Stat File Names"
+#~ msgstr "Načítať strom"
 
 #, fuzzy
 #~ msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute with AttributeGroup"

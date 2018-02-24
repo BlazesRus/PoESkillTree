@@ -27,7 +27,7 @@
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition MinWidth="600" />
+                <ColumnDefinition MinWidth="525" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -54,9 +54,8 @@
                     <l:Catalog Message="TargetFile:" />
                 </Label.Content>
             </Label>
-            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
-            Text="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}" 
-            ToolTip="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Name="TrackedFileText" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"
+            Text="{Binding CurrentTrackedFileData, Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue},UpdateSourceTrigger=PropertyChanged}" TextChanged="TrackedFileText_TextChanged"/>
         </Grid>
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
@@ -94,6 +93,15 @@
                     <l:Catalog Message="Save Tracked Stats to Target File" />
                 </Button.Content>
             </Button>
+        </Grid>
+        <Grid Margin="20 0 5 0" Name="TestGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>

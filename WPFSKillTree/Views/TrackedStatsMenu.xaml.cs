@@ -227,6 +227,20 @@ namespace POESKillTree.TrackedStatViews
             }
         }
 
+        public StringData CurrentTrackedFileData
+        {
+            get { return _CurrentTrackedFile; }
+            set
+            {
+                string CurVal = (string)value;
+                if (CurVal != "" && CurVal != null && CurVal != CurrentTrackedFile)
+                {
+                    _CurrentTrackedFile = CurVal;
+                    NotifyPropertyChanged("CurrentTrackedFileData");
+                }
+            }
+        }
+
         public TrackedStatsMenu()
         {
             InitializeComponent();
@@ -465,6 +479,13 @@ namespace POESKillTree.TrackedStatViews
             ComboBox self = (ComboBox)sender;
             StringData CurrentItem = (StringData)self.SelectedItem;
             CurrentTrackedFile = (string)CurrentItem;
+            CurrentTrackedFileData = CurrentItem;
+        }
+
+        private void TrackedFileText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox self = (TextBox)sender;
+            CurrentTrackedFile = self.Text;
         }
     }
 }
