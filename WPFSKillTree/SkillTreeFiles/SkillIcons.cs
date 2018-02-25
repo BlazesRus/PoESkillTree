@@ -33,11 +33,11 @@ namespace POESKillTree.SkillTreeFiles
             return Images[SkillImages[iconKey]];
         }
 
-        public void AddJewelSlotIcon(string iconKey)
-        {
-            SkillPositions.Add(iconKey, this.SkillPositions[SkillNode.DefaultJewelKey]);
-            SkillImages.Add(iconKey, this.SkillImages[SkillNode.DefaultJewelKey]);
-            Images.Add(iconKey, this.Images[SkillNode.DefaultJewelKey]);
-        }
+        //public void AddJewelSlotIcon(string iconKey)
+        //{
+        //    SkillPositions.Add(iconKey, this.SkillPositions[SkillNode.DefaultJewelKey]);
+        //    SkillImages.Add(iconKey, this.SkillImages[SkillNode.DefaultJewelKey]);
+        //    Images.Add(iconKey, this.Images[SkillNode.DefaultJewelKey]);
+        //}
     }
 }
