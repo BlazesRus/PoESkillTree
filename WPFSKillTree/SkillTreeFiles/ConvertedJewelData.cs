@@ -70,7 +70,7 @@ namespace POESKillTree.SkillTreeFiles
                     JewelName = "JSlot_StrDex_Duelist"; break;
                 //Non-Threshold Jewel Slots
                 case JSlot_Neutral_AcrobaticsID:
-                    JewelName = "JSlot_Neutral_IronGrip"; break;
+                    JewelName = "JSlot_Neutral_Acrobatics"; break;
                 case JSlot_Neutral_PointBlankID:
                     JewelName = "JSlot_Neutral_PointBlank"; break;
                 case JSlot_Neutral_MinionInstabilityID:

@@ -293,6 +293,28 @@ namespace POESKillTree.SkillTreeFiles
                         icons.SkillImages[iconKey] = sprite.filename;
                     }
                 }
+                //Add SpriteSlots for Jewel Sockets
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_Witch");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_Scion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_WitchShadow");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_TemplarWitch");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_WarriorDuelist");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_WarriorTemplarScion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_FarWarTempScion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_Warrior");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_ShadowRanger");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_Ranger");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_RangerDuelist");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrInt_Templar");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrInt_Scion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_DexInt_Shadow");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_DexInt_Scion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrDex_Scion");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrDex_Duelist");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_Acrobatics");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_PointBlank");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_MinionInstability");
+                IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_IronGrip");
 
                 controller?.SetProgress(0.55);
                 // The last percent progress is reserved for rounding errors as progress must not get > 1.

@@ -112,7 +112,7 @@ namespace POESKillTree.SkillTreeFiles
                             { return "JSlotIcon_StrDex_Duelist"; }
                             //Non-Threshold Jewel Slots
                             else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_AcrobaticsID)
-                            { return "JSlotIcon_Neutral_IronGrip"; }
+                            { return "JSlotIcon_Neutral_Acrobatics"; }
                             else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_PointBlankID)
                             { return "JSlotIcon_Neutral_PointBlank"; }
                             else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_MinionInstabilityID)

@@ -229,6 +229,12 @@ namespace POESKillTree.SkillTreeFiles
                 rect = IconActiveSkills.SkillPositions[skillNode.IconKey];
                 bitmapImage = IconActiveSkills.GetSkillImage(skillNode.IconKey);
             }
+            //Special Handling of Jewel Slot Icons(Give non-active Jewels the appearance of empty Jewel Slot)
+            else if (skillNode.IconKey.Contains("JSlotIcon_"))
+            {
+                rect = IconInActiveSkills.SkillPositions[skillNode.JewelKey];
+                bitmapImage = IconInActiveSkills.GetSkillImage(skillNode.JewelKey);
+            }
             else
             {
                 rect = IconInActiveSkills.SkillPositions[skillNode.IconKey];
