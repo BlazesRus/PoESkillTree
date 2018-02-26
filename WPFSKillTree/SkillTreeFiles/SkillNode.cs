@@ -129,7 +129,7 @@ namespace POESKillTree.SkillTreeFiles
                         //    return "normal_" + Icon;
                         //}
                     case NodeType.Normal:
-                        iconPrefix = "normal";
+                            iconPrefix = "normal";
                         break;
                     case NodeType.Notable:
                         iconPrefix = "notable";

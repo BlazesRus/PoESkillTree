@@ -1574,8 +1574,51 @@ namespace POESKillTree.Views
                     }
                     else
                     {
+                        bool NodeCanLeap = node.Attributes.ContainsKey(ConvertedJewelData.FakeIntuitiveLeapSupportAttribute);
+                        if (NodeCanLeap)//Intuitive Leap supported 
+                        {
+                            bool NeighborIsConnectedToTree = false;
+                            foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                            {
+                                if (Tree.SkilledNodes.Contains(skillNode))
+                                {
+                                    NeighborIsConnectedToTree = true;
+                                    break;
+                                }
+                            }
+                            if (Tree.SkilledNodes.Contains(node))//Already Skilled in tree
+                            {
+                                if(NeighborIsConnectedToTree)
+                                {
+                                    Tree.ForceRefundNode(node);
+                                    _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+                                    Tree.DrawPath(_prePath);
+                                }
+                                else
+                                {
+                                    Tree.SkilledNodes.Remove(node);
+                                }
+                            }
+                            else
+                            {
+                                if(NeighborIsConnectedToTree)
+                                {
+                                    if (_prePath != null)
+                                    {
+                                        Tree.AllocateSkillNodes(_prePath);
+                                        _toRemove = Tree.ForceRefundNodePreview(node);
+                                        if (_toRemove != null)
+                                            Tree.DrawRefundPreview(_toRemove);
+                                    }
+                                }
+                                else
+                                {
+                                    Tree.SkilledNodes.Add(node);
+                                }
+                            }
+                        }
                         // Toggle whether the node is included in the tree
-                        if (Tree.SkilledNodes.Contains(node))
+                        else if (Tree.SkilledNodes.Contains(node))
                         {
                             Tree.ForceRefundNode(node);
                             _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
