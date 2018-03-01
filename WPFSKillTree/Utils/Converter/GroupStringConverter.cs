@@ -51,7 +51,6 @@ namespace POESKillTree.Utils.Converter
             new[] {"[Tagged]", PseudoTotal},
             new[] {"Life with", PseudoTotal},
             new[] {"Energy Shield with", PseudoTotal},
-            new[] {POESKillTree.SkillTreeFiles.ConvertedJewelData.FakeIntuitiveLeapSupportAttribute, Hidden },
             new[] {"Strength from Passives in Radius is Transformed to Intelligence", Hidden },
             new[] {"Strength from Passives in Radius is Transformed to Dexterity", Hidden },
             new[] {"Dexterity from Passives in Radius is Transformed to Intelligence", Hidden },
@@ -276,6 +275,8 @@ namespace POESKillTree.Utils.Converter
             new[] {"JSlot", Hidden},
             new[] {"Jewel Socket ID: ", Hidden},
             new[] {"Radius:", Hidden },
+            new[] {POESKillTree.SkillTreeFiles.ConvertedJewelData.FakeIntuitiveLeapSupportAttribute, Hidden },
+            new[] {"Intuitive Leaped", Hidden },
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
