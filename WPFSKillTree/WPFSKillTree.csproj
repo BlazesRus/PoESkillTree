@@ -180,6 +180,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\ExtendableDictionary.cs" />
     <Compile Include="Common\ISkillTree.cs" />
     <Compile Include="Common\ViewModels\CloseableViewModel.cs" />
     <Compile Include="Common\ViewModels\ErrorInfoViewModel.cs" />

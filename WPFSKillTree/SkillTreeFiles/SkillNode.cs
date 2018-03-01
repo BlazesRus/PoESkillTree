@@ -14,9 +14,8 @@ namespace POESKillTree.SkillTreeFiles
 
     public class SkillNode
     {
-        public const string DefaultJewelImage = "Art/2DArt/SkillIcons/passives/MasteryBlank.png";
-        public const string DefaultJewelKey = "normal_Art/2DArt/SkillIcons/passives/MasteryBlank.png";
-        public string JewelKey { get => Icon==""? DefaultJewelKey : "normal_" + Icon; }
+        public string DefaultJewelImage;
+        public string DefaultJewelKey = "";
         public static float[] SkillsPerOrbit = {1, 6, 12, 12, 40};
         public static float[] OrbitRadii = {0, 81.5f, 163, 326, 489};
         public Dictionary<string, IReadOnlyList<float>> Attributes;

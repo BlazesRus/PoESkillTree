@@ -176,7 +176,7 @@ namespace POESKillTree.SkillTreeFiles
         /// <summary>
         /// The fake intuitive leap support attribute
         /// </summary>
-        public static readonly string FakeIntuitiveLeapSupportAttribute = "+# IntuitiveLeapSupports";
+        public static readonly string FakeIntuitiveLeapSupportAttribute = "IntuitiveLeapSupported";
 
         /// <summary>
         /// Calculates the total of target attribute inside jewel area.
@@ -224,8 +224,7 @@ namespace POESKillTree.SkillTreeFiles
         /// <param name="TargetNode">The target node.</param>
         static public void ApplyIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
         {
-            List<float> BlankList = new List<float>(1);
-            BlankList.Add(1.0f);
+            List<float> BlankList = new List<float>(0);
             string[] ExtendedAttribute;
             int attributeSize;
             Vector2D nodePosition = TargetNode.Position;
@@ -236,14 +235,14 @@ namespace POESKillTree.SkillTreeFiles
             {
                 CurrentNode = NodePair.Value;
                 attributeSize = CurrentNode.attributes.Length;
-                if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute) && attributeSize != 0) //&& CurrentNode.ascendancyName =="")
+                if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute) && attributeSize != 0)
                 {
                     ExtendedAttribute = new string[attributeSize + 1];
                     for (int index = 0; index < attributeSize; ++index)
                     {
                         ExtendedAttribute[index] = CurrentNode.attributes[index];
                     }
-                    ExtendedAttribute[attributeSize] = "+1 IntuitiveLeapSupports";
+                    ExtendedAttribute[attributeSize] = FakeIntuitiveLeapSupportAttribute;
                     CurrentNode.attributes = ExtendedAttribute;
                     CurrentNode.Attributes.Add(FakeIntuitiveLeapSupportAttribute, BlankList);
                 }
@@ -260,7 +259,6 @@ namespace POESKillTree.SkillTreeFiles
             int NewAttributeSize;
             int NewIndex;
             string CurrentAttri;
-            string SupportName = "+1 IntuitiveLeapSupports";
             Vector2D nodePosition = TargetNode.Position;
             SkillNode CurrentNode;
             IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
@@ -278,7 +276,7 @@ namespace POESKillTree.SkillTreeFiles
                     for (int index = 0; index < attributeSize; ++index)
                     {
                         CurrentAttri = CurrentNode.attributes[index];
-                        if(CurrentAttri!= SupportName)
+                        if (CurrentAttri != FakeIntuitiveLeapSupportAttribute)
                         {
                             ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
                             ++NewIndex;
@@ -289,6 +287,7 @@ namespace POESKillTree.SkillTreeFiles
                 }
             }
         }
+
         public class JewelUpdateData
         {
             public ushort NodeID;
@@ -324,68 +323,68 @@ namespace POESKillTree.SkillTreeFiles
             switch (JewelIndex)
             {
                 case 0:
-                    NodeID = ConvertedJewelData.JSlot_DexInt_ScionID;
+                    NodeID = JSlot_DexInt_ScionID;
                     CurrentJewelData = ItemInfo.JSlot_DexInt_Scion.Item; break;
                 case 1:
-                    NodeID = ConvertedJewelData.JSlot_DexInt_ShadowID;
+                    NodeID = JSlot_DexInt_ShadowID;
                     CurrentJewelData = ItemInfo.JSlot_DexInt_Shadow.Item; break;
                 case 2:
-                    NodeID = ConvertedJewelData.JSlot_Dex_RangerDuelistID;
+                    NodeID = JSlot_Dex_RangerDuelistID;
                     CurrentJewelData = ItemInfo.JSlot_Dex_RangerDuelist.Item; break;
                 case 3:
-                    NodeID = ConvertedJewelData.JSlot_Dex_RangerID;
+                    NodeID = JSlot_Dex_RangerID;
                     CurrentJewelData = ItemInfo.JSlot_Dex_Ranger.Item; break;
                 case 4:
-                    NodeID = ConvertedJewelData.JSlot_Dex_ShadowRangerID;
+                    NodeID = JSlot_Dex_ShadowRangerID;
                     CurrentJewelData = ItemInfo.JSlot_Dex_ShadowRanger.Item; break;
                 case 5:
-                    NodeID = ConvertedJewelData.JSlot_Int_ScionID;
+                    NodeID = JSlot_Int_ScionID;
                     CurrentJewelData = ItemInfo.JSlot_Int_Scion.Item; break;
                 case 6:
-                    NodeID = ConvertedJewelData.JSlot_Int_TemplarWitchID;
+                    NodeID = JSlot_Int_TemplarWitchID;
                     CurrentJewelData = ItemInfo.JSlot_Int_TemplarWitch.Item; break;
                 case 7:
-                    NodeID = ConvertedJewelData.JSlot_Int_WitchID;
+                    NodeID = JSlot_Int_WitchID;
                     CurrentJewelData = ItemInfo.JSlot_Int_Witch.Item; break;
                 case 8:
-                    NodeID = ConvertedJewelData.JSlot_Int_WitchShadowID;
+                    NodeID = JSlot_Int_WitchShadowID;
                     CurrentJewelData = ItemInfo.JSlot_Int_WitchShadow.Item; break;
                 case 9:
-                    NodeID = ConvertedJewelData.JSlot_StrDex_DuelistID;
+                    NodeID = JSlot_StrDex_DuelistID;
                     CurrentJewelData = ItemInfo.JSlot_StrDex_Duelist.Item; break;
                 case 10:
-                    NodeID = ConvertedJewelData.JSlot_StrDex_ScionID;
+                    NodeID = JSlot_StrDex_ScionID;
                     CurrentJewelData = ItemInfo.JSlot_StrDex_Scion.Item; break;
                 case 11:
-                    NodeID = ConvertedJewelData.JSlot_StrInt_ScionID;
+                    NodeID = JSlot_StrInt_ScionID;
                     CurrentJewelData = ItemInfo.JSlot_StrInt_Scion.Item; break;
                 case 12:
-                    NodeID = ConvertedJewelData.JSlot_StrInt_TemplarID;
+                    NodeID = JSlot_StrInt_TemplarID;
                     CurrentJewelData = ItemInfo.JSlot_StrInt_Templar.Item; break;
                 case 13:
-                    NodeID = ConvertedJewelData.JSlot_Str_FarWarTempScionID;
+                    NodeID = JSlot_Str_FarWarTempScionID;
                     CurrentJewelData = ItemInfo.JSlot_Str_FarWarTempScion.Item; break;
                 case 14:
-                    NodeID = ConvertedJewelData.JSlot_Str_WarriorDuelistID;
+                    NodeID = JSlot_Str_WarriorDuelistID;
                     CurrentJewelData = ItemInfo.JSlot_Str_WarriorDuelist.Item; break;
                 case 15:
-                    NodeID = ConvertedJewelData.JSlot_Str_WarriorID;
+                    NodeID = JSlot_Str_WarriorID;
                     CurrentJewelData = ItemInfo.JSlot_Str_Warrior.Item; break;
                 case 16:
-                    NodeID = ConvertedJewelData.JSlot_Str_WarriorTemplarScionID;
+                    NodeID = JSlot_Str_WarriorTemplarScionID;
                     CurrentJewelData = ItemInfo.JSlot_Str_WarriorTemplarScion.Item; break;
                 //Non-Threshold Jewel Slots below
                 case 17:
-                    NodeID = ConvertedJewelData.JSlot_Neutral_AcrobaticsID;
+                    NodeID = JSlot_Neutral_AcrobaticsID;
                     CurrentJewelData = ItemInfo.JSlot_Neutral_Acrobatics.Item; break;
                 case 18:
-                    NodeID = ConvertedJewelData.JSlot_Neutral_IronGripID;
+                    NodeID = JSlot_Neutral_IronGripID;
                     CurrentJewelData = ItemInfo.JSlot_Neutral_IronGrip.Item; break;
                 case 19:
-                    NodeID = ConvertedJewelData.JSlot_Neutral_MinionInstabilityID;
+                    NodeID = JSlot_Neutral_MinionInstabilityID;
                     CurrentJewelData = ItemInfo.JSlot_Neutral_MinionInstability.Item; break;
                 case 20:
-                    NodeID = ConvertedJewelData.JSlot_Neutral_PointBlankID;
+                    NodeID = JSlot_Neutral_PointBlankID;
                     CurrentJewelData = ItemInfo.JSlot_Neutral_PointBlank.Item; break;
                 default://Shouldn't ever use this part
                     NodeID = 0;
@@ -429,7 +428,7 @@ namespace POESKillTree.SkillTreeFiles
         //            }
         //            if (CurrentJewelData.Name == "Intuitive Leap")
         //            {
-        //                ConvertedJewelData.ApplyIntuitiveLeapSupport(CurrentNode);
+        //                ApplyIntuitiveLeapSupport(CurrentNode);
         //            }
         //        }
         //    }
@@ -481,11 +480,22 @@ namespace POESKillTree.SkillTreeFiles
                     //}
                     if (CurrentJewelData.Name == "Intuitive Leap")
                     {
-                        ConvertedJewelData.ApplyIntuitiveLeapSupport(CurrentNode);
+                        if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Only Apply IntuitiveLeap Area effect once equipped instead of even when only nearby nodes skilled etc
+                        {
+                            ApplyIntuitiveLeapSupport(CurrentNode);
+                        }
+                        continue;
                     }
-                    else if (CurrentJewelData.Name == "Brute Force Solution")
+                    else
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+                        if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Remove Intuitive Leap Area effect once switched for other jewel
+                        {
+                            RemoveIntuitiveLeapSupport(CurrentNode);
+                        }
+                    }
+                    if (CurrentJewelData.Name == "Brute Force Solution")
+                    {
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Strength"][0] -= AreaStats;
@@ -501,7 +511,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Fluid Motion")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Strength"][0] -= AreaStats;
@@ -517,7 +527,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Fertile Mind")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Dexterity"][0] -= AreaStats;
@@ -533,7 +543,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Inertia")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Dexterity"][0] -= AreaStats;
@@ -549,7 +559,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Efficient Training")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Intelligence"][0] -= AreaStats;
@@ -565,7 +575,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Careful Planning")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Intelligence"][0] -= AreaStats;
@@ -581,7 +591,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Energised Armour")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Energy Shield", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Energy Shield", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["#% increased Energy Shield"][0] -= AreaStats;
@@ -598,7 +608,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Energy From Within")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["#% increased Energy Shield"][0] -= AreaStats;
@@ -615,15 +625,15 @@ namespace POESKillTree.SkillTreeFiles
                     else if (CurrentJewelData.Name == "Fireborn")
                     {
                         AreaStats = 0.0f;
-                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
+                        float CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Elemental Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Cold Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Chaos Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Global Physical Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Lightning Damage"][0] -= CurrentTotal; AreaStats += CurrentTotal; }
                         if (AreaStats != 0.0f)
                         {
@@ -639,8 +649,8 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Might in All Forms")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
-                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
+                        AreaStats += CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
                         if (AreaStats != 0.0f)
                         {
                             if (attrlist.ContainsKey("#% increased Melee Damage Bonus(from Might in All Forms)"))
@@ -655,7 +665,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Anatomical Knowledge")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Large");
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Large");
                         AreaStats /= 3.0f;
                         if (AreaStats != 0.0f)
                         {
@@ -671,35 +681,35 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Cold Steel")
                     {
-                        float ColdDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        float ColdDamageTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
                         if (ColdDamageTotal != 0) { attrlist["#% increased Cold Damage"][0] -= ColdDamageTotal; }
-                        float ColdDamageTotalAttacks = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
+                        float ColdDamageTotalAttacks = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
                         if (ColdDamageTotalAttacks != 0) { attrlist["#% increased Cold Damage with Attack Skills"][0] -= ColdDamageTotalAttacks; }
 
-                        float PhysDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes);
+                        float PhysDamageTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes);
                         if (PhysDamageTotal != 0) { attrlist["#% increased Global Physical Damage"][0] -= PhysDamageTotal; }
 
-                        float PhysDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
+                        float PhysDamageTotalTwoWeap = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
                         if (PhysDamageTotalTwoWeap != 0) { attrlist["#% increased Physical Damage with Two Handed Melee Weapons"][0] -= PhysDamageTotalTwoWeap; }
-                        float PhysDamageTotalOneWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
+                        float PhysDamageTotalOneWeap = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
                         if (PhysDamageTotalOneWeap != 0) { attrlist["#% increased Physical Damage with One Handed Melee Weapons"][0] -= PhysDamageTotalOneWeap; }
-                        float PhysDamageTotalDual = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
+                        float PhysDamageTotalDual = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
                         if (PhysDamageTotalDual != 0) { attrlist["#% increased Physical Weapon Damage while Dual Wielding"][0] -= PhysDamageTotalDual; }
-                        float PhysDamageMelee = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
+                        float PhysDamageMelee = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
                         if (PhysDamageMelee != 0) { attrlist["#% increased Melee Physical Damage"][0] -= PhysDamageMelee; }
-                        float PhysDamageShield = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
+                        float PhysDamageShield = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
                         if (PhysDamageShield != 0) { attrlist["#% increased Physical Damage while holding a Shield"][0] -= PhysDamageShield; }
-                        float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
+                        float PhysDamageMace = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
                         if (PhysDamageMace != 0) { attrlist["#% increased Physical Damage with Maces"][0] -= PhysDamageMace; }
-                        float PhysDamageStaves = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
+                        float PhysDamageStaves = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
                         if (PhysDamageStaves != 0) { attrlist["#% increased Physical Damage with Staves"][0] -= PhysDamageMace; }
-                        float PhysDamageSwords = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
+                        float PhysDamageSwords = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
                         if (PhysDamageSwords != 0) { attrlist["#% increased Physical Damage with Swords"][0] -= PhysDamageSwords; }
-                        float PhysDamageDaggers = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
+                        float PhysDamageDaggers = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
                         if (PhysDamageDaggers != 0) { attrlist["#% increased Physical Damage with Daggers"][0] -= PhysDamageDaggers; }
-                        float PhysDamageClaws = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
+                        float PhysDamageClaws = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
                         if (PhysDamageClaws != 0) { attrlist["#% increased Physical Damage with Claws"][0] -= PhysDamageClaws; }
-                        float PhysDamageBows = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
+                        float PhysDamageBows = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
                         if (PhysDamageBows != 0) { attrlist["#% increased Physical Damage with Bows"][0] -= PhysDamageBows; }
 
                         if (ColdDamageTotal != 0)
@@ -904,7 +914,7 @@ namespace POESKillTree.SkillTreeFiles
                     if (CurrentJewelData.Name == "Intuitive Leap"){}
                     else if (CurrentJewelData.Name == "Brute Force Solution")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Strength"] -= AreaStats;
@@ -920,7 +930,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Fluid Motion")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Strength"] -= AreaStats;
@@ -936,7 +946,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Fertile Mind")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Dexterity"] -= AreaStats;
@@ -952,7 +962,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Inertia")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Dexterity"] -= AreaStats;
@@ -968,7 +978,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Efficient Training")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Intelligence"] -= AreaStats;
@@ -984,7 +994,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Careful Planning")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["+# to Intelligence"] -= AreaStats;
@@ -1000,7 +1010,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Energised Armour")
                     {//
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Energy Shield", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Energy Shield", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["#% increased Energy Shield"] -= AreaStats;
@@ -1017,7 +1027,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Energy From Within")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
                             attrlist["#% increased Energy Shield"] -= AreaStats;
@@ -1034,15 +1044,15 @@ namespace POESKillTree.SkillTreeFiles
                     else if (CurrentJewelData.Name == "Fireborn")
                     {
                         AreaStats = 0.0f;
-                        float CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
+                        float CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Elemental Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Elemental Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Cold Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Chaos Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Chaos Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Global Physical Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
-                        CurrentTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
+                        CurrentTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Lightning Damage", Tree.SkilledNodes, "Medium");
                         if (CurrentTotal != 0) { attrlist["#% increased Lightning Damage"] -= CurrentTotal; AreaStats += CurrentTotal; }
                         if (AreaStats != 0)
                         {
@@ -1058,8 +1068,8 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Might in All Forms")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
-                        AreaStats += ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Medium");
+                        AreaStats += CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes, "Medium");
                         if (AreaStats != 0)
                         {
                             if (attrlist.ContainsKey("#% increased Melee Damage Bonus(from Might in All Forms)"))
@@ -1074,7 +1084,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Anatomical Knowledge")
                     {
-                        AreaStats = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Large");
+                        AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes, "Large");
                         AreaStats /= 3.0f;
                         if (AreaStats != 0.0f)
                         {
@@ -1090,35 +1100,35 @@ namespace POESKillTree.SkillTreeFiles
                     }
                     else if (CurrentJewelData.Name == "Cold Steel")
                     {
-                        float ColdDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
+                        float ColdDamageTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage", Tree.SkilledNodes);
                         if (ColdDamageTotal != 0) { attrlist["#% increased Cold Damage"] -= ColdDamageTotal; }
-                        float ColdDamageTotalAttacks = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
+                        float ColdDamageTotalAttacks = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Cold Damage with Attack Skills", Tree.SkilledNodes);
                         if (ColdDamageTotalAttacks != 0) { attrlist["#% increased Cold Damage with Attack Skills"] -= ColdDamageTotalAttacks; }
 
-                        float PhysDamageTotal = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes);
+                        float PhysDamageTotal = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Global Physical Damage", Tree.SkilledNodes);
                         if (PhysDamageTotal != 0) { attrlist["#% increased Global Physical Damage"] -= PhysDamageTotal; }
 
-                        float PhysDamageTotalTwoWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
+                        float PhysDamageTotalTwoWeap = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Two Handed Melee Weapons", Tree.SkilledNodes);
                         if (PhysDamageTotalTwoWeap != 0) { attrlist["#% increased Physical Damage with Two Handed Melee Weapons"] -= PhysDamageTotalTwoWeap; }
-                        float PhysDamageTotalOneWeap = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
+                        float PhysDamageTotalOneWeap = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with One Handed Melee Weapons", Tree.SkilledNodes);
                         if (PhysDamageTotalOneWeap != 0) { attrlist["#% increased Physical Damage with One Handed Melee Weapons"] -= PhysDamageTotalOneWeap; }
-                        float PhysDamageTotalDual = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
+                        float PhysDamageTotalDual = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Weapon Damage while Dual Wielding", Tree.SkilledNodes);
                         if (PhysDamageTotalDual != 0) { attrlist["#% increased Physical Weapon Damage while Dual Wielding"] -= PhysDamageTotalDual; }
-                        float PhysDamageMelee = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
+                        float PhysDamageMelee = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage", Tree.SkilledNodes);
                         if (PhysDamageMelee != 0) { attrlist["#% increased Melee Physical Damage"] -= PhysDamageMelee; }
-                        float PhysDamageShield = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
+                        float PhysDamageShield = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Melee Physical Damage while holding a Shield", Tree.SkilledNodes);
                         if (PhysDamageShield != 0) { attrlist["#% increased Physical Damage while holding a Shield"] -= PhysDamageShield; }
-                        float PhysDamageMace = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
+                        float PhysDamageMace = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Maces", Tree.SkilledNodes);
                         if (PhysDamageMace != 0) { attrlist["#% increased Physical Damage with Maces"] -= PhysDamageMace; }
-                        float PhysDamageStaves = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
+                        float PhysDamageStaves = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Staves", Tree.SkilledNodes);
                         if (PhysDamageStaves != 0) { attrlist["#% increased Physical Damage with Staves"] -= PhysDamageMace; }
-                        float PhysDamageSwords = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
+                        float PhysDamageSwords = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Swords", Tree.SkilledNodes);
                         if (PhysDamageSwords != 0) { attrlist["#% increased Physical Damage with Swords"] -= PhysDamageSwords; }
-                        float PhysDamageDaggers = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
+                        float PhysDamageDaggers = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Daggers", Tree.SkilledNodes);
                         if (PhysDamageDaggers != 0) { attrlist["#% increased Physical Damage with Daggers"] -= PhysDamageDaggers; }
-                        float PhysDamageClaws = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
+                        float PhysDamageClaws = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Claws", Tree.SkilledNodes);
                         if (PhysDamageClaws != 0) { attrlist["#% increased Physical Damage with Claws"] -= PhysDamageClaws; }
-                        float PhysDamageBows = ConvertedJewelData.CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
+                        float PhysDamageBows = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Physical Damage with Bows", Tree.SkilledNodes);
                         if (PhysDamageBows != 0) { attrlist["#% increased Physical Damage with Bows"] -= PhysDamageBows; }
 
                         if (ColdDamageTotal != 0)

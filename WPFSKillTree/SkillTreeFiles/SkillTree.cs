@@ -940,6 +940,13 @@ namespace POESKillTree.SkillTreeFiles
         public List<SkillNode> GetShortestPathTo(SkillNode targetNode, IEnumerable<SkillNode> start)
         {
             var startNodes = start as IList<SkillNode> ?? start.ToList();
+            for (int index = 0; index < startNodes.Count; ++index)
+            {
+                if (startNodes[index].Attributes.ContainsKey("Intuitive Leaped"))//Remove Leaped Nodes from possible start locations
+                {
+                    startNodes.RemoveAt(index);
+                }
+            }
             if (startNodes.Contains(targetNode))
                 return new List<SkillNode>();
             var adjacent = GetAvailableNodes(startNodes);

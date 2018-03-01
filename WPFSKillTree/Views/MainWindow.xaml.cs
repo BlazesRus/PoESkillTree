@@ -1541,6 +1541,72 @@ namespace POESKillTree.Views
             _lastMouseButton = e.ChangedButton;
         }
 
+        const string LeapedNode = "Intuitive Leaped";
+
+        static private void AddLeapTagToNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        {
+            List<float> BlankList = new List<float>();
+            string[] ExtendedAttribute;
+            int attributeSize = CurrentNode.attributes.Length;
+            if (!CurrentNode.Attributes.ContainsKey(LeapedNode) && attributeSize != 0)
+            {
+                ExtendedAttribute = new string[attributeSize + 1];
+                for (int index = 0; index < attributeSize; ++index)
+                {
+                    ExtendedAttribute[index] = CurrentNode.attributes[index];
+                }
+                ExtendedAttribute[attributeSize] = LeapedNode;
+                CurrentNode.attributes = ExtendedAttribute;
+                CurrentNode.Attributes.Add(LeapedNode, BlankList);
+            }
+        }
+
+        static private void RemoveLeapTagFromNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        {
+            string[] ExtendedAttribute;
+            int attributeSize;
+            int NewAttributeSize;
+            int NewIndex;
+            string CurrentAttri;
+            if (CurrentNode.Attributes.ContainsKey(LeapedNode))
+            {
+                CurrentNode.Attributes.Remove(LeapedNode);
+                attributeSize = CurrentNode.attributes.Length;
+                NewAttributeSize = attributeSize - 1;
+                ExtendedAttribute = new string[NewAttributeSize];
+                NewIndex = 0;
+                for (int index = 0; index < attributeSize; ++index)
+                {
+                    CurrentAttri = CurrentNode.attributes[index];
+                    if (CurrentAttri != LeapedNode)
+                    {
+                        ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
+                        ++NewIndex;
+                    }
+                }
+                Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
+                CurrentNode.attributes = ExtendedAttribute;
+            }
+        }
+
+        private void NormalRefund(POESKillTree.SkillTreeFiles.SkillNode node)
+        {
+            Tree.ForceRefundNode(node);
+            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+            Tree.DrawPath(_prePath);
+        }
+
+        private void NormalNodeClick(POESKillTree.SkillTreeFiles.SkillNode node)
+        {
+            if (_prePath != null)
+            {
+                Tree.AllocateSkillNodes(_prePath);
+                _toRemove = Tree.ForceRefundNodePreview(node);
+                if (_toRemove != null)
+                    Tree.DrawRefundPreview(_toRemove);
+            }
+        }
+
         private void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {
             var p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
@@ -1574,62 +1640,64 @@ namespace POESKillTree.Views
                     }
                     else
                     {
-                        bool NodeCanLeap = node.Attributes.ContainsKey(ConvertedJewelData.FakeIntuitiveLeapSupportAttribute);
-                        if (NodeCanLeap)//Intuitive Leap supported 
+                        bool NonLeapedNeighborIsConnected = false;
+                        foreach (var skillNode in node.Neighbor)//Checking for tree connection
                         {
-                            bool NeighborIsConnectedToTree = false;
-                            foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                            if (Tree.SkilledNodes.Contains(skillNode) && !skillNode.Attributes.ContainsKey(LeapedNode))
                             {
-                                if (Tree.SkilledNodes.Contains(skillNode))
-                                {
-                                    NeighborIsConnectedToTree = true;
-                                    break;
-                                }
+                                NonLeapedNeighborIsConnected = true;
+                                break;
                             }
-                            if (Tree.SkilledNodes.Contains(node))//Already Skilled in tree
+                        }
+                        // Toggle whether the node is included in the tree
+                        if (Tree.SkilledNodes.Contains(node))
+                        {
+                            if (node.Attributes.ContainsKey(LeapedNode))
                             {
-                                if(NeighborIsConnectedToTree)
+                                if (NonLeapedNeighborIsConnected)
                                 {
-                                    Tree.ForceRefundNode(node);
-                                    _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-                                    Tree.DrawPath(_prePath);
+                                    NormalRefund(node);
                                 }
                                 else
                                 {
                                     Tree.SkilledNodes.Remove(node);
                                 }
+                                RemoveLeapTagFromNode(node);
                             }
                             else
                             {
-                                if(NeighborIsConnectedToTree)
+                                NormalRefund(node);
+                            }
+                        }
+                        else
+                        {
+                            if (NonLeapedNeighborIsConnected)
+                            {
+                                NormalNodeClick(node);
+                                //Remove Leaping Tag from node if now connected in to tree
+                                if (node.Attributes.ContainsKey(LeapedNode))
                                 {
-                                    if (_prePath != null)
+                                    foreach (var skillNode in node.Neighbor)//Checking for tree connection
                                     {
-                                        Tree.AllocateSkillNodes(_prePath);
-                                        _toRemove = Tree.ForceRefundNodePreview(node);
-                                        if (_toRemove != null)
-                                            Tree.DrawRefundPreview(_toRemove);
+                                        if (Tree.SkilledNodes.Contains(skillNode) && skillNode.Attributes.ContainsKey(LeapedNode))
+                                        {
+                                            RemoveLeapTagFromNode(skillNode);
+                                        }
                                     }
+                                }
+                            }
+                            else
+                            {
+                                if (node.Attributes.ContainsKey(ConvertedJewelData.FakeIntuitiveLeapSupportAttribute))
+                                {
+                                    Tree.SkilledNodes.Add(node);
+                                    AddLeapTagToNode(node);
                                 }
                                 else
                                 {
-                                    Tree.SkilledNodes.Add(node);
+                                    NormalNodeClick(node);
                                 }
                             }
-                        }
-                        // Toggle whether the node is included in the tree
-                        else if (Tree.SkilledNodes.Contains(node))
-                        {
-                            Tree.ForceRefundNode(node);
-                            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-                            Tree.DrawPath(_prePath);
-                        }
-                        else if (_prePath != null)
-                        {
-                            Tree.AllocateSkillNodes(_prePath);
-                            _toRemove = Tree.ForceRefundNodePreview(node);
-                            if (_toRemove != null)
-                                Tree.DrawRefundPreview(_toRemove);
                         }
                     }
                 }
@@ -1763,7 +1831,7 @@ namespace POESKillTree.Views
                         if (!PersistentData.Options.ChangeSummaryEnabled)
                         {
                             sp.Children.Add(new Separator());
-                            }
+                        }
                     }
                 }
 
