@@ -215,8 +215,25 @@
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.74" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased SharedStrength Minion Melee Damage" Group="Damage">
+		<Attribute Name="+# to Strength" ConversionMultiplier="0.1" /><!-- Half of Strength Given to minions-->
+		<Attribute Name="Minions deal #% increased Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Scourge Phys Melee Damage with Some Elem damage(DualW)" Group="Damage">
 		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
 		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Cold Damage with Attack Skills" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.1"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Physical Weapon Damage while Dual Wielding"/>
+		<Attribute Name="#% increased Physical Damage while Dual Wielding or holding a Shield"/>
+		<Attribute Name="#% increased Melee Physical Damage"/>
 	</PseudoAttribute>
  	<PseudoAttribute Name="#% increased Total Critical Strike Chance with Spells[Non-Tagged]" Group="Critical Strike">
 		<Attribute Name="#% increased Critical Strike Chance" />
