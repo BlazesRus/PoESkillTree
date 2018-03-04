@@ -234,6 +234,7 @@
 		<Attribute Name="#% increased Physical Weapon Damage while Dual Wielding"/>
 		<Attribute Name="#% increased Physical Damage while Dual Wielding or holding a Shield"/>
 		<Attribute Name="#% increased Melee Physical Damage"/>
+		<Attribute Name="#% increased Physical Damage with One Handed Melee Weapons"/>
 	</PseudoAttribute>
  	<PseudoAttribute Name="#% increased Total Critical Strike Chance with Spells[Non-Tagged]" Group="Critical Strike">
 		<Attribute Name="#% increased Critical Strike Chance" />
