@@ -41,6 +41,7 @@ namespace PoESkillTree.Computation.IntegrationTests
                 CollectionAssert.IsNotEmpty(modifier.Stats);
                 Assert.NotNull(modifier.Form);
                 Assert.NotNull(modifier.Value);
+                Assert.NotNull(modifier.Source);
                 var s = modifier.ToString();
                 // Assert it has no unresolved references or values
                 StringAssert.DoesNotContain("References", s);
@@ -184,10 +185,10 @@ namespace PoESkillTree.Computation.IntegrationTests
         private static Modifier CreateModifier(
             IStatBuilder statBuilder, IFormBuilder formBuilder, IValueBuilder valueBuilder)
         {
-            var (stats, statValueConverter) = statBuilder.Build();
+            var (stats, sourceConverter, statValueConverter) = statBuilder.Build();
             var (form, formValueConverter) = formBuilder.Build();
             var value = formValueConverter(statValueConverter(valueBuilder)).Build();
-            return new Modifier(stats, form, value);
+            return new Modifier(stats, form, value, sourceConverter(new ModifierSource.Global()));
         }
 
         private static Modifier CreateModifier(

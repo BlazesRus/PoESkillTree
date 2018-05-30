@@ -3,7 +3,11 @@ using PoESkillTree.Computation.Common;
 
 namespace PoESkillTree.Computation.Core.Nodes
 {
-    public class ValueNode : IDisposableNode
+    /// <summary>
+    /// The core implementation of <see cref="ICalculationNode"/> that uses an <see cref="IValue"/> to calculate
+    /// its value. Saves the nodes and collections used in that calculation to subscribe to them after the calculation.
+    /// </summary>
+    public class ValueNode : ICalculationNode, IDisposable
     {
         private readonly IValue _value;
         private readonly ValueCalculationContext _context;
@@ -39,9 +43,9 @@ namespace PoESkillTree.Computation.Core.Nodes
                 node.ValueChanged -= OnValueChanged;
             }
 
-            foreach (var nodeCollection in _context.UsedNodeCollections)
+            foreach (var collection in _context.UsedCollections)
             {
-                nodeCollection.CollectionChanged -= OnValueChanged;
+                collection.CollectionChanged -= OnValueChanged;
             }
 
             _context.Clear();
@@ -54,15 +58,15 @@ namespace PoESkillTree.Computation.Core.Nodes
                 node.ValueChanged += OnValueChanged;
             }
 
-            foreach (var nodeCollection in _context.UsedNodeCollections)
+            foreach (var collection in _context.UsedCollections)
             {
-                nodeCollection.CollectionChanged += OnValueChanged;
+                collection.CollectionChanged += OnValueChanged;
             }
         }
 
-        private void OnValueChanged(object sender, EventArgs args)
-        {
-            ValueChanged?.Invoke(this, args);
-        }
+        private void OnValueChanged(object sender, EventArgs args) => OnValueChanged();
+
+        // Public to allow invocation on conditions this class can't know about (e.g. state changes in _value)
+        public void OnValueChanged() => ValueChanged?.Invoke(this, EventArgs.Empty);
     }
 }

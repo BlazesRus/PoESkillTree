@@ -1,11 +1,15 @@
-﻿using PoESkillTree.Computation.Core.Events;
+﻿using System.ComponentModel;
+using PoESkillTree.Computation.Core.Events;
 
 namespace PoESkillTree.Computation.Core.NodeCollections
 {
-    public class SuspendableNodeCollection<TProperty> : NodeCollection<TProperty>, ISuspendableEvents
+    /// <summary>
+    /// Extends <see cref="ObservableCollection{T}"/> with <see cref="ISuspendableEvents"/>.
+    /// </summary>
+    public class SuspendableObservableCollection<T> : ObservableCollection<T>, ISuspendableEvents
     {
         private bool _suppressEvents;
-        private NodeCollectionChangeEventArgs _suppressedArgs;
+        private CollectionChangeEventArgs _suppressedArgs;
 
         public void SuspendEvents()
         {
@@ -24,7 +28,7 @@ namespace PoESkillTree.Computation.Core.NodeCollections
             }
         }
 
-        protected override void OnCollectionChanged(NodeCollectionChangeEventArgs e)
+        protected override void OnCollectionChanged(CollectionChangeEventArgs e)
         {
             if (_suppressEvents)
             {
@@ -36,11 +40,11 @@ namespace PoESkillTree.Computation.Core.NodeCollections
             }
         }
 
-        private void SuppressEvent(NodeCollectionChangeEventArgs e)
+        private void SuppressEvent(CollectionChangeEventArgs e)
         {
             _suppressedArgs = _suppressedArgs == null
                 ? e
-                : NodeCollectionChangeEventArgs.ResetEventArgs;
+                : new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null);
         }
     }
 }

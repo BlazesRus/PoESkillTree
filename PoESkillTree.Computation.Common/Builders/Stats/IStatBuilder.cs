@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using PoESkillTree.Computation.Common.Builders.Buffs;
 using PoESkillTree.Computation.Common.Builders.Conditions;
@@ -40,7 +41,7 @@ namespace PoESkillTree.Computation.Common.Builders.Stats
         /// Returns a stat that represents the percentage of this stat's value that is converted to the given stat.
         /// </summary>
         IStatBuilder ConvertTo(IStatBuilder stat);
-        
+
         /// <summary>
         /// Returns a stat that represents the percentage of this stat's value that is added to the given stat.
         /// </summary>
@@ -101,6 +102,12 @@ namespace PoESkillTree.Computation.Common.Builders.Stats
         /// </summary>
         IStatBuilder WithCondition(IConditionBuilder condition);
 
-        (IReadOnlyList<IStat> stats, ValueConverter valueConverter) Build();
+        /// <summary>
+        /// Builds this instance into a list of <see cref="IStat"/>s, an <see cref="ModifierSource"/> converter to
+        /// change the original modifier's source and a <see cref="ValueConverter"/> that should be applied
+        /// to <see cref="IValueBuilder"/>s before building them.
+        /// </summary>
+        (IReadOnlyList<IStat> stats, Func<ModifierSource, ModifierSource> sourceConverter,
+            ValueConverter valueConverter) Build();
     }
 }

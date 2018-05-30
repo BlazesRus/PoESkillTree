@@ -1,6 +1,9 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Nodes;
 
 namespace PoESkillTree.Computation.Core.Tests.Nodes
@@ -12,29 +15,30 @@ namespace PoESkillTree.Computation.Core.Tests.Nodes
         public void SutIsValue()
         {
             var sut = CreateSut();
-
+            
             Assert.IsInstanceOf<IValue>(sut);
         }
 
-        [TestCase(null, null, null, null)]
-        [TestCase(42, null, null, 42)]
-        [TestCase(1.5, 2.0, null, 3)]
-        [TestCase(1.5, 2.0, 0.5, 1.5)]
-        public void CalculateReturnsCorrectResult(double? @base, double? increase, double? more, double? expected)
+        [TestCase(null)]
+        [TestCase(0, 0.0)]
+        [TestCase(0, null, 0.0)]
+        [TestCase(3, 1.0, 2.0)]
+        public void CalculateReturnsCorrectResult(double? expected, params double?[] pathTotals)
         {
             var stat = new StatStub();
-            var context = Mock.Of<IValueCalculationContext>(c =>
-                c.GetValue(stat, NodeType.Base) == (NodeValue?) @base &&
-                c.GetValue(stat, NodeType.Increase) == (NodeValue?) increase &&
-                c.GetValue(stat, NodeType.More) == (NodeValue?) more);
+            var values = pathTotals.Select(d => (NodeValue?) d);
+            var contextMock = new Mock<IValueCalculationContext>();
+            contextMock.Setup(c => c.GetPaths(stat))
+                .Returns(Enumerable.Repeat(PathDefinition.MainPath, pathTotals.Length));
+            contextMock.Setup(c => c.GetValue(stat, NodeType.PathTotal, PathDefinition.MainPath))
+                .Returns(new Queue<NodeValue?>(values).Dequeue);
             var sut = CreateSut(stat);
 
-            var actual = sut.Calculate(context);
+            var actual = sut.Calculate(contextMock.Object);
 
             Assert.AreEqual((NodeValue?) expected, actual);
         }
 
-        private static UncappedSubtotalValue CreateSut(IStat stat = null) =>
-            new UncappedSubtotalValue(stat);
+        private static UncappedSubtotalValue CreateSut(IStat stat = null) => new UncappedSubtotalValue(stat);
     }
 }

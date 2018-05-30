@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PoESkillTree.Computation.Common;
 
-namespace PoESkillTree.Computation.Core.Tests
+namespace PoESkillTree.Computation.Common.Tests
 {
     [DebuggerDisplay("{" + nameof(_instance) + "}")]
-    internal class StatStub : IStat
+    public class StatStub : IStat
     {
         private static int _instanceCounter;
 
@@ -26,6 +25,6 @@ namespace PoESkillTree.Computation.Core.Tests
         public IStat Maximum { get; }
         public bool IsRegisteredExplicitly { get; set; }
         public Type DataType => typeof(double);
-        public IEnumerable<IBehavior> Behaviors => Enumerable.Empty<IBehavior>();
+        public IEnumerable<Behavior> Behaviors => Enumerable.Empty<Behavior>();
     }
 }

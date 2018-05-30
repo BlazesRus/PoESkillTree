@@ -3,7 +3,14 @@ using PoESkillTree.Computation.Common;
 
 namespace PoESkillTree.Computation.Core.Nodes
 {
-    public class CachingNodeAdapter : SubscriberCountingNode
+    /// <summary>
+    /// Adapts an <see cref="ICachingNode"/> for usage in the calculation graph itself.
+    /// <para>
+    /// That means subscribing to its <see cref="ICachingNode.ValueChangeReceived"/> event instead of
+    /// <see cref="ICalculationNode.ValueChanged"/> for raising this node's value changed event.
+    /// </para>
+    /// </summary>
+    public class CachingNodeAdapter : SubscriberCountingNode, IDisposable
     {
         private readonly ICachingNode _adaptedNode;
 
@@ -15,7 +22,7 @@ namespace PoESkillTree.Computation.Core.Nodes
 
         public override NodeValue? Value => _adaptedNode.Value;
 
-        public override void Dispose()
+        public void Dispose()
         {
             _adaptedNode.ValueChangeReceived -= AdaptedNodeOnValueChangeReceived;
         }

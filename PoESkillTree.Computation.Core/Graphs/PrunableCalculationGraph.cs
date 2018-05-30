@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
@@ -8,6 +7,10 @@ using PoESkillTree.Computation.Common;
 
 namespace PoESkillTree.Computation.Core.Graphs
 {
+    /// <summary>
+    /// Decorating implementation of <see cref="ICalculationGraph"/> that stores stat subgraphs without modifiers and
+    /// implements <see cref="ICalculationGraphPruner"/> to remove their unused nodes.
+    /// </summary>
     public class PrunableCalculationGraph
         : ICalculationGraph, ICalculationGraphPruner
     {
@@ -51,10 +54,10 @@ namespace PoESkillTree.Computation.Core.Graphs
 
         public void RemoveModifier(Modifier modifier)
         {
+            _decoratedGraph.RemoveModifier(modifier);
             _statsWithoutModifiers.UnionWith(modifier.Stats
                 .Where(s => StatGraphs.ContainsKey(s))
                 .Where(s => StatGraphs[s].ModifierCount == 0));
-            _decoratedGraph.RemoveModifier(modifier);
         }
 
         public void RemoveUnusedNodes()
@@ -73,13 +76,13 @@ namespace PoESkillTree.Computation.Core.Graphs
                 .ToList().ForEach(statGraph.RemoveFormNodeCollection);
         }
 
-        private IEnumerable<NodeType> SelectRemovableNodesByNodeType(IReadOnlyStatGraph statGraph) =>
-            from nodeType in Enum.GetValues(typeof(NodeType)).Cast<NodeType>()
-            where statGraph.Nodes.ContainsKey(nodeType)
-            where _nodeRemovalDeterminer.CanBeRemoved(statGraph.Nodes[nodeType])
-            select nodeType;
+        private IEnumerable<NodeSelector> SelectRemovableNodesByNodeType(IReadOnlyStatGraph statGraph) =>
+            from pair in statGraph.Nodes
+            orderby pair.Key.NodeType
+            where _nodeRemovalDeterminer.CanBeRemoved(pair.Value)
+            select pair.Key;
 
-        private IEnumerable<Form> SelectRemovableNodesByForm(IReadOnlyStatGraph statGraph) =>
+        private IEnumerable<FormNodeSelector> SelectRemovableNodesByForm(IReadOnlyStatGraph statGraph) =>
             from pair in statGraph.FormNodeCollections
             where _nodeRemovalDeterminer.CanBeRemoved(pair.Value)
             select pair.Key;
@@ -90,7 +93,8 @@ namespace PoESkillTree.Computation.Core.Graphs
             where CanStatGraphBeRemoved(statGraph)
             select stat;
 
-        private static bool CanStatGraphBeRemoved(IReadOnlyStatGraph statGraph) =>
-            statGraph.Nodes.IsEmpty() && statGraph.FormNodeCollections.IsEmpty();
+        private bool CanStatGraphBeRemoved(IReadOnlyStatGraph statGraph) =>
+            statGraph.Nodes.IsEmpty() && statGraph.FormNodeCollections.IsEmpty()
+                                      && _nodeRemovalDeterminer.CanBeRemoved(statGraph.Paths);
     }
 }

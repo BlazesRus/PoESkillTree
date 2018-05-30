@@ -1,11 +1,14 @@
 ﻿using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Events;
 using PoESkillTree.Computation.Core.Graphs;
 using PoESkillTree.Computation.Core.NodeCollections;
 using PoESkillTree.Computation.Core.Nodes;
+using static PoESkillTree.Computation.Common.Tests.Helper;
 using static PoESkillTree.Computation.Core.Tests.NodeHelper;
+using static PoESkillTree.Computation.Core.Tests.Graphs.NodeSelectorHelper;
 
 namespace PoESkillTree.Computation.Core.Tests.Graphs
 {
@@ -23,11 +26,12 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void GetNodeReturnsInjectedNodeFactoryGetNode()
         {
-            var expected = MockNodeProvider();
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(NodeType.Base) == expected);
+            var expected = MockDisposableNodeProvider();
+            var selector = Selector(NodeType.Base);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == expected);
             var sut = CreateSut(nodeFactory);
 
-            var actual = sut.GetNode(NodeType.Base);
+            var actual = sut.GetNode(selector);
 
             Assert.AreSame(expected, actual);
         }
@@ -35,14 +39,15 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void GetNodeCachesResult()
         {
-            var expected = MockNodeProvider();
+            var expected = MockDisposableNodeProvider();
+            var selector = Selector(NodeType.Base);
             var nodeFactoryMock = new Mock<IStatNodeFactory>();
-            nodeFactoryMock.Setup(f => f.Create(NodeType.Base)).Returns(expected);
+            nodeFactoryMock.Setup(f => f.Create(selector)).Returns(expected);
             var sut = CreateSut(nodeFactoryMock.Object);
-            sut.GetNode(NodeType.Base);
-            nodeFactoryMock.Setup(f => f.Create(NodeType.Base)).Returns(MockNodeProvider);
+            sut.GetNode(selector);
+            nodeFactoryMock.Setup(f => f.Create(selector)).Returns(MockDisposableNodeProvider);
 
-            var actual = sut.GetNode(NodeType.Base);
+            var actual = sut.GetNode(selector);
 
             Assert.AreSame(expected, actual);
         }
@@ -51,10 +56,11 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         public void GetFormNodecollectionReturnsInjectedNodeCollectionFactoryGetFormNodeCollection()
         {
             var expected = MockModifierNodeCollection();
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(Form.More) == expected);
+            var selector = Selector(Form.More);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == expected);
             var sut = CreateSut(nodeFactory);
 
-            var actual = sut.GetFormNodeCollection(Form.More);
+            var actual = sut.GetFormNodeCollection(selector);
 
             Assert.AreSame(expected, actual);
         }
@@ -63,13 +69,14 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         public void GetFormNodeCollectionCachesResult()
         {
             var expected = MockModifierNodeCollection();
+            var selector = Selector(Form.More);
             var factoryMock = new Mock<IStatNodeFactory>();
-            factoryMock.Setup(f => f.Create(Form.More)).Returns(expected);
+            factoryMock.Setup(f => f.Create(selector)).Returns(expected);
             var sut = CreateSut(factoryMock.Object);
-            sut.GetFormNodeCollection(Form.More);
-            factoryMock.Setup(f => f.Create(Form.More)).Returns(MockModifierNodeCollection);
+            sut.GetFormNodeCollection(selector);
+            factoryMock.Setup(f => f.Create(selector)).Returns(MockModifierNodeCollection);
 
-            var actual = sut.GetFormNodeCollection(Form.More);
+            var actual = sut.GetFormNodeCollection(selector);
 
             Assert.AreSame(expected, actual);
         }
@@ -87,13 +94,14 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void NodesReturnsInternalDictionary()
         {
-            var expected = MockNodeProvider();
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(NodeType.Base) == expected);
+            var expected = MockDisposableNodeProvider();
+            var selector = Selector(NodeType.Base);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == expected);
             var sut = CreateSut(nodeFactory);
             var dict = sut.Nodes;
-            sut.GetNode(NodeType.Base);
+            sut.GetNode(selector);
 
-            var actual = dict[NodeType.Base];
+            var actual = dict[selector];
 
             Assert.AreSame(expected, actual);
         }
@@ -112,12 +120,13 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         public void FormNodeCollectionsReturnsInternalDictionary()
         {
             var expected = MockModifierNodeCollection();
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(Form.More) == expected);
+            var selector = Selector(Form.More);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == expected);
             var sut = CreateSut(nodeFactory);
             var dict = sut.FormNodeCollections;
-            sut.GetFormNodeCollection(Form.More);
+            sut.GetFormNodeCollection(selector);
 
-            var actual = dict[Form.More];
+            var actual = dict[selector];
 
             Assert.AreSame(expected, actual);
         }
@@ -125,11 +134,12 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void RemoveNodeRemoves()
         {
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(NodeType.Base) == MockNodeProvider());
+            var selector = Selector(NodeType.Base);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == MockDisposableNodeProvider());
             var sut = CreateSut(nodeFactory);
-            sut.GetNode(NodeType.Base);
+            sut.GetNode(selector);
 
-            sut.RemoveNode(NodeType.Base);
+            sut.RemoveNode(selector);
 
             CollectionAssert.IsEmpty(sut.Nodes);
         }
@@ -137,37 +147,38 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void RemoveNodesDisposesNode()
         {
-            var nodeMock = new Mock<ISuspendableEventViewProvider<IDisposableNode>>();
-            nodeMock.Setup(p => p.DefaultView.Dispose()).Verifiable();
-            nodeMock.Setup(p => p.SuspendableView.Dispose()).Verifiable();
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(NodeType.Base) == nodeMock.Object);
+            var selector = Selector(NodeType.Base);
+            var nodeMock = new Mock<IDisposableNodeViewProvider>();
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == nodeMock.Object);
             var sut = CreateSut(nodeFactory);
-            sut.GetNode(NodeType.Base);
+            sut.GetNode(selector);
 
-            sut.RemoveNode(NodeType.Base);
+            sut.RemoveNode(selector);
 
-            nodeMock.Verify();
+            nodeMock.Verify(p => p.Dispose());
         }
 
         [Test]
         public void RemoveNodeDoesNothingIfNodeTypeIsUnknown()
         {
-            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(NodeType.BaseAdd) == MockNodeProvider());
+            var selector = Selector(NodeType.BaseAdd);
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == MockDisposableNodeProvider());
             var sut = CreateSut(nodeFactory);
-            sut.GetNode(NodeType.BaseAdd);
+            sut.GetNode(selector);
 
-            sut.RemoveNode(NodeType.Base);
+            sut.RemoveNode(Selector(NodeType.Base));
         }
 
         [Test]
         public void RemoveFormNodeCollectionRemoves()
         {
+            var selector = Selector(Form.More);
             var nodeFactory =
-                Mock.Of<IStatNodeFactory>(f => f.Create(Form.More) == MockModifierNodeCollection());
+                Mock.Of<IStatNodeFactory>(f => f.Create(selector) == MockModifierNodeCollection());
             var sut = CreateSut(nodeFactory);
-            sut.GetFormNodeCollection(Form.More);
+            sut.GetFormNodeCollection(selector);
 
-            sut.RemoveFormNodeCollection(Form.More);
+            sut.RemoveFormNodeCollection(selector);
 
             CollectionAssert.IsEmpty(sut.FormNodeCollections);
         }
@@ -175,29 +186,27 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void AddModifierAddsCorrectly()
         {
-            var value = Mock.Of<IValue>();
-            var modifier = new Modifier(new IStat[0], Form.BaseAdd, value);
+            var modifier = MockModifier();
 
             var node = MockNodeProvider();
             var collection = CreateModifierNodeCollection();
-            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Form.BaseAdd) == collection);
+            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Selector(modifier.Form)) == collection);
             var sut = CreateSut(factory);
 
             sut.AddModifier(node, modifier);
 
             Assert.That(collection.DefaultView,
-                Has.Exactly(1).Items.SameAs(node.DefaultView));
+                Has.Exactly(1).Items.EqualTo((node.DefaultView, modifier)));
         }
 
         [Test]
         public void RemoveModifierRemovesCorrectly()
         {
-            var value = Mock.Of<IValue>();
-            var modifier = new Modifier(new IStat[0], Form.BaseAdd, value);
+            var modifier = MockModifier();
 
             var node = MockNodeProvider();
             var collection = CreateModifierNodeCollection();
-            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Form.BaseAdd) == collection);
+            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Selector(modifier.Form)) == collection);
             var sut = CreateSut(factory);
             sut.AddModifier(node, modifier);
 
@@ -222,11 +231,11 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var values = new[] { Mock.Of<IValue>(), Mock.Of<IValue>() };
             var modifiers = new[]
             {
-                new Modifier(new IStat[0], Form.More, values[0]), new Modifier(new IStat[0], Form.More, values[1])
+                MockModifier(form: Form.More, value: values[0]), MockModifier(form: Form.More, value: values[1])
             };
 
             var nodes = new[] { MockNodeProvider(), MockNodeProvider() };
-            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Form.More) == CreateModifierNodeCollection());
+            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(Selector(Form.More)) == CreateModifierNodeCollection());
             var sut = CreateSut(factory);
 
             sut.AddModifier(nodes[0], modifiers[0]);
@@ -237,8 +246,85 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             Assert.AreEqual(1, actual);
         }
 
-        private static CoreStatGraph CreateSut(IStatNodeFactory nodeFactory = null) =>
-            new CoreStatGraph(nodeFactory);
+        [Test]
+        public void PathsIsInjectedInstance()
+        {
+            var paths = CreatePathDefinitionCollection();
+            var sut = CreateSut(paths: paths);
+
+            Assert.AreSame(paths, sut.Paths);
+        }
+
+        [Test]
+        public void GetNodeAddsPath()
+        {
+            var selector = Selector(NodeType.Base);
+            var paths = CreatePathDefinitionCollection();
+            var sut = CreateSut(paths: paths);
+
+            sut.GetNode(selector);
+
+            CollectionAssert.Contains(paths.DefaultView, selector.Path);
+        }
+
+        [Test]
+        public void RemoveNodeRemovesPath()
+        {
+            var selector = Selector(NodeType.Base);
+            var paths = CreatePathDefinitionCollection();
+            var nodeFactory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == MockDisposableNodeProvider());
+            var sut = CreateSut(nodeFactory, paths);
+            sut.GetNode(selector);
+
+            sut.RemoveNode(selector);
+
+            CollectionAssert.IsEmpty(paths.DefaultView);
+        }
+
+        [Test]
+        public void GetFormNodeCollectionAddsPath()
+        {
+            var selector = Selector(Form.More);
+            var paths = CreatePathDefinitionCollection();
+            var sut = CreateSut(paths: paths);
+
+            sut.GetFormNodeCollection(selector);
+
+            CollectionAssert.Contains(paths.DefaultView, selector.Path);
+        }
+
+        [Test]
+        public void RemoveFormNodeCollectionRemovesPath()
+        {
+            var selector = Selector(Form.More);
+            var paths = CreatePathDefinitionCollection();
+            var sut = CreateSut(paths: paths);
+            sut.GetFormNodeCollection(selector);
+
+            sut.RemoveFormNodeCollection(selector);
+
+            CollectionAssert.IsEmpty(paths.DefaultView);
+        }
+
+        [Test]
+        public void AddModifierUsesCorrectPath()
+        {
+            var node = MockNodeProvider();
+            var source = new ModifierSource.Global(new ModifierSource.Local.Given());
+            var modifier = MockModifier(source: source);
+            var collection = CreateModifierNodeCollection();
+            var selector = new FormNodeSelector(modifier.Form, new PathDefinition(source.CanonicalSource));
+            var factory = Mock.Of<IStatNodeFactory>(f => f.Create(selector) == collection);
+            var sut = CreateSut(factory);
+
+            sut.AddModifier(node, modifier);
+
+            CollectionAssert.Contains(collection.DefaultView, (node.DefaultView, modifier));
+        }
+
+        private static CoreStatGraph CreateSut(
+            IStatNodeFactory nodeFactory = null, PathDefinitionCollection paths = null) =>
+            new CoreStatGraph(nodeFactory ?? Mock.Of<IStatNodeFactory>(), paths ?? CreatePathDefinitionCollection());
 
         private static ModifierNodeCollection MockModifierNodeCollection()
         {
@@ -249,9 +335,16 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         private static ModifierNodeCollection CreateModifierNodeCollection()
         {
             var defaultView = new NodeCollection<Modifier>();
-            var suspendableView = new SuspendableNodeCollection<Modifier>();
+            var suspendableView = new NodeCollection<Modifier>();
             var nodeCollectionViewProvider = SuspendableEventViewProvider.Create(defaultView, suspendableView);
             return new ModifierNodeCollection(nodeCollectionViewProvider);
+        }
+
+        private static PathDefinitionCollection CreatePathDefinitionCollection()
+        {
+            var viewProvider = SuspendableEventViewProvider.Create(new ObservableCollection<PathDefinition>(),
+                new SuspendableObservableCollection<PathDefinition>());
+            return new PathDefinitionCollection(viewProvider);
         }
     }
 }

@@ -66,8 +66,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\CalculationGraphWithEventsTest.cs" />
+    <Compile Include="Graphs\NodeSelectorHelper.cs" />
+    <Compile Include="Graphs\SelectorValidationTest.cs" />
+    <Compile Include="Graphs\StatGraphWithEventsTest.cs" />
     <Compile Include="Graphs\StatRegistryTest.cs" />
     <Compile Include="Graphs\TransformableNodeFactoryTest.cs" />
+    <Compile Include="Graphs\ValueTransformerTest.cs" />
+    <Compile Include="NodeCollections\PathDefinitionCollectionTest.cs" />
     <Compile Include="Nodes\BaseValueTest.cs" />
     <Compile Include="CalculatorExtensionsTest.cs" />
     <Compile Include="CalculatorTest.cs" />
@@ -77,24 +82,26 @@
     <Compile Include="NodeCollections\ModifierNodeCollectionTest.cs" />
     <Compile Include="NodeCollections\NodeCollectionTest.cs" />
     <Compile Include="Graphs\StatGraphCollectionSuspenderTest.cs" />
+    <Compile Include="Nodes\ConvertedBaseValueTest.cs" />
     <Compile Include="Nodes\CycleGuardTest.cs" />
     <Compile Include="Nodes\FormAggregatingValueTest.cs" />
+    <Compile Include="Nodes\MultiPathFormAggregatingValueTest.cs" />
     <Compile Include="Nodes\NodeValueAggregatorsTest.cs" />
     <Compile Include="NodeHelper.cs" />
     <Compile Include="Nodes\TransformableValueTest.cs" />
+    <Compile Include="Nodes\UncappedSubtotalValueTest.cs" />
     <Compile Include="Nodes\WrappingNodeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Nodes\CachingNodeAdapterTest.cs" />
     <Compile Include="Nodes\CachingNodeTest.cs" />
     <Compile Include="Graphs\PrunableCalculationGraphTest.cs" />
-    <Compile Include="StatStub.cs" />
     <Compile Include="Nodes\SubtotalValueTest.cs" />
     <Compile Include="Events\SuspendableEventsCompositeTest.cs" />
     <Compile Include="Events\SuspendableEventViewProviderTest.cs" />
-    <Compile Include="NodeCollections\SuspendableNodeCollectionTest.cs" />
+    <Compile Include="NodeCollections\SuspendableObservableCollectionTest.cs" />
     <Compile Include="Graphs\SuspendableViewNodeRepositoryTest.cs" />
     <Compile Include="Nodes\TotalValueTest.cs" />
-    <Compile Include="Nodes\UncappedSubtotalValueTest.cs" />
+    <Compile Include="Nodes\PathTotalValueTest.cs" />
     <Compile Include="Nodes\ValueCalculationContextTest.cs" />
     <Compile Include="Nodes\ValueNodeTest.cs" />
   </ItemGroup>
@@ -102,6 +109,10 @@
     <ProjectReference Include="..\PoESkillTree.Common\PoESkillTree.Common.csproj">
       <Project>{1f11d13c-9039-40ab-8b91-8a03e4da934a}</Project>
       <Name>PoESkillTree.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PoESkillTree.Computation.Common.Tests\PoESkillTree.Computation.Common.Tests.csproj">
+      <Project>{844b58ab-4d91-4567-bca9-f3e1b2a29444}</Project>
+      <Name>PoESkillTree.Computation.Common.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\PoESkillTree.Computation.Common\PoESkillTree.Computation.Common.csproj">
       <Project>{827be52d-878c-45f0-afc0-75b5385aad53}</Project>
@@ -116,7 +127,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

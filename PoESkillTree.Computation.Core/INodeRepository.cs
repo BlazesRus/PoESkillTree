@@ -2,28 +2,55 @@
 
 namespace PoESkillTree.Computation.Core
 {
+    /// <summary>
+    /// Repository of nodes in the calculation graph. Querying non-existing nodes leads to their creation.
+    /// </summary>
     public interface INodeRepository
     {
-        // Asking for non-existing nodes leads to their creation
+        /// <summary>
+        /// Returns an observable collection of all paths of the given stat.
+        /// </summary>
+        IObservableCollection<PathDefinition> GetPaths(IStat stat);
 
-        // stat selects the stat subgraph, nodeType the node in it.
-        // With conversions and/or sources:
-        // - Increase, More: the node on the unconverted, Global path.
-        // - Base, BaseOverride, BaseSet, Base Add: the unconverted base node.
-        // - UncappedSubtotal: The node that sums all paths.
-        // - Subtotal, TotalOverride, Total: There should only be one.
-        ICalculationNode GetNode(IStat stat, NodeType nodeType = NodeType.Total);
+        /// <summary>
+        /// Returns the node of type <paramref name="nodeType"/> in the path <paramref name="path"/> of
+        /// <paramref name="stat"/>'s calculation subgraph.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="NodeType.Total"/>, <see cref="NodeType.Subtotal"/>, <see cref="NodeType.UncappedSubtotal"/>
+        /// and <see cref="NodeType.TotalOverride"/> may only be used as <paramref name="nodeType"/> if
+        /// <see cref="PathDefinition.IsMainPath"/> for <paramref name="path"/>.
+        /// </remarks>
+        ICalculationNode GetNode(IStat stat, NodeType nodeType, PathDefinition path);
 
-        // stat selects the stat subgraph, nodeType the node in it.
-        // Only one NodeType from Total, Subtotal and UncappedSubtotal make sense, probably Uncapped Subtotal as
-        // that's where these path subgraphs end up. BaseOverride, BaseSet, BaseAdd and TotalOverride don't make sense.
-        // Returns all nodes by conversion path and source.
-        //INodeCollection<NodePathProperty> GetPathNodes(IStat stat, NodeType nodeType = NodeType.Total);
-        // NodePathProperty: Contains the path's definition
-        // - Its IModifierSource (only with the information that is the same for all modifiers of the path)
-        // - The IStats on its conversion path (the node's IStat itself if unconverted)
+        /// <summary>
+        /// Returns the form node collection of type <paramref name="form"/> in the path <paramref name="path"/> of
+        /// <paramref name="stat"/>'s calculation subgraph.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Form.TotalOverride"/> may only be used as <paramref name="form"/> if
+        /// <see cref="PathDefinition.IsMainPath"/> for <paramref name="path"/>.
+        /// </remarks>
+        INodeCollection<Modifier> GetFormNodeCollection(IStat stat, Form form, PathDefinition path);
+    }
 
-        // Returns the form node collection of stat
-        INodeCollection<Modifier> GetFormNodeCollection(IStat stat, Form form);
+
+    public static class NodeRepositoryExtensions
+    {
+        /// <summary>
+        /// Returns the node of type <paramref name="nodeType"/> in the main path of
+        /// <paramref name="stat"/>'s calculation subgraph.
+        /// </summary>
+        public static ICalculationNode GetNode(
+            this INodeRepository repo, IStat stat, NodeType nodeType = NodeType.Total) =>
+            repo.GetNode(stat, nodeType, PathDefinition.MainPath);
+
+        /// <summary>
+        /// Returns the form node collection of type <paramref name="form"/> in the main path of
+        /// <paramref name="stat"/>'s calculation subgraph.
+        /// </summary>
+        public static INodeCollection<Modifier> GetFormNodeCollection(
+            this INodeRepository repo, IStat stat, Form form) =>
+            repo.GetFormNodeCollection(stat, form, PathDefinition.MainPath);
     }
 }

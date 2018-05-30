@@ -6,6 +6,9 @@ using PoESkillTree.Computation.Core.Nodes;
 
 namespace PoESkillTree.Computation.Core
 {
+    /// <summary>
+    /// Implementation of <see cref="ICalculator"/> and composition root of Computation.Core.
+    /// </summary>
     public class Calculator : ICalculator
     {
         private readonly ISuspendableEvents _suspender;
@@ -44,21 +47,18 @@ namespace PoESkillTree.Computation.Core
             _suspender.ResumeEvents();
         }
 
-        // Passing an empty SuspendableEventsComposite instead
-        // might be a significant performance improvement for "preview" calculations, where events are not used.
-        // (or add a property to ICalculator to disable/enable suspender usage)
-        public static Calculator CreateCalculator()
+        /// <summary>
+        /// Creates an <see cref="ICalculator"/>.
+        /// </summary>
+        public static ICalculator CreateCalculator()
         {
             var innerNodeFactory = new NodeFactory();
             var nodeFactory = new TransformableNodeFactory(innerNodeFactory, v => new TransformableValue(v));
-            var statRegistryCollection = new SuspendableNodeCollection<IStat>();
-            var statRegistry = new StatRegistry(statRegistryCollection, n => new WrappingNode(n));
-            var coreGraph = new CoreCalculationGraph(
-                s => new CoreStatGraph(new StatNodeFactory(nodeFactory, s)), nodeFactory);
-            var eventGraph = new CalculationGraphWithEvents(coreGraph);
-            eventGraph.StatAdded += (_, args) => statRegistry.Add(args.Stat);
-            eventGraph.StatRemoved += (_, args) => statRegistry.Remove(args.Stat);
-            var prunableGraph = new PrunableCalculationGraph(eventGraph, statRegistry);
+            var statRegistryCollection = new NodeCollection<IStat>();
+            var statRegistry = new StatRegistry(statRegistryCollection);
+            var valueTransformer = new ValueTransformer();
+
+            var prunableGraph = CreateCalculationGraph(nodeFactory, statRegistry, valueTransformer);
 
             var defaultView = new DefaultViewNodeRepository(prunableGraph);
             var suspendableView = new SuspendableViewNodeRepository(prunableGraph);
@@ -70,6 +70,45 @@ namespace PoESkillTree.Computation.Core
             suspender.Add(statRegistryCollection);
 
             return new Calculator(suspender, prunableGraph, prunableGraph, suspendableView, statRegistryCollection);
+        }
+
+        private static PrunableCalculationGraph CreateCalculationGraph(
+            TransformableNodeFactory nodeFactory, StatRegistry statRegistry, ValueTransformer valueTransformer)
+        {
+            var coreGraph =
+                new CoreCalculationGraph(s => CreateStatGraph(nodeFactory, valueTransformer, s), nodeFactory);
+            var eventGraph = new CalculationGraphWithEvents(coreGraph, StatAdded, StatRemoved);
+            return new PrunableCalculationGraph(eventGraph, statRegistry);
+
+            void StatAdded(IStat stat)
+            {
+                statRegistry.Add(stat);
+                valueTransformer.AddBehaviors(stat.Behaviors);
+            }
+
+            void StatRemoved(IStat stat)
+            {
+                statRegistry.Remove(stat);
+                valueTransformer.RemoveBehaviors(stat.Behaviors);
+            }
+        }
+
+        private static IStatGraph CreateStatGraph(
+            TransformableNodeFactory nodeFactory, ValueTransformer valueTransformer, IStat stat)
+        {
+            var paths = new PathDefinitionCollection(SuspendableEventViewProvider.Create(
+                new ObservableCollection<PathDefinition>(), new SuspendableObservableCollection<PathDefinition>()));
+            var coreGraph = new CoreStatGraph(new StatNodeFactory(nodeFactory, stat), paths);
+            return new StatGraphWithEvents(coreGraph, NodeAdded, NodeRemoved);
+
+            void NodeAdded(NodeSelector selector)
+            {
+                var node = coreGraph.Nodes[selector];
+                var transformable = nodeFactory.TransformableDictionary[node];
+                valueTransformer.AddTransformable(stat, selector, transformable);
+            }
+
+            void NodeRemoved(NodeSelector selector) => valueTransformer.RemoveTransformable(stat, selector);
         }
     }
 }

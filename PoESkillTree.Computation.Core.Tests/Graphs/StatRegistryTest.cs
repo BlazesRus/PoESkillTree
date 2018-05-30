@@ -1,11 +1,11 @@
-﻿using System;
+﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Events;
 using PoESkillTree.Computation.Core.Graphs;
 using PoESkillTree.Computation.Core.NodeCollections;
-using PoESkillTree.Computation.Core.Nodes;
 
 namespace PoESkillTree.Computation.Core.Tests.Graphs
 {
@@ -25,14 +25,14 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var stat = new StatStub { IsRegisteredExplicitly = true };
             var coreNode = Mock.Of<ICalculationNode>();
-            var expected = Mock.Of<IDisposableNode>();
-            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total) == coreNode);
+            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total, Path) == coreNode);
             var nodeCollection = new NodeCollection<IStat>();
-            var sut = CreateSut(nodeCollection, nodeRepository, n => n == coreNode ? expected : null);
+            var sut = CreateSut(nodeCollection, nodeRepository);
 
             sut.Add(stat);
 
-            CollectionAssert.Contains(nodeCollection, expected);
+            CollectionAssert.IsNotEmpty(nodeCollection);
+            CollectionAssert.DoesNotContain(nodeCollection, coreNode);
         }
 
         [Test]
@@ -40,15 +40,14 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var stat = new StatStub { IsRegisteredExplicitly = true };
             var coreNode = Mock.Of<ICalculationNode>();
-            var expected = Mock.Of<IDisposableNode>();
-            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total) == coreNode);
+            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total, Path) == coreNode);
             var nodeCollection = new NodeCollection<IStat>();
-            var sut = CreateSut(nodeCollection, nodeRepository, n => n == coreNode ? expected : null);
+            var sut = CreateSut(nodeCollection, nodeRepository);
             sut.Add(stat);
 
             sut.Remove(stat);
 
-            CollectionAssert.DoesNotContain(nodeCollection, expected);
+            CollectionAssert.IsEmpty(nodeCollection);
         }
 
         [Test]
@@ -99,7 +98,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var stat = new StatStub { IsRegisteredExplicitly = true };
             var coreNode = Mock.Of<ICalculationNode>();
-            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total) == coreNode);
+            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total, Path) == coreNode);
             var sut = CreateSut(nodeRepository: nodeRepository);
             sut.Add(stat);
             var node = Mock.Of<ISuspendableEventViewProvider<ICalculationNode>>(c =>
@@ -113,7 +112,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var stat = new StatStub { IsRegisteredExplicitly = true };
             var coreNode = Mock.Of<ICalculationNode>();
-            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total) == coreNode);
+            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total, Path) == coreNode);
             var sut = CreateSut(nodeRepository: nodeRepository);
             sut.Add(stat);
             sut.Remove(stat);
@@ -127,28 +126,29 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         public void RemoveDisposesWrappingNode()
         {
             var stat = new StatStub { IsRegisteredExplicitly = true };
-            var wrappedNode = Mock.Of<IDisposableNode>();
-            var nodeRepository = 
-                Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total) == Mock.Of<ICalculationNode>());
-            var sut = CreateSut(nodeRepository: nodeRepository, nodeWrapper: _ => wrappedNode);
+            var nodeMock = new Mock<ICalculationNode>();
+            var nodeCollection = new NodeCollection<IStat>();
+            var nodeRepository = Mock.Of<INodeRepository>(r => r.GetNode(stat, NodeType.Total, Path) == nodeMock.Object);
+            var sut = CreateSut(nodeCollection, nodeRepository);
             sut.Add(stat);
+            var wrappingNode = nodeCollection.Single().node;
 
             sut.Remove(stat);
-
-            Mock.Get(wrappedNode).Verify(n => n.Dispose());
+            
+            wrappingNode.AssertValueChangedWillNotBeInvoked();
+            nodeMock.RaiseValueChanged();
         }
 
         private static StatRegistry CreateSut(
             NodeCollection<IStat> nodeCollection = null,
-            INodeRepository nodeRepository = null,
-            Func<ICalculationNode, IDisposableNode> nodeWrapper = null)
+            INodeRepository nodeRepository = null)
         {
-            return new StatRegistry(
-                nodeCollection ?? new NodeCollection<IStat>(),
-                nodeWrapper ?? (_ => Mock.Of<IDisposableNode>()))
+            return new StatRegistry(nodeCollection ?? new NodeCollection<IStat>())
             {
                 NodeRepository = nodeRepository
             };
         }
+
+        private static readonly PathDefinition Path = PathDefinition.MainPath;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.Linq;
 using MoreLinq;
 using NUnit.Framework;
@@ -26,14 +26,6 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
         }
 
         [Test]
-        public void NodePropertiesIsEmptyInitially()
-        {
-            var sut = CreateSut();
-
-            CollectionAssert.IsEmpty(sut.NodeProperties);
-        }
-
-        [Test]
         public void AddAddsNode()
         {
             var node = NodeHelper.MockNode();
@@ -41,7 +33,7 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
 
             sut.Add(node, 0);
 
-            CollectionAssert.AreEquivalent(new[] { node }, sut);
+            CollectionAssert.AreEquivalent(new[] { (node, 0) }, sut);
         }
 
         [Test]
@@ -51,7 +43,7 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             var sut = CreateSut();
             sut.Add(node, 0);
 
-            sut.Remove(node);
+            sut.Remove(node, 0);
 
             CollectionAssert.IsEmpty(sut);
         }
@@ -87,8 +79,8 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             sut.CollectionChanged += (sender, args) =>
             {
                 Assert.AreSame(sender, sut);
-                Assert.AreEqual(NodeCollectionChangeAction.Add, args.Action);
-                Assert.AreEqual(node, args.Element);
+                Assert.AreEqual(CollectionChangeAction.Add, args.Action);
+                Assert.AreEqual((node, 0), args.Element);
                 raised = true;
             };
 
@@ -107,12 +99,12 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             sut.CollectionChanged += (sender, args) =>
             {
                 Assert.AreSame(sender, sut);
-                Assert.AreEqual(NodeCollectionChangeAction.Remove, args.Action);
-                Assert.AreEqual(node, args.Element);
+                Assert.AreEqual(CollectionChangeAction.Remove, args.Action);
+                Assert.AreEqual((node, 0), args.Element);
                 raised = true;
             };
 
-            sut.Remove(node);
+            sut.Remove(node, 0);
 
             Assert.IsTrue(raised);
         }
@@ -124,7 +116,7 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             var sut = CreateSut();
 
             sut.CollectionChanged += (sender, args) => Assert.Fail();
-            sut.Remove(node);
+            sut.Remove(node, 0);
         }
 
         [Test]
@@ -136,14 +128,14 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
                 (NodeHelper.MockNode(), 0),
                 (NodeHelper.MockNode(), 1),
                 (NodeHelper.MockNode(), 2),
-            }.Select(t => new KeyValuePair<ICalculationNode, int>(t.Item1, t.Item2)).ToList();
+            };
             var sut = CreateSut();
 
             sut.Add(removed, -1);
-            expected.ForEach(t => sut.Add(t.Key, t.Value));
-            sut.Remove(removed);
+            expected.ForEach(t => sut.Add(t.Item1, t.Item2));
+            sut.Remove(removed, -1);
 
-            CollectionAssert.AreEquivalent(expected, sut.NodeProperties);
+            CollectionAssert.AreEquivalent(expected, sut);
         }
 
         [TestCase(3)]
@@ -156,6 +148,17 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             var actual = sut.SubscriberCount;
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void AddDoesNotRaiseCollectionChangedIfPreviouslyAdded()
+        {
+            var node = NodeHelper.MockNode();
+            var sut = CreateSut();
+            sut.Add(node, 0);
+
+            sut.CollectionChanged += (sender, args) => Assert.Fail();
+            sut.Add(node, 0);
         }
 
         private static NodeCollection<int> CreateSut() =>

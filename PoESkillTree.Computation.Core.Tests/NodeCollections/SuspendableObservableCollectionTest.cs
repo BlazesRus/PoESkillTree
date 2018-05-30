@@ -1,18 +1,19 @@
-﻿using NUnit.Framework;
+﻿using System.ComponentModel;
+using NUnit.Framework;
 using PoESkillTree.Computation.Core.Events;
 using PoESkillTree.Computation.Core.NodeCollections;
 
 namespace PoESkillTree.Computation.Core.Tests.NodeCollections
 {
     [TestFixture]
-    public class SuspendableNodeCollectionTest
+    public class SuspendableObservableCollectionTest
     {
         [Test]
-        public void SutIsNodeCollection()
+        public void SutIsObservableCollection()
         {
             var sut = CreateSut();
 
-            Assert.IsInstanceOf<NodeCollection<int>>(sut);
+            Assert.IsInstanceOf<ObservableCollection<int>>(sut);
         }
 
         [Test]
@@ -64,16 +65,15 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
         {
             var sut = CreateSut();
             sut.SuspendEvents();
-            var node = NodeHelper.MockNode();
             var raised = false;
             sut.CollectionChanged += (sender, args) =>
             {
-                Assert.AreEqual(NodeCollectionChangeAction.Add, args.Action);
-                Assert.AreEqual(node, args.Element);
+                Assert.AreEqual(CollectionChangeAction.Add, args.Action);
+                Assert.AreEqual(0, args.Element);
                 raised = true;
             };
 
-            sut.Add(node, 0);
+            sut.Add(0);
             sut.ResumeEvents();
             Assert.IsTrue(raised);
         }
@@ -116,15 +116,14 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
         {
             var sut = CreateSut();
             sut.SuspendEvents();
-            var node = NodeHelper.MockNode();
             sut.CollectionChanged += (sender, args) =>
             {
-                Assert.AreEqual(NodeCollectionChangeAction.Reset, args.Action);
+                Assert.AreEqual(CollectionChangeAction.Refresh, args.Action);
                 Assert.IsNull(args.Element);
             };
 
-            sut.Add(node, 0);
-            sut.Remove(node);
+            sut.Add(0);
+            sut.Remove(0);
             sut.ResumeEvents();
         }
 
@@ -137,13 +136,12 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             sut.ResumeEvents();
 
             sut.SuspendEvents();
-            var node = NodeHelper.MockNode();
-            sut.Add(node, 0);
+            sut.Add(0);
             var raised = false;
             sut.CollectionChanged += (sender, args) =>
             {
-                Assert.AreEqual(NodeCollectionChangeAction.Add, args.Action);
-                Assert.AreEqual(node, args.Element);
+                Assert.AreEqual(CollectionChangeAction.Add, args.Action);
+                Assert.AreEqual(0, args.Element);
                 raised = true;
             };
 
@@ -152,11 +150,11 @@ namespace PoESkillTree.Computation.Core.Tests.NodeCollections
             Assert.IsTrue(raised);
         }
 
-        private static SuspendableNodeCollection<int> CreateSut() => new SuspendableNodeCollection<int>();
+        private static SuspendableObservableCollection<int> CreateSut() => new SuspendableObservableCollection<int>();
 
-        private static void RaiseCollectionChanged(NodeCollection<int> sut)
+        private static void RaiseCollectionChanged(SuspendableObservableCollection<int> sut)
         {
-            sut.Add(NodeHelper.MockNode(), 0);
+            sut.Add(-1);
         }
     }
 }

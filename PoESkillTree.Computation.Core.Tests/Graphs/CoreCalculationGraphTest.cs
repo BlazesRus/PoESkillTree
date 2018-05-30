@@ -3,9 +3,10 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
-using PoESkillTree.Computation.Core.Events;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Graphs;
 using PoESkillTree.Computation.Core.Nodes;
+using static PoESkillTree.Computation.Common.Tests.Helper;
 using static PoESkillTree.Computation.Core.Tests.NodeHelper;
 
 namespace PoESkillTree.Computation.Core.Tests.Graphs
@@ -94,9 +95,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var value = Mock.Of<IValue>();
             var stats = new IStat[] { new StatStub(), new StatStub() };
-            var modifier = new Modifier(stats, Form.More, value);
+            var modifier = MockModifier(stats, Form.More, value);
             var graphs = stats.ToDictionary(s => s, _ => Mock.Of<IStatGraph>());
-            var node = MockNodeProvider();
+            var node = MockDisposableNodeProvider();
             var nodeFactory = Mock.Of<INodeFactory>(f => f.Create(value) == node);
             var sut = CreateSut(s => graphs[s], nodeFactory);
 
@@ -111,9 +112,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var value = Mock.Of<IValue>();
             var stats = new IStat[] { new StatStub(), new StatStub(), new StatStub() };
-            var modifier = new Modifier(stats, Form.More, value);
+            var modifier = MockModifier(stats, Form.More, value);
             var graphs = stats.ToDictionary(s => s, _ => Mock.Of<IStatGraph>());
-            var node = MockNodeProvider();
+            var node = MockDisposableNodeProvider();
             var nodeFactory = Mock.Of<INodeFactory>(f => f.Create(value) == node);
             var sut = CreateSut(s => graphs[s], nodeFactory);
             sut.AddModifier(modifier);
@@ -129,7 +130,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var sut = CreateSut();
 
-            sut.RemoveModifier(new Modifier(new[] { new StatStub() }, Form.More, Mock.Of<IValue>()));
+            sut.RemoveModifier(MockModifier(new StatStub()));
         }
 
         [Test]
@@ -137,9 +138,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         {
             var value = Mock.Of<IValue>();
             var stats = new IStat[] { new StatStub() };
-            var modifier = new Modifier(stats, Form.More, value);
+            var modifier = MockModifier(stats, Form.More, value);
             var graphs = stats.ToDictionary(s => s, _ => Mock.Of<IStatGraph>());
-            var node = Mock.Of<ISuspendableEventViewProvider<IDisposableNode>>(p => 
+            var node = Mock.Of<IDisposableNodeViewProvider>(p => 
                 p.DefaultView == MockNode(0) && p.SuspendableView == MockNode(0));
             var nodeFactory = Mock.Of<INodeFactory>(f => f.Create(value) == node);
             var sut = CreateSut(s => graphs[s], nodeFactory);
@@ -147,8 +148,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
 
             sut.RemoveModifier(modifier);
 
-            Mock.Get(node.DefaultView).Verify(n => n.Dispose());
-            Mock.Get(node.SuspendableView).Verify(n => n.Dispose());
+            Mock.Get(node).Verify(n => n.Dispose());
         }
 
         private static CoreCalculationGraph CreateSut(

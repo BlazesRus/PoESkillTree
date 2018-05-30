@@ -6,13 +6,22 @@ using PoESkillTree.Computation.Common;
 
 namespace PoESkillTree.Computation.Core.Graphs
 {
+    /// <summary>
+    /// Decorating implementation of <see cref="ICalculationGraph"/> that triggers actions when stat subgraphs are
+    /// added or removed.
+    /// </summary>
     public class CalculationGraphWithEvents : ICalculationGraph
     {
         private readonly ICalculationGraph _decoratedGraph;
+        private readonly Action<IStat> _statAddedAction;
+        private readonly Action<IStat> _statRemovedAction;
 
-        public CalculationGraphWithEvents(ICalculationGraph decoratedGraph)
+        public CalculationGraphWithEvents(ICalculationGraph decoratedGraph,
+            Action<IStat> statAddedAction, Action<IStat> statRemovedAction)
         {
             _decoratedGraph = decoratedGraph;
+            _statAddedAction = statAddedAction;
+            _statRemovedAction = statRemovedAction;
         }
 
         public IEnumerator<IReadOnlyStatGraph> GetEnumerator() => _decoratedGraph.GetEnumerator();
@@ -27,7 +36,7 @@ namespace PoESkillTree.Computation.Core.Graphs
             var statGraph = _decoratedGraph.GetOrAdd(stat);
             if (statIsNew)
             {
-                StatAdded?.Invoke(this, new StatAddedEventArgs(stat));
+                _statAddedAction(stat);
             }
             return statGraph;
         }
@@ -38,7 +47,7 @@ namespace PoESkillTree.Computation.Core.Graphs
             _decoratedGraph.AddModifier(modifier);
             foreach (var stat in newStats)
             {
-                StatAdded?.Invoke(this, new StatAddedEventArgs(stat));
+                _statAddedAction(stat);
             }
         }
 
@@ -47,30 +56,7 @@ namespace PoESkillTree.Computation.Core.Graphs
         public void Remove(IStat stat)
         {
             _decoratedGraph.Remove(stat);
-            StatRemoved?.Invoke(this, new StatRemovedEventArgs(stat));
+            _statRemovedAction(stat);
         }
-
-        public event EventHandler<StatAddedEventArgs> StatAdded;
-        public event EventHandler<StatRemovedEventArgs> StatRemoved;
-    }
-
-    public class StatAddedEventArgs : EventArgs
-    {
-        public StatAddedEventArgs(IStat stat)
-        {
-            Stat = stat;
-        }
-
-        public IStat Stat { get; }
-    }
-
-    public class StatRemovedEventArgs : EventArgs
-    {
-        public StatRemovedEventArgs(IStat stat)
-        {
-            Stat = stat;
-        }
-
-        public IStat Stat { get; }
     }
 }

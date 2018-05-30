@@ -1,13 +1,14 @@
-﻿using PoESkillTree.Computation.Common;
-using PoESkillTree.Computation.Core.Events;
-using PoESkillTree.Computation.Core.NodeCollections;
+﻿using PoESkillTree.Computation.Core.NodeCollections;
 using PoESkillTree.Computation.Core.Nodes;
 
 namespace PoESkillTree.Computation.Core.Graphs
 {
+    /// <summary>
+    /// Factory for creating the nodes and modifier node collections for stat subgraphs.
+    /// </summary>
     public interface IStatNodeFactory
     {
-        ISuspendableEventViewProvider<IDisposableNode> Create(NodeType nodeType);
-        ModifierNodeCollection Create(Form form);
+        IDisposableNodeViewProvider Create(NodeSelector selector);
+        ModifierNodeCollection Create(FormNodeSelector selector);
     }
 }

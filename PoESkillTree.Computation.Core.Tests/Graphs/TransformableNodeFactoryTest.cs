@@ -2,7 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
-using PoESkillTree.Computation.Core.Events;
 using PoESkillTree.Computation.Core.Graphs;
 using PoESkillTree.Computation.Core.Nodes;
 
@@ -22,11 +21,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void CreateReturnsInjectedResult()
         {
-            var expected = Mock.Of<ISuspendableEventViewProvider<IDisposableNode>>();
+            var expected = Mock.Of<IDisposableNodeViewProvider>();
             var value = Mock.Of<IValue>();
-            var transformableValue = new TransformableValue(value);
-            var injectedFactory = Mock.Of<INodeFactory>(f => f.Create(transformableValue) == expected);
-            var sut = CreateSut(injectedFactory, _ => transformableValue);
+            var sut = CreateSut(new TransformableValue(value), expected);
 
             var actual = sut.Create(value);
 
@@ -44,10 +41,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void CreateAddsToTransformableDictionary()
         {
-            var key = Mock.Of<ISuspendableEventViewProvider<IDisposableNode>>();
+            var key = Mock.Of<IDisposableNodeViewProvider>();
             var transformableValue = new TransformableValue(null);
-            var injectedFactory = Mock.Of<INodeFactory>(f => f.Create(transformableValue) == key);
-            var sut = CreateSut(injectedFactory, _ => transformableValue);
+            var sut = CreateSut(transformableValue, key);
 
             sut.Create(null);
 
@@ -55,10 +51,51 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             Assert.AreSame(transformableValue, sut.TransformableDictionary[key]);
         }
 
-        private static TransformableNodeFactory CreateSut(
-            INodeFactory injectedFactory = null, Func<IValue, TransformableValue> transformableFactory = null)
+        [Test]
+        public void DisposingProviderRemovesIt()
         {
-            return new TransformableNodeFactory(injectedFactory, transformableFactory);
+            var providerMock = new Mock<IDisposableNodeViewProvider>();
+            var sut = CreateSut(provider: providerMock.Object);
+            sut.Create(null);
+
+            providerMock.Raise(p => p.Disposed += null, EventArgs.Empty);
+
+            CollectionAssert.IsEmpty(sut.TransformableDictionary);
+        }
+
+        [Test]
+        public void RaisingTransformableValuesValueChangedCallsProvidersRaiseValueChanged()
+        {
+            var transformableValue = new TransformableValue(null);
+            var providerMock = new Mock<IDisposableNodeViewProvider>();
+            var sut = CreateSut(transformableValue, providerMock.Object);
+            sut.Create(null);
+
+            transformableValue.RemoveAll();
+
+            providerMock.Verify(p => p.RaiseValueChanged());
+        }
+
+        [Test]
+        public void RaisingTransformableValuesValueChangedDoesNotCallProvidersRaiseValueChangedAfterDisposal()
+        {
+            var transformableValue = new TransformableValue(null);
+            var providerMock = new Mock<IDisposableNodeViewProvider>();
+            var sut = CreateSut(transformableValue, providerMock.Object);
+            sut.Create(null);
+            
+            providerMock.Raise(p => p.Disposed += null, EventArgs.Empty);
+            transformableValue.RemoveAll();
+
+            providerMock.Verify(p => p.RaiseValueChanged(), Times.Never);
+        }
+
+        private static TransformableNodeFactory CreateSut(
+            TransformableValue transformableValue = null, IDisposableNodeViewProvider provider = null)
+        {
+            transformableValue = transformableValue ?? new TransformableValue(null);
+            var injectedFactory = Mock.Of<INodeFactory>(f => f.Create(transformableValue) == provider);
+            return new TransformableNodeFactory(injectedFactory, _ => transformableValue);
         }
     }
 }

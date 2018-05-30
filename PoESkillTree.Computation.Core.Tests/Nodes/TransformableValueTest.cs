@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Nodes;
 
 namespace PoESkillTree.Computation.Core.Tests.Nodes
@@ -43,7 +44,7 @@ namespace PoESkillTree.Computation.Core.Tests.Nodes
         {
             var expected = new NodeValue(42);
             var context = Mock.Of<IValueCalculationContext>();
-            var values = NodeHelper.MockMany<IValue>();
+            var values = Helper.MockMany<IValue>();
             var sut = CreateSut(values[0]);
             Mock.Get(values[2]).Setup(v => v.Calculate(context)).Returns(expected);
 
@@ -59,7 +60,7 @@ namespace PoESkillTree.Computation.Core.Tests.Nodes
         {
             var expected = new NodeValue(42);
             var context = Mock.Of<IValueCalculationContext>();
-            var values = NodeHelper.MockMany<IValue>();
+            var values = Helper.MockMany<IValue>();
             var sut = CreateSut(values[0]);
             var transformations = new[]
             {
@@ -74,6 +75,57 @@ namespace PoESkillTree.Computation.Core.Tests.Nodes
             var actual = sut.Calculate(context);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void RemoveAllResetsToInitialValue()
+        {
+            var expected = new NodeValue(42);
+            var context = Mock.Of<IValueCalculationContext>();
+            var value = Mock.Of<IValue>(v => v.Calculate(context) == expected);
+            var sut = CreateSut(value);
+            sut.Add(Mock.Of<IValueTransformation>());
+
+            sut.RemoveAll();
+            var actual = sut.Calculate(context);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void AddRaisesValueChanged()
+        {
+            var sut = CreateSut();
+            var raised = false;
+            sut.ValueChanged += (sender, args) => raised = true;
+
+            sut.Add(Mock.Of<IValueTransformation>());
+            
+            Assert.IsTrue(raised);
+        }
+
+        [Test]
+        public void RemoveRaisesValueChanged()
+        {
+            var sut = CreateSut();
+            var raised = false;
+            sut.ValueChanged += (sender, args) => raised = true;
+
+            sut.Remove(null);
+            
+            Assert.IsTrue(raised);
+        }
+
+        [Test]
+        public void RemoveAllRaisesValueChanged()
+        {
+            var sut = CreateSut();
+            var raised = false;
+            sut.ValueChanged += (sender, args) => raised = true;
+
+            sut.RemoveAll();
+            
+            Assert.IsTrue(raised);
         }
 
         private static TransformableValue CreateSut(IValue value = null) => new TransformableValue(value);

@@ -3,8 +3,11 @@ using Moq;
 using MoreLinq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Common;
+using PoESkillTree.Computation.Common.Tests;
 using PoESkillTree.Computation.Core.Events;
 using PoESkillTree.Computation.Core.Graphs;
+using static PoESkillTree.Computation.Common.Tests.Helper;
+using static PoESkillTree.Computation.Core.Tests.Graphs.NodeSelectorHelper;
 
 namespace PoESkillTree.Computation.Core.Tests.Graphs
 {
@@ -65,7 +68,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void AddModifierCallsInjectedGraph()
         {
-            var modifier = NodeHelper.MockModifier();
+            var modifier = MockModifier();
             var graphMock = new Mock<ICalculationGraph>();
             var sut = CreateSut(graphMock.Object);
 
@@ -77,7 +80,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
         [Test]
         public void RemoveModifierCallsInjectedGraph()
         {
-            var modifier = NodeHelper.MockModifier();
+            var modifier = MockModifier();
             var graphMock = new Mock<ICalculationGraph>();
             var sut = CreateSut(graphMock.Object);
 
@@ -153,7 +156,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var sut = CreateSut(graphMock.Object);
             sut.GetOrAdd(stat);
 
-            sut.AddModifier(new Modifier(new[] { stat }, Form.More, null));
+            sut.AddModifier(MockModifier(stat));
 
             sut.RemoveUnusedNodes();
             graphMock.Verify(g => g.Remove(stat), Times.Never);
@@ -167,7 +170,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var sut = CreateSut(graphMock.Object);
             SetStats(graphMock, stat);
 
-            sut.RemoveModifier(new Modifier(new[] { stat }, Form.More, null));
+            sut.RemoveModifier(MockModifier(stat));
 
             sut.RemoveUnusedNodes();
             graphMock.Verify(g => g.Remove(stat));
@@ -180,7 +183,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var graphMock = MockGraph();
             var sut = CreateSut(graphMock.Object);
 
-            sut.RemoveModifier(new Modifier(new[] { stat }, Form.More, null));
+            sut.RemoveModifier(MockModifier(stat));
 
             sut.RemoveUnusedNodes();
             graphMock.Verify(g => g.Remove(stat), Times.Never);
@@ -195,7 +198,7 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             graphMock.Setup(g => g.StatGraphs[stat].ModifierCount).Returns(5);
             var sut = CreateSut(graphMock.Object);
 
-            sut.RemoveModifier(new Modifier(new[] { stat }, Form.More, null));
+            sut.RemoveModifier(MockModifier(stat));
 
             sut.RemoveUnusedNodes();
             graphMock.Verify(g => g.Remove(stat), Times.Never);
@@ -208,9 +211,9 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var graphMock = MockGraph();
             var sut = CreateSut(graphMock.Object);
             sut.GetOrAdd(stat);
-            var nodes = new Dictionary<NodeType, ISuspendableEventViewProvider<ICalculationNode>>
+            var nodes = new Dictionary<NodeSelector, ISuspendableEventViewProvider<ICalculationNode>>
             {
-                { NodeType.Base, Mock.Of<ISuspendableEventViewProvider<ICalculationNode>>() }
+                { Selector(NodeType.Base), Mock.Of<ISuspendableEventViewProvider<ICalculationNode>>() }
             };
             var statGraph = Mock.Of<IStatGraph>(g => g.Nodes == nodes);
             var statGraphs = new Dictionary<IStat, IStatGraph> { { stat, statGraph } };
@@ -232,12 +235,12 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var graphMock = MockGraph();
             var sut = CreateSut(graphMock.Object);
             sut.GetOrAdd(stat);
-            var formNodeCollection = new Dictionary<Form, ISuspendableEventViewProvider<INodeCollection<Modifier>>>
+            var formNodeCollection = new Dictionary<FormNodeSelector, ISuspendableEventViewProvider<INodeCollection<Modifier>>>
             {
-                { Form.More, Mock.Of<ISuspendableEventViewProvider<INodeCollection<Modifier>>>() }
+                { Selector(Form.More), Mock.Of<ISuspendableEventViewProvider<INodeCollection<Modifier>>>() }
             };
             var statGraph = Mock.Of<IStatGraph>(g => 
-                g.Nodes == new Dictionary<NodeType, ISuspendableEventViewProvider<ICalculationNode>>() &&
+                g.Nodes == new Dictionary<NodeSelector, ISuspendableEventViewProvider<ICalculationNode>>() &&
                 g.FormNodeCollections == formNodeCollection);
             var statGraphs = new Dictionary<IStat, IStatGraph> { { stat, statGraph } };
             graphMock.SetupGet(g => g.StatGraphs).Returns(statGraphs);
@@ -257,29 +260,62 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
             var statGraphMock = new Mock<IStatGraph>(MockBehavior.Strict);
             var statGraphs = new Dictionary<IStat, IStatGraph> { { stat, statGraphMock.Object } };
             graphMock.SetupGet(g => g.StatGraphs).Returns(statGraphs);
-            var nodes = new Dictionary<NodeType, ISuspendableEventViewProvider<ICalculationNode>>
+            var nodeSelectors = new[] { Selector(NodeType.Base), Selector(NodeType.More), Selector(NodeType.Total) };
+            var nodes = new Dictionary<NodeSelector, ISuspendableEventViewProvider<ICalculationNode>>
             {
-                { NodeType.Base, MockProvider<ICalculationNode>() },
-                { NodeType.More, MockProvider<ICalculationNode>(5) },
-                { NodeType.Total, MockProvider<ICalculationNode>() },
+                { nodeSelectors[0], MockProvider<ICalculationNode>() },
+                { nodeSelectors[1], MockProvider<ICalculationNode>(5) },
+                { nodeSelectors[2], MockProvider<ICalculationNode>() },
             };
             statGraphMock.SetupGet(g => g.Nodes).Returns(nodes);
-            var formNodeCollection = new Dictionary<Form, ISuspendableEventViewProvider<INodeCollection<Modifier>>>
+            var formNodeSelectors = new[] { Selector(Form.Increase), Selector(Form.More) };
+            var formNodeCollection = new Dictionary<FormNodeSelector, ISuspendableEventViewProvider<INodeCollection<Modifier>>>
             {
-                { Form.Increase, MockProvider<INodeCollection<Modifier>>(2) },
-                { Form.More, MockProvider<INodeCollection<Modifier>>() },
+                { formNodeSelectors[0], MockProvider<INodeCollection<Modifier>>(2) },
+                { formNodeSelectors[1], MockProvider<INodeCollection<Modifier>>() },
             };
             statGraphMock.SetupGet(g => g.FormNodeCollections).Returns(formNodeCollection);
 
             var seq = new MockSequence();
-            statGraphMock.InSequence(seq).Setup(g => g.RemoveNode(NodeType.Total)).Verifiable();
-            statGraphMock.InSequence(seq).Setup(g => g.RemoveNode(NodeType.Base)).Verifiable();
-            statGraphMock.InSequence(seq).Setup(g => g.RemoveFormNodeCollection(Form.More)).Verifiable();
+            statGraphMock.InSequence(seq).Setup(g => g.RemoveNode(nodeSelectors[2])).Verifiable();
+            statGraphMock.InSequence(seq).Setup(g => g.RemoveNode(nodeSelectors[0])).Verifiable();
+            statGraphMock.InSequence(seq).Setup(g => g.RemoveFormNodeCollection(formNodeSelectors[1])).Verifiable();
 
             sut.RemoveUnusedNodes();
 
             // Verify last step of sequence to force previous calls in sequence
-            statGraphMock.Verify(g => g.RemoveFormNodeCollection(Form.More));
+            statGraphMock.Verify(g => g.RemoveFormNodeCollection(formNodeSelectors[1]));
+        }
+
+        [Test]
+        public void RemoveUnusedNodesDoesNotRemoveStatsWherePathsCantBeRemoved()
+        {
+            var stat = new StatStub();
+            var graphMock = MockGraph();
+            var sut = CreateSut(graphMock.Object);
+            sut.GetOrAdd(stat);
+            var statGraph = MockStatGraph();
+            Mock.Get(statGraph).Setup(g => g.Paths.SubscriberCount).Returns(1);
+            var statGraphs = new Dictionary<IStat, IStatGraph> { { stat, statGraph } };
+            graphMock.SetupGet(g => g.StatGraphs).Returns(statGraphs);
+
+            sut.RemoveUnusedNodes();
+
+            graphMock.Verify(g => g.Remove(stat), Times.Never);
+        }
+
+        [Test]
+        public void RemoveModifierCallsDecoratedGraphFirst()
+        {
+            var stat = new StatStub();
+            var modifier = MockModifier(stat);
+            var graphMock = new Mock<ICalculationGraph>();
+            graphMock.Setup(g => g.RemoveModifier(modifier)).Callback(() => SetStats(graphMock));
+            var sut = CreateSut(graphMock.Object);
+
+            sut.RemoveModifier(modifier);
+
+            graphMock.Verify(g => g.RemoveModifier(modifier));
         }
 
         private static PrunableCalculationGraph CreateSut(ICalculationGraph decoratedGraph) =>
@@ -313,9 +349,10 @@ namespace PoESkillTree.Computation.Core.Tests.Graphs
 
         private static IStatGraph MockStatGraph() =>
             Mock.Of<IStatGraph>(g =>
-                g.Nodes == new Dictionary<NodeType, ISuspendableEventViewProvider<ICalculationNode>>() &&
+                g.Nodes == new Dictionary<NodeSelector, ISuspendableEventViewProvider<ICalculationNode>>() &&
                 g.FormNodeCollections ==
-                new Dictionary<Form, ISuspendableEventViewProvider<INodeCollection<Modifier>>>());
+                new Dictionary<FormNodeSelector, ISuspendableEventViewProvider<INodeCollection<Modifier>>>() &&
+                g.Paths.SubscriberCount == 0);
 
         private static ISuspendableEventViewProvider<T> MockProvider<T>(int subscriberCount = 0) =>
             Mock.Of<ISuspendableEventViewProvider<T>>(p => p.SubscriberCount == subscriberCount);

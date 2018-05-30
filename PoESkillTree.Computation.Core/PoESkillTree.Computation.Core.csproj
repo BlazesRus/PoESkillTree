@@ -65,9 +65,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Graphs\CalculationGraphWithEvents.cs" />
+    <Compile Include="Graphs\FormNodeSelector.cs" />
     <Compile Include="Graphs\IDeterminesNodeRemoval.cs" />
+    <Compile Include="Graphs\NodeSelector.cs" />
+    <Compile Include="Graphs\StatGraphWithEvents.cs" />
     <Compile Include="Graphs\StatRegistry.cs" />
     <Compile Include="Graphs\TransformableNodeFactory.cs" />
+    <Compile Include="Graphs\ValueTransformer.cs" />
+    <Compile Include="IObservableCollection.cs" />
+    <Compile Include="NodeCollections\ObservableCollection.cs" />
+    <Compile Include="NodeCollections\PathDefinitionCollection.cs" />
     <Compile Include="NodeFactory.cs" />
     <Compile Include="Nodes\BaseValue.cs" />
     <Compile Include="Calculator.cs" />
@@ -81,10 +88,10 @@
     <Compile Include="Graphs\IModifierCollection.cs" />
     <Compile Include="INodeCollection.cs" />
     <Compile Include="Graphs\IStatNodeFactory.cs" />
+    <Compile Include="Nodes\ConvertedBaseValue.cs" />
     <Compile Include="Nodes\CycleGuard.cs" />
     <Compile Include="Nodes\FormAggregatingValue.cs" />
     <Compile Include="Nodes\ICycleGuard.cs" />
-    <Compile Include="Nodes\IDisposableNode.cs" />
     <Compile Include="Graphs\INodeFactory.cs" />
     <Compile Include="Graphs\IStatGraph.cs" />
     <Compile Include="Events\ISuspendableEvents.cs" />
@@ -92,13 +99,16 @@
     <Compile Include="NodeCollections\ModifierNodeCollection.cs" />
     <Compile Include="NodeCollections\NodeCollection.cs" />
     <Compile Include="Graphs\StatGraphCollectionSuspender.cs" />
+    <Compile Include="Nodes\IDisposableNodeViewProvider.cs" />
     <Compile Include="Nodes\IValueTransformable.cs" />
+    <Compile Include="Nodes\MultiPathFormAggregatingValue.cs" />
     <Compile Include="Nodes\NodeValueAggregators.cs" />
     <Compile Include="Nodes\ICachingNode.cs" />
     <Compile Include="ICalculator.cs" />
     <Compile Include="ICalculationNode.cs" />
     <Compile Include="INodeRepository.cs" />
     <Compile Include="Nodes\TransformableValue.cs" />
+    <Compile Include="Nodes\UncappedSubtotalValue.cs" />
     <Compile Include="Nodes\WrappingNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Nodes\CachingNode.cs" />
@@ -108,10 +118,10 @@
     <Compile Include="Nodes\SubtotalValue.cs" />
     <Compile Include="Events\SuspendableEventsComposite.cs" />
     <Compile Include="Events\SuspendableEventViewProvider.cs" />
-    <Compile Include="NodeCollections\SuspendableNodeCollection.cs" />
+    <Compile Include="NodeCollections\SuspendableObservableCollection.cs" />
     <Compile Include="Graphs\SuspendableViewNodeRepository.cs" />
     <Compile Include="Nodes\TotalValue.cs" />
-    <Compile Include="Nodes\UncappedSubtotalValue.cs" />
+    <Compile Include="Nodes\PathTotalValue.cs" />
     <Compile Include="Nodes\ValueCalculationContext.cs" />
     <Compile Include="Nodes\ValueNode.cs" />
     <Compile Include="StatNodeFactory.cs" />
