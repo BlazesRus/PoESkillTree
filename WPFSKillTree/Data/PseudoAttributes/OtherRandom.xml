@@ -206,7 +206,7 @@
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.74" />
 	</PseudoAttribute>
-		<PseudoAttribute Name="#% increased Burn DOT before tags with Level 20 Melee Splash" Group="Damage">
+	<PseudoAttribute Name="#% increased Burn DOT before tags with Level 20 Melee Splash" Group="Damage">
 		<Attribute Name="#% increased Damage over Time" />
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased Fire Damage"/>
@@ -352,5 +352,47 @@
 		<Attribute Name="+# to Strength"/>
 		<Attribute Name="+# to Intelligence" />
 		<Attribute Name="+# to Dexterity" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Chaos Projectile Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Chaos Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Fire Projectile Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Fire Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Ice Projectile Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Cold Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Poison Projectile DOT [Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage over Time" />
+		<Attribute Name="#% increased Damage with Poison"/>
+		<Attribute Name="#% increased Chaos Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Burn Projectile DOT [Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage over Time" />
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Fire Damage"/>
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Burning Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Bleed Projectile DOT [Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage over Time" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Physical Damage over Time"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
 	</PseudoAttribute>
 </PseudoAttributes>
