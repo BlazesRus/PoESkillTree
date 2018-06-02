@@ -395,4 +395,43 @@
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased Projectile Damage" />
 	</PseudoAttribute>
+	<!--Zerphi's Heart based burn-->
+	<PseudoAttribute Name="#% increased Chaotic Burn DOT [Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage over Time" />
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Chaos Damage"/>
+		<Attribute Name="#% increased Burning Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Chaotic Burn Projectile DOT [Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage over Time" />
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Chaos Damage"/>
+		<Attribute Name="#% increased Burning Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% Total increased Burn Duration" Group="Damage">
+		<Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+		<Attribute Name="#% increased Ignite Duration on Enemies"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% Total increased Freeze Duration" Group="Damage">
+		<Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+		<Attribute Name="#% increased Freeze Duration on Enemies"/>
+	</PseudoAttribute>
+		<PseudoAttribute Name="#% Total increased Shock Duration" Group="Damage">
+		<Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+		<Attribute Name="#% increased Shock Duration on Enemies"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% Total increased Ignite Chance" Group="Damage">
+		<Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+		<Attribute Name="#% chance to Ignite" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% Total increased Shock Chance" Group="Damage">
+		<Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+		<Attribute Name="#% chance to Shock" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% Total increased Freeze Chance" Group="Damage">
+		<Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+		<Attribute Name="#% chance to Freeze" />
+	</PseudoAttribute>
 </PseudoAttributes>

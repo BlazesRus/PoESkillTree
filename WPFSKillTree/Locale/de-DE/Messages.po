@@ -1039,7 +1039,7 @@ msgstr "Sprache"
 msgid "Build save path"
 msgstr "Speicherpfad für Builds"
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:49
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:50
 msgid "Change..."
 msgstr "Ändern..."
 
@@ -1083,32 +1083,32 @@ msgstr "Setze 'Ascendancy' Fähigkeitenbaum zurück"
 msgid "Reset selected bandits"
 msgstr "Setze ausgewählte Banditen zurück"
 
-#: Views\TrackedStatsMenu.xaml:40
+#: Views\TrackedStatsMenu.xaml:41
 #, fuzzy
 msgid "TrackedStats Path:"
 msgstr "Ersetze Einstellungen für Banditen"
 
-#: Views\TrackedStatsMenu.xaml:54
+#: Views\TrackedStatsMenu.xaml:55
 #, fuzzy
 msgid "TargetFile:"
 msgstr "Ziel"
 
-#: Views\TrackedStatsMenu.xaml:73
+#: Views\TrackedStatsMenu.xaml:74
 #, fuzzy
 msgid "Load File Names From TrackedStats Directory"
 msgstr "Wähle das Verzeichnis für Builds aus"
 
-#: Views\TrackedStatsMenu.xaml:83
+#: Views\TrackedStatsMenu.xaml:84
 #, fuzzy
 msgid "Load Tracked Stats from Target File"
 msgstr "Lade Fähigkeitenbaum"
 
-#: Views\TrackedStatsMenu.xaml:88
+#: Views\TrackedStatsMenu.xaml:89
 #, fuzzy
 msgid "Reset Tracking"
 msgstr "Einstellungen zurücksetzen"
 
-#: Views\TrackedStatsMenu.xaml:93
+#: Views\TrackedStatsMenu.xaml:94
 #, fuzzy
 msgid "Save Tracked Stats to Target File"
 msgstr "Lade Fähigkeitenbaum"
@@ -1169,36 +1169,36 @@ msgstr "Konnte Build nicht importieren"
 msgid "Character"
 msgstr "Charakter"
 
-#: SkillTreeFiles\SkillTree.cs:1301
+#: SkillTreeFiles\SkillTree.cs:1337
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr "Manche Knoten ({unknownNodes}) sind unbekannt und wurden weggelassen."
 
-#: SkillTreeFiles\Updater.cs:116 SkillTreeFiles\Updater.cs:237
+#: SkillTreeFiles\Updater.cs:125 SkillTreeFiles\Updater.cs:246
 msgid "Download already in progress"
 msgstr "Das Herunterladen findet bereits statt"
 
-#: SkillTreeFiles\Updater.cs:118
+#: SkillTreeFiles\Updater.cs:127
 msgid "Download already completed"
 msgstr "Das Herunterladen ist bereits abgeschlossen"
 
-#: SkillTreeFiles\Updater.cs:160 SkillTreeFiles\Updater.cs:353
-#: SkillTreeFiles\Updater.cs:427
+#: SkillTreeFiles\Updater.cs:169 SkillTreeFiles\Updater.cs:362
+#: SkillTreeFiles\Updater.cs:436
 msgid "Download still in progress"
 msgstr "Das Herunterladen ist noch nicht abgeschlossen"
 
-#: SkillTreeFiles\Updater.cs:163 SkillTreeFiles\Updater.cs:429
+#: SkillTreeFiles\Updater.cs:172 SkillTreeFiles\Updater.cs:438
 msgid "No package downloaded"
 msgstr "Kein Paket heruntergeladen"
 
-#: SkillTreeFiles\Updater.cs:261
+#: SkillTreeFiles\Updater.cs:270
 msgid "No release found"
 msgstr "Keine Veröffentlichung gefunden"
 
-#: SkillTreeFiles\Updater.cs:369
+#: SkillTreeFiles\Updater.cs:378
 msgid "Download completed or still in progress"
 msgstr "Das Herunterladen ist abgeschlossen oder findet noch statt"
 
-#: SkillTreeFiles\Updater.cs:409
+#: SkillTreeFiles\Updater.cs:418
 msgid "The application is not correctly installed"
 msgstr "Die Anwendung ist nicht korrekt installiert"
 
@@ -1306,7 +1306,7 @@ msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:33
-#: ItemFilter\Model\FilterManager.cs:567
+#: ItemFilter\Model\FilterManager.cs:674
 msgid "Flasks"
 msgstr ""
 
@@ -1455,64 +1455,64 @@ msgstr "Fehler beim Laden des Builds von der URL."
 msgid "Currency"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:386
+#: ItemFilter\Model\FilterManager.cs:493
 msgid "Recipes"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:393
+#: ItemFilter\Model\FilterManager.cs:500
 msgid "Any Normal item which vendor trades for Scroll Fragment."
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:404
+#: ItemFilter\Model\FilterManager.cs:511
 msgid "Any Magic item which vendor trades for Transmutation Shard, Alteration Shard or Alchemy Shard."
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:416
+#: ItemFilter\Model\FilterManager.cs:523
 msgid ""
 "A single Normal weapon with 20% quality.\n"
 "Weapons with a total of at least 40% quality."
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:464
+#: ItemFilter\Model\FilterManager.cs:571
 msgid ""
 "1 Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
 "1 Any Map"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:537
+#: ItemFilter\Model\FilterManager.cs:644
 msgid "Gems"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:760
+#: ItemFilter\Model\FilterManager.cs:867
 msgid "Miscellaneous"
 msgstr "Verschiedenes"
 
-#: ItemFilter\Model\FilterManager.cs:884
+#: ItemFilter\Model\FilterManager.cs:1007
 msgid "Crafting"
 msgstr ""
 
-#: ItemFilter\Model\FilterManager.cs:1002
+#: ItemFilter\Model\FilterManager.cs:1125
 msgid "Chancing"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:35
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:38
 msgid "Original color"
 msgstr "Originale Farbe"
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:37
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:40
 msgid "Standard colors"
 msgstr "Standardfarben"
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:39
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:42
 msgid "Recent colors"
 msgstr "Kürzlich verwendete Farben"
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:40
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:44
 msgctxt "color"
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:41
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:45
 msgctxt "color"
 msgid "Standard"
 msgstr "Standard"
@@ -1809,7 +1809,7 @@ msgstr[1] "{0} Punkte"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Dein Build muss mindestens einen Knoten ausgewählt haben, damit ein Screenshot generiert werden kann."
 
-#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2119
+#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2230
 msgid "An error occurred while copying to Clipboard."
 msgstr "Beim Kopieren in den Zwischenspeicher ist ein Fehler aufgetreten."
 
@@ -1883,45 +1883,45 @@ msgstr "Während des Herunterladens ist ein Fehler aufgetreten."
 msgid "An error occurred while attempting to start the installation."
 msgstr "Beim Versuch die Installation zu starten ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:1850
+#: Views\MainWindow.xaml.cs:1961
 msgid "An error occurred while attempting to load item data."
 msgstr "Beim Versuch die Gegenstandsdaten zu laden ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:1944 Views\MainWindow.xaml.cs:1987
+#: Views\MainWindow.xaml.cs:2055 Views\MainWindow.xaml.cs:2098
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Beim Versuch den Fähigkeitenbaum von der URL zu laden ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:1966
+#: Views\MainWindow.xaml.cs:2077
 msgid "The build you are loading contains information about selected bandits."
 msgstr "Der Build enthält Informationen über ausgewählte Banditen."
 
-#: Views\MainWindow.xaml.cs:1967
+#: Views\MainWindow.xaml.cs:2078
 msgid "Do you want to use it and overwrite current settings?"
 msgstr "Möchtest Du es verwenden und die derzeitige Einstellungen überschreiben?"
 
-#: Views\MainWindow.xaml.cs:1968
+#: Views\MainWindow.xaml.cs:2079
 msgid "Replace Bandits settings"
 msgstr "Ersetze Einstellungen für Banditen"
 
-#: Views\MainWindow.xaml.cs:1994
+#: Views\MainWindow.xaml.cs:2105
 #, fuzzy
 msgid "Current: "
 msgstr "Aktuell:"
 
-#: Views\MainWindow.xaml.cs:1995
+#: Views\MainWindow.xaml.cs:2106
 #, fuzzy
 msgid "Loaded: "
 msgstr "Geladen:"
 
-#: Views\MainWindow.xaml.cs:2099
+#: Views\MainWindow.xaml.cs:2210
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Generiere PoEUrl des Fähigkeitenbaums"
 
-#: Views\MainWindow.xaml.cs:2105
+#: Views\MainWindow.xaml.cs:2216
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Beim Versuch die PoEUrl zu kontaktieren ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:2115
+#: Views\MainWindow.xaml.cs:2226
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Der PoEUrl Link wurde in die Zwischenablage kopiert."
 
