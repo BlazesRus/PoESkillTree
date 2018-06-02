@@ -218,11 +218,51 @@ namespace POESKillTree.SkillTreeFiles
             return AttributeTotal;
         }
 
-        /// <summary>
-        /// Applies the fake Intuitive Leap Support attribute to nodes in effected area
-        /// </summary>
-        /// <param name="TargetNode">The target node.</param>
-        static public void ApplyIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
+		/// <summary>
+		/// Calculates the total of target attribute inside jewel area.
+		/// </summary>
+		/// <param name="TargetNode">The target node.</param>
+		/// <param name="AttributeName">Name of Attribute to search for</param>
+		/// <param name="SkilledNodes">The skilled nodes.</param>
+		/// <param name="JewelRadiusType">Jewel Radius Type(Large/Medium/Small)(Default:Large"")</param>
+		/// <returns></returns>
+		static public float CalculateTotalUnallocAttributeInJewelArea(SkillNode TargetNode, string AttributeName, Utils.ObservableSet<SkillNode> SkilledNodes, string JewelRadiusType = "")
+		{
+			int JewelRadius;
+			switch (JewelRadiusType)
+			{
+				case "Medium":
+					JewelRadius = 1200;
+					break;
+				case "Small":
+					JewelRadius = 800;
+					break;
+				default://"Large"
+					JewelRadius = 1500;
+					break;
+			}
+			SkillNode CurrentNode;
+			float AttributeTotal = 0.0f;
+			Vector2D nodePosition = TargetNode.Position;
+			IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
+				SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
+			foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
+			{
+				CurrentNode = NodePair.Value;
+				if (CurrentNode.Attributes.ContainsKey(AttributeName) && !SkilledNodes.Contains(CurrentNode))
+				{
+					AttributeTotal += CurrentNode.Attributes[AttributeName][0];
+				}
+
+			}
+			return AttributeTotal;
+		}
+
+		/// <summary>
+		/// Applies the fake Intuitive Leap Support attribute to nodes in effected area
+		/// </summary>
+		/// <param name="TargetNode">The target node.</param>
+		static public void ApplyIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
         {
             List<float> BlankList = new List<float>(0);
             string[] ExtendedAttribute;
@@ -867,7 +907,120 @@ namespace POESKillTree.SkillTreeFiles
                             }
                         }
                     }
-                    else
+					else if (CurrentJewelData.Name == "Transcendent Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							AreaStats *= 0.4f;
+							if (attrlist.ContainsKey("+#% to Energy Shield Regenerated Per Second"))
+							{
+								attrlist["+#% to Energy Shield Regenerated Per Second"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% to Energy Shield Regenerated Per Second", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Transcendent Flesh")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							if (attrlist.ContainsKey("+# additional Physical Damage Reduction"))
+							{
+								attrlist["+# additional Physical Damage Reduction"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# additional Physical Damage Reduction", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Transcendent Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							AreaStats *= 2f;
+							if (attrlist.ContainsKey("+#% increased Movement Speed"))
+							{
+								attrlist["+#% increased Movement Speed"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% increased Movement Speed", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Spirit")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Dexterity"][0] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 15;
+							if (attrlist.ContainsKey("+# to Maximum Mana"))
+							{
+								attrlist["+# to Maximum Mana"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# to Maximum Mana", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Flesh")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Strength"][0] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 5;
+							if (attrlist.ContainsKey("+#% to Critical Strike Multiplier"))
+							{
+								attrlist["+#% to Critical Strike Multiplier"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% to Critical Strike Multiplier", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Intelligence"][0] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 100;
+							if (attrlist.ContainsKey("+# to Accuracy Rating"))
+							{
+								attrlist["+# to Accuracy Rating"][0] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# to Accuracy Rating", new List<float>(1) { AreaStats });
+							}
+						}
+					}
+					else
                     {
                         string JewelData = CurrentJewelData.Name;
                     }
@@ -1286,7 +1439,120 @@ namespace POESKillTree.SkillTreeFiles
                             }
                         }
                     }
-                }
+					else if (CurrentJewelData.Name == "Transcendent Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							AreaStats *= 0.4f;
+							if (attrlist.ContainsKey("+#% to Energy Shield Regenerated Per Second"))
+							{
+								attrlist["+#% to Energy Shield Regenerated Per Second"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% to Energy Shield Regenerated Per Second", AreaStats);
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Transcendent Flesh")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							if (attrlist.ContainsKey("+# additional Physical Damage Reduction"))
+							{
+								attrlist["+# additional Physical Damage Reduction"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# additional Physical Damage Reduction", AreaStats);
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Transcendent Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+						AreaStats /= 10;
+						AreaStats = (int)AreaStats;
+						if (AreaStats != 0)
+						{
+							AreaStats *= 2f;
+							if (attrlist.ContainsKey("+#% increased Movement Speed"))
+							{
+								attrlist["+#% increased Movement Speed"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% increased Movement Speed", AreaStats);
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Spirit")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Dexterity", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Dexterity"] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 15;
+							if (attrlist.ContainsKey("+# to Maximum Mana"))
+							{
+								attrlist["+# to Maximum Mana"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# to Maximum Mana", AreaStats);
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Flesh")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Strength", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Strength"] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 5;
+							if (attrlist.ContainsKey("+#% to Critical Strike Multiplier"))
+							{
+								attrlist["+#% to Critical Strike Multiplier"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+#% to Critical Strike Multiplier", AreaStats);
+							}
+						}
+					}
+					else if (CurrentJewelData.Name == "Tempered Mind")
+					{
+						AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+						if (AreaStats != 0)
+						{
+							attrlist["+# to Intelligence"] -= AreaStats;
+							AreaStats = CalculateTotalUnallocAttributeInJewelArea(CurrentNode, "+# to Intelligence", Tree.SkilledNodes);
+							AreaStats /= 10;
+							AreaStats = (int)AreaStats;
+							AreaStats *= 100;
+							if (attrlist.ContainsKey("+# to Accuracy Rating"))
+							{
+								attrlist["+# to Accuracy Rating"] += AreaStats;
+							}
+							else
+							{
+								attrlist.Add("+# to Accuracy Rating", AreaStats);
+							}
+						}
+					}
+				}
             }
             return attrlist;
         }
