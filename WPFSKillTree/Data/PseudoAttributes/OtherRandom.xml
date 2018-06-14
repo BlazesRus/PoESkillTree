@@ -25,9 +25,9 @@
 		<Attribute Name="#% increased Area Damage"/>
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Damage"/>
-		<!--Attack speed increases rate of AOE circles during charge of skill, while Movement speed increases speed of travel distance (granting more damage based on percent of dash distance)-->
+		<!--Attack speed increases rate of AOE circles during charge of skill, while Movement speed increases speed of travel distance and maximum travel-->
 		<Attribute Name="#% increased Attack Speed"/>
-		<Attribute Name="#% increased Movement Speed"/>
+		<!--Attribute Name="#% increased Movement Speed"/-->
 		<Attribute Name="#% increased Melee Physical Damage"/>
 		<Attribute Name="#% increased Attack Physical Damage"/>
 		<Attribute Name="#% increased Melee Damage"/>
@@ -40,9 +40,8 @@
 		<Attribute Name="#% increased Area Damage"/>
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Damage"/>
-		<!--Attack speed increases rate of AOE circles during charge of skill, while Movement speed increases speed of travel distance (granting more damage based on percent of dash distance)-->
 		<Attribute Name="#% increased Attack Speed"/>
-		<Attribute Name="#% increased Movement Speed"/>
+		<!--Attribute Name="#% increased Movement Speed"/-->
 		<Attribute Name="#% increased Melee Physical Damage"/>
 		<Attribute Name="#% increased Attack Physical Damage"/>
 		<Attribute Name="#% increased Melee Damage"/>
@@ -78,10 +77,19 @@
 		<Attribute Name="#% increased Physical Damage with {0}">
 			<Conditions>
 				<AndComposition>
-					<WeaponClass>{0}</WeaponClass> <!-- Maces, Axes, Two Handed Melee Weapons, ... -->
+					<WeaponClass>{0}</WeaponClass> 
 					<Tag>Attack</Tag>
 				</AndComposition>
-				<Tag>{0}</Tag><!-- Attacks -->
+				<Tag>{0}</Tag>
+			</Conditions>
+		</Attribute>
+		<Attribute Name="#% increased Physical Damage with Two Handed Weapons">
+			<Conditions>
+				<AndComposition>
+					<Not><OffHand>Dual Wield</OffHand></Not>
+					<Tag>Attack</Tag>
+					<Not><WeaponClass>Unarmed</WeaponClass></Not>
+				</AndComposition>
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
@@ -98,6 +106,7 @@
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased maximum Life" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Full Conversion Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
@@ -105,6 +114,7 @@
 		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
@@ -112,6 +122,7 @@
 		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<!-- Physical to Lightning Conversion based on https://www.reddit.com/r/pathofexile/comments/6rjnwe/glacial_cascade_dmg_conversion_to_lightning/-->
 	<PseudoAttribute Name="#% increased Glacial Cascade Damage with Physical to Lightning Gem[Non-Tagged]" Group="Damage">
@@ -121,6 +132,7 @@
 		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Glacial Cascade Damage with Level 20 Physical to Lightning Gem with gains[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
@@ -129,6 +141,7 @@
 		<Attribute Name="#% increased Global Physical Damage"/>
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
  	<PseudoAttribute Name="#% increased Average Wild Strike Damage with Pure Physical Weapon[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
@@ -143,6 +156,7 @@
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Projectile Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Average Wild Strike Damage with 75% Physical Weapon[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
@@ -157,6 +171,7 @@
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Projectile Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 
 	<PseudoAttribute Name="#% increased Average Wild Strike Damage[Non-Tagged]" Group="Damage">
@@ -171,6 +186,7 @@
 		<Attribute Name="#% increased Area Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Projectile Damage" ConversionMultiplier="0.333333333"/>
 		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	
 	<PseudoAttribute Name="#% increased Bleed DOT before tags" Group="Damage">
@@ -240,6 +256,10 @@
 		<Attribute Name="#% increased Critical Strike Chance" />
 		<Attribute Name="#% increased Critical Strike Chance for Spells" />
 	</PseudoAttribute>
+ 	<PseudoAttribute Name="#% increased Total Critical Strike Multiplier with Spells[Non-Tagged]" Group="Critical Strike">
+		<Attribute Name="#% increased Critical Strike Multiplier" />
+		<Attribute Name="#% increased Critical Strike Multiplier for Spells" />
+	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Critical Strike Chance with One-Handed Sword Attacks[Non-Tagged]" Group="Critical Strike">
 		<Attribute Name="#% increased Critical Strike Chance" />
 		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
@@ -249,6 +269,7 @@
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Cold Damage" />
 		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Lightning Projectile Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
@@ -303,33 +324,39 @@
  	<PseudoAttribute Name="#% increased Total Elemental Damage with Spells[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Elemental Damage with One-Handed Sword Attack Projectiles[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Projectile Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Elemental Damage with Projectile Spells[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Projectile Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Elemental Damage with One-Handed Sword AOE Attacks[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Attack Damage" />
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Elemental Damage with Attack Skills" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 
 	<PseudoAttribute Name="#% increased Total Chaos Area of Effect Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Chaos Damage" />
 		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Total Chaos Spell Area of Effect Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Chaos Damage" />
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
 	</PseudoAttribute>
 	<PseudoAttribute Name="+# maximum Base Energy Shield" Group="Defense">
 		<Attribute Name="+# to maximum Energy Shield" />
@@ -401,7 +428,6 @@
 		<Attribute Name="#% increased Damage"/>
 		<Attribute Name="#% increased Chaos Damage"/>
 		<Attribute Name="#% increased Burning Damage"/>
-		<Attribute Name="#% increased Projectile Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Chaotic Burn Projectile DOT [Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Damage over Time" />
