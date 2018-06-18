@@ -651,7 +651,7 @@ namespace POESKillTree.SkillTreeFiles
                         AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
-                            attrlist["#% increased Energy Shield"][0] -= AreaStats;
+                            attrlist["#% increased Life"][0] -= AreaStats;
                             if (attrlist.ContainsKey("+# to Dexterity"))
                             {
                                 attrlist["#% increased Energy Shield"][0] += AreaStats;
@@ -1183,7 +1183,7 @@ namespace POESKillTree.SkillTreeFiles
                         AreaStats = CalculateTotalOfAttributeInJewelArea(CurrentNode, "#% increased Life", Tree.SkilledNodes);
                         if (AreaStats != 0)
                         {
-                            attrlist["#% increased Energy Shield"] -= AreaStats;
+                            attrlist["#% increased Life"] -= AreaStats;
                             if (attrlist.ContainsKey("+# to Dexterity"))
                             {
                                 attrlist["#% increased Energy Shield"] += AreaStats;

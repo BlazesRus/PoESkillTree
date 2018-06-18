@@ -123,12 +123,14 @@ namespace POESKillTree.SkillTreeFiles
             return -1;
         }
 
-        /// <summary>
-        /// Gets the index of attribute.
-        /// </summary>
-        /// <param name="Attribute">The attribute.</param>
-        /// <returns></returns>
-        public int GetIndexOfAttribute(PseudoAttribute Attribute)
+		public int IndexOf(string Name) => GetIndexOfAttribute(Name);
+
+		/// <summary>
+		/// Gets the index of attribute.
+		/// </summary>
+		/// <param name="Attribute">The attribute.</param>
+		/// <returns></returns>
+		public int GetIndexOfAttribute(PseudoAttribute Attribute)
         {
             for (int Index = 0; Index < Count; ++Index)
             {

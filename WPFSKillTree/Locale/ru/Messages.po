@@ -1618,7 +1618,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr ""
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:454
-#: Views\MainWindow.xaml.cs:956
+#: Views\MainWindow.xaml.cs:968
 msgid "Do you want to continue?"
 msgstr "Хотите продолжить?"
 
@@ -1796,178 +1796,178 @@ msgstr "Имя Аккаунта"
 msgid "A group with that name already exists."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:452
+#: Views\MainWindow.xaml.cs:464
 #, fuzzy
 msgid "Initialization"
 msgstr "Подождите..."
 
-#: Views\MainWindow.xaml.cs:453 Views\MainWindow.xaml.cs:552
+#: Views\MainWindow.xaml.cs:465 Views\MainWindow.xaml.cs:564
 #, fuzzy
 msgid "Initializing window ..."
 msgstr "Подождите..."
 
-#: Views\MainWindow.xaml.cs:480
+#: Views\MainWindow.xaml.cs:492
 msgid "Highlight nodes by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:485
+#: Views\MainWindow.xaml.cs:497
 msgid "Remove highlights by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:545
+#: Views\MainWindow.xaml.cs:557
 #, fuzzy
 msgid "Loading skill tree assets ..."
 msgstr "Загрузить активы"
 
-#: Views\MainWindow.xaml.cs:575
+#: Views\MainWindow.xaml.cs:587
 msgid "Load Tree"
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:581
+#: Views\MainWindow.xaml.cs:593
 #, fuzzy
 msgid "Load as new build"
 msgstr "Сохранить билд"
 
-#: Views\MainWindow.xaml.cs:773
+#: Views\MainWindow.xaml.cs:785
 msgid ""
 "There are unsaved builds. Do you want to save them before closing?\n"
 "\n"
 "Canceling stops the program from closing and does not save any builds."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:803
+#: Views\MainWindow.xaml.cs:815
 msgid "Are you sure?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:804
+#: Views\MainWindow.xaml.cs:816
 #, fuzzy
 msgid "Untag All Skill Nodes"
 msgstr "Убрать все отметки"
 
-#: Views\MainWindow.xaml.cs:877
+#: Views\MainWindow.xaml.cs:889
 #, fuzzy, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
 msgstr[0] "{0}, {1} умений использовано"
 msgstr[1] "{0}, {1} умений использовано"
 
-#: Views\MainWindow.xaml.cs:911
+#: Views\MainWindow.xaml.cs:923
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:947 Views\MainWindow.xaml.cs:2230
+#: Views\MainWindow.xaml.cs:959 Views\MainWindow.xaml.cs:2242
 msgid "An error occurred while copying to Clipboard."
 msgstr "Произошла ошибка при копировании."
 
-#: Views\MainWindow.xaml.cs:953
+#: Views\MainWindow.xaml.cs:965
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:962
+#: Views\MainWindow.xaml.cs:974
 #, fuzzy
 msgid "Downloading skill tree assets ..."
 msgstr "Загрузить активы"
 
-#: Views\MainWindow.xaml.cs:983
+#: Views\MainWindow.xaml.cs:995
 msgid "An error occurred while downloading assets."
 msgstr "Произошла ошибка при загрузке активов."
 
-#: Views\MainWindow.xaml.cs:1043
+#: Views\MainWindow.xaml.cs:1055
 msgid "Checking for updates"
 msgstr "Проверяется наличие обновлений"
 
-#: Views\MainWindow.xaml.cs:1048
+#: Views\MainWindow.xaml.cs:1060
 msgid "You have the latest version!"
 msgstr "Вы используете последнюю версию!"
 
-#: Views\MainWindow.xaml.cs:1053
+#: Views\MainWindow.xaml.cs:1065
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Доступно обновление {0} ({1})"
 
-#: Views\MainWindow.xaml.cs:1056
+#: Views\MainWindow.xaml.cs:1068
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Приложение будет закрыито по завершению загрузки для продолжения обновления."
 
-#: Views\MainWindow.xaml.cs:1057
+#: Views\MainWindow.xaml.cs:1069
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Длступна новая версия {0}!"
 
-#: Views\MainWindow.xaml.cs:1060
+#: Views\MainWindow.xaml.cs:1072
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Новая версия прилодения будет установлена поверх предидущей."
 
-#: Views\MainWindow.xaml.cs:1064
+#: Views\MainWindow.xaml.cs:1076
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Внимание! Это пре-релизная версия, что значит, что моут возникать баги."
 
-#: Views\MainWindow.xaml.cs:1068
+#: Views\MainWindow.xaml.cs:1080
 msgid "Do you want to download and install the update?"
 msgstr "Хотите загрузить и установить обновление?"
 
-#: Views\MainWindow.xaml.cs:1069
+#: Views\MainWindow.xaml.cs:1081
 msgid "Do you want to download and install the new version?"
 msgstr "Хотите загрузить и установить новую версию?"
 
-#: Views\MainWindow.xaml.cs:1071
+#: Views\MainWindow.xaml.cs:1083
 msgid "Continue installation?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1082
+#: Views\MainWindow.xaml.cs:1094
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Произошла ошибка при попытке соединения."
 
-#: Views\MainWindow.xaml.cs:1090
+#: Views\MainWindow.xaml.cs:1102
 msgid "Downloading latest version"
 msgstr "Загрузить последнюю версию"
 
-#: Views\MainWindow.xaml.cs:1105 Views\MainWindow.xaml.cs:1120
+#: Views\MainWindow.xaml.cs:1117 Views\MainWindow.xaml.cs:1132
 msgid "An error occurred during the download operation."
 msgstr "Произошла ошибка при загрузке."
 
-#: Views\MainWindow.xaml.cs:1133
+#: Views\MainWindow.xaml.cs:1145
 msgid "An error occurred while attempting to start the installation."
 msgstr "Произошла ошибка при попытке начать установку."
 
-#: Views\MainWindow.xaml.cs:1961
+#: Views\MainWindow.xaml.cs:1973
 msgid "An error occurred while attempting to load item data."
 msgstr "Произошла ошибка при попытке загрузки базы данных предметов."
 
-#: Views\MainWindow.xaml.cs:2055 Views\MainWindow.xaml.cs:2098
+#: Views\MainWindow.xaml.cs:2067 Views\MainWindow.xaml.cs:2110
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Произошла ошибка при попытке загрузить ссылку."
 
-#: Views\MainWindow.xaml.cs:2077
+#: Views\MainWindow.xaml.cs:2089
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2078
+#: Views\MainWindow.xaml.cs:2090
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2079
+#: Views\MainWindow.xaml.cs:2091
 msgid "Replace Bandits settings"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2105
+#: Views\MainWindow.xaml.cs:2117
 msgid "Current: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2106
+#: Views\MainWindow.xaml.cs:2118
 #, fuzzy
 msgid "Loaded: "
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:2210
+#: Views\MainWindow.xaml.cs:2222
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Создается ссылка PoEUrl"
 
-#: Views\MainWindow.xaml.cs:2216
+#: Views\MainWindow.xaml.cs:2228
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Произошла ошибка при попытке соединения с PoEUrl."
 
-#: Views\MainWindow.xaml.cs:2226
+#: Views\MainWindow.xaml.cs:2238
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Сссылка PoEUrl была скопирована."
 

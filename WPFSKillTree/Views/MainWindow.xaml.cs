@@ -385,9 +385,21 @@ namespace POESKillTree.Views
             if (lb == null)
                 return;
             var attributelist = new List<string>();
+			string SelectedAttrName;
+			int index;
             foreach (var o in lb.SelectedItems)
             {
-                attributelist.Add(o.ToString());
+				SelectedAttrName = o.ToString();
+				index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
+				if (index>-1)//Functionality of removing individual tracked stat
+				{
+					GlobalSettings.TrackedStats.RemoveAt(index);
+				}
+				else
+				{
+					attributelist.Add(SelectedAttrName);
+				}
+				
             }
             if (attributelist.Count > 0)
             {
