@@ -176,9 +176,6 @@
 					<views:InventoryItemView Grid.Row="3" Grid.Column="3"
 					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
 					Width="41" Height="38" DataContext="{Binding JSlot_Dex_RangerDuelist}" ToolTip="Jewel slot south-east of Scion area; At road between Ranger and Duelist areas"/>
-					<views:InventoryItemView Grid.Row="3" Grid.Column="4"
-					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-					Width="41" Height="38" DataContext="{Binding JSlot_Dex_Acrobatics}" ToolTip="Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel"/>
 
 					<TextBlock  Grid.Row="4" Grid.Column="0">Non-Threshold Jewels</TextBlock>
 					<views:InventoryItemView Grid.Row="4" Grid.Column="1"
@@ -190,6 +187,9 @@
 					<views:InventoryItemView Grid.Row="4" Grid.Column="3"
 					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
 					Width="41" Height="38" DataContext="{Binding JSlot_Neutral_MinionInstability}" ToolTip="Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability"/>
+					<views:InventoryItemView Grid.Row="4" Grid.Column="4"
+					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+					Width="41" Height="38" DataContext="{Binding JSlot_Neutral_Acrobatics}" ToolTip="Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel"/>
 				</Grid>
                 <views:BinView Grid.Column="1" Margin="0 20 0 0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 			</Grid>

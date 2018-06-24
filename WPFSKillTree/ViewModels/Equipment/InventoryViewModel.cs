@@ -33,7 +33,7 @@ namespace POESKillTree.ViewModels.Equipment
         public InventoryItemViewModel JSlot_DexInt_Scion { get; }
         public InventoryItemViewModel JSlot_StrInt_Scion { get; }
         public InventoryItemViewModel JSlot_StrDex_Scion { get; }
-        public InventoryItemViewModel JSlot_Dex_Acrobatics { get; }
+        public InventoryItemViewModel JSlot_Neutral_Acrobatics { get; }
         public InventoryItemViewModel JSlot_Dex_ShadowRanger { get; }
         public InventoryItemViewModel JSlot_DexInt_Shadow { get; }
         public InventoryItemViewModel JSlot_Dex_Ranger { get; }
@@ -72,7 +72,7 @@ namespace POESKillTree.ViewModels.Equipment
             JSlot_DexInt_Scion = CreateSlotVm(ItemSlot.JSlot_DexInt_Scion);
             JSlot_StrInt_Scion = CreateSlotVm(ItemSlot.JSlot_StrInt_Scion);
             JSlot_StrDex_Scion = CreateSlotVm(ItemSlot.JSlot_StrDex_Scion);
-            JSlot_Dex_Acrobatics = CreateSlotVm(ItemSlot.JSlot_Dex_Acrobatics);
+            JSlot_Neutral_Acrobatics = CreateSlotVm(ItemSlot.JSlot_Neutral_Acrobatics);
             JSlot_Dex_ShadowRanger = CreateSlotVm(ItemSlot.JSlot_Dex_ShadowRanger);
             JSlot_DexInt_Shadow = CreateSlotVm(ItemSlot.JSlot_DexInt_Shadow);
             JSlot_Dex_Ranger = CreateSlotVm(ItemSlot.JSlot_Dex_Ranger);
@@ -109,7 +109,7 @@ namespace POESKillTree.ViewModels.Equipment
                 imageName = "Helmet";
             }
             else if(slot == ItemSlot.JSlot_Int_Witch || slot == ItemSlot.JSlot_Int_Scion || slot == ItemSlot.JSlot_Int_WitchShadow || slot == ItemSlot.JSlot_DexInt_Scion || slot == ItemSlot.JSlot_StrInt_Scion
-            || slot == ItemSlot.JSlot_StrDex_Scion || slot == ItemSlot.JSlot_Dex_Acrobatics || slot == ItemSlot.JSlot_Dex_ShadowRanger || slot == ItemSlot.JSlot_DexInt_Shadow || slot == ItemSlot.JSlot_Dex_Ranger
+            || slot == ItemSlot.JSlot_StrDex_Scion || slot == ItemSlot.JSlot_Neutral_Acrobatics || slot == ItemSlot.JSlot_Dex_ShadowRanger || slot == ItemSlot.JSlot_DexInt_Shadow || slot == ItemSlot.JSlot_Dex_Ranger
             || slot == ItemSlot.JSlot_Dex_RangerDuelist || slot == ItemSlot.JSlot_Str_WarriorDuelist || slot == ItemSlot.JSlot_Str_WarriorTemplarScion || slot == ItemSlot.JSlot_Int_TemplarWitch || slot == ItemSlot.JSlot_Str_FarWarTempScion
             || slot == ItemSlot.JSlot_StrInt_Templar || slot == ItemSlot.JSlot_StrDex_Duelist || slot == ItemSlot.JSlot_Neutral_IronGrip || slot == ItemSlot.JSlot_Neutral_PointBlank || slot == ItemSlot.JSlot_Neutral_MinionInstability
             || slot == ItemSlot.JSlot_Str_Warrior)
@@ -170,7 +170,7 @@ namespace POESKillTree.ViewModels.Equipment
                     case 16:
                         ItemData = JSlot_Str_WarriorTemplarScion.Item; break;
                     case 17:
-                        ItemData = JSlot_Dex_Acrobatics.Item; break;
+                        ItemData = JSlot_Neutral_Acrobatics.Item; break;
                     case 18:
                         ItemData = JSlot_Neutral_IronGrip.Item; break;
                     case 19:

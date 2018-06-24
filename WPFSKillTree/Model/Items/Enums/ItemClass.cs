@@ -166,7 +166,7 @@ namespace POESKillTree.Model.Items.Enums
                 case ItemClass.Any:
                     return ItemSlot.Unequipable;
                 case ItemClass.Jewel:
-                    return ItemSlot.JSlot_Int_Witch | ItemSlot.JSlot_Int_Scion | ItemSlot.JSlot_Int_WitchShadow | ItemSlot.JSlot_DexInt_Scion | ItemSlot.JSlot_StrInt_Scion | ItemSlot.JSlot_StrDex_Scion | ItemSlot.JSlot_Dex_Acrobatics | ItemSlot.JSlot_Dex_ShadowRanger | ItemSlot.JSlot_DexInt_Shadow | ItemSlot.JSlot_Dex_Ranger |
+                    return ItemSlot.JSlot_Int_Witch | ItemSlot.JSlot_Int_Scion | ItemSlot.JSlot_Int_WitchShadow | ItemSlot.JSlot_DexInt_Scion | ItemSlot.JSlot_StrInt_Scion | ItemSlot.JSlot_StrDex_Scion | ItemSlot.JSlot_Neutral_Acrobatics | ItemSlot.JSlot_Dex_ShadowRanger | ItemSlot.JSlot_DexInt_Shadow | ItemSlot.JSlot_Dex_Ranger |
                     ItemSlot.JSlot_Dex_RangerDuelist | ItemSlot.JSlot_Str_WarriorDuelist | ItemSlot.JSlot_Str_WarriorTemplarScion | ItemSlot.JSlot_Int_TemplarWitch | ItemSlot.JSlot_Str_FarWarTempScion | ItemSlot.JSlot_StrInt_Templar | ItemSlot.JSlot_StrDex_Duelist | ItemSlot.JSlot_Neutral_IronGrip | ItemSlot.JSlot_Neutral_PointBlank | ItemSlot.JSlot_Neutral_MinionInstability |
                     ItemSlot.JSlot_Str_Warrior;
                 default:
