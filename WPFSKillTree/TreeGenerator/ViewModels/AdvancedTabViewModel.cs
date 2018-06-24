@@ -878,5 +878,4 @@ namespace POESKillTree.TreeGenerator.ViewModels
             return stats;
         }
     }
-
 }

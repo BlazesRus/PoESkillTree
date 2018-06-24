@@ -1,12 +1,12 @@
-﻿using POESKillTree.SkillTreeFiles;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Algorithm.Model;
 using POESKillTree.TreeGenerator.Genetic;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.TreeGenerator.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace POESKillTree.TreeGenerator.Solver
 {
@@ -69,7 +69,6 @@ namespace POESKillTree.TreeGenerator.Solver
         {
             get { return 200; }
         }
-
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -103,24 +102,20 @@ namespace POESKillTree.TreeGenerator.Solver
         /// Maps indexes of constraints (both attribute and pseudo attribute constraints) to their {Target, Weight}-Tuple.
         /// </summary>
         private Tuple<float, double>[] _attrConstraints;
-
         /// <summary>
         /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
-
         /// <summary>
         /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
-
         /// <summary>
         /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.
         /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
-
         /// <summary>
         /// Dictionary that saves which nodes (represented by their id) are travel nodes.
         /// </summary>
@@ -472,6 +467,7 @@ namespace POESKillTree.TreeGenerator.Solver
                 // If it is lower, apply it as a logarithmic factor.
                 csvs *= 1 + UsedNodeCountFactor * Math.Log(totalPoints + 1 - usedNodeCount);
             }
+
             // Make sure the fitness is not < 0 (can't happen with the current implementation anyway).
             return Math.Max(csvs, 0);
         }
