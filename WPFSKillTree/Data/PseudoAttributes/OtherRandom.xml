@@ -460,4 +460,12 @@
 		<Attribute Name="#% chance to Freeze, Shock, and Ignite" />
 		<Attribute Name="#% chance to Freeze" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Whispering Ice Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Cold Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Area Damage" />
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.1" />
+	</PseudoAttribute>
 </PseudoAttributes>

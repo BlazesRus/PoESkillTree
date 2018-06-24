@@ -116,10 +116,10 @@ namespace POESKillTree.Model.Items
             set { SetItemInSlot(value, ItemSlot.JSlot_StrDex_Scion); }
         }
 
-        public Item JSlot_Neutral_Acrobatics
+        public Item JSlot_Dex_Acrobatics
         {
-            get { return GetItemInSlot(ItemSlot.JSlot_Neutral_Acrobatics); }
-            set { SetItemInSlot(value, ItemSlot.JSlot_Neutral_Acrobatics); }
+            get { return GetItemInSlot(ItemSlot.JSlot_Dex_Acrobatics); }
+            set { SetItemInSlot(value, ItemSlot.JSlot_Dex_Acrobatics); }
         }
 
         public Item JSlot_Dex_ShadowRanger
@@ -249,7 +249,7 @@ namespace POESKillTree.Model.Items
                 case "JSlot_StrDex_Duelist"://Jewel slot south of Duelist starting area
                     return JSlot_StrDex_Duelist;
                 //Non-Threshold Jewel Slots
-                case "JSlot_Neutral_Acrobatics":
+                case "JSlot_Dex_Acrobatics":
                     return JSlot_Neutral_IronGrip;
                 case "JSlot_Neutral_PointBlank":
                     return JSlot_Neutral_PointBlank;
@@ -421,8 +421,8 @@ namespace POESKillTree.Model.Items
                     case "JSlot_StrDex_Scion":
                         AddItem(jobj, ItemSlot.JSlot_StrDex_Scion);
                         break;
-                    case "JSlot_Neutral_Acrobatics":
-                        AddItem(jobj, ItemSlot.JSlot_Neutral_Acrobatics);
+                    case "JSlot_Dex_Acrobatics":
+                        AddItem(jobj, ItemSlot.JSlot_Dex_Acrobatics);
                         break;
                     case "JSlot_Dex_ShadowRanger":
                         AddItem(jobj, ItemSlot.JSlot_Dex_ShadowRanger);
@@ -537,8 +537,8 @@ namespace POESKillTree.Model.Items
                     case ItemSlot.JSlot_Int_WitchShadow:
                         jItem["inventoryId"] = "JSlot_Int_WitchShadow";
                         break;
-                    case ItemSlot.JSlot_Neutral_Acrobatics:
-                        jItem["inventoryId"] = "JSlot_Neutral_Acrobatics";
+                    case ItemSlot.JSlot_Dex_Acrobatics:
+                        jItem["inventoryId"] = "JSlot_Dex_Acrobatics";
                         break;
                     case ItemSlot.JSlot_Neutral_IronGrip:
                         jItem["inventoryId"] = "JSlot_Neutral_IronGrip";

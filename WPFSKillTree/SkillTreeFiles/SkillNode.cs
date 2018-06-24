@@ -110,7 +110,7 @@ namespace POESKillTree.SkillTreeFiles
                         //    else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_StrDex_DuelistID)//Jewel slot south of Duelist starting area
                         //    { return "JSlotIcon_StrDex_Duelist"; }
                         //    //Non-Threshold Jewel Slots
-                        //    else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_AcrobaticsID)
+                        //    else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Dex_AcrobaticsID)
                         //    { return "JSlotIcon_Neutral_Acrobatics"; }
                         //    else if (Id == POESKillTree.SkillTreeFiles.ConvertedJewelData.JSlot_Neutral_PointBlankID)
                         //    { return "JSlotIcon_Neutral_PointBlank"; }

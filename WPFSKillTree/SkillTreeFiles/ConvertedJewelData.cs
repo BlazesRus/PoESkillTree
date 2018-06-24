@@ -69,8 +69,8 @@ namespace POESKillTree.SkillTreeFiles
                 case JSlot_StrDex_DuelistID://Jewel slot south of Duelist starting area
                     JewelName = "JSlot_StrDex_Duelist"; break;
                 //Non-Threshold Jewel Slots
-                case JSlot_Neutral_AcrobaticsID:
-                    JewelName = "JSlot_Neutral_Acrobatics"; break;
+                case JSlot_Dex_AcrobaticsID:
+                    JewelName = "JSlot_Dex_Acrobatics"; break;
                 case JSlot_Neutral_PointBlankID:
                     JewelName = "JSlot_Neutral_PointBlank"; break;
                 case JSlot_Neutral_MinionInstabilityID:
@@ -159,7 +159,7 @@ namespace POESKillTree.SkillTreeFiles
         /// <summary>
         /// Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel (Non-Threshold Jewel Slot)
         /// </summary>
-        public const ushort JSlot_Neutral_AcrobaticsID = 32763;
+        public const ushort JSlot_Dex_AcrobaticsID = 32763;
         /// <summary>
         /// Jewel slot far south-west of center; Located between Marauder and Duelist areas next to Iron Grip (Non-Threshold jewel slot)
         /// </summary>
@@ -415,8 +415,8 @@ namespace POESKillTree.SkillTreeFiles
                     CurrentJewelData = ItemInfo.JSlot_Str_WarriorTemplarScion.Item; break;
                 //Non-Threshold Jewel Slots below
                 case 17:
-                    NodeID = JSlot_Neutral_AcrobaticsID;
-                    CurrentJewelData = ItemInfo.JSlot_Neutral_Acrobatics.Item; break;
+                    NodeID = JSlot_Dex_AcrobaticsID;
+                    CurrentJewelData = ItemInfo.JSlot_Dex_Acrobatics.Item; break;
                 case 18:
                     NodeID = JSlot_Neutral_IronGripID;
                     CurrentJewelData = ItemInfo.JSlot_Neutral_IronGrip.Item; break;

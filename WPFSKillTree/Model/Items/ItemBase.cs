@@ -179,7 +179,7 @@ namespace POESKillTree.Model.Items
                 case ItemSlot.JSlot_DexInt_Scion:
                 case ItemSlot.JSlot_StrInt_Scion:
                 case ItemSlot.JSlot_StrDex_Scion:
-                case ItemSlot.JSlot_Neutral_Acrobatics:
+                case ItemSlot.JSlot_Dex_Acrobatics:
                 case ItemSlot.JSlot_Dex_ShadowRanger:
                 case ItemSlot.JSlot_DexInt_Shadow:
                 case ItemSlot.JSlot_Dex_Ranger:

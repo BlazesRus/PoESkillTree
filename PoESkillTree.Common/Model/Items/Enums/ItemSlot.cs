@@ -45,9 +45,9 @@ namespace PoESkillTree.Common.Model.Items.Enums
         /// </summary>
         JSlot_StrDex_Scion = 0x10000,
         /// <summary>
-        /// Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel (Non-Threshold Jewel Slot)
+        /// Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel (Dex Jewel Slot)
         /// </summary>
-        JSlot_Neutral_Acrobatics = 0x20000,
+        JSlot_Dex_Acrobatics = 0x20000,
         /// <summary>
         /// Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
         /// (Dex Threshold Jewel Slot)
