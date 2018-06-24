@@ -103,7 +103,7 @@
 				</Grid.RowDefinitions>
 				<Grid Grid.Column="0">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="Auto"/>
 						<ColumnDefinition Width="41"/>
 						<ColumnDefinition Width="41"/>
 						<ColumnDefinition Width="41"/>
