@@ -103,12 +103,13 @@
 				</Grid.RowDefinitions>
 				<Grid Grid.Column="0">
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
+						<ColumnDefinition Width="41"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
