@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using PoESkillTree.Common.Model.Items.Enums;
 using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
+using POESKillTree.SkillTreeFiles;
 using POESKillTree.Utils;
 using POESKillTree.ViewModels;
 
@@ -591,9 +592,15 @@ namespace POESKillTree.Model.Items
             var aList = new List<Attribute>();
             var independent = new List<Attribute>();
             foreach (var item in Equip)
-            {
-                LoadItemAttributes(item, aList, independent);
-            }
+			{
+				if (item.Slot>=ItemSlot.JSlot_Int_Witch)//Only apply Jewel Stats if Node is used
+				{}
+				else
+				{
+					LoadItemAttributes(item, aList, independent);
+				}
+
+			}
             aList.AddRange(independent);
             Attributes = new ListCollectionView(aList);
 
@@ -603,7 +610,107 @@ namespace POESKillTree.Model.Items
             Attributes.Refresh();
         }
 
-        private static void AddAttribute(ItemMod mod, string group, ICollection<Attribute> attributes, Attribute existingAttribute)
+		public void RefreshItemAttributesWithJeweledNodes(SkillTree Tree)
+		{
+			NonLocalMods = (from item in Equip
+							from mod in SelectNonLocalMods(item)
+							group mod by mod.Attribute into modsForAttr
+							select modsForAttr.Aggregate((m1, m2) => m1.Sum(m2))
+						   ).ToList();
+			var aList = new List<Attribute>();
+			var independent = new List<Attribute>();
+			bool JewelInTree;
+			foreach (var item in Equip)
+			{
+				if (item.Slot>=ItemSlot.JSlot_Int_Witch)//Only apply Jewel Stats if Node is used
+				{
+					JewelInTree = false;
+					switch (item.Slot)
+					{
+						case ItemSlot.JSlot_DexInt_Scion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_DexInt_ScionID]);
+							break;
+						case ItemSlot.JSlot_DexInt_Shadow:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_DexInt_ShadowID]);
+							break;
+						case ItemSlot.JSlot_Dex_Ranger:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Dex_RangerID]);
+							break;
+						case ItemSlot.JSlot_Dex_RangerDuelist:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Dex_RangerDuelistID]);
+							break;
+						case ItemSlot.JSlot_Dex_ShadowRanger:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Dex_ShadowRangerID]);
+							break;
+						case ItemSlot.JSlot_Int_Scion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Int_ScionID]);
+							break;
+						case ItemSlot.JSlot_Int_TemplarWitch:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Int_TemplarWitchID]);
+							break;
+						case ItemSlot.JSlot_Int_Witch:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Int_WitchID]);
+							break;
+						case ItemSlot.JSlot_Int_WitchShadow:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Int_WitchShadowID]);
+							break;
+						case ItemSlot.JSlot_Neutral_Acrobatics:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Neutral_AcrobaticsID]);
+							break;
+						case ItemSlot.JSlot_Neutral_IronGrip:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Neutral_IronGripID]);
+							break;
+						case ItemSlot.JSlot_Neutral_MinionInstability:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Neutral_MinionInstabilityID]);
+							break;
+						case ItemSlot.JSlot_Neutral_PointBlank:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Neutral_PointBlankID]);
+							break;
+						case ItemSlot.JSlot_StrDex_Duelist:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_StrDex_DuelistID]);
+							break;
+						case ItemSlot.JSlot_StrDex_Scion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_StrDex_ScionID]);
+							break;
+						case ItemSlot.JSlot_StrInt_Scion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_StrInt_ScionID]);
+							break;
+						case ItemSlot.JSlot_StrInt_Templar:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_StrInt_TemplarID]);
+							break;
+						case ItemSlot.JSlot_Str_FarWarTempScion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Str_FarWarTempScionID]);
+							break;
+						case ItemSlot.JSlot_Str_Warrior:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Str_WarriorID]);
+							break;
+						case ItemSlot.JSlot_Str_WarriorDuelist:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Str_WarriorDuelistID]);
+							break;
+						case ItemSlot.JSlot_Str_WarriorTemplarScion:
+							JewelInTree = Tree.SkilledNodes.Contains(SkillTree.Skillnodes[ConvertedJewelData.JSlot_Str_WarriorTemplarScionID]);
+							break;
+					}
+					if (JewelInTree)
+					{
+						LoadItemAttributes(item, aList, independent);
+					}
+				}
+				else
+				{
+					LoadItemAttributes(item, aList, independent);
+				}
+			}
+			aList.AddRange(independent);
+			Attributes = new ListCollectionView(aList);
+
+			var pgd = new PropertyGroupDescription("Group", new HeaderConverter());
+			Attributes.GroupDescriptions.Add(pgd);
+
+			Attributes.Refresh();
+		}
+
+		private static void AddAttribute(ItemMod mod, string group, ICollection<Attribute> attributes, Attribute existingAttribute)
         {
             if (existingAttribute == null)
             {
