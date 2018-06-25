@@ -442,38 +442,6 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        ///// <summary>
-        ///// Applies Intuitive Leap support during Attribute-Display mode
-        ///// </summary>
-        ///// <param name="ItemInfo">The item information.</param>
-        ///// <param name="Tree">The tree.</param>
-        //static public void IntuitizeLeapUpdater(InventoryViewModel ItemInfo, SkillTree Tree)
-        //{
-        //    ushort NodeID;
-        //    SkillNode CurrentNode;
-        //    POESKillTree.Model.Items.Item CurrentJewelData;
-        //    JewelUpdateData updateData;
-
-        //    for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
-        //    {
-        //        updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
-        //        NodeID = updateData.NodeID;
-        //        CurrentNode = updateData.CurrentNode;
-        //        CurrentJewelData = updateData.CurrentJewelData;
-        //        if (Tree.SkilledNodes.Contains(CurrentNode))
-        //        {
-        //            if (CurrentJewelData == null)//Jewel Not Equipped
-        //            {
-        //                continue;
-        //            }
-        //            if (CurrentJewelData.Name == "Intuitive Leap")
-        //            {
-        //                ApplyIntuitiveLeapSupport(CurrentNode);
-        //            }
-        //        }
-        //    }
-        //}
-
         /// <summary>
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
@@ -510,15 +478,40 @@ namespace POESKillTree.SkillTreeFiles
 						//}
 						continue;
 					}
-					//else
-					//{//Update Jewel Slot Appearance
-					//    string CurrentJewelIcon = CurrentJewelData.Image.ToString();
-					//    string CurrentNodeIcon = CurrentNode.Icon;
-					//    string CurrentNodeIconKey = CurrentNode.IconKey;
-					//    //CurrentNode.Icon = CurrentJewelIcon;
-					//    //Change Node Image to match Jewel
-					//    //CurrentNode.Icon = CurrentJewelData.Image.ToString();
-					//}
+					else
+					{
+						//Add Attributes from Jewel into AttributeTotal
+						foreach (var attrMod in CurrentJewelData.Mods)
+						{
+							if (attrlist.ContainsKey(attrMod.Attribute))
+							{
+								if (attrlist[attrMod.Attribute].Count == 1)
+								{
+									attrlist[attrMod.Attribute][0] += attrMod.Values[0];
+								}
+								for(int Index=0; Index<attrlist[attrMod.Attribute].Count;++Index)
+								{
+									attrlist[attrMod.Attribute][Index] += attrMod.Values[Index];
+								}
+							}
+							else
+							{
+								List<float> TempList = new List<float>();
+								foreach (var row in attrMod.Values)
+								{
+									TempList.Add(row);
+								}
+								attrlist.Add(attrMod.Attribute, TempList);
+							}
+						}
+						//Update Jewel Slot Appearance
+						//    string CurrentJewelIcon = CurrentJewelData.Image.ToString();
+						//    string CurrentNodeIcon = CurrentNode.Icon;
+						//    string CurrentNodeIconKey = CurrentNode.IconKey;
+						//    //CurrentNode.Icon = CurrentJewelIcon;
+						//    //Change Node Image to match Jewel
+						//    //CurrentNode.Icon = CurrentJewelData.Image.ToString();
+					}
 					if (CurrentJewelData.Name == "Intuitive Leap")
 					{
 						if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Only Apply IntuitiveLeap Area effect once equipped instead of even when only nearby nodes skilled etc
@@ -1157,10 +1150,46 @@ namespace POESKillTree.SkillTreeFiles
                 CurrentJewelData = updateData.CurrentJewelData;
                 if (Tree.SkilledNodes.Contains(CurrentNode))
                 {
-                    if (CurrentJewelData == null)//Jewel Not Equipped
-                    {
-                        continue;
-                    }
+					if (CurrentJewelData == null)//Jewel Not Equipped
+					{
+						continue;
+					}
+					else
+					{
+						//Add Attributes from Jewel into AttributeTotal (Only allow single attribute Mods)
+						foreach (var attrMod in CurrentJewelData.Mods)
+						{
+							if (attrlist.ContainsKey(attrMod.Attribute))
+							{
+								attrlist[attrMod.Attribute] += attrMod.Values[0];
+							}
+							else
+							{
+								if (attrMod.Values.Count == 1)
+								{
+									attrlist.Add(attrMod.Attribute, attrMod.Values[0]);
+								}
+								else if (attrMod.Values.Count == 0)//Treat non-Value Attributes as value of one
+								{
+									string ModifiedName = attrMod.Attribute + " (#)";
+									if (attrlist.ContainsKey(attrMod.Attribute))
+									{
+										attrlist[ModifiedName] += 1;
+									}
+									else
+									{
+										attrlist.Add(ModifiedName, 1);
+									}
+								}
+								//List<float> TempList = new List<float>();
+								//foreach (var row in attrMod.Values)
+								//{
+								//	TempList.Add(row);
+								//}
+								//attrlist.Add(attrMod.Attribute, TempList);
+							}
+						}
+					}
                     if (CurrentJewelData.Name == "Intuitive Leap"){}
                     else if (CurrentJewelData.Name == "Brute Force Solution")
                     {
