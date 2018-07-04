@@ -468,4 +468,23 @@
 		<Attribute Name="#% increased Area Damage" />
 		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.1" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Void Harnessed Lightning Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Lightning Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<!-- Damage focused around Harness the Void Trickster Node-->
+		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.05" />
+		<!--Your Hits have 5% chance to gain 100% of Non-Chaos Damage as Extra Chaos Damage contributes 0.05
+		Your Hits have 25% chance to gain 25% of Non-Chaos Damage as Extra Chaos Damage contributes .0625
+		Your Hits have 15% chance to gain 50% of Non-Chaos Damage as Extra Chaos Damage contributes .075
+		-->
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Void Harnessed Elemental Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<!-- Damage focused around Harness the Void Trickster Node-->
+		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.1875" />
+	</PseudoAttribute>
 </PseudoAttributes>
