@@ -26,6 +26,7 @@ namespace POESKillTree
         /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
         /// </summary>
         public static string StatTrackingSavePath = DefaultTrackingDir;
-        public static PoESkillTree.Common.Model.Items.Enums.ItemSlot RemovingIntLeapJewels = 0;
-    }
+        //public static PoESkillTree.Common.Model.Items.Enums.ItemSlot RemovingIntLeapJewels = 0;
+		public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
+	}
 }
