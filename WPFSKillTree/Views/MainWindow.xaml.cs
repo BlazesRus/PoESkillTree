@@ -36,6 +36,7 @@ using POESKillTree.Utils.Extensions;
 using POESKillTree.Utils.UrlProcessing;
 using POESKillTree.ViewModels;
 using POESKillTree.ViewModels.Builds;
+using POESKillTree.ViewModels.Computation;
 using POESKillTree.ViewModels.Crafting;
 using POESKillTree.ViewModels.Equipment;
 using POESKillTree.Views.Crafting;
@@ -124,6 +125,8 @@ namespace POESKillTree.Views
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel(ExtendedDialogCoordinator.Instance);
+
+        public ComputationViewModel ComputationViewModel { get; } = new ComputationViewModel();
 
         private SkillTree _tree;
         public SkillTree Tree
