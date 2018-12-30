@@ -502,8 +502,10 @@ namespace POESKillTree.Views
                 ItemDB.Index();
             });
             var persistentDataTask = PersistentData.InitializeAsync(DialogCoordinator.Instance);
+            var computationViewModelTask = ComputationViewModel.InitializeAsync();
             await itemDBTask;
             await persistentDataTask;
+            await computationViewModelTask;
             RegisterPersistentDataHandlers();
 
             var cmHighlight = new MenuItem
