@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -86,28 +87,16 @@ namespace POESKillTree.Views
         private ItemAttributes _itemAttributes;
         public ItemAttributes ItemAttributes
         {
-            get { return _itemAttributes; }
-            private set
-            {
-                if (value == _itemAttributes)
-                    return;
-                _itemAttributes = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ItemAttributes"));
-            }
+            get => _itemAttributes;
+            private set => SetProperty(ref _itemAttributes, value);
         }
 
 /*
         private InventoryViewModel _inventoryViewModel;
         public InventoryViewModel InventoryViewModel
         {
-            get { return _inventoryViewModel; }
-            private set
-            {
-                if (value == _inventoryViewModel)
-                    return;
-                _inventoryViewModel = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InventoryViewModel)));
-            }
+            get => _inventoryViewModel;
+            private set => SetProperty(ref _inventoryViewModel, value);
         }
 */
 
@@ -127,19 +116,23 @@ namespace POESKillTree.Views
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel(ExtendedDialogCoordinator.Instance);
-
-        public ComputationViewModel ComputationViewModel { get; } = new ComputationViewModel();
+        
+        private ComputationViewModel _computationViewModel;
+        public ComputationViewModel ComputationViewModel
+        {
+            get => _computationViewModel;
+            private set => SetProperty(ref _computationViewModel, value);
+        }
 
         private SkillTree _tree;
         public SkillTree Tree
         {
-            get { return _tree; }
+            get => _tree;
             private set
             {
                 if (_tree != null)
                     _tree.PropertyChanged -= Tree_PropertyChanged;
-                _tree = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Tree"));
+                SetProperty(ref _tree, value);
             }
         }
         private async Task<SkillTree> CreateSkillTreeAsync(ProgressDialogController controller,
@@ -157,12 +150,8 @@ namespace POESKillTree.Views
         private BuildsControlViewModel _buildsControlViewModel;
         public BuildsControlViewModel BuildsControlViewModel
         {
-            get { return _buildsControlViewModel; }
-            private set
-            {
-                _buildsControlViewModel = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(BuildsControlViewModel)));
-            }
+            get => _buildsControlViewModel;
+            private set => SetProperty(ref _buildsControlViewModel, value);
         }
 
         public CommandCollectionViewModel LoadTreeButtonViewModel { get; } = new CommandCollectionViewModel();
@@ -198,24 +187,16 @@ namespace POESKillTree.Views
         /// </summary>
         public bool NoAsyncTaskRunning
         {
-            get { return _noAsyncTaskRunning; }
-            private set
-            {
-                _noAsyncTaskRunning = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("NoAsyncTaskRunning"));
-            }
+            get => _noAsyncTaskRunning;
+            private set => SetProperty(ref _noAsyncTaskRunning, value);
         }
 
         private TreeGeneratorInteraction _treeGeneratorInteraction;
 
         public TreeGeneratorInteraction TreeGeneratorInteraction
         {
-            get { return _treeGeneratorInteraction; }
-            private set
-            {
-                _treeGeneratorInteraction = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TreeGeneratorInteraction)));
-            }
+            get => _treeGeneratorInteraction;
+            private set => SetProperty(ref _treeGeneratorInteraction, value);
         }
 
         public string MainWindowTitle { get; } =
@@ -234,19 +215,24 @@ namespace POESKillTree.Views
         /// </summary>
         public string InputTreeUrl
         {
-            get { return _inputTreeUrl; }
-            set
-            {
-                if (value == _inputTreeUrl)
-                    return;
-                _inputTreeUrl = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputTreeUrl)));
-            }
+            get => _inputTreeUrl;
+            set => SetProperty(ref _inputTreeUrl, value);
         }
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void SetProperty<T>(
+            ref T backingStore, T value, Action onChanged = null, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
+
+            backingStore = value;
+
+            onChanged?.Invoke();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void RegisterPersistentDataHandlers()
@@ -508,6 +494,7 @@ namespace POESKillTree.Views
             gameData.PassiveNodes = SkillTree.Skillnodes.Values;
             var computationFactory = new ComputationFactory(gameData.Data);
             var calculator = computationFactory.CreateCalculator();
+            var builderFactories = await computationFactory.CreateBuilderFactoriesAsync();
             var parser = await computationFactory.CreateParserAsync();
             var schedulers = new ComputationSchedulerProvider();
             var observables = new ComputationObservables(gameData.Data, parser);
@@ -515,7 +502,7 @@ namespace POESKillTree.Views
                 .SubscribeOn(schedulers.TaskPool)
                 .ObserveOn(schedulers.CalculationThread)
                 .SubscribeAndAwaitCompletionAsync(calculator.Update);
-            await ComputationViewModel.InitializeAsync(gameData.Data);
+            ComputationViewModel = await ComputationViewModel.CreateAsync(gameData.Data, builderFactories);
 
             await itemDBTask;
 
