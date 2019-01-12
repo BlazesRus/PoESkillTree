@@ -291,10 +291,7 @@ namespace POESKillTree.Views
                     break;
                 case nameof(BanditSettings.Choice):
                     UpdateUI();
-                    if (ComputationViewModel != null)
-                    {
-                        ComputationViewModel.BanditStat.NumericValue = (int) PersistentData.CurrentBuild.Bandits.Choice;
-                    }
+                    ComputationViewModel?.SharedConfiguration.SetBandit(PersistentData.CurrentBuild.Bandits.Choice);
                     break;
             }
         }
@@ -528,9 +525,9 @@ namespace POESKillTree.Views
             await Task.WhenAll(initialComputationTask, skilledNodesComputationTask);
             ComputationViewModel =
                 await ComputationViewModel.CreateAsync(gameData.Data, builderFactories, observableCalculator);
-            ComputationViewModel.LevelStat.NumericValue = Tree.Level;
-            ComputationViewModel.CharacterClassStat.NumericValue = (int) Tree.CharClass;
-            ComputationViewModel.BanditStat.NumericValue = (int) PersistentData.CurrentBuild.Bandits.Choice;
+            ComputationViewModel.SharedConfiguration.SetLevel(Tree.Level);
+            ComputationViewModel.SharedConfiguration.SetCharacterClass(Tree.CharClass);
+            ComputationViewModel.SharedConfiguration.SetBandit(PersistentData.CurrentBuild.Bandits.Choice);
             observableCalculator.SubscribeCalculatorTo(
                 observables.ObserveSkilledPassiveNodes(Tree.SkilledNodes),
                 ex => Log.Error("Exception while observing skilled node updates", ex));
@@ -700,18 +697,12 @@ namespace POESKillTree.Views
             {
                 case nameof(SkillTree.Level):
                     PersistentData.CurrentBuild.Level = Tree.Level;
-                    if (ComputationViewModel != null)
-                    {
-                        ComputationViewModel.LevelStat.NumericValue = Tree.Level;
-                    }
+                    ComputationViewModel?.SharedConfiguration.SetLevel(Tree.Level);
                     break;
                 case nameof(SkillTree.CharClass):
                     Tree.UpdateAscendancyClasses = true;
                     PopulateAscendancySelectionList();
-                    if (ComputationViewModel != null)
-                    {
-                        ComputationViewModel.CharacterClassStat.NumericValue = (int) Tree.CharClass;
-                    }
+                    ComputationViewModel?.SharedConfiguration.SetCharacterClass(Tree.CharClass);
                     break;
             }
         }
