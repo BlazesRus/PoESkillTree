@@ -2155,9 +2155,9 @@ namespace POESKillTree.Views
                 BanditSettings bandits = PersistentData.CurrentBuild.Bandits;
                 if (forceBanditsUpdate)
                 {
-                    bandits.Choice = data.Bandit;
+                    bandits.Choice = data.Bandit ?? Bandit.None;
                 }
-                else if (data != null && data.HasAnyBanditValue() && !data.BanditsAreSame(bandits))
+                else if (data != null && data.Bandit is Bandit bandit && bandits.Choice != bandit)
                 {
                     var details = CreateDetailsString(bandits, data);
 
@@ -2168,7 +2168,7 @@ namespace POESKillTree.Views
 
                     if (dialogResult == MessageBoxResult.Yes)
                     {
-                        bandits.Choice = data.Bandit;
+                        bandits.Choice = bandit;
                     }
                 }
 
