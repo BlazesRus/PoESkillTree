@@ -522,6 +522,7 @@ namespace POESKillTree.Views
             ComputationViewModel =
                 await ComputationViewModel.CreateAsync(gameData.Data, builderFactories, observableCalculator);
             ComputationViewModel.LevelStat.NumericValue = Tree.Level;
+            ComputationViewModel.CharacterClassStat.NumericValue = (int) Tree.CharClass;
             observableCalculator.SubscribeCalculatorTo(
                 observables.ObserveSkilledPassiveNodes(Tree.SkilledNodes),
                 ex => Log.Error("Exception while observing skilled node updates", ex));
@@ -699,6 +700,10 @@ namespace POESKillTree.Views
                 case nameof(SkillTree.CharClass):
                     Tree.UpdateAscendancyClasses = true;
                     PopulateAscendancySelectionList();
+                    if (ComputationViewModel != null)
+                    {
+                        ComputationViewModel.CharacterClassStat.NumericValue = (int) Tree.CharClass;
+                    }
                     break;
             }
         }
