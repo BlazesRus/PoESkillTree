@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
@@ -117,7 +118,10 @@ namespace POESKillTree.Views
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel(ExtendedDialogCoordinator.Instance);
-        
+
+        private readonly ObservableItemCollectionConverter
+            _equipmentConverter = new ObservableItemCollectionConverter();
+
         private ComputationViewModel _computationViewModel;
         public ComputationViewModel ComputationViewModel
         {
@@ -512,7 +516,8 @@ namespace POESKillTree.Views
             InitializeBuildDependentUI();
             
             await initialComputationTask;
-            await computationInitializer.InitializeAfterBuildLoadAsync(Tree.SkilledNodes);
+            await computationInitializer.InitializeAfterBuildLoadAsync(
+                Tree.SkilledNodes, _equipmentConverter.Collection);
             ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync();
             computationInitializer.SetupPeriodicActions();
 
@@ -2039,6 +2044,7 @@ namespace POESKillTree.Views
             itemAttributes.Equip.CollectionChanged += ItemAttributesEquipCollectionChanged;
             itemAttributes.ItemDataChanged += ItemAttributesEquipCollectionChanged;
             itemAttributes.PropertyChanged += ItemAttributesPropertyChanged;
+            _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
             InventoryViewModel = new InventoryViewModel(ExtendedDialogCoordinator.Instance, 
                 PersistentData.EquipmentData, itemAttributes);
