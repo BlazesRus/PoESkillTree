@@ -1,6 +1,5 @@
 ﻿using PoESkillTree.GameModel.Items;
 using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
 using POESKillTree.Utils;
 
 namespace POESKillTree.ViewModels.Equipment
@@ -11,7 +10,6 @@ namespace POESKillTree.ViewModels.Equipment
     public class InventoryViewModel : Notifier
     {
         private readonly IExtendedDialogCoordinator _dialogCoordinator;
-        private readonly EquipmentData _equipmentData;
         private readonly ItemAttributes _itemAttributes;
 
         public InventoryItemViewModel Armor { get; }
@@ -25,34 +23,9 @@ namespace POESKillTree.ViewModels.Equipment
         public InventoryItemViewModel Boots { get; }
         public InventoryItemViewModel Belt { get; }
 
-// Need to place in skilltree instead later (replace with dynamic jewel slots later)
-        public InventoryItemViewModel JSlot_Int_Witch { get; }
-        public InventoryItemViewModel JSlot_Int_Scion { get; }
-        public InventoryItemViewModel JSlot_Int_WitchShadow { get; }
-        public InventoryItemViewModel JSlot_DexInt_Scion { get; }
-        public InventoryItemViewModel JSlot_StrInt_Scion { get; }
-        public InventoryItemViewModel JSlot_StrDex_Scion { get; }
-        public InventoryItemViewModel JSlot_Neutral_Acrobatics { get; }
-        public InventoryItemViewModel JSlot_Dex_ShadowRanger { get; }
-        public InventoryItemViewModel JSlot_DexInt_Shadow { get; }
-        public InventoryItemViewModel JSlot_Dex_Ranger { get; }
-        public InventoryItemViewModel JSlot_Dex_RangerDuelist { get; }
-        public InventoryItemViewModel JSlot_Str_WarriorDuelist { get; }
-        public InventoryItemViewModel JSlot_Str_WarriorTemplarScion { get; }
-        public InventoryItemViewModel JSlot_Int_TemplarWitch { get; }
-        public InventoryItemViewModel JSlot_Str_FarWarTempScion { get; }
-        public InventoryItemViewModel JSlot_StrInt_Templar { get; }
-        public InventoryItemViewModel JSlot_StrDex_Duelist { get; }
-        public InventoryItemViewModel JSlot_Neutral_IronGrip { get; }
-        public InventoryItemViewModel JSlot_Neutral_PointBlank { get; }
-        public InventoryItemViewModel JSlot_Neutral_MinionInstability { get; }
-        public InventoryItemViewModel JSlot_Str_Warrior { get; }
-
-        public InventoryViewModel(IExtendedDialogCoordinator dialogCoordinator, EquipmentData equipmentData,
-            ItemAttributes itemAttributes)
+        public InventoryViewModel(IExtendedDialogCoordinator dialogCoordinator, ItemAttributes itemAttributes)
         {
             _dialogCoordinator = dialogCoordinator;
-            _equipmentData = equipmentData;
             _itemAttributes = itemAttributes;
             Armor = CreateSlotVm(ItemSlot.BodyArmour);
             MainHand = CreateSlotVm(ItemSlot.MainHand);
@@ -117,7 +90,7 @@ namespace POESKillTree.ViewModels.Equipment
                 imageName = "Jewel";
             }
 
-            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, slot)
+            return new InventoryItemViewModel(_dialogCoordinator, _itemAttributes, slot)
             {
                 EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };

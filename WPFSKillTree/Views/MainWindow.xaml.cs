@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -63,6 +63,7 @@ namespace POESKillTree.Views
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private IExtendedDialogCoordinator _dialogCoordinator;
         public IPersistentData PersistentData { get; } = App.PersistentData;
 
         private readonly List<Attribute> _allAttributesList = new List<Attribute>();
@@ -78,6 +79,7 @@ namespace POESKillTree.Views
         private ContextMenu _attributeContextMenu;
         private MenuItem cmCreateGroup, cmAddToGroup, cmRemoveFromGroup, cmDeleteGroup;
 
+        private GameData _gameData;
 
         private ItemAttributes _itemAttributes;
         public ItemAttributes ItemAttributes
@@ -110,7 +112,7 @@ namespace POESKillTree.Views
             }
         }
 
-        public StashViewModel StashViewModel { get; } = new StashViewModel(ExtendedDialogCoordinator.Instance);
+        public StashViewModel StashViewModel { get; } = new StashViewModel();
 
         private readonly ObservableItemCollectionConverter
             _equipmentConverter = new ObservableItemCollectionConverter();
@@ -481,9 +483,10 @@ namespace POESKillTree.Views
             controller.Maximum = 1;
             controller.SetIndeterminate();
 
-            var itemDBTask = Task.Run(() => InitializeItemDB());
-            var persistentDataTask = PersistentData.InitializeAsync(DialogCoordinator.Instance);
+            var itemDBTask = Task.Run(InitializeItemDB);
             var computationInitializer = ComputationInitializer.StartNew();
+            _gameData = computationInitializer.GameData;
+            var persistentDataTask = PersistentData.InitializeAsync(DialogCoordinator.Instance, _gameData);
 
             InitializeIndependentUI();
 
@@ -590,8 +593,9 @@ namespace POESKillTree.Views
 
         private void InitializePersistentDataDependentUI()
         {
+            _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
             RegisterPersistentDataHandlers();
-            StashViewModel.PersistentData = PersistentData;
+            StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             // Set theme & accent.
             SetTheme(PersistentData.Options.Theme);
             SetAccent(PersistentData.Options.Accent);
@@ -607,7 +611,7 @@ namespace POESKillTree.Views
         {
             PersistentData.Options.PropertyChanged += Options_PropertyChanged;
             PopulateAscendancySelectionList();
-            BuildsControlViewModel = new BuildsControlViewModel(ExtendedDialogCoordinator.Instance, PersistentData, Tree);
+            BuildsControlViewModel = new BuildsControlViewModel(_dialogCoordinator, PersistentData, Tree);
             UpdateTreeComparison();
             TreeGeneratorInteraction =
                 new TreeGeneratorInteraction(SettingsDialogCoordinator.Instance, PersistentData, Tree);
@@ -961,7 +965,7 @@ namespace POESKillTree.Views
 
         private async void Menu_ImportStash(object sender, RoutedEventArgs e)
         {
-            var vm = new DownloadStashViewModel(DialogCoordinator.Instance, PersistentData, StashViewModel);
+            var vm = new DownloadStashViewModel(DialogCoordinator.Instance, _gameData, PersistentData, StashViewModel);
             await this.ShowDialogAsync(vm, new DownloadStashWindow(), () => vm.ViewLoaded());
         }
 
@@ -1919,13 +1923,15 @@ namespace POESKillTree.Views
                 ItemAttributes.PropertyChanged -= ItemAttributesPropertyChanged;
             }
 
+            var equipmentData = PersistentData.EquipmentData;
             var itemData = PersistentData.CurrentBuild.ItemData;
             ItemAttributes itemAttributes;
             if (!string.IsNullOrEmpty(itemData))
             {
                 try
                 {
-                    itemAttributes = new ItemAttributes(PersistentData, itemData);
+                    var skillDefinitions = await _gameData.Skills;
+                    itemAttributes = new ItemAttributes(equipmentData, skillDefinitions, itemData);
                 }
                 catch (Exception ex)
                 {
@@ -1944,8 +1950,7 @@ namespace POESKillTree.Views
             itemAttributes.PropertyChanged += ItemAttributesPropertyChanged;
             _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
-            InventoryViewModel = new InventoryViewModel(ExtendedDialogCoordinator.Instance, 
-                PersistentData.EquipmentData, itemAttributes);
+            InventoryViewModel = new InventoryViewModel(_dialogCoordinator, itemAttributes);
             UpdateUI();
         }
 
