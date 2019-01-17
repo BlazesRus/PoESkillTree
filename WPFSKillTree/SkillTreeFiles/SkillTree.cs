@@ -504,7 +504,6 @@ namespace POESKillTree.SkillTreeFiles
                 {"NormalTotal", 22},
                 {"AscendancyUsed", 0},
                 {"AscendancyTotal", 8},
-                {"ScionAscendancyChoices", 0}
             };
 
             var bandits = _persistentData.CurrentBuild.Bandits;
@@ -520,10 +519,6 @@ namespace POESKillTree.SkillTreeFiles
                 {
                     points["AscendancyUsed"] += 1;
                     points["NormalTotal"] += node.passivePointsGranted;
-                }
-                else if (node.IsMultipleChoiceOption)
-                {
-                    points["ScionAscendancyChoices"] += 1;
                 }
             }
             return points;
@@ -1195,7 +1190,7 @@ namespace POESKillTree.SkillTreeFiles
             string url, out HashSet<SkillNode> skilledNodes, out CharacterClass charClass, ISkillTree skillTree)
             => DecodeUrlPrivate(url, out skilledNodes, out charClass, skillTree);
 
-        public static BuildUrlData DecodeUrl(string url, out HashSet<SkillNode> skilledNodes, ISkillTree skillTree)
+        private static BuildUrlData DecodeUrl(string url, out HashSet<SkillNode> skilledNodes, ISkillTree skillTree)
             => DecodeUrlPrivate(url, out skilledNodes, out _,  skillTree);
 
         public static BuildUrlData DecodeUrl(string url, ISkillTree skillTree)
