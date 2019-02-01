@@ -511,7 +511,7 @@ namespace POESKillTree.Views
             await initialComputationTask;
             await computationInitializer.InitializeAfterBuildLoadAsync(
                 Tree.SkilledNodes, _equipmentConverter.Items, _equipmentConverter.Skills);
-            ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync();
+            ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
             computationInitializer.SetupPeriodicActions();
 
             await controller.CloseAsync();
