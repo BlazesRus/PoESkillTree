@@ -14,14 +14,73 @@ using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree
 {
-    public static class ConvertedJewelData
+    public static class JewelData
     {
-	    //(Most of ConvertedJewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
-    //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
-    //var v = new Vector2D(p.X, p.Y);
-    //v = v * _multransform + _addtransform;
-    //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
-    //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
+        public static System.Collections.Generic.List<int> JewelIds;
+        private static string[] GetJewelAttributeList(Node skillNode)
+        {
+            const string PlusJewelSocket = "+1 Jewel Socket";
+            switch (skillNode.id)//Might need to manually update this later if skilltree changes too much
+            {
+                //Int Jewels
+                case 61419://Jewel Slot directly north of Witch starting area
+                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Witch" }
+                case 21984://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
+                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Scion" };
+                case 41263://NE from center jewel slot between Witch and shadow areas
+                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_WitchShadow" };
+                case 36634://Jewel slot north-west of Scion area; At road between Templar and Witch areas
+                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_TemplarWitch" };
+                //Str Jewels
+                case 28475://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorDuelist" };
+                case 33631://Jewel slot west of Scion area; At road between Marauder and Templar areas
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorTemplarScion" };
+                case 55190://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_FarWarTempScion" };
+                case 26725://Jewel slot west of Marauder area
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_Warrior" };
+                //Dex Jewels
+                case 33989://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
+                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_ShadowRanger" };
+                case 60735://Jewel slot east of Ranger area(Jewel10)
+                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_Ranger" };
+                case 34483://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
+                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_RangerDuelist" };
+                //Hybrid Jewels
+                case 26196://Jewel slot west of Templar starting area
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Templar" };
+                case 6230://Scion Jewel Slot west of starting area
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Scion" };
+                case 61834://Jewel slot east of Shadow starting area
+                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Shadow" };
+                case 48768://Scion jewel slot east of starting area
+                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Scion" };
+                case 31683://Scion Jewel Slot south of starting area
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Scion" };
+                case 54127://Jewel slot south of Duelist starting area
+                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Duelist" };
+                //Non-Threshold Jewel Slots
+                case 32763:
+                case 2491:
+                case 46882:
+                case 7960:
+                    return new[] { PlusJewelSocket };
+                default://Non-Assigned Jewel Slots And/Or Non-Threshold Jewel Slots(Mainly in case of Jewel IDs changing;so can find the correct node ids for slots)
+#if (DEBUG)
+                    return new[] { PlusJewelSocket, "Jewel Socket ID: " + skillNode.id};
+#else
+                    return new[] { PlusJewelSocket};
+#endif
+            }
+        }
+
+	    //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
+      //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
+      //var v = new Vector2D(p.X, p.Y);
+      //v = v * _multransform + _addtransform;
+      //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
+      //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
 	
         /// <summary>
         /// Jewels the name of the slot.

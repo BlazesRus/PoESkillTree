@@ -329,6 +329,8 @@ namespace POESKillTree.SkillTreeFiles
                         else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
                         {
                             skillNode.Type = PassiveNodeType.JewelSocket;
+                            //Sending Node Id into List to dynamically add threshold stat
+                            JewelData.JewelIds.Add(skillNode.Id);
                         }
                         else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
                         {
@@ -411,6 +413,8 @@ namespace POESKillTree.SkillTreeFiles
                             Skillnodes[ints[1]].Neighbor.Add(Skillnodes[ints[0]]);
                     }
                 }
+
+                //Dynamically search node area to determine if JewelSocket is skill based threshold jewel type
 
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 foreach (var skillnode in Skillnodes)
