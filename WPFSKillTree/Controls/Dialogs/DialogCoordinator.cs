@@ -6,7 +6,6 @@ using MahApps.Metro.Controls.Dialogs;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs.Views;
 using POESKillTree.Controls.Dialogs.ViewModels;
-using POESKillTree.ViewModels;
 
 namespace POESKillTree.Controls.Dialogs
 {

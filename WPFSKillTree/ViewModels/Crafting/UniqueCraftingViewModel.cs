@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using MoreLinq;
 using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Modifiers;
 using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
 
 namespace POESKillTree.ViewModels.Crafting
@@ -55,25 +55,9 @@ namespace POESKillTree.ViewModels.Crafting
                 .Select(ms => ms.Query().RequiredLevel)
                 .DefaultIfEmpty()
                 .Max();
-            IEnumerable<IGrouping<ModLocation, StatIdValuePair>> NewSelf;
-            try
-            {
-                NewSelf = MsExplicits
-                    .SelectMany(ms => ms.GetStatValues())
-                    .ToLookup(_ => ModLocation.Explicit);
-            }
-            catch
-            {//Fix for creating Jewel uniques
-                NewSelf = Enumerable.Empty<IGrouping<ModLocation, StatIdValuePair>>();
-                List<IGrouping<ModLocation, StatIdValuePair>> SelfV2 = new List<IGrouping<ModLocation, StatIdValuePair>>(MsExplicits.Count);
-                foreach(var Elem in MsExplicits)
-                {
-                    //Elem.
-                }
-                //NewSelf.
-                return NewSelf;
-            }
-            return NewSelf;
+            return MsExplicits
+                .SelectMany(ms => ms.GetStatValues())
+                .ToLookup(_ => ModLocation.Explicit);
         }
 
         private void MsOnPropertyChanged(object sender, PropertyChangedEventArgs e)

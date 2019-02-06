@@ -43,7 +43,7 @@ namespace POESKillTree.Model
                     {
                         ("#% of Life Regenerated per second", 1F),
                         ("#% additional Physical Damage Reduction", 2F),
-                        ("#% increased Global Physical Damage", 20F)
+                        ("#% increased Physical Damage", 20F)
                     }
                 },
                 {

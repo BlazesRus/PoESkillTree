@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 using log4net;
+using PoESkillTree.GameModel.PassiveTree;
 using POESKillTree.Common;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
@@ -175,64 +176,6 @@ namespace POESKillTree.SkillTreeFiles
             Serializer = new SkillTreeSerializer(this);
         }
 
-        private string[] GetJewelAttributeList(Node skillNode)
-        {
-            const string PlusJewelSocket = "+1 Jewel Socket";
-            switch (skillNode.id)//Might need to manually update this later if skilltree changes too much
-            {
-                //Int Jewels
-                case 61419://Jewel Slot directly north of Witch starting area
-                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Witch" }
-                case 21984://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
-                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Scion" };
-                case 41263://NE from center jewel slot between Witch and shadow areas
-                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_WitchShadow" };
-                case 36634://Jewel slot north-west of Scion area; At road between Templar and Witch areas
-                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_TemplarWitch" };
-                //Str Jewels
-                case 28475://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorDuelist" };
-                case 33631://Jewel slot west of Scion area; At road between Marauder and Templar areas
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorTemplarScion" };
-                case 55190://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_FarWarTempScion" };
-                case 26725://Jewel slot west of Marauder area
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_Warrior" };
-                //Dex Jewels
-                case 33989://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
-                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_ShadowRanger" };
-                case 60735://Jewel slot east of Ranger area(Jewel10)
-                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_Ranger" };
-                case 34483://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
-                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_RangerDuelist" };
-                //Hybrid Jewels
-                case 26196://Jewel slot west of Templar starting area
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Templar" };
-                case 6230://Scion Jewel Slot west of starting area
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Scion" };
-                case 61834://Jewel slot east of Shadow starting area
-                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Shadow" };
-                case 48768://Scion jewel slot east of starting area
-                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Scion" };
-                case 31683://Scion Jewel Slot south of starting area
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Scion" };
-                case 54127://Jewel slot south of Duelist starting area
-                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Duelist" };
-                //Non-Threshold Jewel Slots
-                case 32763:
-                case 2491:
-                case 46882:
-                case 7960:
-                    return new[] { PlusJewelSocket };
-                default://Non-Assigned Jewel Slots And/Or Non-Threshold Jewel Slots(Mainly in case of Jewel IDs changing;so can find the correct node ids for slots)
-#if (DEBUG)
-                    return new[] { PlusJewelSocket, "Jewel Socket ID: " + skillNode.id};
-#else
-                    return new[] { PlusJewelSocket};
-#endif
-            }
-        }
-
         private async Task InitializeAsync(string treestring, string opsstring, [CanBeNull] ProgressDialogController controller,
             AssetLoader assetLoader)
         {
@@ -293,28 +236,6 @@ namespace POESKillTree.SkillTreeFiles
                         icons.SkillImages[iconKey] = sprite.filename;
                     }
                 }
-                ////Add SpriteSlots for Jewel Sockets
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_Witch");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_Scion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_WitchShadow");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Int_TemplarWitch");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_WarriorDuelist");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_WarriorTemplarScion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_FarWarTempScion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Str_Warrior");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_ShadowRanger");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_Ranger");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Dex_RangerDuelist");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrInt_Templar");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrInt_Scion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_DexInt_Shadow");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_DexInt_Scion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrDex_Scion");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_StrDex_Duelist");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_Acrobatics");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_PointBlank");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_MinionInstability");
-                //IconActiveSkills.AddJewelSlotIcon("JSlotIcon_Neutral_IronGrip");
 
                 controller?.SetProgress(0.55);
                 // The last percent progress is reserved for rounding errors as progress must not get > 1.
@@ -379,9 +300,9 @@ namespace POESKillTree.SkillTreeFiles
                         {
                             Id = nd.id,
                             Name = nd.dn,
-							//this value should not be split on '\n' as it causes the attribute list to separate nodes
-							attributes = nd.dn.Contains("Jewel Socket") ? GetJewelAttributeList(nd) : nd.sd,
-							Orbit = nd.o,
+                            //this value should not be split on '\n' as it causes the attribute list to separate nodes
+                            attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" } : nd.sd,
+                            Orbit = nd.o,
                             OrbitIndex = nd.oidx,
                             Icon = nd.icon,
                             LinkId = nd._out,
@@ -399,23 +320,23 @@ namespace POESKillTree.SkillTreeFiles
                         };
                         if (nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
                         {
-                            skillNode.Type = NodeType.Keystone;
+                            skillNode.Type = PassiveNodeType.Keystone;
                         }
                         else if (!nd.ks && nd.not && !nd.isJewelSocket && !nd.m)
                         {
-                            skillNode.Type = NodeType.Notable;
+                            skillNode.Type = PassiveNodeType.Notable;
                         }
                         else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
                         {
-                            skillNode.Type = NodeType.JewelSocket;
+                            skillNode.Type = PassiveNodeType.JewelSocket;
                         }
                         else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
                         {
-                            skillNode.Type = NodeType.Mastery;
+                            skillNode.Type = PassiveNodeType.Mastery;
                         }
                         else if (!nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
                         {
-                            skillNode.Type = NodeType.Normal;
+                            skillNode.Type = PassiveNodeType.Normal;
                         }
                         else
                         {
@@ -700,10 +621,6 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            }
             return temp;
         }
 
@@ -740,11 +657,6 @@ namespace POESKillTree.SkillTreeFiles
                 }
             }
 
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            }
-
             return temp;
         }
 
@@ -769,10 +681,6 @@ namespace POESKillTree.SkillTreeFiles
                         }
                     }
                 }
-            }
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
 
             return temp;
@@ -947,13 +855,6 @@ namespace POESKillTree.SkillTreeFiles
         public List<SkillNode> GetShortestPathTo(SkillNode targetNode, IEnumerable<SkillNode> start)
         {
             var startNodes = start as IList<SkillNode> ?? start.ToList();
-            for (int index = 0; index < startNodes.Count; ++index)
-            {
-                if (startNodes[index].Attributes.ContainsKey("Intuitive Leaped"))//Remove Leaped Nodes from possible start locations
-                {
-                    startNodes.RemoveAt(index);
-                }
-            }
             if (startNodes.Contains(targetNode))
                 return new List<SkillNode>();
             var adjacent = GetAvailableNodes(startNodes);
@@ -994,7 +895,7 @@ namespace POESKillTree.SkillTreeFiles
                         continue;
                     if (newNode.Spc.HasValue)
                         continue;
-                    if (newNode.Type == NodeType.Mastery)
+                    if (newNode.Type == PassiveNodeType.Mastery)
                         continue;
                     if (IsAscendantClassStartNode(newNode))
                         continue;
@@ -1144,7 +1045,7 @@ namespace POESKillTree.SkillTreeFiles
                     var nodes =
                         Skillnodes.Values.Where(
                             nd => (matchFct(nd.attributes, att => regex.IsMatch(att)) ||
-                                  regex.IsMatch(nd.Name) && nd.Type != NodeType.Mastery) &&
+                                  regex.IsMatch(nd.Name) && nd.Type != PassiveNodeType.Mastery) &&
                                   (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
                     _nodeHighlighter.ResetHighlights(nodes, flag);
                     DrawHighlights();
@@ -1160,7 +1061,7 @@ namespace POESKillTree.SkillTreeFiles
                 var nodes =
                     Skillnodes.Values.Where(
                         nd => (matchFct(nd.attributes, att => att.ToLowerInvariant().Contains(search)) ||
-                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != NodeType.Mastery) &&
+                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != PassiveNodeType.Mastery) &&
                               (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
                 _nodeHighlighter.ResetHighlights(nodes, flag);
                 DrawHighlights();

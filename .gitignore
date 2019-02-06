@@ -354,7 +354,7 @@ obj
 # mstest test results
 TestResults
 
-vswhere.exe
+vswhere.exe#optional file for helping find Visual studio directory
 
 #This is AlternativeTypes versions of the ExtraOptions files (only storing locally)
 *AlternativeExtraOptions*

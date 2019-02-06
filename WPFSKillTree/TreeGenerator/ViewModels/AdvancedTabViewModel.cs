@@ -9,10 +9,10 @@ using System.Windows.Data;
 using System.Windows.Input;
 using MoreLinq;
 using Newtonsoft.Json.Linq;
+using PoESkillTree.GameModel.PassiveTree;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
-using POESKillTree.Model.Items;
 using POESKillTree.Model.JsonSettings;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Model;
@@ -21,7 +21,6 @@ using POESKillTree.TreeGenerator.Settings;
 using POESKillTree.TreeGenerator.Solver;
 using POESKillTree.Utils.Converter;
 using POESKillTree.Utils.Extensions;
-using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -231,10 +230,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {L10n.Message("Trap"), 13},
             {L10n.Message("Totem"), 14},
             {L10n.Message("Flasks"), 15 },
-            {L10n.Message("Jewel Types"), 16},
-            {L10n.Message("Tracked PseudoTotals"), 17},
-            {L10n.Message("Everything Else"), 18},
-            {L10n.Message("Hidden"), 19}
+            {L10n.Message("Everything Else"), 16}
         };
 
         /// <summary>
@@ -246,7 +242,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# Jewel Socket", "+# Str Based Jewel", "+# Int Based Jewel", "+# Dex Based Jewel"
+            "+# to Jewel Socket"
         };
 
         /// <summary>
@@ -268,8 +264,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "+# to maximum Mana",
             "+# to maximum Life",
             "+# Accuracy Rating",
-            "+# to maximum Energy Shield",
-            "Jewel Socket ID: #"
+            "+# to maximum Energy Shield"
         };
 
         #endregion
@@ -368,34 +363,10 @@ namespace POESKillTree.TreeGenerator.ViewModels
         }
 
         /// <summary>
-        /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
-        /// </summary>
-        public SkillTree TreeInfo;
-
-        /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
+        /// (has no effect at the moment)
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
-
-        /// <summary>
-        /// The item information sent along to enable TreePlusItemsMode to be used
-        /// </summary>
-        private InventoryViewModel _ItemInfo;
-
-        /// <summary>
-        /// Gets or sets the item information from SkillTree (used to enable working TreePlusItemsMode code).
-        /// </summary>
-        /// <value>
-        /// The item information.
-        /// </value>
-        public InventoryViewModel ItemInfo
-        {
-            get { return _ItemInfo; }
-            set
-            {
-                SetProperty(ref _ItemInfo, value);
-            }
-        }
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculations.
@@ -578,11 +549,10 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// Instantiates a new AdvancedTabViewModel.
         /// </summary>
         /// <param name="tree">The (not null) SkillTree instance to operate on.</param>
-        /// <param name="dialogCoordinator">The <see cref="IDialogCoordinator" /> used to display dialogs.</param>
-        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
-        /// <param name="itemInfo">The item attributes passed from SkillTree</param>
+        /// <param name="dialogCoordinator">The <see cref="IDialogCoordinator"/> used to display dialogs.</param>
+        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator"/>.</param>
         /// <param name="runCallback">The action that is called when RunCommand is executed.</param>
-        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext, InventoryViewModel itemInfo,
+        public AdvancedTabViewModel(SkillTree tree, IDialogCoordinator dialogCoordinator, object dialogContext,
             Action<GeneratorTabViewModel> runCallback)
             : base(tree, dialogCoordinator, dialogContext, 3, runCallback)
         {
@@ -594,8 +564,6 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 () => WeaponClassIsTwoHanded = WeaponClass.Value.IsTwoHanded());
             OffHand = new LeafSetting<OffHand>(nameof(OffHand), Model.PseudoAttributes.OffHand.Shield);
             Tags = new LeafSetting<Tags>(nameof(Tags), Model.PseudoAttributes.Tags.None);
-            ItemInfo = itemInfo;
-            TreeInfo = tree;
 
             tree.PropertyChanged += (sender, args) =>
             {
@@ -764,7 +732,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private void ConverteAttributeToPseudoAttributeConstraints()
         {
             var keystones = from node in Tree.GetCheckedNodes()
-                            where node.Type == NodeType.Keystone
+                            where node.Type == PassiveNodeType.Keystone
                             select node.Name;
             var conditionSettings = new ConditionSettings(Tags.Value, OffHand.Value, keystones.ToArray(), WeaponClass.Value);
             var convertedConstraints = new List<AttributeConstraint>();
@@ -839,8 +807,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, ItemInfo, TreeInfo, TreePlusItemsMode.Value));
-            GlobalSettings.TrackedStats.StartTracking(pseudoConstraints);
+                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
             return Task.FromResult<ISolver>(solver);
         }
 

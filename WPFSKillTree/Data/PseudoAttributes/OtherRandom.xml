@@ -400,6 +400,34 @@
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Projectile Damage" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Projectile Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Projectile Attack Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Attack Physical Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Projectile Sword Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Attack Physical Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+		<Attribute Name="#% increased Physical Damage with Swords"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Projectile Axe Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Attack Physical Damage" />
+		<Attribute Name="#% increased Projectile Damage" />
+		<Attribute Name="#% increased Physical Damage with Axes"/>
+	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Poison Projectile DOT [Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Damage over Time" />
 		<Attribute Name="#% increased Damage with Poison"/>
@@ -500,5 +528,103 @@
 		<Attribute Name="#% increased Spell Damage" />
 		<!-- Damage focused around Harness the Void Trickster Node-->
 		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.1875" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Shared Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Shared Physical 2H Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Attack Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Physical Damage with Two Handed Weapons"/>
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Shared Chaos Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Chaos Damage"/>
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Shared Attack Speed[Non-Tagged]" Group="Damage">
+		<Attribute Name="Minions have #% increased Attack Speed" />
+		<Attribute Name="#% increased Attack Speed"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Total Attack Poison Chance[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% chance to Poison on Hit"/>
+		<Attribute Name="#% chance to Poison on Hit with Attacks"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Smite Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Melee Physical Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Infused Smite Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Melee Physical Damage"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Infused 80% Light Conversion Melee Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Melee Physical Damage"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Spirit Infused 80% Light Conversion Melee Area Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
+		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Elemental Damage"  ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Lightning Damage with Attack Skills" ConversionMultiplier="0.8"/>
+		<Attribute Name="#% increased Attack Damage" />
+		<Attribute Name="#% increased Melee Physical Damage"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+	</PseudoAttribute>
+	<!--
+412 - 602 Phys Damage before Damage effectiveness
+144 - 211 After 35% damage effectiveness
+(Disintegrater staff with one siphon charge)
+22 - 420 Lightning Damage
+(Level 20 Ball Lightning)
+19 - 76 Lightning Damage before Damage effectiveness
+7 - 27 Lightning Damage after Damage effectiveness
+(Level 20 Herald of Lightning - For damage plus curse on hit)
+Total  173 - 658 Non-Chaos Damage
+83.24% of Non-chaos minimum is Physical
+32.07% of Non-chaos maximum is Physical
+Average of 57.65% of Non-chaos is Physical
+4% as chaos
+	-->
+<PseudoAttribute Name="#% increased Spirit Infused  Lightning Disintegrater Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage" />
+		<Attribute Name="#% increased Lightning Damage" />
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Global Physical Damage"  ConversionMultiplier="0.576519318"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.04"/>
+	</PseudoAttribute>
+	
+	<PseudoAttribute Name="+#% to Combined Elemental Resistances" Group="Defense">
+		<Attribute Name="+#% to Fire Resistance" />
+		<Attribute Name="+#% to Cold Resistance" />
+		<Attribute Name="+#% to Lightning Resistance" />
+		<PseudoAttribute Name="+#% to all Elemental Resistances" />
 	</PseudoAttribute>
 </PseudoAttributes>

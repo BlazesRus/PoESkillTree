@@ -108,7 +108,7 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         }
 
         /// <summary>
-        /// Converts the given XmlPseudoAttributes into PseudoAttributes.
+        /// Convertes the given XmlPseudoAttributes into PseudoAttributes.
         /// Does not resolve nesting so there may be duplicates.
         /// </summary>
         private IEnumerable<PseudoAttribute> ConvertFromXml(IEnumerable<XmlPseudoAttribute> xmlPseudoAttributes)
@@ -251,31 +251,12 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
                     }
                     catch (KeyNotFoundException e)
                     {
-                        if (pseudo.Name.Contains("(Total)"))//Needed to allow (Total) versions of Normal Attributes
-                        {
-                            var Elements = _pseudoNameDict[pseudo.Name].Attributes;
-                            foreach(var Elem in Elements)//Force add non-existing attributes to current list
-                            {
-                                if(!pseudo.Attributes.Contains(Elem))
-                                {
-                                    pseudo.Attributes.Add(Elem);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new PseudoAttributeDataInvalidException(string.Format(L10n.Message("Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"), name), e);
-                        }
-
+                        throw new PseudoAttributeDataInvalidException(string.Format(L10n.Message("Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"), name), e);
                     }
-
-                    if(_nestedPseudosDict.ContainsKey(name))
+                    // Enqueue pseudo attributes nested in this one.
+                    foreach (var newName in _nestedPseudosDict[name])
                     {
-                        // Enqueue pseudo attributes nested in this one.
-                        foreach (var newName in _nestedPseudosDict[name])
-                        {
-                            nestedNames.Enqueue(newName);
-                        }
+                        nestedNames.Enqueue(newName);
                     }
                 }
             }

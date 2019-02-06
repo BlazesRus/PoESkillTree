@@ -12,6 +12,7 @@ namespace POESKillTree.Model.Items.Mods
     /// </summary>
     public class ItemMod
     {
+
         public static readonly Regex Numberfilter = new Regex(@"[0-9]*\.?[0-9]+");
 
         public string Attribute { get; }
@@ -119,19 +120,6 @@ namespace POESKillTree.Model.Items.Mods
             {
                 {"name", name}, {"values", new JArray(ValueTokensToJArrays(tokens))}, {"displayMode", displayMode}
             };
-        }
-
-        public string CreateModString()
-        {
-            if (Values.Count == 0)
-            {
-                return Attribute;
-            }
-            var regex = new Regex(Regex.Escape("#"));
-            string ModString = Attribute;
-            foreach (var val in Values)
-                ModString = regex.Replace(ModString, val.ToString(), 1);
-            return ModString;
         }
     }
 

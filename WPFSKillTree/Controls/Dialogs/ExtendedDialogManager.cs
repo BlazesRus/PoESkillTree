@@ -14,8 +14,6 @@ using POESKillTree.Controls.Dialogs.ViewModels;
 using POESKillTree.Controls.Dialogs.Views;
 using POESKillTree.Localization;
 using POESKillTree.Utils.Extensions;
-using POESKillTree.ViewModels;
-using POESKillTree.Views;
 
 namespace POESKillTree.Controls.Dialogs
 {
@@ -30,7 +28,7 @@ namespace POESKillTree.Controls.Dialogs
         {
             view.DataContext = viewModel;
 
-            // Non-default buttons not in the dialog as they would be pressed instead of a dialog button on enter.
+            // Undefault buttons not in the dialog as they would be pressed instead of a dialog button on enter.
             var oldDefaults = window.FindVisualChildren<Button>().Where(b => b.IsDefault).ToList();
             oldDefaults.ForEach(b => b.IsDefault = false);
             // Save old keyboard focus.

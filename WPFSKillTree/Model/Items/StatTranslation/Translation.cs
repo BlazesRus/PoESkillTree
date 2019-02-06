@@ -5,7 +5,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using MoreLinq;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Utils.Extensions;
+using PoESkillTree.Utils.Extensions;
 
 namespace POESKillTree.Model.Items.StatTranslation
 {
@@ -18,7 +18,7 @@ namespace POESKillTree.Model.Items.StatTranslation
         /// Translates the given values.
         /// </summary>
         /// <param name="values">the values to translates</param>
-        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be 
+        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be
         /// hidden. This is the case for stats without effect or stats that are not meant to be visible to players.
         /// </returns>
         [CanBeNull]
@@ -43,14 +43,14 @@ namespace POESKillTree.Model.Items.StatTranslation
         }
 
         /// <summary>
-        /// Translates the given values. Each value is taken as the value for the id at its index 
+        /// Translates the given values. Each value is taken as the value for the id at its index
         /// (ids as in <see cref="Ids"/>).
         /// </summary>
         /// <param name="values">the values to translates</param>
-        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be 
+        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be
         /// hidden. This is the case for stats without effect or stats that are not meant to be visible to players.
         /// </returns>
-        /// <exception cref="ArgumentException">if the number of values does not match the number of 
+        /// <exception cref="ArgumentException">if the number of values does not match the number of
         /// <see cref="Ids"/></exception>
         public string Translate(IReadOnlyList<int> values)
         {
@@ -83,7 +83,7 @@ namespace POESKillTree.Model.Items.StatTranslation
                     var suffix = _jsonTranslation.IsHidden
                         ? " " + ItemConstants.HiddenStatSuffix
                         : "";
-                    return string.Format(CultureInfo.InvariantCulture, entry.FormatString, 
+                    return string.Format(CultureInfo.InvariantCulture, entry.FormatString,
                         formatInputs.ToArray<object>()) + suffix;
                 }
             }
@@ -95,7 +95,7 @@ namespace POESKillTree.Model.Items.StatTranslation
         /// </summary>
         /// <param name="idValueDict">dictionary of the values to translate. The keys are the ids the values belong to.
         /// Values for ids not handled by this instance are ignored.</param>
-        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be 
+        /// <returns>the translated values. Null if the values should not be translated, e.g. the stat should be
         /// hidden. This is the case for stats without effect or stats that are not meant to be visible to players.
         /// </returns>
         [CanBeNull]

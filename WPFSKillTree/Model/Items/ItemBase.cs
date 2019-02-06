@@ -173,28 +173,6 @@ namespace POESKillTree.Model.Items
                     return ItemClass.ActiveSkillGem;
                 case ItemSlot.Belt:
                     return ItemClass.Belt;
-                case ItemSlot.JSlot_Int_Witch:
-                case ItemSlot.JSlot_Int_Scion:
-                case ItemSlot.JSlot_Int_WitchShadow:
-                case ItemSlot.JSlot_DexInt_Scion:
-                case ItemSlot.JSlot_StrInt_Scion:
-                case ItemSlot.JSlot_StrDex_Scion:
-                case ItemSlot.JSlot_Neutral_Acrobatics:
-                case ItemSlot.JSlot_Dex_ShadowRanger:
-                case ItemSlot.JSlot_DexInt_Shadow:
-                case ItemSlot.JSlot_Dex_Ranger:
-                case ItemSlot.JSlot_Dex_RangerDuelist:
-                case ItemSlot.JSlot_Str_WarriorDuelist:
-                case ItemSlot.JSlot_Str_WarriorTemplarScion:
-                case ItemSlot.JSlot_Int_TemplarWitch:
-                case ItemSlot.JSlot_Str_FarWarTempScion:
-                case ItemSlot.JSlot_StrInt_Templar:
-                case ItemSlot.JSlot_StrDex_Duelist:
-                case ItemSlot.JSlot_Neutral_IronGrip:
-                case ItemSlot.JSlot_Neutral_PointBlank:
-                case ItemSlot.JSlot_Neutral_MinionInstability:
-                case ItemSlot.JSlot_Str_Warrior:
-                    return ItemClass.Jewel;
                 default: // MainHand, OffHand, Unequippable
                     return ItemClass.Unknown;
             }

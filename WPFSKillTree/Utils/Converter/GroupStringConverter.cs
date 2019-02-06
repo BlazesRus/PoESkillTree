@@ -33,30 +33,9 @@ namespace POESKillTree.Utils.Converter
         private static readonly string Flasks = L10n.Message("Flasks");
         private static readonly string CoreAttributes = L10n.Message("Core Attributes");
         private static readonly string MiscLabel = L10n.Message("Everything Else");
-        private static readonly string JewelTypes = L10n.Message("Jewel Types");
-        private static readonly string PseudoTotal = L10n.Message("Tracked PseudoTotals");
-        private static readonly string Hidden = L10n.Message("Hidden");
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
-            new[] {"(Total)", PseudoTotal},
-            new[] {"[Non-Tagged]", PseudoTotal},
-            new[] {"Charged Dash Damage", PseudoTotal},
-            new[] {"before tags", PseudoTotal},
-            new[] {"SharedStrength", PseudoTotal},
-            new[] {"maximum Base", PseudoTotal},
-            new[] {"combined", PseudoTotal},
-            new[] {"increased Hybrid", PseudoTotal},
-            new[] {"increased Total", PseudoTotal},
-            new[] {"[Tagged]", PseudoTotal},
-            new[] {"Life with", PseudoTotal},
-            new[] {"Energy Shield with", PseudoTotal},
-            new[] {"Strength from Passives in Radius is Transformed to Intelligence", Hidden },
-            new[] {"Strength from Passives in Radius is Transformed to Dexterity", Hidden },
-            new[] {"Dexterity from Passives in Radius is Transformed to Intelligence", Hidden },
-            new[] {"Dexterity from Passives in Radius is Transformed to Strength", Hidden },
-            new[] {"Intelligence from Passives in Radius is Transformed to Strength", Hidden },
-            new[] {"Intelligence from Passives in Radius is Transformed to Dexterity", Hidden },
             new[] {"Share Endurance, Frenzy and Power Charges with nearby party members", Keystone},
             new[] {"Critical Strike Chance with Claws", CriticalStrike},
             new[] {"with Claws", Weapon},
@@ -101,8 +80,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Minions have", Minion},
             new[] {"Minions Leech", Minion},
             new[] {"Minions Regenerate", Minion},
-			new[] {"Skeletons", Minion},
-			new[] {"Mine Damage", Trap},
+            new[] {"Mine Damage", Trap},
             new[] {"Trap Damage", Trap},
             new[] {"Trap Duration", Trap},
             new[] {"Trap Trigger Radius", Trap},
@@ -243,10 +221,10 @@ namespace POESKillTree.Utils.Converter
             new[] {"Melee Physical Damage", Weapon},
             new[] {"with Swords", Weapon},
             new[] {"with Wands", Weapon},
-            new[] {"Cold Damage with Attack Skills", Weapon},
-            new[] {"Fire Damage with Attack Skills", Weapon},
-            new[] {"Lightning Damage with Attack Skills", Weapon},
-            new[] {"Elemental Damage with Attack Skills", Weapon},
+            new[] {"Cold Damage with Weapons", Weapon},
+            new[] {"Fire Damage with Weapons", Weapon},
+            new[] {"Lightning Damage with Weapons", Weapon},
+            new[] {"Elemental Damage with Weapons", Weapon},
             new[] {"Physical Damage with Wands", Weapon},
             new[] {"Damage with Wands", Weapon},
             new[] {"Damage with Weapons", Weapon},
@@ -258,10 +236,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Leeched", General},
             new[] {"increased Physical Damage", General},
             new[] {"Elemental Damage", General},
-            new[] {"Jewel Socket", JewelTypes},
-            new[] {"Str Based Jewel", JewelTypes},
-            new[] {"Dex Based Jewel", JewelTypes},
-            new[] {"Int Based Jewel", JewelTypes},
+            new[] {"Jewel Socket", General},
             new[] {"Cast Speed", Spell},
             new[] {"Cold Damage", General},
             new[] {"Fire Damage", General},
@@ -273,11 +248,6 @@ namespace POESKillTree.Utils.Converter
             new[] {"Strength", CoreAttributes},
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
-            new[] {"JSlot", Hidden},
-            new[] {"Jewel Socket ID: ", Hidden},
-            new[] {"Radius:", Hidden },
-            new[] {POESKillTree.SkillTreeFiles.ConvertedJewelData.FakeIntuitiveLeapSupportAttribute, Hidden },
-            new[] {"Intuitive Leaped", Hidden },
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");

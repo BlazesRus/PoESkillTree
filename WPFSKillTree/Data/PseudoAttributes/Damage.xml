@@ -26,7 +26,7 @@
 		</Attribute>
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Physical Damage" Hidden="True" Group="Damage">
-		<Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Physical Damage"/>
 		<Attribute Name="#% increased Physical Damage with {0}">
 			<Conditions>
 				<AndComposition>
@@ -85,13 +85,13 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Physical Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Physical Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Physical Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Fire Damage" Hidden="True" Group="Damage">
 		<Attribute Name="#% increased Fire Damage" />
-		<Attribute Name="#% increased Fire Damage with Attack Skills">
+		<Attribute Name="#% increased Fire Damage with Weapons">
 			<Conditions>
 				<AndComposition>
 					<Tag>Attack</Tag>
@@ -103,14 +103,14 @@
 			<Conditions><Tag>Duration</Tag></Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Fire Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Fire Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Fire Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Cold Damage" Hidden="True" Group="Damage">
 		<Attribute Name="#% increased Cold Damage" />
-		<Attribute Name="#% increased Cold Damage with Attack Skills">
+		<Attribute Name="#% increased Cold Damage with Weapons">
 			<Conditions>
 				<AndComposition>
 					<Tag>Attack</Tag>
@@ -119,14 +119,14 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Cold Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Cold Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Cold Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Lightning Damage" Hidden="True" Group="Damage">
 		<Attribute Name="#% increased Lightning Damage" />
-		<Attribute Name="#% increased Lightning Damage with Attack Skills">
+		<Attribute Name="#% increased Lightning Damage with Weapons">
 			<Conditions>
 				<AndComposition>
 					<Tag>Attack</Tag>
@@ -135,7 +135,7 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Lightning Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Lightning Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Lightning Damage" />
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
@@ -151,7 +151,7 @@
 				<Tag>{0}</Tag><!-- Attacks -->
 			</Conditions>
 		</Attribute>
-		<Attribute Name="#% increased Elemental Damage with Attack Skills">
+		<Attribute Name="#% increased Elemental Damage with Weapons">
 			<Conditions>
 				<AndComposition>
 					<Tag>Attack</Tag>
@@ -160,14 +160,14 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Elemental Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Elemental Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Elemental Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>
 	<PseudoAttribute Name="raw #% increased Chaos Damage" Hidden="True" Group="Damage">
 		<Attribute Name="#% increased Chaos Damage" />
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Chaos Damage(Total)" Group="Damage">
+	<PseudoAttribute Name="#% increased Chaos Damage" Group="Damage">
 		<PseudoAttribute Name="raw #% increased Chaos Damage" />
 		<PseudoAttribute Name="#% increased Non-Specific Damage" />
 	</PseudoAttribute>

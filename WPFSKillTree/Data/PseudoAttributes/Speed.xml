@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Speed pseudo attributes -->
 <PseudoAttributes>
-	<PseudoAttribute Name="#% increased Attack Speed(Total)" Group="Speed">
+	<PseudoAttribute Name="#% increased Attack Speed" Group="Speed">
 		<Attribute Name="#% increased Attack Speed" />
 		<Attribute Name="#% increased Attack and Cast Speed" />
 		<Attribute Name="#% increased Attack Speed with {0}">
@@ -25,7 +25,7 @@
 			<Conditions><OffHand>Dual Wield</OffHand></Conditions>
 		</Attribute>
 	</PseudoAttribute>
-	<PseudoAttribute Name="#% increased Cast Speed(Total)" Group="Speed">
+	<PseudoAttribute Name="#% increased Cast Speed" Group="Speed">
 		<Attribute Name="#% increased Cast Speed" />
 		<Attribute Name="#% increased Attack and Cast Speed" />
 		<Attribute Name="#% increased Cast Speed while Dual Wielding">

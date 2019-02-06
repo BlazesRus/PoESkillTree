@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using POESKillTree.Model.Items;
 using POESKillTree.Model.JsonSettings;
 using POESKillTree.SkillTreeFiles;
-using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -19,18 +17,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private readonly ISettingsDialogCoordinator _dialogCoordinator;
         private readonly object _dialogContext;
 
-        /// <summary>
-        /// Gets the tree.
-        /// </summary>
-        /// <value>
-        /// The tree.
-        /// </value>
-        public SkillTree Tree { get; }
-
-        /// <summary>
-        /// The item information
-        /// </summary>
-        public InventoryViewModel ItemInfo;
+        private SkillTree Tree { get; }
 
         /// <summary>
         /// Gets or sets the observable collection of <see cref="GeneratorTabViewModel"/> contained in
@@ -55,13 +42,11 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// Constructs a new SettingsViewModel that operates on the given skill tree.
         /// </summary>
         /// <param name="tree">The skill tree to operate on. (not null)</param>
-        /// <param name="dialogCoordinator">The dialog coordinator.</param>
-        /// <param name="itemAttributes">The item attributes.</param>
-        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator" />.</param>
-        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, InventoryViewModel itemInfo, object dialogContext)
+        /// <param name="dialogCoordinator"></param>
+        /// <param name="dialogContext">The context used for <paramref name="dialogCoordinator"/>.</param>
+        public SettingsViewModel(SkillTree tree, ISettingsDialogCoordinator dialogCoordinator, object dialogContext)
         {
             Tree = tree;
-            ItemInfo = itemInfo;
             _dialogCoordinator = dialogCoordinator;
             _dialogContext = dialogContext;
 
@@ -71,7 +56,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             Tabs = new ObservableCollection<GeneratorTabViewModel>
             {
                 new SteinerTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback),
-                new AdvancedTabViewModel(Tree, _dialogCoordinator, _dialogContext, ItemInfo, runCallback),
+                new AdvancedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback),
                 new AutomatedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback)
             };
             SubSettings = new ISetting[] {SelectedTabIndex}.Union(Tabs).ToArray();

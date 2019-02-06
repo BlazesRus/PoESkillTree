@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using PoESkillTree.GameModel.PassiveTree;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Algorithm.Model;
 using POESKillTree.TreeGenerator.Genetic;
@@ -15,26 +16,6 @@ namespace POESKillTree.TreeGenerator.Solver
     /// </summary>
     public class AdvancedSolver : AbstractGeneticSolver<AdvancedSolverSettings>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        private class ConstraintValues
-        {
-            public float TargetValue;
-            public double Weight;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
-            /// </summary>
-            /// <param name="targetValue">The target value.</param>
-            /// <param name="weight">The weight.</param>
-            public ConstraintValues(float targetValue, double weight)
-            {
-                TargetValue = targetValue;
-                Weight = weight;
-            }
-        }
-
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
         /// into the applicable attributes and their conversion multiplier.
@@ -107,7 +88,7 @@ namespace POESKillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -136,12 +117,10 @@ namespace POESKillTree.TreeGenerator.Solver
         {
             get
             {
-#pragma warning disable DF0022 // Marks indisposed objects assigned to a property, originated in an object creation.
                 return new GeneticAlgorithmParameters(
-                    (int)(PopMultiplier * SearchSpace.Count),
+                    (int) (PopMultiplier * SearchSpace.Count),
                     SearchSpace.Count,
                     maxMutateClusterSize: MaxMutateClusterSize);
-#pragma warning restore DF0022 // Marks indisposed objects assigned to a property, originated in an object creation.
             }
         }
 
@@ -185,7 +164,7 @@ namespace POESKillTree.TreeGenerator.Solver
             foreach (var kvPair in attrConstraints)
             {
                 _attrConstraints[i] = kvPair.Value;
-                _attrNameLookup[kvPair.Key] = new List<int> { i };
+                _attrNameLookup[kvPair.Key] = new List<int> {i};
                 _attrConversionMultipliers[Tuple.Create(kvPair.Key, i)] = 1;
                 i++;
             }
@@ -200,7 +179,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     }
                     else
                     {
-                        _attrNameLookup[tuple.Item1] = new List<int> { i };
+                        _attrNameLookup[tuple.Item1] = new List<int> {i};
                     }
                     _attrConversionMultipliers[Tuple.Create(tuple.Item1, i)] = tuple.Item2;
                 }
@@ -218,7 +197,7 @@ namespace POESKillTree.TreeGenerator.Solver
         protected override bool IncludeNodeInSearchGraph(SkillNode node)
         {
             // Keystones can only be included if they are check-tagged.
-            return node.Type != NodeType.Keystone;
+            return node.Type != PassiveNodeType.Keystone;
         }
 
         /// <summary>
@@ -269,13 +248,13 @@ namespace POESKillTree.TreeGenerator.Solver
         private List<ConvertedPseudoAttributeConstraint> EvalPseudoAttrConstraints()
         {
             var keystones = from node in Settings.Checked
-                            where node.Type == NodeType.Keystone
+                            where node.Type == PassiveNodeType.Keystone
                             select node.Name;
             var conditionSettings = new ConditionSettings(Settings.Tags, Settings.OffHand, keystones.ToArray(), Settings.WeaponClass);
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-
+            
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
@@ -284,7 +263,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     var name = attr.Name;
                     if (ContainsWildcardRegex.IsMatch(name))
                     {
-                        // Wildcards are resolved by searching the skill tree attributes for each attribute
+                        // Wildcards are resolverd by searching the skill tree attributes for each attribute
                         // that matches the attribute name ('{number}' replaced by '(.*)' for matching) and
                         // evaluating the attribute for each of those replacements.
                         if (!resolvedWildcardNames.ContainsKey(name))
@@ -415,50 +394,16 @@ namespace POESKillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            if(Settings.TreePlusItemsMode)
+            for (var i = 0; i < _attrConstraints.Length; i++)
             {
-                string StatName;
-                Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
-                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
-                int attrIndex;
-                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
-                {
-                    attrIndex = ConversionKey.Item2;
-                    StatName = ConversionKey.Item1;
-                    var stat = _attrConstraints[attrIndex];
-                    ConstraintDictionary.Add(StatName, new ConstraintValues(stat.Item1, stat.Item2));
-                    var currentValue = totalStats[attrIndex];
-                    StatTotals.Add(StatName, currentValue);
-                }
-                StatTotals = ConvertedJewelData.JewelBasedStatUpdater(StatTotals,Settings.ItemInfo, Settings.TreeInfo);
-                Dictionary<string, float> ItemStatTotals = Settings.ItemInfo.CalculateTotalSingleAttributes();
-                float StatTotal;
-                ConstraintValues StatConstraint;
-                foreach (var keyName in StatTotals.Keys)
-                {
-                    StatTotal = StatTotals[keyName];
-                    if(ItemStatTotals.ContainsKey(keyName))
-                    {
-                        StatTotal += ItemStatTotals[keyName];
-                    }
-                    StatConstraint = ConstraintDictionary[keyName];
-                    csvs *= CalcCsv(StatTotal, StatConstraint.Weight, StatConstraint.TargetValue);
-                }
-            }
-            else
-            {
-                for (var i = 0; i < _attrConstraints.Length; i++)
-                {
-                    var stat = _attrConstraints[i];
-                    var currentValue = totalStats[i];
-                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
-                }
+                var stat = _attrConstraints[i];
+                csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
             }
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }
@@ -472,15 +417,11 @@ namespace POESKillTree.TreeGenerator.Solver
             return Math.Max(csvs, 0);
         }
 
-        private static double CalcCsv(float currentValue, double weight, float target)
+        private static double CalcCsv(float x, double weight, float target)
         {
             // Don't go higher than the target value.
-            //currentValue = Math.Min(currentValue, target);
-            if (currentValue >= target)//Needless checking if current value is equal or higher than target based on CalcCsv (Math.Exp(W*M*(X/T))/Math.Exp(W*M)==1.0)
-            {
-                return 1.0;
-            }
-            return Math.Exp(weight * CsvWeightMultiplier * currentValue / target) / Math.Exp(weight * CsvWeightMultiplier);
+            x = Math.Min(x, target);
+            return Math.Exp(weight * CsvWeightMultiplier * x/target) / Math.Exp(weight * CsvWeightMultiplier);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace POESKillTree.TreeGenerator.Model
         }
 
         /// <summary>
-        /// Maximum allowed weight (inclusive).
+        /// Maximim allowed weight (inclusive).
         /// </summary>
         public static int MaxWeight
         {

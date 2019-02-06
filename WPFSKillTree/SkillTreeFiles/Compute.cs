@@ -7,8 +7,8 @@ using POESKillTree.ViewModels;
 using System.Linq;
 using PoESkillTree.GameModel.Items;
 using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
+using Item = POESKillTree.Model.Items.Item;
 
 namespace POESKillTree.SkillTreeFiles
 {
@@ -1232,7 +1232,6 @@ namespace POESKillTree.SkillTreeFiles
                 static Regex ReMoreSimple = new Regex("^#% (more|less) (.+) Damage$");
                 static Regex ReMoreWhen = new Regex("^#% more (.+) Damage when on Full Life$");
                 static Regex ReMoreWith = new Regex("^#% more (.+) Damage with Weapons$");
-                static Regex ReMoreWithAttack = new Regex("^#% more (.+) Damage with Attack Skills$");
 
                 public More(float percent)
                     : base()

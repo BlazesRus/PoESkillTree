@@ -16,7 +16,7 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         /// <summary>
         /// Gets the list of Attributes this PseudoAttribute contains.
         /// </summary>
-        public List<Attribute> Attributes { get; set; }
+        public List<Attribute> Attributes { get; private set; }
 
         /// <summary>
         /// Gets the name of the group this PseudoAttribute belongs to.

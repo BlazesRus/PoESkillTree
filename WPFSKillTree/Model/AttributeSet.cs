@@ -36,45 +36,6 @@ namespace POESKillTree.Model
                 Add(attr.Key, new List<float>(attr.Value));
         }
 
-        /// <summary>
-        ///   Adds Tracked attribute.
-        ///   Existing attributes have value increased by value of attribute being added.
-        /// </summary>
-        public void Add(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
-        {
-            if (ContainsKey(Target.Name))
-            {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.CalculateValue(this)+ this[Target.Name][0];
-                this[Target.Name] = TargetValue;
-            }
-            else
-            {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.CalculateValue(this);
-                Add(Target.Name, TargetValue);
-            }
-        }
-
-        /// <summary>
-        ///   Adds Tracked attribute if doesn't exist yet otherwise update value
-        /// </summary>
-        public void Set(POESKillTree.SkillTreeFiles.TrackedAttribute Target)
-        {
-            if (ContainsKey(Target.Name))
-            {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.CalculateValue(this);
-                this[Target.Name] = TargetValue;
-            }
-            else
-            {
-                List<float> TargetValue = new List<float>(1);
-                TargetValue[0] = Target.CalculateValue(this);
-                Add(Target.Name, TargetValue);
-            }
-        }
-
         // Adds item mod.
         // Existing attribute has value increased by value of attribute being added.
         public void Add(ItemMod itemMod)
@@ -139,7 +100,7 @@ namespace POESKillTree.Model
 
         // Removes attribute.
         // Attribute has value decreased by value of attribute being removed.
-        // If attribute in set has all values zeros or it has no value at all it will be removed from set.
+        // If attribute in set has all values zeroes or it has no value at all it will be removed from set.
         public void Remove(KeyValuePair<string, List<float>> attr)
         {
             if (ContainsKey(attr.Key))
@@ -149,7 +110,7 @@ namespace POESKillTree.Model
                     for (int i = 0; i < attr.Value.Count; ++i)
                         this[attr.Key][i] -= attr.Value[i];
 
-                    // Remove attribute from set if all values are zeros.
+                    // Remove attribute from set if all values are zeroes.
                     for (int i = 0; i < attr.Value.Count; ++i)
                         if (this[attr.Key][i] != 0) return;
                     Remove(attr.Key);

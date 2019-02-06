@@ -107,7 +107,7 @@ namespace PoESkillTree.Computation.Parsing.Tests
             return new CompositeParser<int, string>(stepper, stepToParserFunc);
         }
 
-        private static IParser<int> MockConstantParser(string stat, 
+        private static IParser<int> MockConstantParser(string stat,
             string remaining = "remaining", int result = 42, bool @return = true)
         {
             return Mock.Of<IParser<int>>(p => p.Parse(stat) == new ParseResult<int>(@return, remaining, result));

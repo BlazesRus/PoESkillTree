@@ -17,7 +17,7 @@ namespace POESKillTree.Utils
         private static bool HasPortableData;
         // The flag indicating whether application data are portable.
         public static bool IsPortable { get { return HasPortableData; } }
-        // The name of INI file whose existence indicates that application is running in portable mode (must be same as defined in release.iss script).
+        // The name of INI file whose existance indicates that application is running in portable mode (must be same as defined in release.iss script).
         private const string PortableIniFileName = "Portable.ini";
 
         // Static constructor.
@@ -26,7 +26,7 @@ namespace POESKillTree.Utils
             HasPortableData = File.Exists(Path.Combine(ProgramDirectory, PortableIniFileName));
         }
 
-        // Returns absolute path to application data folder (i.e. system folder + AppDataFolderName).
+        // Returns abolute path to appliation data folder (i.e. system folder + AppDataFolderName).
         // If folder doesn't exist, it will be created.
         // If trailingSlash is true, directory separator will be appended to path returned.
         public static string GetFolder(bool trailingSlash = false)
@@ -41,7 +41,7 @@ namespace POESKillTree.Utils
                 }
                 else
                 {
-                    // Use roaming profile to store application data.
+                    // Use roaming profile to store appliation data.
                     ApplicationData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), AppDataFolderName);
                     if (!Directory.Exists(ApplicationData))
                         Directory.CreateDirectory(ApplicationData);
@@ -51,7 +51,7 @@ namespace POESKillTree.Utils
             return trailingSlash ? ApplicationData + Path.DirectorySeparatorChar : ApplicationData;
         }
 
-        // Returns absolute path of subfolder of application data folder.
+        // Returns absolute path of subfolder of appliation data folder.
         // If subfolder doesn't exist, it will be created.
         // If trailingSlash is true, directory separator will be appended to path returned.
         public static string GetFolder(string folderName, bool trailingSlash = false)

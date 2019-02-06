@@ -67,12 +67,6 @@ namespace POESKillTree.SkillTreeFiles
         public bool not { get; set; }
         public string dn { get; set; }
         public bool m { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is jewel socket.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is jewel socket; otherwise, <c>false</c>.
-        /// </value>
         public bool isJewelSocket { get; set; }
         public bool isMultipleChoice { get; set; }
         public bool isMultipleChoiceOption { get; set; }
