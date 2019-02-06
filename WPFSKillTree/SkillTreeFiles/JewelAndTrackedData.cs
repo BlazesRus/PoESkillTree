@@ -2126,7 +2126,29 @@ namespace POESKillTree
         /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
         /// </summary>
         public static string StatTrackingSavePath = DefaultTrackingDir;
-        //public static PoESkillTree.Common.Model.Items.Enums.ItemSlot RemovingIntLeapJewels = 0;
+		/// <summary>
+        /// Saved slot for item slot that are removing Intuitive leap support from
+        /// </summary>
 		public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
+		/// <summary>
+        /// If true, automatically adds skilltree pseudoattributes to stat tracking (Use menu to turn on)(Default:false)
+        /// </summary>
+		public static bool AutoTrackStats = false;
+		/// <summary>
+        /// Auto-updated value of types of weapons equipped (0:None; 
+		//  1: 2H Axe; 2: 2H Sword; 3: 2H Mace;
+		// 5+ values = Shield+Weapon (5 = shield+fist)
+		// 6: Axe+Shield; 7: Sword+Shield; 
+		// 500+ values = Dual Wielding;
+		// 501 = Dual Wand; 502 = Dual Axe; 503 = Dual Sword; 504 = Dual Mace 
+        /// </summary>
+		public static int WeaponComboType = 0;
+		/// <summary>
+        /// Generate an update fake non-pseudo attributes such as total(before leveling+gear) accuracy
+        /// </summary>
+		static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
+		{
+			//"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
+		}
 	}
 }
