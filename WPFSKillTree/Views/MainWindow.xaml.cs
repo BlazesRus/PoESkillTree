@@ -93,6 +93,7 @@ namespace POESKillTree.Views
             }
         }
 
+/*
         private InventoryViewModel _inventoryViewModel;
         public InventoryViewModel InventoryViewModel
         {
@@ -102,6 +103,22 @@ namespace POESKillTree.Views
                 if (value == _inventoryViewModel)
                     return;
                 _inventoryViewModel = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InventoryViewModel)));
+            }
+        }
+*/
+
+		    /// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
+        /// </summary>
+        public InventoryViewModel InventoryViewModel
+        {
+            get { return GlobalSettings.ItemInfoVal; }
+            private set
+            {
+                if (value == GlobalSettings.ItemInfoVal)
+                    return;
+                GlobalSettings.ItemInfoVal = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InventoryViewModel)));
             }
         }
@@ -385,9 +402,20 @@ namespace POESKillTree.Views
             if (lb == null)
                 return;
             var attributelist = new List<string>();
+            string SelectedAttrName;
+			      int index;
             foreach (var o in lb.SelectedItems)
             {
-                attributelist.Add(o.ToString());
+				        SelectedAttrName = o.ToString();
+				        index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
+				        if (index>-1)//Functionality of removing individual tracked stat
+				        {
+					          GlobalSettings.TrackedStats.RemoveAt(index);
+				        }
+				        else
+				        {
+					          attributelist.Add(SelectedAttrName);
+				        }
             }
             if (attributelist.Count > 0)
             {
@@ -450,7 +478,7 @@ namespace POESKillTree.Views
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var controller = await ExtendedDialogManager.ShowProgressAsync(this, L10n.Message("Initialization"),
-                        L10n.Message("Initalizing window ..."));
+                        L10n.Message("Initializing window ..."));
             controller.Maximum = 1;
             controller.SetIndeterminate();
 
@@ -549,7 +577,7 @@ namespace POESKillTree.Views
             updateCanvasSize();
             recSkillTree.Fill = new VisualBrush(Tree.SkillTreeVisual);
 
-            controller.SetMessage(L10n.Message("Initalizing window ..."));
+            controller.SetMessage(L10n.Message("Initializing window ..."));
             controller.SetIndeterminate();
             await Task.Delay(1); // Give the progress dialog a chance to update
 
@@ -564,6 +592,7 @@ namespace POESKillTree.Views
             PopulateAscendancySelectionList();
             BuildsControlViewModel = new BuildsControlViewModel(ExtendedDialogCoordinator.Instance, PersistentData, Tree);
             UpdateTreeComparison();
+            //GlobalSettings.ItemInfo = InventoryViewModel;//Copy Equipped ItemInfo into GlobalSettings(might switch to store statically in one interance later instead rather than keep passing oopies)
             TreeGeneratorInteraction =
                 new TreeGeneratorInteraction(SettingsDialogCoordinator.Instance, PersistentData, Tree);
             TreeGeneratorInteraction.RunFinished += (o, args) =>

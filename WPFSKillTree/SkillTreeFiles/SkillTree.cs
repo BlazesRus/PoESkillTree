@@ -625,6 +625,10 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
             return temp;
         }
 

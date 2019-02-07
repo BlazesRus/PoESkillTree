@@ -2143,6 +2143,24 @@ namespace POESKillTree
 		// 501 = Dual Wand; 502 = Dual Axe; 503 = Dual Sword; 504 = Dual Mace 
         /// </summary>
 		public static int WeaponComboType = 0;
+		
+		public InventoryViewModel ItemInfoVal;
+
+		/// <summary>
+        /// The item information equipped in skilltree
+        /// </summary>
+        public InventoryViewModel ItemInfo
+        {
+            get { return ItemInfoVal; }
+            private set
+            {
+                if (value == ItemInfoVal)
+                    return;
+                ItemInfoVal = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemInfoVal)));
+            }
+        }
+		
 		/// <summary>
         /// Generate an update fake non-pseudo attributes such as total(before leveling+gear) accuracy
         /// </summary>
