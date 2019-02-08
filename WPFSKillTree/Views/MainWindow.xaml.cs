@@ -592,7 +592,6 @@ namespace POESKillTree.Views
             PopulateAscendancySelectionList();
             BuildsControlViewModel = new BuildsControlViewModel(ExtendedDialogCoordinator.Instance, PersistentData, Tree);
             UpdateTreeComparison();
-            //GlobalSettings.ItemInfo = InventoryViewModel;//Copy Equipped ItemInfo into GlobalSettings(might switch to store statically in one interance later instead rather than keep passing oopies)
             TreeGeneratorInteraction =
                 new TreeGeneratorInteraction(SettingsDialogCoordinator.Instance, PersistentData, Tree);
             TreeGeneratorInteraction.RunFinished += (o, args) =>
@@ -1047,6 +1046,11 @@ namespace POESKillTree.Views
                 new SettingsMenuWindow());
         }
 
+        private async void Menu_LoadTrackedStats(object sender, RoutedEventArgs e)
+        {
+            await this.ShowDialogAsync(new TrackedStatsMenuModel(PersistentData, DialogCoordinator.Instance, BuildsControlViewModel), new TrackedStatViews.TrackedStatsMenu());
+        }
+
         private async void Menu_OpenHotkeys(object sender, RoutedEventArgs e)
         {
             await this.ShowDialogAsync(new CloseableViewModel(), new HotkeysWindow());
@@ -1232,6 +1236,7 @@ namespace POESKillTree.Views
             UpdateStatistics();
             UpdateClass();
             UpdatePoints();
+            IntuitiveLeapCheckup();
         }
 
         public void UpdateAllAttributeList()
@@ -1279,7 +1284,14 @@ namespace POESKillTree.Views
                     }
                 }
             }
-            
+
+            attritemp = ConvertedJewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
+
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                attritemp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(attritemp);
+            }
+
             foreach (var item in (attritemp.Select(InsertNumbersInAttributes)))
             {
                 var a = new Attribute(item);
@@ -1294,6 +1306,9 @@ namespace POESKillTree.Views
             cbAscType.SelectedIndex = Tree.AscType;
         }
 
+        /// <summary>
+        /// Updates the attribute list.
+        /// </summary>
         public void UpdateAttributeList()
         {
             lbAttr.SelectedIndex = -1;
@@ -1301,7 +1316,27 @@ namespace POESKillTree.Views
             var copy = Tree.HighlightedAttributes == null
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
-            
+
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                Dictionary<string, float> AttributeTotals = GlobalSettings.TrackedStats.CreateAttributeDictionary(Tree.SelectedAttributes);
+                foreach (var Element in AttributeTotals.Keys)
+                {
+                    if (Tree.SelectedAttributes.ContainsKey(Element))
+                    {
+                        List<float> TargetValue = new List<float>(1);
+                        TargetValue.Add(AttributeTotals[Element]);
+                        Tree.SelectedAttributes[Element] = TargetValue;
+                    }
+                    else
+                    {
+                        List<float> TargetValue = new List<float>(1);
+                        TargetValue.Add(AttributeTotals[Element]);
+                        Tree.SelectedAttributes.Add(Element, TargetValue);
+                    }
+                }
+            }
+
             foreach (var item in Tree.SelectedAttributes)
             {
                 var a = new Attribute(InsertNumbersInAttributes(item));
@@ -1332,6 +1367,17 @@ namespace POESKillTree.Views
             }
         }
 
+        /// <summary>
+        /// Apply removal of Intuitive Leap supported jewels
+        /// </summary>
+        public void IntuitiveLeapCheckup()
+        {
+            if(GlobalSettings.RemovingIntLeapJewels!=0)
+            {
+
+            }
+        }
+
         public void UpdatePoints()
         {
             var points = Tree.GetPointCount();
@@ -1341,6 +1387,9 @@ namespace POESKillTree.Views
             AscendancyTotalPoints.Content = "[" + points["AscendancyTotal"].ToString() + "]";
         }
 
+        /// <summary>
+        /// Updates the statistics.
+        /// </summary>
         public void UpdateStatistics()
         {
             _defenceList.Clear();
@@ -1520,6 +1569,72 @@ namespace POESKillTree.Views
             _lastMouseButton = e.ChangedButton;
         }
 
+        const string LeapedNode = "Intuitive Leaped";
+
+        static private void AddLeapTagToNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        {
+            List<float> BlankList = new List<float>();
+            string[] ExtendedAttribute;
+            int attributeSize = CurrentNode.attributes.Length;
+            if (!CurrentNode.Attributes.ContainsKey(LeapedNode) && attributeSize != 0)
+            {
+                ExtendedAttribute = new string[attributeSize + 1];
+                for (int index = 0; index < attributeSize; ++index)
+                {
+                    ExtendedAttribute[index] = CurrentNode.attributes[index];
+                }
+                ExtendedAttribute[attributeSize] = LeapedNode;
+                CurrentNode.attributes = ExtendedAttribute;
+                CurrentNode.Attributes.Add(LeapedNode, BlankList);
+            }
+        }
+
+        static private void RemoveLeapTagFromNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        {
+            string[] ExtendedAttribute;
+            int attributeSize;
+            int NewAttributeSize;
+            int NewIndex;
+            string CurrentAttri;
+            if (CurrentNode.Attributes.ContainsKey(LeapedNode))
+            {
+                CurrentNode.Attributes.Remove(LeapedNode);
+                attributeSize = CurrentNode.attributes.Length;
+                NewAttributeSize = attributeSize - 1;
+                ExtendedAttribute = new string[NewAttributeSize];
+                NewIndex = 0;
+                for (int index = 0; index < attributeSize; ++index)
+                {
+                    CurrentAttri = CurrentNode.attributes[index];
+                    if (CurrentAttri != LeapedNode)
+                    {
+                        ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
+                        ++NewIndex;
+                    }
+                }
+                Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
+                CurrentNode.attributes = ExtendedAttribute;
+            }
+        }
+
+        private void NormalRefund(POESKillTree.SkillTreeFiles.SkillNode node)
+        {
+            Tree.ForceRefundNode(node);
+            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+            Tree.DrawPath(_prePath);
+        }
+
+        private void NormalNodeClick(POESKillTree.SkillTreeFiles.SkillNode node)
+        {
+            if (_prePath != null)
+            {
+                Tree.AllocateSkillNodes(_prePath);
+                _toRemove = Tree.ForceRefundNodePreview(node);
+                if (_toRemove != null)
+                    Tree.DrawRefundPreview(_toRemove);
+            }
+        }
+
         private void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {
             var p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
@@ -1553,19 +1668,64 @@ namespace POESKillTree.Views
                     }
                     else
                     {
+                        bool NonLeapedNeighborIsConnected = false;
+                        foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                        {
+                            if (Tree.SkilledNodes.Contains(skillNode) && !skillNode.Attributes.ContainsKey(LeapedNode))
+                            {
+                                NonLeapedNeighborIsConnected = true;
+                                break;
+                            }
+                        }
                         // Toggle whether the node is included in the tree
                         if (Tree.SkilledNodes.Contains(node))
                         {
-                            Tree.ForceRefundNode(node);
-                            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-                            Tree.DrawPath(_prePath);
+                            if (node.Attributes.ContainsKey(LeapedNode))
+                            {
+                                if (NonLeapedNeighborIsConnected)
+                                {
+                                    NormalRefund(node);
+                                }
+                                else
+                                {
+                                    Tree.SkilledNodes.Remove(node);
+                                }
+                                RemoveLeapTagFromNode(node);
+                            }
+                            else
+                            {
+                                NormalRefund(node);
+                            }
                         }
-                        else if (_prePath != null)
+                        else
                         {
-                            Tree.AllocateSkillNodes(_prePath);
-                            _toRemove = Tree.ForceRefundNodePreview(node);
-                            if (_toRemove != null)
-                                Tree.DrawRefundPreview(_toRemove);
+                            if (NonLeapedNeighborIsConnected)
+                            {
+                                NormalNodeClick(node);
+                                //Remove Leaping Tag from node if now connected in to tree
+                                if (node.Attributes.ContainsKey(LeapedNode))
+                                {
+                                    foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                                    {
+                                        if (Tree.SkilledNodes.Contains(skillNode) && skillNode.Attributes.ContainsKey(LeapedNode))
+                                        {
+                                            RemoveLeapTagFromNode(skillNode);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (node.Attributes.ContainsKey(ConvertedJewelData.FakeIntuitiveLeapSupportAttribute))
+                                {
+                                    Tree.SkilledNodes.Add(node);
+                                    AddLeapTagToNode(node);
+                                }
+                                else
+                                {
+                                    NormalNodeClick(node);
+                                }
+                            }
                         }
                     }
                 }
@@ -1678,6 +1838,35 @@ namespace POESKillTree.Views
                         points--;
                     sp.Children.Add(new Separator());
                     sp.Children.Add(new TextBlock { Text = "Points to skill node: " + points });
+                }
+                if (node.Type == NodeType.JewelSocket)
+                {
+                    int ID = node.Id;
+                    string SlotName = ConvertedJewelData.JewelSlotName(ID);
+                    sp.Children.Add(new Separator());
+#if(DEBUG)
+                    sp.Children.Add(new TextBlock { Text = "JewelSlotName: " + SlotName });
+#endif
+
+                    Item EquippedJewel = ItemAttributes.ReturnItemByName(SlotName);
+                    if (EquippedJewel != null)
+                    {
+                        sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
+                        bool HasMods = false;
+                        foreach (var attriStat in EquippedJewel.Mods)
+                        {
+                            if (HasMods == false)
+                            {
+                                sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
+                                HasMods = true;
+                            }
+                            sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
+                        }
+                        if (!PersistentData.Options.ChangeSummaryEnabled)
+                        {
+                            sp.Children.Add(new Separator());
+                        }
+                    }
                 }
 
                 //Change summary, activated with ctrl

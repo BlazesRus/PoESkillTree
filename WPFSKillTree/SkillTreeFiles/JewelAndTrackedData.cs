@@ -2111,12 +2111,52 @@ namespace POESKillTree
             }
         }
     }
+	
+	 /// <summary>
+    /// Dictionary  holding NodeIDs for Jewel Slots  ([Key] = NodeID)
+    /// </summary>
+	public class JewelDictionary : Dictionary<string, int>//
+	{
+	    /// <summary>
+	    /// Keys for Strength Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> StrJewelSlots;
+	    /// <summary>
+	    /// Keys for Intellegence Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> IntJewelSlots;
+	    /// <summary>
+	    /// Keys for Dexterity Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> DexJewelSlots;
+	    /// <summary>
+	    /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> StrIntJewelSlots;
+	    /// <summary>
+	    /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> StrDexJewelSlots;
+	    /// <summary>
+	    /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> StrIntJewelSlots;
+	    /// <summary>
+	    /// Keys for Hybrid Intellegence+Dexterity Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> IntDexJewelSlots;
+			    /// <summary>
+	    /// Keys for Hybrid Intellegence+Dexterity Threshold Jewel Slots
+        /// </summary>
+		public System.Collections.Generic.List<string> NeutralJewelSlots;
+	}
+	
 	public static class GlobalSettings
     {
         /// <summary>
         /// The tracked stats
         /// </summary>
-        public static SkillTreeFiles.TrackedAttributes TrackedStats = new SkillTreeFiles.TrackedAttributes();
+        public static TrackedAttributes TrackedStats = new TrackedAttributes();
 
         /// <summary>
         /// The default tracking directory
