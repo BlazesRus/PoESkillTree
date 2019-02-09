@@ -16,24 +16,17 @@ namespace POESKillTree
 {
     public class JewelNodeData : Notifier
 	{
-	    public int NodeID;
 		public InventoryItemViewModel ItemModel;
 		public POESKillTree.Model.Items.Item JewelData { get ItemModel.Item; }
 		
-		public JewelNodeData(int nodeID)
-		{
-			NodeID = nodeID;
-			ItemModel = CreateSlotVm();
-		}
 		public JewelNodeData()
 		{
-			NodeID = 0;
 			ItemModel = CreateSlotVm();
 		}
 		private InventoryItemViewModel CreateSlotVm()
         {
             var imageName = "Jewel";
-			return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, slot)
+			return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes)
             {
                 EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };
@@ -41,26 +34,26 @@ namespace POESKillTree
 	}
 
 	 /// <summary>
-    /// Dictionary  holding NodeIDs for Jewel Slots  ([Key] = JewelNodeData.NodeID) and storing socketed Jewel Items
+    /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
     /// </summary>
-	public class JewelDictionary : Dictionary<string, JewelNodeData>//
+	public class JewelDictionary : Dictionary<int, JewelNodeData>
 	{
 	    /// <summary>
 	    /// Keys for Strength Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> StrJewelSlots;
+		public System.Collections.Generic.List<int> StrJewelSlots;
 	    /// <summary>
 	    /// Keys for Intellegence Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> IntJewelSlots;
+		public System.Collections.Generic.List<int> IntJewelSlots;
 	    /// <summary>
 	    /// Keys for Dexterity Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> DexJewelSlots;
+		public System.Collections.Generic.List<int> DexJewelSlots;
 	    /// <summary>
 	    /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> StrIntJewelSlots;
+		public System.Collections.Generic.List<int> StrIntJewelSlots;
 	    /// <summary>
 	    /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
         /// </summary>
