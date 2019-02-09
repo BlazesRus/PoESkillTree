@@ -174,7 +174,7 @@ namespace POESKillTree.ViewModels.Equipment
 								}
 							}
 						}
-						ItemData = null; break;
+						ItemData = null;ContinueCalc=false; break;
                 }
                 if (ItemData != null)
                 {
