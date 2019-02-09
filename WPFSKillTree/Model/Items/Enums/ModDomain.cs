@@ -10,9 +10,11 @@
     {
         Item,
         Flask,
-        Master,
+        Crafted,
         Area,
-        Jewel,
+        Misc,
+        Abyss_Jewel,
         Atlas,
+        Delve,
     }
 }

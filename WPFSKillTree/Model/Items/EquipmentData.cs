@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MoreLinq;
+using PoESkillTree.GameModel;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.StatTranslation;
 using POESKillTree.Model.Items.Mods;
-using POESKillTree.Model.Items.StatTranslation;
-using POESKillTree.Utils;
 
 namespace POESKillTree.Model.Items
 {
     public class EquipmentData
     {
-        private const string ResourcePath =
-            "pack://application:,,,/PoESkillTree;component/Data/Equipment/";
-
         public ModDatabase ModDatabase { get; private set; }
         public StatTranslator StatTranslator { get; private set; }
 
@@ -35,18 +33,16 @@ namespace POESKillTree.Model.Items
 
         private EquipmentData(Options options)
         {
-            Util.TriggerPackUriSchemeInitialization();
             _itemImageService = new ItemImageService(options);
         }
 
         private async Task InitializeAsync()
         {
-            var modsTask = RePoEUtils.LoadAsync<Dictionary<string, JsonMod>>("mods");
-            var benchOptionsTask = RePoEUtils.LoadAsync<JsonCraftingBenchOption[]>("crafting_bench_options");
-            var npcMastersTask = RePoEUtils.LoadAsync<Dictionary<string, JsonNpcMaster>>("npc_master");
-            var statTranslationsTask = RePoEUtils.LoadAsync<List<JsonStatTranslation>>("stat_translations");
-            ModDatabase = new ModDatabase(await modsTask, await benchOptionsTask, await npcMastersTask);
-            StatTranslator = new StatTranslator(await statTranslationsTask);
+            var modsTask = DataUtils.LoadRePoEAsync<Dictionary<string, JsonMod>>("mods");
+            var benchOptionsTask = DataUtils.LoadRePoEAsync<JsonCraftingBenchOption[]>("crafting_bench_options");
+            var statTranslatorTask = StatTranslationLoader.LoadAsync(StatTranslationLoader.MainFileName);
+            ModDatabase = new ModDatabase(await modsTask, await benchOptionsTask);
+            StatTranslator = await statTranslatorTask;
 
             ItemBases = (await LoadBases()).ToList();
             UniqueBases = (await LoadUniques()).ToList();
@@ -66,22 +62,16 @@ namespace POESKillTree.Model.Items
 
         private async Task<IEnumerable<ItemBase>> LoadBases()
         {
-            var xmlList = await DeserializeXmlResourceAsync<XmlItemList>("Items.xml");
+            var xmlList = await DataUtils.LoadXmlAsync<XmlItemList>("Equipment.Items.xml");
             return xmlList.ItemBases.Select(x => new ItemBase(_itemImageService, ModDatabase, x));
         }
 
         private async Task<IEnumerable<UniqueBase>> LoadUniques()
         {
             var metadataToBase = ItemBases.ToDictionary(b => b.MetadataId);
-            var xmlList = await DeserializeXmlResourceAsync<XmlUniqueList>("Uniques.xml");
+            var xmlList = await DataUtils.LoadXmlAsync<XmlUniqueList>("Equipment.Uniques.xml");
             return xmlList.Uniques.Select(
                 x => new UniqueBase(_itemImageService, ModDatabase, metadataToBase[x.BaseMetadataId], x));
-        }
-
-        private static async Task<T> DeserializeXmlResourceAsync<T>(string file)
-        {
-            var text = await SerializationUtils.ReadResourceAsync(ResourcePath + file);
-            return SerializationUtils.XmlDeserializeString<T>(text);
         }
 
         public ItemBase ItemBaseFromTypeline(string typeline)

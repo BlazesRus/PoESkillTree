@@ -4,8 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using MB.Algodat;
 using MoreLinq;
+using PoESkillTree.GameModel.StatTranslation;
 using POESKillTree.Model.Items.Mods;
-using POESKillTree.Model.Items.StatTranslation;
 using POESKillTree.Utils;
 
 namespace POESKillTree.ViewModels.Crafting
@@ -70,7 +70,7 @@ namespace POESKillTree.ViewModels.Crafting
                                 && matchingAffix.QueryMods(valuesBefore).Any())
                             {
                                 _sliders.Zip(valuesBefore, Tuple.Create)
-                                    .ForEach(t => t.Item1.Value = t.Item2);
+                                    .ForEach(t => t.Item1.Value = t.Item2.value);
                             }
                             return;
                         }
@@ -98,7 +98,7 @@ namespace POESKillTree.ViewModels.Crafting
             private set { SetProperty(ref _affixText, value); }
         }
 
-        public IEnumerable<int> SelectedValues => _sliders.Select(s => s.Value);
+        public IEnumerable<(int valueIndex, int value)> SelectedValues => _sliders.Select(s => (s.ValueIndex, s.Value));
 
         private readonly ObservableCollection<SliderGroupViewModel> _sliderGroups =
             new ObservableCollection<SliderGroupViewModel>();
@@ -125,11 +125,11 @@ namespace POESKillTree.ViewModels.Crafting
             {
                 var ids = new List<string>();
                 var idToIndex = new Dictionary<string, int>();
-                for (var i = 0; i < SelectedAffix.ValueCount; i++)
+                for (var i = 0; i < SelectedAffix.StatIds.Count; i++)
                 {
-                    var stat = SelectedAffix.FirstTierStats[i];
-                    ids.Add(stat.Id);
-                    idToIndex[stat.Id] = i;
+                    var statId = SelectedAffix.StatIds[i];
+                    ids.Add(statId);
+                    idToIndex[statId] = i;
                 }
 
                 var translations = _statTranslator.GetTranslations(ids);
@@ -189,7 +189,7 @@ namespace POESKillTree.ViewModels.Crafting
                 if (!SelectedAffix.QueryModsSingleValue(iValue, other.Value).Intersect(tiers).Any())
                 {
                     // slider isn't inside current tier
-                    Range<int> moveto = tiers[0].Stats[iValue].Range;
+                    Range<int> moveto = SelectedAffix.SelectStat(tiers[0], iValue).Range;
                     other.Value = (e.NewValue > e.OldValue) ? moveto.From : moveto.To;
                 }
             }
@@ -212,7 +212,13 @@ namespace POESKillTree.ViewModels.Crafting
             {
                 return Enumerable.Empty<StatIdValuePair>();
             }
-            return firstMatch.Stats.EquiZip(SelectedValues, (s, v) => new StatIdValuePair(s.Id, v));
+
+            return
+                from t in SelectedValues
+                let valueIndex = t.valueIndex
+                let value = t.value
+                let stat = SelectedAffix.SelectStat(firstMatch, valueIndex)
+                select new StatIdValuePair(stat.Id, value);
         }
 
         /// <summary>
@@ -248,7 +254,7 @@ namespace POESKillTree.ViewModels.Crafting
                 }
 
                 var idValueDict = _valueIndices
-                    .Select(i => firstMatch.Stats[i].Id)
+                    .Select(i => _affix.SelectStat(firstMatch, i).Id)
                     .EquiZip(values, Tuple.Create)
                     .ToDictionary(t => t.Item1, t => t.Item2);
                 return _statTranslator.GetTranslations(idValueDict).First();

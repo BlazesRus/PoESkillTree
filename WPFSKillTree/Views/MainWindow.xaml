@@ -546,6 +546,15 @@
                         <l:Catalog Message="C_ross-tag highlighted Nodes" />
                     </MenuItem.Header>
                 </MenuItem>
+                <Separator />
+                <MenuItem Click="Menu_LoadTrackedStats">
+                    <MenuItem.Header>
+                        <l:Catalog Message="Load Tracked Stat"/>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconModern Kind="Settings" HorizontalAlignment="Center" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem>
                 <MenuItem.Header>
@@ -660,13 +669,13 @@
                         </Label.ToolTip>
                     </Label>
                     <Label Content="/" Margin="-5,0,-5,0" Opacity="0.5" FontSize="14"/>
-                    <Label Content="123" Margin="0,0,0,0" x:Name="NormalTotalPoints" Opacity="0.50" FontSize="14"
+                    <Label Content="124" Margin="0,0,0,0" x:Name="NormalTotalPoints" Opacity="0.50" FontSize="14"
                            Width="34" HorizontalContentAlignment="Right">
                         <Label.ToolTip>
                             <l:Catalog Message="Total Passive Skill Points"/>
                         </Label.ToolTip>
                     </Label>
-                    <Label Content="[6]" Margin="-5,0,0,0" x:Name="AscendancyTotalPoints" Opacity="0.50" FontSize="14">
+                    <Label Content="[8]" Margin="-5,0,0,0" x:Name="AscendancyTotalPoints" Opacity="0.50" FontSize="14">
                         <Label.ToolTip>
                             <l:Catalog Message="Total Ascendancy Skill Points"/>
                         </Label.ToolTip>
@@ -688,7 +697,7 @@
                     </Style>
                 </TabControl.ItemContainerStyle>
                 <TabItem IsSelected="True" Name="tyPassiveTree">
-                    <local:ZoomBorder IsManipulationEnabled="True" x:Name="zbSkillTreeBackground" ClipToBounds="True" MouseMove="zbSkillTreeBackground_MouseMove" Click="zbSkillTreeBackground_Click" Background="Black" MouseLeave="zbSkillTreeBackground_MouseLeave" Margin="0,0,0,0" Focusable="True" PreviewMouseUp="zbSkillTreeBackground_PreviewMouseUp">
+                    <local:ZoomBorder IsManipulationEnabled="True" x:Name="zbSkillTreeBackground" ClipToBounds="True" MouseMove="zbSkillTreeBackground_MouseMove" Click="zbSkillTreeBackground_Click" Background="Black" MouseLeave="zbSkillTreeBackground_MouseLeave" Margin="0,0,0,0" Focusable="True" PreviewMouseUp="zbSkillTreeBackground_PreviewMouseUp" StylusSystemGesture="zbSkillTreeBackground_StylusSystemGesture">
                         <Rectangle Height="500" Width="597" IsManipulationEnabled="True" x:Name="recSkillTree" Stretch="Fill"  ClipToBounds="True" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </local:ZoomBorder>
                 </TabItem>
@@ -861,7 +870,7 @@
                     <Style TargetType="{x:Type ToggleButton}"
                            BasedOn="{StaticResource ExpanderDownHeaderStyle}">
                         <Style.Setters>
-                            <Setter Property="Margin" Value="108 4 4 4" />
+                            <Setter Property="Margin" Value="108 0 0 0" />
                         </Style.Setters>
                     </Style>
                 </controls:ExpanderHelper.HeaderDownStyle>
@@ -869,7 +878,7 @@
                     <Style TargetType="{x:Type ToggleButton}"
                            BasedOn="{StaticResource ExpanderUpHeaderStyle}">
                         <Style.Setters>
-                            <Setter Property="Margin" Value="108 4 4 4" />
+                            <Setter Property="Margin" Value="108 0 0 0" />
                         </Style.Setters>
                     </Style>
                 </controls:ExpanderHelper.HeaderUpStyle>

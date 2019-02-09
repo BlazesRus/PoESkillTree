@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MB.Algodat;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Model.Items.Enums;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Modifiers;
+using PoESkillTree.Utils.Extensions;
 using POESKillTree.Model.Items.Mods;
 using POESKillTree.Utils;
 using POESKillTree.Utils.Extensions;
@@ -226,9 +228,9 @@ namespace POESKillTree.Model.Items
 
             var keywordProp = new ItemMod(string.Join(", ", Keywords), false);
             _properties.Add(keywordProp);
-            var levelProp = new ItemMod($"Level: {level}", false, ItemMod.ValueColoring.LocallyAffected);
+            var levelProp = new ItemMod($"Level: {level}", false, ValueColoring.LocallyAffected);
             _properties.Add(levelProp);
-            var qualityProp = new ItemMod($"Quality: +{quality}%", false, ItemMod.ValueColoring.LocallyAffected);
+            var qualityProp = new ItemMod($"Quality: +{quality}%", false, ValueColoring.LocallyAffected);
             _properties.Add(qualityProp);
 
             NameLine = "";
@@ -359,7 +361,7 @@ namespace POESKillTree.Model.Items
                     CraftedMods.Add(ItemModFromString(FixOldRanges(s), ModLocation.Crafted));
                 }
 
-            if (val["flavourText"] != null)
+            if (val["flavourText"] != null && val["flavourText"].HasValues)
                 FlavourText = string.Join("\r\n", val["flavourText"].Values<string>().Select(s => s.Replace("\r", "")));
 
             var sockets = new List<int>();
@@ -380,9 +382,9 @@ namespace POESKillTree.Model.Items
         }
 
         private ItemMod ItemModFromString(string attribute, ModLocation location, 
-            IEnumerable<ItemMod.ValueColoring> valueColor = null)
+            IEnumerable<ValueColoring> valueColor = null)
         {
-            var isLocal = StatLocalityChecker.DetermineLocal(ItemClass, location, attribute);
+            var isLocal = ModifierLocalityTester.IsLocal(attribute, Tags);
             var itemMod = new ItemMod(attribute, isLocal);
             if (valueColor != null)
             {
@@ -394,7 +396,7 @@ namespace POESKillTree.Model.Items
         private ItemMod ItemModFromJson(JToken jsonMod, ModLocation location)
         {
             var valuePairs = (from a in jsonMod["values"]
-                              let vc = (ItemMod.ValueColoring)a[1].Value<int>()
+                              let vc = (ValueColoring)a[1].Value<int>()
                               select new { Value = a[0].Value<string>(), ValueColor = vc }).ToList();
             var values = valuePairs.Select(p => p.Value).ToList();
             var valueColors = (from p in valuePairs
@@ -454,15 +456,15 @@ namespace POESKillTree.Model.Items
         {
             var requirements = new List<string>();
             var values = new List<float>();
-            var colors = new List<ItemMod.ValueColoring>();
+            var colors = new List<ValueColoring>();
             var attrColor = attrRequirementsMultiplier == 100
-                ? ItemMod.ValueColoring.White
-                : ItemMod.ValueColoring.LocallyAffected;
+                ? ValueColoring.White
+                : ValueColoring.LocallyAffected;
             if (BaseType.Level > 1 || minRequiredLevel > 1)
             {
                 requirements.Add("Level #");
                 values.Add(Math.Max(BaseType.Level, minRequiredLevel));
-                colors.Add(ItemMod.ValueColoring.White);
+                colors.Add(ValueColoring.White);
             }
             if (BaseType.RequiredStrength > 0)
             {

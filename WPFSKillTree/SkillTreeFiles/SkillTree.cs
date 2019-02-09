@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 using log4net;
+using PoESkillTree.GameModel.PassiveTree;
 using POESKillTree.Common;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
@@ -190,7 +191,7 @@ namespace POESKillTree.SkillTreeFiles
                         args.ErrorContext.Handled = true;
                     }
                 };
-
+                treestring = treestring.Replace("\"nodes\":{", "\"nodesDict\":{");
                 var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treestring, jss);
                 var inOpts = JsonConvert.DeserializeObject<Opts>(opsstring, jss);
 
@@ -286,80 +287,89 @@ namespace POESKillTree.SkillTreeFiles
                 StartNodeDictionary = new Dictionary<int, int>();
                 AscRootNodeList = new HashSet<SkillNode>();
 
-                foreach (var nd in inTree.nodes)
+                if (inTree.nodes != null && inTree.nodes.Any())
+                    BuildNodeList(inTree.nodes);
+                else if (inTree.nodesDict != null && inTree.nodesDict.Any())
+                    BuildNodeList(inTree.nodesDict.Values.ToArray());
+
+                void BuildNodeList(Node[] nodes)
                 {
-                    var skillNode = new SkillNode
+                    foreach (var nd in nodes)
                     {
-                        Id = nd.id,
-                        Name = nd.dn,
-                        //this value should not be split on '\n' as it causes the attribute list to separate nodes
-                        attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" } : nd.sd,
-                        Orbit = nd.o,
-                        OrbitIndex = nd.oidx,
-                        Icon = nd.icon,
-                        LinkId = nd.ot,
-                        G = nd.g,
-                        Da = nd.da,
-                        Ia = nd.ia,
-                        Sa = nd.sa,
-                        Spc = nd.spc.Length > 0 ? (int?)nd.spc[0] : null,
-                        IsMultipleChoice = nd.isMultipleChoice,
-                        IsMultipleChoiceOption = nd.isMultipleChoiceOption,
-                        passivePointsGranted = nd.passivePointsGranted,
-                        ascendancyName = nd.ascendancyName,
-                        IsAscendancyStart = nd.isAscendancyStart,
-                        reminderText = nd.reminderText
-                    };
-                    if (nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Keystone;
-                    }
-                    else if (!nd.ks && nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Notable;
-                    }
-                    else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.JewelSocket;
-                    }
-                    else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
-                    {
-                        skillNode.Type = NodeType.Mastery;
-                    }
-                    else if (!nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Normal;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"Invalid node type for node {skillNode.Name}");
-                    }
-                    Skillnodes.Add(nd.id, skillNode);
-                    if(skillNode.IsAscendancyStart)
-                        if(!AscRootNodeList.Contains(skillNode))
-                            AscRootNodeList.Add(skillNode);
-                    if (RootNodeList.Contains(nd.id))
-                    {
-                        if (!RootNodeClassDictionary.ContainsKey(nd.dn.ToUpperInvariant()))
+                        var skillNode = new SkillNode
                         {
-                            RootNodeClassDictionary.Add(nd.dn.ToUpperInvariant(), nd.id);
+                            Id = nd.id,
+                            Name = nd.dn,
+                            //this value should not be split on '\n' as it causes the attribute list to separate nodes
+                            attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" } : nd.sd,
+                            Orbit = nd.o,
+                            OrbitIndex = nd.oidx,
+                            Icon = nd.icon,
+                            LinkId = nd._out,
+                            G = nd.g,
+                            Da = nd.da,
+                            Ia = nd.ia,
+                            Sa = nd.sa,
+                            Spc = nd.spc.Length > 0 ? (int?)nd.spc[0] : null,
+                            IsMultipleChoice = nd.isMultipleChoice,
+                            IsMultipleChoiceOption = nd.isMultipleChoiceOption,
+                            passivePointsGranted = nd.passivePointsGranted,
+                            ascendancyName = nd.ascendancyName,
+                            IsAscendancyStart = nd.isAscendancyStart,
+                            reminderText = nd.reminderText
+                        };
+                        if (nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
+                        {
+                            skillNode.Type = PassiveNodeType.Keystone;
                         }
-                        foreach (var linkedNode in nd.ot)
+                        else if (!nd.ks && nd.not && !nd.isJewelSocket && !nd.m)
                         {
-                            if (!StartNodeDictionary.ContainsKey(nd.id) && !nd.isAscendancyStart)
+                            skillNode.Type = PassiveNodeType.Notable;
+                        }
+                        else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
+                        {
+                            skillNode.Type = PassiveNodeType.JewelSocket;
+                            //Sending Node Id into List to dynamically add threshold stat
+                            JewelData.JewelIds.Add(skillNode.Id);
+                        }
+                        else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
+                        {
+                            skillNode.Type = PassiveNodeType.Mastery;
+                        }
+                        else if (!nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
+                        {
+                            skillNode.Type = PassiveNodeType.Normal;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException($"Invalid node type for node {skillNode.Name}");
+                        }
+                        Skillnodes.Add(nd.id, skillNode);
+                        if (skillNode.IsAscendancyStart)
+                            if (!AscRootNodeList.Contains(skillNode))
+                                AscRootNodeList.Add(skillNode);
+                        if (RootNodeList.Contains(nd.id))
+                        {
+                            if (!RootNodeClassDictionary.ContainsKey(nd.dn.ToUpperInvariant()))
                             {
-                                StartNodeDictionary.Add(linkedNode, nd.id);
+                                RootNodeClassDictionary.Add(nd.dn.ToUpperInvariant(), nd.id);
+                            }
+                            foreach (var linkedNode in nd._out)
+                            {
+                                if (!StartNodeDictionary.ContainsKey(nd.id) && !nd.isAscendancyStart)
+                                {
+                                    StartNodeDictionary.Add(linkedNode, nd.id);
+                                }
+                            }
+                        }
+                        foreach (var node in nd._out)
+                        {
+                            if (!StartNodeDictionary.ContainsKey(nd.id) && RootNodeList.Contains(node))
+                            {
+                                StartNodeDictionary.Add(nd.id, node);
                             }
                         }
                     }
-                    foreach (var node in nd.ot)
-                    {
-                        if (!StartNodeDictionary.ContainsKey(nd.id) && RootNodeList.Contains(node))
-                        {
-                            StartNodeDictionary.Add(nd.id, node);
-                        }
-                    }
-
                 }
 
                 foreach (var skillNode in Skillnodes)
@@ -403,6 +413,8 @@ namespace POESKillTree.SkillTreeFiles
                             Skillnodes[ints[1]].Neighbor.Add(Skillnodes[ints[0]]);
                     }
                 }
+
+                //Dynamically search node area to determine if JewelSocket is skill based threshold jewel type
 
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 foreach (var skillnode in Skillnodes)
@@ -486,7 +498,7 @@ namespace POESKillTree.SkillTreeFiles
             Dictionary<string, int> points = new Dictionary<string, int>()
             {
                 {"NormalUsed", 0},
-                {"NormalTotal", 21},
+                {"NormalTotal", 22},
                 {"AscendancyUsed", 0},
                 {"AscendancyTotal", 8},
                 {"ScionAscendancyChoices", 0}
@@ -612,6 +624,10 @@ namespace POESKillTree.SkillTreeFiles
                         temp[key].Add(a.Value[i]);
                     }
                 }
+            }
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
             return temp;
         }
@@ -887,7 +903,7 @@ namespace POESKillTree.SkillTreeFiles
                         continue;
                     if (newNode.Spc.HasValue)
                         continue;
-                    if (newNode.Type == NodeType.Mastery)
+                    if (newNode.Type == PassiveNodeType.Mastery)
                         continue;
                     if (IsAscendantClassStartNode(newNode))
                         continue;
@@ -1037,7 +1053,7 @@ namespace POESKillTree.SkillTreeFiles
                     var nodes =
                         Skillnodes.Values.Where(
                             nd => (matchFct(nd.attributes, att => regex.IsMatch(att)) ||
-                                  regex.IsMatch(nd.Name) && nd.Type != NodeType.Mastery) &&
+                                  regex.IsMatch(nd.Name) && nd.Type != PassiveNodeType.Mastery) &&
                                   (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
                     _nodeHighlighter.ResetHighlights(nodes, flag);
                     DrawHighlights();
@@ -1053,7 +1069,7 @@ namespace POESKillTree.SkillTreeFiles
                 var nodes =
                     Skillnodes.Values.Where(
                         nd => (matchFct(nd.attributes, att => att.ToLowerInvariant().Contains(search)) ||
-                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != NodeType.Mastery) &&
+                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != PassiveNodeType.Mastery) &&
                               (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
                 _nodeHighlighter.ResetHighlights(nodes, flag);
                 DrawHighlights();

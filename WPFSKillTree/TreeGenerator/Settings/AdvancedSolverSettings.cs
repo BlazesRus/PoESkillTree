@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
+using POESKillTree.SkillTreeFiles;
 
 namespace POESKillTree.TreeGenerator.Settings
 {
@@ -32,6 +33,21 @@ namespace POESKillTree.TreeGenerator.Settings
         /// Weight must be between 0 and 1 (both inclusive).
         /// </summary>
         public readonly Dictionary<PseudoAttribute, Tuple<float, double>> PseudoAttributeConstraints;
+
+        /// <summary>
+        /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
+        /// </summary>
+        public readonly bool TreePlusItemsMode;
+
+        ///// <summary>
+        ///// The item information equipped in skilltree
+        ///// </summary>
+        //public readonly InventoryViewModel ItemInfo;
+
+        /// <summary>
+        /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
+        /// </summary>
+        public readonly SkillTree TreeInfo;
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculation.
@@ -70,7 +86,8 @@ namespace POESKillTree.TreeGenerator.Settings
             Dictionary<string, float> initialAttributes,
             Dictionary<string, Tuple<float, double>> attributeConstraints,
             Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints,
-            WeaponClass weaponClass, Tags tags, OffHand offHand)
+            WeaponClass weaponClass, Tags tags, OffHand offHand,
+            SkillTree treeInfo, bool TreePlusItemsMode)
             : base(baseSettings)
         {
             if (totalPoints < 0) throw new ArgumentOutOfRangeException(nameof(totalPoints), totalPoints, "must be >= 0");
@@ -82,6 +99,7 @@ namespace POESKillTree.TreeGenerator.Settings
             AttributeConstraints = attributeConstraints ?? new Dictionary<string, Tuple<float, double>>();
             PseudoAttributeConstraints = pseudoAttributeConstraints ?? new Dictionary<PseudoAttribute, Tuple<float, double>>();
             InitialAttributes = initialAttributes ?? new Dictionary<string, float>();
+            TreeInfo = treeInfo;
 
             if (AttributeConstraints.Values.Any(tuple => tuple.Item2 < 0 || tuple.Item2 > 1))
                 throw new ArgumentException("Weights need to be between 0 and 1", "attributeConstraints");

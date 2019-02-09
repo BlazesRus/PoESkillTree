@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialogs:CloseableBaseDialog
+    x:Class="POESKillTree.TrackedStatViews.TrackedStatsMenu"
+    xmlns:local="clr-namespace:POESKillTree.TrackedStatViews"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="clr-namespace:POESKillTree.Localization.XAML" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:viewModels="clr-namespace:POESKillTree.ViewModels"
+    xmlns:dialogs="clr-namespace:POESKillTree.Controls.Dialogs"
+    xmlns:model="clr-namespace:POESKillTree.Model"
+    xmlns:converter="clr-namespace:POESKillTree.Utils.Converter"
+    d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
+    MaxContentWidth="780">
+    <ContentControl.Resources>
+        <Style x:Key="SectionLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="FontSize" Value="{DynamicResource DialogMessageFontSize}"></Setter>
+        </Style>
+        <Style x:Key="SettingLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <local:EmptyStringToFallbackvalue x:Key="EmptyStringToFallbackvalue"/>
+        <local:StringDataAsString x:Key="StringDataAsString"/>
+    </ContentControl.Resources>
+    <StackPanel Orientation="Vertical">
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition MinWidth="540" />
+                <ColumnDefinition MinWidth="200" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TrackedStats Path:" />
+                </Label.Content>
+            </Label>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StatTrackingSavePath}"
+                           VerticalAlignment="Center"
+                           ToolTip="{Binding StatTrackingSavePath}" />
+            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
+                        Command="{Binding ChangeStatTrackingPathCommand}">
+                <Button.Content>
+                    <l:Catalog Message="Change..." />
+                </Button.Content>
+            </Button>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TargetFile:" />
+                </Label.Content>
+            </Label>
+            <TextBox Name="TrackedFileText" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Left"
+            Text="{Binding CurrentTrackedFile, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TrackedFileText_TextChanged"/>
+        </Grid>
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="50" />
+                <ColumnDefinition MinWidth="50" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Click="LoadTrackedStatFileNamesAsync">
+                <Button.Content>
+                    <l:Catalog Message="Load File Names From TrackedStats Directory" />
+                </Button.Content>
+            </Button>
+
+            <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
+            DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue" SelectionChanged="TrackingList_SelectionChanged"
+            SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Grid.Row="2" Click="LoadTrackedStats">
+                <Button.Content>
+                    <l:Catalog Message="Load Tracked Stats from Target File" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="3" Click="ResetTracking">
+                <Button.Content>
+                    <l:Catalog Message="Reset Tracking" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="4" Click="SaveTrackedStats">
+                <Button.Content>
+                    <l:Catalog Message="Save Tracked Stats to Target File" />
+                </Button.Content>
+            </Button>
+        </Grid>
+    </StackPanel>
+</dialogs:CloseableBaseDialog>

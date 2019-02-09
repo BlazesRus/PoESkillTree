@@ -1,8 +1,9 @@
 ﻿using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using JetBrains.Annotations;
+using PoESkillTree.GameModel.Items;
 using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
+using Item = POESKillTree.Model.Items.Item;
 
 namespace POESKillTree.ViewModels.Equipment
 {

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using PoESkillTree.GameModel.Items;
 using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
 

@@ -32,22 +32,15 @@ namespace UnitTests
                 Assert.AreEqual(expect[level], GetValueOf("Molten Strike", "Mana Cost: #", level)[0]);
 
             // Per level gain.
-            expect2 = new List<double> { double.NaN, 120, 121.4, 122.8, 124.2, 125.6, 127, 128.4, 129.8, 131.2, 132.6, 134, 135.4, 136.8, 138.2, 139.6, 141, 142.4, 143.8, 145.2, 146.6, 148, 149.4, 150.8, 152.2, 153.6, 155, 156.4, 157.8, 159.2, 160.6 };
+            expect2 = new List<double> { double.NaN, 120, 122.2, 124.3, 126.5, };
             for (int level = 1; level < expect2.Count; ++level)
                 Assert.AreEqual(Math.Round(expect2[level], 1), Math.Round(GetValueOf("Molten Strike", "Deals #% of Base Attack Damage", level)[0], 1));
 
             // Table of damage ranges.
             expectPair = new List<float[]> { new float[] { float.NaN, float.NaN },
-                        new float[] { 7, 10 }, new float[] { 8, 11 }, new float[] { 10, 14 },
-                        new float[] { 13, 20 }, new float[] { 19, 29 }, new float[] { 29, 43 },
-                        new float[] { 39, 58 }, new float[] { 52, 77 }, new float[] { 67, 101 },
-                        new float[] { 87, 131 }, new float[] { 112, 168 }, new float[] { 142, 213 },
-                        new float[] { 180, 270 }, new float[] { 226, 339 }, new float[] { 283, 424 },
-                        new float[] { 352, 528 }, new float[] { 437, 655 }, new float[] { 540, 810 },
-                        new float[] { 632, 948 }, new float[] { 739, 1109 }, new float[] { 819, 1229 },
-                        new float[] { 908, 1362 }, new float[] { 1005, 1508 }, new float[] { 1113, 1669 },
-                        new float[] { 1231, 1847 }, new float[] { 1361, 2042 }, new float[] { 1504, 2257 },
-                        new float[] { 1662, 2493 }, new float[] { 1835, 2752 }, new float[] { 2025, 3038 } 
+                        new float[] { 7, 10 }, new float[] { 8, 11 }, new float[] { 10, 15 },
+                        new float[] { 13, 20 }, new float[] { 20, 29 }, new float[] { 30, 45 },
+                        new float[] { 41, 61 }, new float[] { 55, 82 }, new float[] { 72, 109 },
             };
             for (int level = 1; level < expectPair.Count; ++level)
             {

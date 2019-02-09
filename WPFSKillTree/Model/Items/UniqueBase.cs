@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using PoESkillTree.GameModel.Items;
 using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
 
