@@ -14,7 +14,7 @@ using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree
 {
-    public JewelNodeData
+    public class JewelNodeData : Notifier
 	{
 	    public int NodeID;
 		public InventoryItemViewModel ItemModel;
@@ -23,12 +23,20 @@ namespace POESKillTree
 		public JewelNodeData(int nodeID)
 		{
 			NodeID = nodeID;
-			ItemModel = null;
+			ItemModel = CreateSlotVm();
 		}
 		public JewelNodeData()
 		{
 			NodeID = 0;
-			ItemModel = null;
+			ItemModel = CreateSlotVm();
+		}
+		private InventoryItemViewModel CreateSlotVm()
+        {
+            var imageName = "Jewel";
+			return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, slot)
+            {
+                EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
+            };
 		}
 	}
 
