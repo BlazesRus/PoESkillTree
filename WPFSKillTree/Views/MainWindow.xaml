@@ -546,6 +546,15 @@
                         <l:Catalog Message="C_ross-tag highlighted Nodes" />
                     </MenuItem.Header>
                 </MenuItem>
+                <Separator />
+                <MenuItem Click="Menu_LoadTrackedStats">
+                    <MenuItem.Header>
+                        <l:Catalog Message="Load Tracked Stat"/>
+                    </MenuItem.Header>
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconModern Kind="Settings" HorizontalAlignment="Center" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem>
                 <MenuItem.Header>
