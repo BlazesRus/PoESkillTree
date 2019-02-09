@@ -234,6 +234,13 @@
 		<Attribute Name="+# to Strength" ConversionMultiplier="0.1" /><!-- Half of Strength Given to minions-->
 		<Attribute Name="Minions deal #% increased Damage" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased SpiritBoosted Lightning Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
+		<Attribute Name="#% increased Lightning Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="Minions deal #% increased Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Scourge Phys Melee Damage with Some Elem damage(DualW)" Group="Damage">
 		<Attribute Name="+# to Strength" ConversionMultiplier="0.2" />
 		<Attribute Name="Minions deal #% increased Damage" />
@@ -265,6 +272,27 @@
 		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
 		<Attribute Name="#% increased Critical Strike Chance with Swords" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Total Melee Critical Strike Chance with Sword and Mace[Non-Tagged]" Group="Critical Strike">
+		<Attribute Name="#% increased Melee Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
+		<Attribute Name="#% increased Critical Strike Chance with Swords"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Critical Strike Chance with Maces"  ConversionMultiplier="0.5"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Attack Speed  with Sword and Mace[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Attack Speed"/>
+		<Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"/>
+		<Attribute Name="#% increased Attack Speed with Swords" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Speed with Maces" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Speed while Dual Wielding"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Attack Speed  with Dual Spirit Boosted Mace[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Attack Speed"/>
+		<Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"/>
+		<Attribute Name="#% increased Attack Speed with Maces"/>
+		<Attribute Name="#% increased Attack Speed while Dual Wielding"/>
+		<Attribute Name="Minions have #% increased Attack Speed" />
+	</PseudoAttribute>
  	<PseudoAttribute Name="#% increased Total Cold Area of Effect Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage" />
 		<Attribute Name="#% increased Cold Damage" />
@@ -274,6 +302,12 @@
 	<PseudoAttribute Name="#% increased Lightning Projectile Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Lightning Damage"/>
+		<Attribute Name="#% increased Projectile Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage"/>
+	</PseudoAttribute>
+	<PseudoAttribute Name="#% increased Elemental Projectile Spell Damage[Non-Tagged]" Group="Damage">
+		<Attribute Name="#% increased Elemental Damage"/>
 		<Attribute Name="#% increased Projectile Damage"/>
 		<Attribute Name="#% increased Spell Damage" />
 		<Attribute Name="#% increased Damage"/>
@@ -515,6 +549,13 @@
 		<!-- Damage focused around Harness the Void Trickster Node-->
 		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.1875" />
 	</PseudoAttribute>
+	<PseudoAttribute Name="#% added effective average dual wand Hit chance[Non-Tagged]" Group="Damage">
+		<Attribute Name="+# to Dexterity" ConversionMultiplier="0.04" />
+		<Attribute Name="+# to Accuracy Rating" ConversionMultiplier="0.001" />
+		<Attribute Name="+# increased Global Accuracy Rating" ConversionMultiplier="0.1" /><!-- About 1% increase per 8 at 200 dex ,About 1% increase per 10 once have 400 dex--> 
+		<Attribute Name="+# increased Accuracy Rating with Wands" ConversionMultiplier="0.1" />
+		<Attribute Name="+# increased Accuracy Rating while Dual Wielding" ConversionMultiplier="0.1" />
+	</PseudoAttribute>
 	<PseudoAttribute Name="#% increased Void Harnessed Lightning Damage[Non-Tagged]" Group="Damage">
 		<Attribute Name="#% increased Lightning Damage"/>
 		<Attribute Name="#% increased Damage"/>
@@ -625,6 +666,6 @@ Average of 57.65% of Non-chaos is Physical
 		<Attribute Name="+#% to Fire Resistance" />
 		<Attribute Name="+#% to Cold Resistance" />
 		<Attribute Name="+#% to Lightning Resistance" />
-		<PseudoAttribute Name="+#% to all Elemental Resistances" />
+		<PseudoAttribute Name="+#% to all Elemental Resistances"  ConversionMultiplier="3.0"/>
 	</PseudoAttribute>
 </PseudoAttributes>

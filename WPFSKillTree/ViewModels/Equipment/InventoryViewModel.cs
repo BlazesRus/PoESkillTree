@@ -153,7 +153,7 @@ namespace POESKillTree.ViewModels.Equipment
                     case 9:
                         ItemData = Belt.Item; break;
                     default:
-						foreach (var JewelSlotData in GlobalSettings.JewelInfo)
+						foreach (KeyValuePair<int, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
 						{
 							ItemData = JewelSlotData.JewelData;
 							if (ItemData != null)
