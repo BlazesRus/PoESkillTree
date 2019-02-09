@@ -16,14 +16,19 @@ namespace POESKillTree
 {
     public JewelNodeData
 	{
-	    int NodeID;
+	    public int NodeID;
+		public InventoryItemViewModel ItemModel;
+		public POESKillTree.Model.Items.Item JewelData { get ItemModel.Item; }
+		
 		public JewelNodeData(int nodeID)
 		{
 			NodeID = nodeID;
+			ItemModel = null;
 		}
 		public JewelNodeData()
 		{
-		
+			NodeID = 0;
+			ItemModel = null;
 		}
 	}
 
