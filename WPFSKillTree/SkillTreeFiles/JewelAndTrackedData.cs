@@ -126,11 +126,11 @@ namespace POESKillTree
             bool IsDexThreshold = false;////"Jewel Socket ID: #"//new[] { "+1 Jewel Socket" }
         }
 
-		public static explicit operator System.Collections.Generic.List<int>(JewelDictionary self)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public static explicit operator System.Collections.Generic.List<int>(JewelDictionary self)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public class JewelData
     {
@@ -2061,7 +2061,7 @@ namespace POESKillTree
                 }
                 else
                 {
-                    this[Index] = new TrackedAttribute(Attribute);
+                    this[Index] = Attribute;
                 }
             }
         }
@@ -2114,7 +2114,7 @@ namespace POESKillTree
                     else
                     {
                         indexFound = this.Count;
-                        this.Add(new TrackedAttribute(data));
+                        this.Add(data);
                         return this[indexFound];
                     }
                 }
