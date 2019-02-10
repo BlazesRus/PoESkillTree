@@ -479,6 +479,8 @@ namespace POESKillTree.Views
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var controller = await this.ShowProgressAsync(L10n.Message("Initialization"),
                         L10n.Message("Initializing window ..."));
             controller.Maximum = 1;
@@ -516,6 +518,9 @@ namespace POESKillTree.Views
             computationInitializer.SetupPeriodicActions();
 
             await controller.CloseAsync();
+
+            stopwatch.Stop();
+            Log.Info($"Window_Loaded took {stopwatch.ElapsedMilliseconds} ms");
         }
 
         private void InitializeIndependentUI()
