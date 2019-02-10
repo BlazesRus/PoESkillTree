@@ -1288,7 +1288,7 @@ namespace POESKillTree.Views
                 }
             }
 
-            attritemp = JewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
+            attritemp = JewelData.JewelBasedStatUpdater(attritemp, Tree);
 
             if (GlobalSettings.TrackedStats.Count != 0)
             {
@@ -1769,14 +1769,10 @@ namespace POESKillTree.Views
                 }
                 if (node.Type == PassiveNodeType.JewelSocket)
                 {
-                    int ID = node.Id;
-                    string SlotName = JewelData.JewelSlotName(ID);
+                    ushort ID = node.Id;
                     sp.Children.Add(new Separator());
-#if(DEBUG)
-                    sp.Children.Add(new TextBlock { Text = "JewelSlotName: " + SlotName });
-#endif
 
-                    Item EquippedJewel = ItemAttributes.ReturnItemByName(SlotName);
+                    Item EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
                     if (EquippedJewel != null)
                     {
                         sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });

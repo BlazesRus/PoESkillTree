@@ -384,7 +384,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// </summary>
         private InventoryViewModel _ItemInfo;
 
-  		/// <summary>
+        /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
         public InventoryViewModel ItemInfo
