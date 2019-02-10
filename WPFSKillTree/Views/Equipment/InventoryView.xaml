@@ -142,7 +142,7 @@
 						<RowDefinition Height="Auto" />
 						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
-					<TextBlock  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">Hybrid Threshold Jewels</TextBlock>
+<!-- 					<TextBlock  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">Hybrid Threshold Jewels</TextBlock>
 					<views:InventoryItemView Grid.Row="0" Grid.Column="1"
 					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
 					Width="41" Height="38" DataContext="{Binding JSlot_StrDex_Scion}" ToolTip="Scion Jewel Slot south of starting area(Str+Dex)"/>
@@ -213,7 +213,7 @@
 					Width="41" Height="38" DataContext="{Binding JSlot_Neutral_MinionInstability}" ToolTip="Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability"/>
 					<views:InventoryItemView Grid.Row="4" Grid.Column="4"
 					Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-					Width="41" Height="38" DataContext="{Binding JSlot_Neutral_Acrobatics}" ToolTip="Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel"/>
+					Width="41" Height="38" DataContext="{Binding JSlot_Neutral_Acrobatics}" ToolTip="Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel"/> -->
 				</Grid>
 </Border>
 </StackPanel>

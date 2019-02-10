@@ -126,8 +126,8 @@ namespace POESKillTree.ViewModels.Equipment
         {
             Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
             POESKillTree.Model.Items.Item ItemData;
-			int JewelIndex = 0;
-			bool ContinueCalc = true;
+            int JewelIndex = 0;
+            bool ContinueCalc = true;
             for (int Index = 0; ContinueCalc; ++Index)
             {
                 switch (Index)
@@ -153,28 +153,28 @@ namespace POESKillTree.ViewModels.Equipment
                     case 9:
                         ItemData = Belt.Item; break;
                     default:
-						foreach (KeyValuePair<int, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
-						{
-							ItemData = JewelSlotData.JewelData;
-							if (ItemData != null)
-							{
-								foreach (var TargetMod in ItemData.Mods)
-								{
-									if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-									{
-										if(ItemDictionary.ContainsKey(TargetMod.Attribute))
-										{
-											ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-										}
-										else
-										{
-											ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-										}
-									}
-								}
-							}
-						}
-						ItemData = null;ContinueCalc=false; break;
+                        foreach (KeyValuePair<int, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
+                        {
+                            ItemData = JewelSlotData.JewelData;
+                            if (ItemData != null)
+                            {
+                                foreach (var TargetMod in ItemData.Mods)
+                                {
+                                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                                    {
+                                        if(ItemDictionary.ContainsKey(TargetMod.Attribute))
+                                        {
+                                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                                        }
+                                        else
+                                        {
+                                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ItemData = null;ContinueCalc=false; break;
                 }
                 if (ItemData != null)
                 {

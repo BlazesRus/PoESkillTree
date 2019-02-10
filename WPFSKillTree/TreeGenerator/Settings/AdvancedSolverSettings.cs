@@ -39,10 +39,13 @@ namespace POESKillTree.TreeGenerator.Settings
         /// </summary>
         public readonly bool TreePlusItemsMode;
 
-        ///// <summary>
-        ///// The item information equipped in skilltree
-        ///// </summary>
-        //public readonly InventoryViewModel ItemInfo;
+        /// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
+        /// </summary>
+        public InventoryViewModel ItemInfo
+        {
+            get { return GlobalSettings.ItemInfoVal; }
+        }
 
         /// <summary>
         /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)

@@ -15,97 +15,98 @@ using POESKillTree.ViewModels.Equipment;
 namespace POESKillTree
 {
     public class JewelNodeData : Notifier
-	{
-		public InventoryItemViewModel ItemModel;
-		public POESKillTree.Model.Items.Item JewelData { get ItemModel.Item; }
-		
-		public JewelNodeData()
-		{
-			ItemModel = CreateSlotVm();
-		}
-		private InventoryItemViewModel CreateSlotVm()
+    {
+        public InventoryItemViewModel ItemModel;
+        public POESKillTree.Model.Items.Item JewelData { get ItemModel.Item; }
+
+        public JewelNodeData()
+        {
+            ItemModel = CreateSlotVm();
+        }
+        private InventoryItemViewModel CreateSlotVm()
         {
             var imageName = "Jewel";
-			return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes)
+            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes)
             {
                 EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };
-		}
-	}
+        }
+    }
 
-	 /// <summary>
+     /// <summary>
     /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
     /// </summary>
-	public class JewelDictionary : Dictionary<int, JewelNodeData>
-	{
-	    /// <summary>
-	    /// Keys for Strength Threshold Jewel Slots
+    public class JewelDictionary : Dictionary<int, JewelNodeData>
+    {
+        /// <summary>
+        /// Keys for Strength Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<int> StrJewelSlots;
-	    /// <summary>
-	    /// Keys for Intellegence Threshold Jewel Slots
+        public System.Collections.Generic.List<int> StrJewelSlots;
+        /// <summary>
+        /// Keys for Intellegence Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<int> IntJewelSlots;
-	    /// <summary>
-	    /// Keys for Dexterity Threshold Jewel Slots
+        public System.Collections.Generic.List<int> IntJewelSlots;
+        /// <summary>
+        /// Keys for Dexterity Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<int> DexJewelSlots;
-	    /// <summary>
-	    /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        public System.Collections.Generic.List<int> DexJewelSlots;
+        /// <summary>
+        /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<int> StrIntJewelSlots;
-	    /// <summary>
-	    /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
+        public System.Collections.Generic.List<int> StrIntJewelSlots;
+        /// <summary>
+        /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> StrDexJewelSlots;
-	    /// <summary>
-	    /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        public System.Collections.Generic.List<string> StrDexJewelSlots;
+        /// <summary>
+        /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> StrIntJewelSlots;
-	    /// <summary>
-	    /// Keys for Hybrid Intellegence+Dexterity Threshold Jewel Slots
+        public System.Collections.Generic.List<string> StrIntJewelSlots;
+        /// <summary>
+        /// Keys for Hybrid Intellegence+Dexterity Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> IntDexJewelSlots;
-	    /// <summary>
-	    /// Keys for Non-Threshold Jewel Slots
+        public System.Collections.Generic.List<string> IntDexJewelSlots;
+        /// <summary>
+        /// Keys for Non-Threshold Jewel Slots
         /// </summary>
-		public System.Collections.Generic.List<string> NeutralJewelSlots;
-		//Convert into System.Collections.Generic.List<int>
-		
-/*	    /// <summary>
-	    /// Generate JewelDictionary from System.Collections.Generic.List<int> and Data from SkillTree
-        /// </summary>
-		public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds, Utils.ObservableSet<SkillNode> SkilledNodes)
-		{
-			bool IsIntThreshold = false;
-			bool IsStrThreshold = false;
-			bool IsDexThreshold = false;
-		}*/
-		/// <summary>
-	    /// Generate JewelDictionary from System.Collections.Generic.List<int> (Categorize slots after)
-        /// </summary>
-		public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds)
-		{
+        public System.Collections.Generic.List<string> NeutralJewelSlots;
+        //Convert into System.Collections.Generic.List<int>
 
-		}
-		public JewelDictionary()
+/*	    /// <summary>
+        /// Generate JewelDictionary from System.Collections.Generic.List<int> and Data from SkillTree
+        /// </summary>
+        public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds, Utils.ObservableSet<SkillNode> SkilledNodes)
+        {
+            bool IsIntThreshold = false;
+            bool IsStrThreshold = false;
+            bool IsDexThreshold = false;
+        }*/
+        public JewelDictionary()
+        {
+		
+        }
+		public AddJewelSlot(int nodeID)
 		{
+			Add(nodeID, default(JewelNodeData));
 		}
-		public CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
-		{
-			bool IsIntThreshold = false;
-			bool IsStrThreshold = false;
-			bool IsDexThreshold = false;
-		}
-	}
+		/// <summary>
+        /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label theshold type and Node id for identifying node in inventory view
+        /// </summary>
+        public CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
+        {
+            bool IsIntThreshold = false;
+            bool IsStrThreshold = false;
+            bool IsDexThreshold = false;////"Jewel Socket ID: #"//new[] { "+1 Jewel Socket" }
+        }
+    }
 
     public class JewelData
     {
         public JewelDictionary JewelInfo;
-	    /// <summary>
-	    /// Property that converts JewelDictionary into List of node ids
+        /// <summary>
+        /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-		public System.Collections.Generic.List<int> JewelIds { get (System.Collections.Generic.List<int>) JewelInfo; }
+        public System.Collections.Generic.List<int> JewelIds { get (System.Collections.Generic.List<int>) JewelInfo; }
 //        private static string[] GetJewelAttributeList(Node skillNode)
 //        {
 //            const string PlusJewelSocket = "+1 Jewel Socket";
@@ -164,13 +165,13 @@ namespace POESKillTree
 //            }
 //        }
 //
-	    //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
+        //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
       //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
       //var v = new Vector2D(p.X, p.Y);
       //v = v * _multransform + _addtransform;
       //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
       //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
-	
+
   //      /// <summary>
   //      /// Creates jewel slot name for slot
   //      /// </summary>
@@ -1905,13 +1906,13 @@ namespace POESKillTree
 
     public class TrackedAttribute : PseudoAttribute
     {
-	    public TrackedAttribute(PseudoAttribute attribute)
+        public TrackedAttribute(PseudoAttribute attribute)
         {
             this.Name = attribute.Name;
             this.Group = attribute.Group;
-            this.Attributes = attribute.Attributes; 
+            this.Attributes = attribute.Attributes;
         }
-	
+
         /// <summary>
         /// Calculates updated value
         /// </summary>
@@ -1934,8 +1935,8 @@ namespace POESKillTree
             }
             return TotalStat;
         }
-		
-		public static implicit operator TrackedAttribute(PseudoAttribute attribute)
+
+        public static implicit operator TrackedAttribute(PseudoAttribute attribute)
         {
             TrackedAttribute NewSelf = new TrackedAttribute(attribute);
             return NewSelf;
@@ -1947,7 +1948,7 @@ namespace POESKillTree
             NewSelf.Attributes = self.Attributes;
             return NewSelf;
         }
-	}
+    }
     public class TrackedAttributes : System.Collections.Generic.List<TrackedAttribute>
     {
         /// <summary>
@@ -1982,14 +1983,14 @@ namespace POESKillTree
             return -1;
         }
 
-		public int IndexOf(string Name) => GetIndexOfAttribute(Name);
+        public int IndexOf(string Name) => GetIndexOfAttribute(Name);
 
-		/// <summary>
-		/// Gets the index of attribute.
-		/// </summary>
-		/// <param name="Attribute">The attribute.</param>
-		/// <returns></returns>
-		public int GetIndexOfAttribute(PseudoAttribute Attribute)
+        /// <summary>
+        /// Gets the index of attribute.
+        /// </summary>
+        /// <param name="Attribute">The attribute.</param>
+        /// <returns></returns>
+        public int GetIndexOfAttribute(PseudoAttribute Attribute)
         {
             for (int Index = 0; Index < Count; ++Index)
             {
@@ -2089,7 +2090,7 @@ namespace POESKillTree
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TrackedAttribute"/> with the specified index key using data field to create new tracked attribute if indexKey not found 
+        /// Gets or sets the <see cref="TrackedAttribute"/> with the specified index key using data field to create new tracked attribute if indexKey not found
         /// </summary>
         /// <value>
         /// The <see cref="TrackedAttribute"/>.
@@ -2200,8 +2201,8 @@ namespace POESKillTree
             }
         }
     }
-	
-	public static class GlobalSettings
+
+    public static class GlobalSettings
     {
         /// <summary>
         /// The tracked stats
@@ -2216,27 +2217,27 @@ namespace POESKillTree
         /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
         /// </summary>
         public static string StatTrackingSavePath = DefaultTrackingDir;
-		/// <summary>
+        /// <summary>
         /// Saved slot for item slot that are removing Intuitive leap support from
         /// </summary>
-		public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
-		/// <summary>
+        public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
+        /// <summary>
         /// If true, automatically adds skilltree pseudoattributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
-		public static bool AutoTrackStats = false;
-		/// <summary>
-        /// Auto-updated value of types of weapons equipped (0:None; 
-		//  1: 2H Axe; 2: 2H Sword; 3: 2H Mace;
-		// 5+ values = Shield+Weapon (5 = shield+fist)
-		// 6: Axe+Shield; 7: Sword+Shield; 
-		// 500+ values = Dual Wielding;
-		// 501 = Dual Wand; 502 = Dual Axe; 503 = Dual Sword; 504 = Dual Mace 
+        public static bool AutoTrackStats = false;
+        /// <summary>
+        /// Auto-updated value of types of weapons equipped (0:None;
+        //  1: 2H Axe; 2: 2H Sword; 3: 2H Mace;
+        // 5+ values = Shield+Weapon (5 = shield+fist)
+        // 6: Axe+Shield; 7: Sword+Shield;
+        // 500+ values = Dual Wielding;
+        // 501 = Dual Wand; 502 = Dual Axe; 503 = Dual Sword; 504 = Dual Mace
         /// </summary>
-		public static int WeaponComboType = 0;
-		
-		public InventoryViewModel ItemInfoVal;
+        public static int WeaponComboType = 0;
 
-		/// <summary>
+        public InventoryViewModel ItemInfoVal;
+
+        /// <summary>
         /// The item information equipped in skilltree
         /// </summary>
         public InventoryViewModel ItemInfo
@@ -2250,13 +2251,13 @@ namespace POESKillTree
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemInfoVal)));
             }
         }
-		
-		/// <summary>
+
+        /// <summary>
         /// Generate an update fake non-pseudo attributes such as total(before leveling+gear) accuracy
         /// </summary>
-		static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
-		{
-			//"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
-		}
-	}
+        static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
+        {
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
+        }
+    }
 }

@@ -333,7 +333,7 @@ namespace POESKillTree.SkillTreeFiles
                         {
                             skillNode.Type = PassiveNodeType.JewelSocket;
                             //Sending Node Id into List to dynamically add threshold stat
-                            JewelData.JewelIds.Add(skillNode.Id);
+							GlobalSettings.JewelInfo.AddJewelSlot(skillNode.Id);
                         }
                         else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
                         {
@@ -419,7 +419,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
 
-                //Dynamically search node area to determine if JewelSocket is skill based threshold jewel type
+				GlobalSettings.JewelInfo.CategorizeJewelSlots(Skillnodes);
 
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 foreach (var skillnode in Skillnodes)
@@ -665,6 +665,11 @@ namespace POESKillTree.SkillTreeFiles
                 }
             }
 
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
+
             return temp;
         }
 
@@ -689,6 +694,10 @@ namespace POESKillTree.SkillTreeFiles
                         }
                     }
                 }
+            }
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
 
             return temp;
@@ -862,6 +871,13 @@ namespace POESKillTree.SkillTreeFiles
         public List<SkillNode> GetShortestPathTo(SkillNode targetNode, IEnumerable<SkillNode> start)
         {
             var startNodes = start as IList<SkillNode> ?? start.ToList();
+            for (int index = 0; index < startNodes.Count; ++index)
+            {
+                if (startNodes[index].Attributes.ContainsKey("Intuitive Leaped"))//Remove Leaped Nodes from possible start locations
+                {
+                    startNodes.RemoveAt(index);
+                }
+            }
             if (startNodes.Contains(targetNode))
                 return new List<SkillNode>();
             var adjacent = GetAvailableNodes(startNodes);
