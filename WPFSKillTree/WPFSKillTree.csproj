@@ -157,9 +157,6 @@
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -816,7 +813,8 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup><!--Jewel and Stat Tracking based files-->
+  <ItemGroup>
+    <!--Jewel and Stat Tracking based files-->
     <Compile Include="SkillTreeFiles\JewelAndTrackedData.cs" />
     <Compile Include="ViewModels\TrackedStatsMenuModel.cs" />
     <Page Include="Views\TrackedStatsMenu.xaml">
