@@ -108,7 +108,7 @@ namespace POESKillTree.Views
         }
 */
 
-		    /// <summary>
+            /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
         public InventoryViewModel InventoryViewModel
@@ -274,7 +274,7 @@ namespace POESKillTree.Views
                     PersistentData.CurrentBuild.PropertyChanged -= CurrentBuildOnPropertyChanged;
                 }
             };
-            
+
         }
 
         private async void CurrentBuildOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -403,19 +403,19 @@ namespace POESKillTree.Views
                 return;
             var attributelist = new List<string>();
             string SelectedAttrName;
-			      int index;
+            int index;
             foreach (var o in lb.SelectedItems)
             {
-				        SelectedAttrName = o.ToString();
-				        index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
-				        if (index>-1)//Functionality of removing individual tracked stat
-				        {
-					          GlobalSettings.TrackedStats.RemoveAt(index);
-				        }
-				        else
-				        {
-					          attributelist.Add(SelectedAttrName);
-				        }
+                SelectedAttrName = o.ToString();
+                index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
+                if (index>-1)//Functionality of removing individual tracked stat
+                {
+                    GlobalSettings.TrackedStats.RemoveAt(index);
+                }
+                else
+                {
+                    attributelist.Add(SelectedAttrName);
+                }
             }
             if (attributelist.Count > 0)
             {
@@ -2005,7 +2005,7 @@ namespace POESKillTree.Views
             itemAttributes.ItemDataChanged += ItemAttributesEquipCollectionChanged;
             itemAttributes.PropertyChanged += ItemAttributesPropertyChanged;
             ItemAttributes = itemAttributes;
-            InventoryViewModel = new InventoryViewModel(ExtendedDialogCoordinator.Instance, 
+            InventoryViewModel = new InventoryViewModel(ExtendedDialogCoordinator.Instance,
                 PersistentData.EquipmentData, itemAttributes);
             UpdateUI();
         }

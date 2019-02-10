@@ -233,7 +233,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {L10n.Message("Jewel Types"), 16},
             {L10n.Message("Tracked PseudoTotals"), 17},
             {L10n.Message("Everything Else"), 18},
-            {L10n.Message("Hidden"), 19}
+            {L10n.Message("Calculated Other Totals"), 19},//Things like Accuracy*increases for current weapon setup
+            {L10n.Message("Hidden"), 20}
         };
 
         /// <summary>
@@ -245,7 +246,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket"
+            "+# to Jewel Socket", "+# Str Based Jewel", "+# Int Based Jewel", "+# Dex Based Jewel"
         };
 
         /// <summary>
@@ -267,7 +268,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "+# to maximum Mana",
             "+# to maximum Life",
             "+# Accuracy Rating",
-            "+# to maximum Energy Shield"
+            "+# to maximum Energy Shield",
+            "Jewel Socket ID: #",
+            "IntuitiveLeapSupported"
         };
 
         #endregion
@@ -592,7 +595,6 @@ namespace POESKillTree.TreeGenerator.ViewModels
             OffHand = new LeafSetting<OffHand>(nameof(OffHand), Model.PseudoAttributes.OffHand.Shield);
             Tags = new LeafSetting<Tags>(nameof(Tags), Model.PseudoAttributes.Tags.None);
             TreeInfo = tree;
-            //GlobalSettings.ItemInfo = itemInfo;//InventoryViewModel itemInfo
 
             tree.PropertyChanged += (sender, args) =>
             {
