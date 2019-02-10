@@ -1,4 +1,8 @@
-﻿using POESKillTree.TrackedStatViews;
+﻿// ***********************************************************************
+// Code Created by James Michael Armstrong (https://github.com/BlazesRus)
+// Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
+// ***********************************************************************
+using POESKillTree.TrackedStatViews;
 using POESKillTree.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,14 +15,30 @@ using System.Threading.Tasks;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.Model.Items;
 using POESKillTree.ViewModels.Equipment;
+using POESKillTree.SkillTreeFiles;
 
 namespace POESKillTree
 {
+    /// <summary>
+    /// Class named JewelNodeData.
+    /// Implements the <see cref="POESKillTree.Utils.Notifier" />
+    /// </summary>
+    /// <seealso cref="POESKillTree.Utils.Notifier" />
     public class JewelNodeData : Notifier
     {
+        /// <summary>
+        /// The item model
+        /// </summary>
         public InventoryItemViewModel ItemModel;
+        /// <summary>
+        /// Gets the jewel data.
+        /// </summary>
+        /// <value>The jewel data.</value>
         public POESKillTree.Model.Items.Item JewelData { get { return ItemModel.Item; } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
+        /// </summary>
         public JewelNodeData()
         {
             ItemModel = null;//CreateSlotVm();
@@ -33,9 +53,11 @@ namespace POESKillTree
         }*/
     }
 
-     /// <summary>
+    /// <summary>
     /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
     /// </summary>
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
     public class JewelDictionary : Dictionary<int, JewelNodeData>
     {
         /// <summary>
@@ -43,7 +65,7 @@ namespace POESKillTree
         /// </summary>
         public System.Collections.Generic.List<int> StrJewelSlots;
         /// <summary>
-        /// Keys for Intellegence Threshold Jewel Slots
+        /// Keys for Intelligence Threshold Jewel Slots
         /// </summary>
         public System.Collections.Generic.List<int> IntJewelSlots;
         /// <summary>
@@ -51,48 +73,53 @@ namespace POESKillTree
         /// </summary>
         public System.Collections.Generic.List<int> DexJewelSlots;
         /// <summary>
-        /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        /// Keys for Hybrid Strength+Intelligence Threshold Jewel Slots
         /// </summary>
         public System.Collections.Generic.List<int> StrIntJewelSlots;
         /// <summary>
         /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<string> StrDexJewelSlots;
+        public System.Collections.Generic.List<int> StrDexJewelSlots;
         /// <summary>
-        /// Keys for Hybrid Strength+Intellegence Threshold Jewel Slots
+        /// Keys for Hybrid Intelligence+Dexterity Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<string> StrIntJewelSlots;
-        /// <summary>
-        /// Keys for Hybrid Intellegence+Dexterity Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<string> IntDexJewelSlots;
+        public System.Collections.Generic.List<int> IntDexJewelSlots;
         /// <summary>
         /// Keys for Non-Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<string> NeutralJewelSlots;
+        public System.Collections.Generic.List<int> NeutralJewelSlots;
         //Convert into System.Collections.Generic.List<int>
 
-/*	    /// <summary>
-        /// Generate JewelDictionary from System.Collections.Generic.List<int> and Data from SkillTree
+        /*	    /// <summary>
+                /// Generate JewelDictionary from System.Collections.Generic.List<int> and Data from SkillTree
+                /// </summary>
+                public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds, Utils.ObservableSet<SkillNode> SkilledNodes)
+                {
+                    bool IsIntThreshold = false;
+                    bool IsStrThreshold = false;
+                    bool IsDexThreshold = false;
+                }*/
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
         /// </summary>
-        public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds, Utils.ObservableSet<SkillNode> SkilledNodes)
-        {
-            bool IsIntThreshold = false;
-            bool IsStrThreshold = false;
-            bool IsDexThreshold = false;
-        }*/
         public JewelDictionary()
         {
 
         }
-        public AddJewelSlot(int nodeID)
+        /// <summary>
+        /// Adds the jewel slot.
+        /// </summary>
+        /// <param name="nodeID">The node identifier.</param>
+        public void AddJewelSlot(int nodeID)
         {
             Add(nodeID, default(JewelNodeData));
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label theshold type and Node id for identifying node in inventory view
         /// </summary>
-        public CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
+        /// <typeparam name="ObservableSet`1">The type of the observable set`1.</typeparam>
+        /// <returns>CategorizeJewelSlots</returns>
+        public void CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
         {
             bool IsIntThreshold = false;
             bool IsStrThreshold = false;
@@ -102,11 +129,14 @@ namespace POESKillTree
 
     public class JewelData
     {
-        public JewelDictionary JewelInfo;
+		/// <summary>
+		///  Stored information for linked node IDs with Jewel items in tree
+		/// </summary>
+		public JewelDictionary JewelInfo;
         /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-        public System.Collections.Generic.List<int> JewelIds { get (System.Collections.Generic.List<int>) JewelInfo; }
+        public System.Collections.Generic.List<int> JewelIds { get { return (System.Collections.Generic.List<int>) JewelInfo; } }
 //        private static string[] GetJewelAttributeList(Node skillNode)
 //        {
 //            const string PlusJewelSocket = "+1 Jewel Socket";
