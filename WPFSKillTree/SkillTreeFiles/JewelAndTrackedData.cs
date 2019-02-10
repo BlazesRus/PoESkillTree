@@ -119,16 +119,16 @@ namespace POESKillTree
         /// </summary>
         /// <typeparam name="ObservableSet`1">The type of the observable set`1.</typeparam>
         /// <returns>CategorizeJewelSlots</returns>
-        public void CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
+        public void CategorizeJewelSlots()
         {
             bool IsIntThreshold = false;
             bool IsStrThreshold = false;
             bool IsDexThreshold = false;////"Jewel Socket ID: #"//new[] { "+1 Jewel Socket" }
         }
 
-        public static explicit operator System.Collections.Generic.List<int>(JewelDictionary self)
+        public static explicit operator System.Collections.Generic.List<ushort>(JewelDictionary self)
         {
-            throw new NotImplementedException();
+            return new List<ushort>(self.Keys);
         }
     }
 
@@ -139,10 +139,10 @@ namespace POESKillTree
         /// </summary>
         public JewelDictionary JewelInfo;
 
-/*        /// <summary>
+        /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) JewelInfo; } }*/
+        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) JewelInfo; } }
 
       //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
       //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
