@@ -21,6 +21,7 @@ using POESKillTree.TreeGenerator.Settings;
 using POESKillTree.TreeGenerator.Solver;
 using POESKillTree.Utils.Converter;
 using POESKillTree.Utils.Extensions;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
