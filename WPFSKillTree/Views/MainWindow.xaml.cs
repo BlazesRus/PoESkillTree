@@ -1288,7 +1288,7 @@ namespace POESKillTree.Views
                 }
             }
 
-            attritemp = ConvertedJewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
+            attritemp = JewelData.JewelBasedStatUpdater(attritemp, InventoryViewModel, Tree);
 
             if (GlobalSettings.TrackedStats.Count != 0)
             {
@@ -1643,7 +1643,7 @@ namespace POESKillTree.Views
                             }
                             else
                             {
-                                if (node.Attributes.ContainsKey(ConvertedJewelData.FakeIntuitiveLeapSupportAttribute))
+                                if (node.Attributes.ContainsKey(JewelData.FakeIntuitiveLeapSupportAttribute))
                                 {
                                     Tree.SkilledNodes.Add(node);
                                     AddLeapTagToNode(node);
@@ -1767,10 +1767,10 @@ namespace POESKillTree.Views
                     sp.Children.Add(new Separator());
                     sp.Children.Add(new TextBlock { Text = "Points to skill node: " + points });
                 }
-                if (node.Type == NodeType.JewelSocket)
+                if (node.Type == PassiveNodeType.JewelSocket)
                 {
                     int ID = node.Id;
-                    string SlotName = ConvertedJewelData.JewelSlotName(ID);
+                    string SlotName = JewelData.JewelSlotName(ID);
                     sp.Children.Add(new Separator());
 #if(DEBUG)
                     sp.Children.Add(new TextBlock { Text = "JewelSlotName: " + SlotName });
