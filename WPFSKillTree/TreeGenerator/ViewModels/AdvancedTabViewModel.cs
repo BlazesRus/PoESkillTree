@@ -383,18 +383,15 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// </summary>
         private InventoryViewModel _ItemInfo;
 
-        /// <summary>
-        /// Gets or sets the item information from SkillTree (used to enable working TreePlusItemsMode code).
+  		/// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
-        /// <value>
-        /// The item information.
-        /// </value>
         public InventoryViewModel ItemInfo
         {
-            get { return _ItemInfo; }
+            get { return GlobalSettings.ItemInfoVal; }
             set
             {
-                SetProperty(ref _ItemInfo, value);
+                SetProperty(ref GlobalSettings.ItemInfoVal, value);
             }
         }
 
