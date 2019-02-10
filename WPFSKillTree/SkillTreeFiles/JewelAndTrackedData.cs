@@ -17,20 +17,20 @@ namespace POESKillTree
     public class JewelNodeData : Notifier
     {
         public InventoryItemViewModel ItemModel;
-        public POESKillTree.Model.Items.Item JewelData { get ItemModel.Item; }
+        public POESKillTree.Model.Items.Item JewelData { get { return ItemModel.Item; } }
 
         public JewelNodeData()
         {
-            ItemModel = CreateSlotVm();
-        }
+            ItemModel = null;//CreateSlotVm();
+        }/*
         private InventoryItemViewModel CreateSlotVm()
         {
             var imageName = "Jewel";
-            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes)
+            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, PoESkillTree.GameModel.Items.ItemSlot.JSlot_Dex_Ranger)
             {
                 EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };
-        }
+        }*/
     }
 
      /// <summary>
