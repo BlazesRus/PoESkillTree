@@ -83,13 +83,13 @@ namespace POESKillTree
         }*/
         public JewelDictionary()
         {
-		
+
         }
-		public AddJewelSlot(int nodeID)
-		{
-			Add(nodeID, default(JewelNodeData));
-		}
-		/// <summary>
+        public AddJewelSlot(int nodeID)
+        {
+            Add(nodeID, default(JewelNodeData));
+        }
+        /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label theshold type and Node id for identifying node in inventory view
         /// </summary>
         public CategorizeJewelSlots(Utils.ObservableSet<SkillNode> SkilledNodes)
@@ -2205,6 +2205,18 @@ namespace POESKillTree
     public static class GlobalSettings
     {
         /// <summary>
+        /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
+        /// </summary>
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        /// <summary>
+        /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
+        /// </summary>
+        public static void NotifyStaticPropertyChanged(string propertyName)
+        {
+            if (StaticPropertyChanged != null)
+                StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
+        }
+        /// <summary>
         /// The tracked stats
         /// </summary>
         public static TrackedAttributes TrackedStats = new TrackedAttributes();
@@ -2222,7 +2234,7 @@ namespace POESKillTree
         /// </summary>
         public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
         /// <summary>
-        /// If true, automatically adds skilltree pseudoattributes to stat tracking (Use menu to turn on)(Default:false)
+        /// If true, automatically adds skilltree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
         public static bool AutoTrackStats = false;
         /// <summary>
@@ -2235,12 +2247,12 @@ namespace POESKillTree
         /// </summary>
         public static int WeaponComboType = 0;
 
-        public InventoryViewModel ItemInfoVal;
+        public static InventoryViewModel ItemInfoVal;
 
         /// <summary>
         /// The item information equipped in skilltree
         /// </summary>
-        public InventoryViewModel ItemInfo
+        public static InventoryViewModel ItemInfo
         {
             get { return ItemInfoVal; }
             private set
@@ -2248,16 +2260,17 @@ namespace POESKillTree
                 if (value == ItemInfoVal)
                     return;
                 ItemInfoVal = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemInfoVal)));
+                NotifyStaticPropertyChanged("ItemInfo");
             }
         }
 
+/*
         /// <summary>
         /// Generate an update fake non-pseudo attributes such as total(before leveling+gear) accuracy
         /// </summary>
         static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
         {
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
-        }
+        }*/
     }
 }
