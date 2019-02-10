@@ -88,17 +88,6 @@ namespace POESKillTree
         /// Keys for Non-Threshold Jewel Slots
         /// </summary>
         public System.Collections.Generic.List<ushort> NeutralJewelSlots;
-        //Convert into System.Collections.Generic.List<int>
-
-        /*	    /// <summary>
-                /// Generate JewelDictionary from System.Collections.Generic.List<int> and Data from SkillTree
-                /// </summary>
-                public JewelDictionary(Convert into System.Collections.Generic.List<int> JewelIds, Utils.ObservableSet<SkillNode> SkilledNodes)
-                {
-                    bool IsIntThreshold = false;
-                    bool IsStrThreshold = false;
-                    bool IsDexThreshold = false;
-                }*/
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
         /// </summary>
@@ -117,13 +106,99 @@ namespace POESKillTree
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
         /// </summary>
-        /// <typeparam name="ObservableSet`1">The type of the observable set`1.</typeparam>
-        /// <returns>CategorizeJewelSlots</returns>
         public void CategorizeJewelSlots()
         {
-            bool IsIntThreshold = false;
             bool IsStrThreshold = false;
+            bool IsIntThreshold = false;
             bool IsDexThreshold = false;////"Jewel Socket ID: #"//new[] { "+1 Jewel Socket" }
+
+            SkillNode TargetNode;
+            SkillNode CurrentNode;
+            ushort NodeID;
+            foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
+            {
+                NodeID = JewelElement.Key;
+                TargetNode = SkillTree.Skillnodes[NodeID];
+                string AttributeName;
+                float AttributeTotal;
+                for (int AttrIndex = 0; AttrIndex < 3; ++AttrIndex)
+                {
+                    AttributeTotal = 0.0f;
+                    switch (AttrIndex)
+                    {
+                        case 1:
+                            AttributeName = "+# to Intelligence";
+                            break;
+                        case 2:
+                            AttributeName = "+# to Dexterity";
+                            break;
+                        default:
+                            AttributeName = " +# to Strength";
+                            break;
+                    }
+                    Vector2D nodePosition = TargetNode.Position;
+                    IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
+                        SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 1200)).ToList();
+                    foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
+                    {
+                        CurrentNode = NodePair.Value;
+                        if (CurrentNode.Attributes.ContainsKey(AttributeName))
+                        {
+                            AttributeTotal += CurrentNode.Attributes[AttributeName][0];
+                        }
+                    }
+                    if (AttributeTotal >= 40.0f)
+                    {
+                        switch (AttrIndex)
+                        {
+                            case 1:
+                                IsIntThreshold = true;
+                                break;
+                            case 2:
+                                IsDexThreshold = true;
+                                break;
+                            default:
+                                IsStrThreshold = true;
+                                break;
+                        }
+                    }
+                }
+                if (IsStrThreshold)//No support for all 3 attribute types at once for now
+                {
+                    if (IsIntThreshold)
+                    {
+
+                    }
+                    else if (IsDexThreshold)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (IsIntThreshold)
+                {
+                    if (IsDexThreshold)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (IsDexThreshold)
+                {
+
+                }
+                else//Neutral(often ineffective corner jewels)
+                {
+
+                }
+            }
+
         }
 
         public static explicit operator System.Collections.Generic.List<ushort>(JewelDictionary self)
