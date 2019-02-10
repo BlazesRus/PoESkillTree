@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -40,7 +41,7 @@ namespace POESKillTree.Model.Items.Mods
         /// <summary>
         /// Creates an ItemMod using the given values
         /// </summary>
-        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values, 
+        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values,
             IEnumerable<ValueColoring> valueColors)
         {
             IsLocal = isLocal;
@@ -125,6 +126,22 @@ namespace POESKillTree.Model.Items.Mods
             {
                 {"name", name}, {"values", new JArray(ValueTokensToJArrays(tokens))}, {"displayMode", displayMode}
             };
+        }
+
+        /// <summary>
+        ///   Create string based on attribute information
+        /// </summary>
+        public string CreateModString()
+        {
+            if (Values.Count == 0)
+            {
+                return Attribute;
+            }
+            var regex = new Regex(Regex.Escape("#"));
+            string ModString = Attribute;
+            foreach (var val in Values)
+                ModString = regex.Replace(ModString, val.ToString(), 1);
+            return ModString;
         }
     }
 
