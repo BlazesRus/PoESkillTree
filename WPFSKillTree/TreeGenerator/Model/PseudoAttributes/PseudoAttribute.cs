@@ -45,5 +45,28 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         {
             return Name;
         }
+		
+        /// <summary>
+        /// Calculates updated value
+        /// </summary>
+        /// <param name="attrlist">The attrlist.</param>
+        public float CalculateValue(Dictionary<string, List<float>> attrlist)
+        {
+            float TotalStat = 0.0f;
+            string AttributeName;
+            float Multiplier;
+            List<float> RetrievedVal;
+            foreach (var Attribute in Attributes)
+            {
+                AttributeName = Attribute.Name;
+                Multiplier = Attribute.ConversionMultiplier;
+                attrlist.TryGetValue(AttributeName, out RetrievedVal);
+                if (RetrievedVal != null && RetrievedVal.Count == 1)
+                {
+                    TotalStat += Multiplier * RetrievedVal[0];
+                }
+            }
+            return TotalStat;
+        }
     }
 }

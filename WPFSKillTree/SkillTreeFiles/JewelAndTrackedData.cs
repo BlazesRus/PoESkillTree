@@ -115,7 +115,7 @@ namespace POESKillTree
             Add(nodeID, default(JewelNodeData));
         }
         /// <summary>
-        /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label theshold type and Node id for identifying node in inventory view
+        /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
         /// </summary>
         /// <typeparam name="ObservableSet`1">The type of the observable set`1.</typeparam>
         /// <returns>CategorizeJewelSlots</returns>
@@ -125,14 +125,19 @@ namespace POESKillTree
             bool IsStrThreshold = false;
             bool IsDexThreshold = false;////"Jewel Socket ID: #"//new[] { "+1 Jewel Socket" }
         }
-    }
+
+		public static explicit operator System.Collections.Generic.List<int>(JewelDictionary self)
+		{
+			throw new NotImplementedException();
+		}
+	}
 
     public class JewelData
     {
-		/// <summary>
-		///  Stored information for linked node IDs with Jewel items in tree
-		/// </summary>
-		public JewelDictionary JewelInfo;
+        /// <summary>
+        ///  Stored information for linked node IDs with Jewel items in tree
+        /// </summary>
+        public JewelDictionary JewelInfo;
         /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
@@ -1934,52 +1939,7 @@ namespace POESKillTree
         }
     }
 
-    public class TrackedAttribute : PseudoAttribute
-    {
-        public TrackedAttribute(PseudoAttribute attribute)
-        {
-            this.Name = attribute.Name;
-            this.Group = attribute.Group;
-            this.Attributes = attribute.Attributes;
-        }
-
-        /// <summary>
-        /// Calculates updated value
-        /// </summary>
-        /// <param name="attrlist">The attrlist.</param>
-        public float CalculateValue(Dictionary<string, List<float>> attrlist)
-        {
-            float TotalStat = 0.0f;
-            string AttributeName;
-            float Multiplier;
-            List<float> RetrievedVal;
-            foreach (var Attribute in Attributes)
-            {
-                AttributeName = Attribute.Name;
-                Multiplier = Attribute.ConversionMultiplier;
-                attrlist.TryGetValue(AttributeName, out RetrievedVal);
-                if (RetrievedVal != null && RetrievedVal.Count == 1)
-                {
-                    TotalStat += Multiplier * RetrievedVal[0];
-                }
-            }
-            return TotalStat;
-        }
-
-        public static implicit operator TrackedAttribute(PseudoAttribute attribute)
-        {
-            TrackedAttribute NewSelf = new TrackedAttribute(attribute);
-            return NewSelf;
-        }
-
-        public static explicit operator PseudoAttribute(TrackedAttribute self)
-        {
-            PseudoAttribute NewSelf = new PseudoAttribute(self.Name, self.Group);
-            NewSelf.Attributes = self.Attributes;
-            return NewSelf;
-        }
-    }
-    public class TrackedAttributes : System.Collections.Generic.List<TrackedAttribute>
+    public class TrackedAttributes : System.Collections.Generic.List<PseudoAttribute>
     {
         /// <summary>
         /// Adds the specified attribute.
@@ -1987,7 +1947,7 @@ namespace POESKillTree
         /// <param name="Attribute">The attribute.</param>
         public void Add(PseudoAttribute Attribute)
         {
-            Add(new TrackedAttribute(Attribute));
+            Add(Attribute);
         }
 
         public TrackedAttributes CloneSelf()
@@ -2039,7 +1999,7 @@ namespace POESKillTree
         /// <returns></returns>
         public string GetNameOfAttribute(int Index)
         {
-            TrackedAttribute CurrentAttribute = this[Index];
+            PseudoAttribute CurrentAttribute = this[Index];
             return CurrentAttribute.Name;
         }
 
@@ -2129,7 +2089,7 @@ namespace POESKillTree
         /// <param name="data">The data.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">IndexKey has found no matches in indexes - IndexKey</exception>
-        public TrackedAttribute this[string IndexKey, PseudoAttribute data]
+        public PseudoAttribute this[string IndexKey, PseudoAttribute data]
         {
             get
             {
