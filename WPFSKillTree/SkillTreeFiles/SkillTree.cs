@@ -330,7 +330,7 @@ namespace POESKillTree.SkillTreeFiles
                         {
                             skillNode.Type = PassiveNodeType.JewelSocket;
                             //Sending Node Id into List to dynamically add threshold stat
-							GlobalSettings.JewelInfo.AddJewelSlot(skillNode.Id);
+                            GlobalSettings.JewelInfo.AddJewelSlot(skillNode.Id);
                         }
                         else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
                         {
@@ -414,7 +414,7 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
 
-				GlobalSettings.JewelInfo.CategorizeJewelSlots(Skillnodes);
+                GlobalSettings.JewelInfo.CategorizeJewelSlots();
 
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 foreach (var skillnode in Skillnodes)
@@ -427,7 +427,7 @@ namespace POESKillTree.SkillTreeFiles
                         skillnode.Value.VisibleNeighbors.Add(snn);
                     }
 
-                    //populate the Attributes fields with parsed attributes 
+                    //populate the Attributes fields with parsed attributes
                     skillnode.Value.Attributes = new Dictionary<string, IReadOnlyList<float>>();
                     foreach (string s in skillnode.Value.attributes)
                     {
@@ -547,7 +547,7 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument", 
+        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
             Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
         private void ChangeAscClass(int toType)
         {
@@ -638,7 +638,7 @@ namespace POESKillTree.SkillTreeFiles
         public static Dictionary<string, List<float>> GetAttributesWithoutImplicit(IEnumerable<SkillNode> skilledNodes, int chartype, BanditSettings banditSettings)
         {
             var temp = new Dictionary<string, List<float>>();
-            
+
             foreach (var attr in CharBaseAttributes[chartype].Union(BaseAttributes).Union(banditSettings.Rewards))
             {
                 if (!temp.ContainsKey(attr.Key))
@@ -646,7 +646,7 @@ namespace POESKillTree.SkillTreeFiles
                 else if (temp[attr.Key].Any())
                     temp[attr.Key][0] += attr.Value;
             }
-            
+
             foreach (var node in skilledNodes)
             {
                 foreach (var attr in ExpandHybridAttributes(node.Attributes))
@@ -1142,7 +1142,7 @@ namespace POESKillTree.SkillTreeFiles
             };
             // +# to Strength", co["base_str"].Value<int>() }, { "+# to Dexterity", co["base_dex"].Value<int>() }, { "+# to Intelligence", co["base_int"].Value<int>() } };
 
-            // Every 10 strength grants 2% increased melee physical damage. 
+            // Every 10 strength grants 2% increased melee physical damage.
             var str = (int)attribs["+# to Strength"][0];
             if (str % (int)StrPerED > 0) str += (int)StrPerED - (str % (int)StrPerED);
             retval["#% increased Melee Physical Damage"] = new List<float> { str / StrPerED };

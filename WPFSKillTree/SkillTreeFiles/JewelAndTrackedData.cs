@@ -58,36 +58,36 @@ namespace POESKillTree
     /// Implements the <see cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
     /// </summary>
     /// <seealso cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
-    public class JewelDictionary : Dictionary<int, JewelNodeData>
+    public class JewelDictionary : Dictionary<ushort, JewelNodeData>
     {
         /// <summary>
         /// Keys for Strength Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> StrJewelSlots;
+        public System.Collections.Generic.List<ushort> StrJewelSlots;
         /// <summary>
         /// Keys for Intelligence Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> IntJewelSlots;
+        public System.Collections.Generic.List<ushort> IntJewelSlots;
         /// <summary>
         /// Keys for Dexterity Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> DexJewelSlots;
+        public System.Collections.Generic.List<ushort> DexJewelSlots;
         /// <summary>
         /// Keys for Hybrid Strength+Intelligence Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> StrIntJewelSlots;
+        public System.Collections.Generic.List<ushort> StrIntJewelSlots;
         /// <summary>
         /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> StrDexJewelSlots;
+        public System.Collections.Generic.List<ushort> StrDexJewelSlots;
         /// <summary>
         /// Keys for Hybrid Intelligence+Dexterity Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> IntDexJewelSlots;
+        public System.Collections.Generic.List<ushort> IntDexJewelSlots;
         /// <summary>
         /// Keys for Non-Threshold Jewel Slots
         /// </summary>
-        public System.Collections.Generic.List<int> NeutralJewelSlots;
+        public System.Collections.Generic.List<ushort> NeutralJewelSlots;
         //Convert into System.Collections.Generic.List<int>
 
         /*	    /// <summary>
@@ -110,7 +110,7 @@ namespace POESKillTree
         /// Adds the jewel slot.
         /// </summary>
         /// <param name="nodeID">The node identifier.</param>
-        public void AddJewelSlot(int nodeID)
+        public void AddJewelSlot(ushort nodeID)
         {
             Add(nodeID, default(JewelNodeData));
         }
@@ -138,245 +138,20 @@ namespace POESKillTree
         ///  Stored information for linked node IDs with Jewel items in tree
         /// </summary>
         public JewelDictionary JewelInfo;
-        /// <summary>
+
+/*        /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-        public System.Collections.Generic.List<int> JewelIds { get { return (System.Collections.Generic.List<int>) JewelInfo; } }
-//        private static string[] GetJewelAttributeList(Node skillNode)
-//        {
-//            const string PlusJewelSocket = "+1 Jewel Socket";
-//            switch (skillNode.id)//Might need to manually update this later if skilltree changes too much
-//            {
-//                //Int Jewels
-//                case 61419://Jewel Slot directly north of Witch starting area
-//                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Witch" }
-//                case 21984://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
-//                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_Scion" };
-//                case 41263://NE from center jewel slot between Witch and shadow areas
-//                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_WitchShadow" };
-//                case 36634://Jewel slot north-west of Scion area; At road between Templar and Witch areas
-//                    return new[] { PlusJewelSocket, "+1 Int Based Jewel" };//, "JSlot_Int_TemplarWitch" };
-//                //Str Jewels
-//                case 28475://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorDuelist" };
-//                case 33631://Jewel slot west of Scion area; At road between Marauder and Templar areas
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_WarriorTemplarScion" };
-//                case 55190://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_FarWarTempScion" };
-//                case 26725://Jewel slot west of Marauder area
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel" };//, "JSlot_Str_Warrior" };
-//                //Dex Jewels
-//                case 33989://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
-//                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_ShadowRanger" };
-//                case 60735://Jewel slot east of Ranger area(Jewel10)
-//                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_Ranger" };
-//                case 34483://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
-//                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel" };//, "JSlot_Dex_RangerDuelist" };
-//                //Hybrid Jewels
-//                case 26196://Jewel slot west of Templar starting area
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Templar" };
-//                case 6230://Scion Jewel Slot west of starting area
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Int Based Jewel" };//, "JSlot_StrInt_Scion" };
-//                case 61834://Jewel slot east of Shadow starting area
-//                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Shadow" };
-//                case 48768://Scion jewel slot east of starting area
-//                    return new[] { PlusJewelSocket, "+1 Dex Based Jewel", "+1 Int Based Jewel" };//, "JSlot_DexInt_Scion" };
-//                case 31683://Scion Jewel Slot south of starting area
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Scion" };
-//                case 54127://Jewel slot south of Duelist starting area
-//                    return new[] { PlusJewelSocket, "+1 Str Based Jewel", "+1 Dex Based Jewel" };//, "JSlot_StrDex_Duelist" };
-//                //Non-Threshold Jewel Slots
-//                case 32763:
-//                case 2491:
-//                case 46882:
-//                case 7960:
-//                    return new[] { PlusJewelSocket };
-//                default://Non-Assigned Jewel Slots And/Or Non-Threshold Jewel Slots(Mainly in case of Jewel IDs changing;so can find the correct node ids for slots)
-//#if (DEBUG)
-//                    return new[] { PlusJewelSocket, "Jewel Socket ID: " + skillNode.id};
-//#else
-//                    return new[] { PlusJewelSocket};
-//#endif
-//            }
-//        }
-//
-        //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
+        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) JewelInfo; } }*/
+
+      //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
       //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
       //var v = new Vector2D(p.X, p.Y);
       //v = v * _multransform + _addtransform;
       //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
       //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
 
-  //      /// <summary>
-  //      /// Creates jewel slot name for slot
-  //      /// </summary>
-  //      /// <param name="NodeId">The node identifier.</param>
-  //      /// <returns></returns>
-  //      public static string JewelSlotName(int NodeId)
-  //      {
-  //          string JewelName;
-  //          switch (NodeId)
-  //          {
-  //              //Int Jewels
-  //              case JSlot_Int_WitchID://Jewel Slot directly north of Witch starting area
-  //                  JewelName = "JSlot_Int_Witch"; break;
-  //              case JSlot_Int_ScionID://Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
-  //                  JewelName = "JSlot_Int_Scion"; break;
-  //              case JSlot_Int_WitchShadowID://NE from center jewel slot between Witch and shadow areas
-  //                  JewelName = "JSlot_Int_WitchShadow"; break;
-  //              case JSlot_Int_TemplarWitchID://Jewel slot north-west of Scion area; At road between Templar and Witch areas
-  //                  JewelName = "JSlot_Int_TemplarWitch"; break;
-  //              //Str Jewels
-  //              case JSlot_Str_WarriorDuelistID://Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
-  //                  JewelName = "JSlot_Str_WarriorDuelist"; break;
-  //              case JSlot_Str_WarriorTemplarScionID://Jewel slot west of Scion area; At road between Marauder and Templar areas
-  //                  JewelName = "JSlot_Str_WarriorTemplarScion"; break;
-  //              case JSlot_Str_FarWarTempScionID://Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
-  //                  JewelName = "JSlot_Str_FarWarTempScion"; break;
-  //              case JSlot_Str_WarriorID://Jewel slot west of Marauder area
-  //                  JewelName = "JSlot_Str_Warrior"; break;
-  //              //Dex Jewels
-  //              case JSlot_Dex_ShadowRangerID://Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
-  //                  JewelName = "JSlot_Dex_ShadowRanger"; break;
-  //              case JSlot_Dex_RangerID://Jewel slot east of Ranger area(Jewel10)
-  //                  JewelName = "JSlot_Dex_Ranger"; break;
-  //              case JSlot_Dex_RangerDuelistID://Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
-  //                  JewelName = "JSlot_Dex_RangerDuelist"; break;
-  //              //Hybrid Jewels
-  //              case JSlot_StrInt_TemplarID://Jewel slot west of Templar starting area
-  //                  JewelName = "JSlot_StrInt_Templar"; break;
-  //              case JSlot_StrInt_ScionID://Scion Jewel Slot west of starting area
-  //                  JewelName = "JSlot_StrInt_Scion"; break;
-  //              case JSlot_DexInt_ShadowID://Jewel slot east of Shadow starting area
-  //                  JewelName = "JSlot_DexInt_Shadow"; break;
-  //              case JSlot_DexInt_ScionID://Scion jewel slot east of starting area
-  //                  JewelName = "JSlot_DexInt_Scion"; break;
-  //              case JSlot_StrDex_ScionID://Scion Jewel Slot south of starting area
-  //                  JewelName = "JSlot_StrDex_Scion"; break;
-  //              case JSlot_StrDex_DuelistID://Jewel slot south of Duelist starting area
-  //                  JewelName = "JSlot_StrDex_Duelist"; break;
-  //              //Non-Threshold Jewel Slots
-  //              case JSlot_Neutral_AcrobaticsID:
-  //                  JewelName = "JSlot_Neutral_Acrobatics"; break;
-  //              case JSlot_Neutral_PointBlankID:
-  //                  JewelName = "JSlot_Neutral_PointBlank"; break;
-  //              case JSlot_Neutral_MinionInstabilityID:
-  //                  JewelName = "JSlot_Neutral_MinionInstability"; break;
-  //              case JSlot_Neutral_IronGripID:
-  //                  JewelName = "JSlot_Neutral_IronGrip"; break;
-  //              default:
-  //                  JewelName = "JSlot_" + NodeId;
-  //                  break;
-  //          }
-  //          return JewelName;
-  //      }
-
-//        /// <summary>
-//        /// Jewel Slot directly north of Witch starting area
-//        /// </summary>
-//        public const ushort JSlot_Int_WitchID = 61419;
-//
-//        /// <summary>
-//        /// Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area (Int Threshold Jewel Slot)
-//        /// </summary>
-//        public const ushort JSlot_Int_ScionID = 21984;
-//
-//        /// <summary>
-//        /// NE from center jewel slot between Witch and shadow areas
-//        /// </summary>
-//        public const ushort JSlot_Int_WitchShadowID = 41263;
-//
-//        /// <summary>
-//        /// Jewel slot north-west of Scion area; At road between Templar and Witch areas
-//        /// </summary>
-//        public const ushort JSlot_Int_TemplarWitchID = 36634;
-//
-//        /// <summary>
-//        /// Jewel slot south-west of Scion area; At road between Marauder and Duelist areas
-//        /// </summary>
-//        public const ushort JSlot_Str_WarriorDuelistID = 28475;
-//
-//        /// <summary>
-//        /// Jewel slot west of Scion area; At road between Marauder and Templar areas
-//        /// </summary>
-//        public const ushort JSlot_Str_WarriorTemplarScionID = 33631;
-//
-//        /// <summary>
-//        /// Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique
-//        /// </summary>
-//        public const ushort JSlot_Str_FarWarTempScionID = 55190;
-//
-//        /// <summary>
-//        /// Jewel slot west of Marauder area
-//        /// </summary>
-//        public const ushort JSlot_Str_WarriorID = 26725;
-//
-//        /// <summary>
-//        /// Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node
-//        /// </summary>
-//        public const ushort JSlot_Dex_ShadowRangerID = 33989;
-//
-//        /// <summary>
-//        /// Jewel slot east of Ranger area
-//        /// </summary>
-//        public const ushort JSlot_Dex_RangerID = 60735;
-//
-//        /// <summary>
-//        /// Jewel slot south-east of Scion area; At road between Ranger and Duelist areas
-//        /// </summary>
-//        public const ushort JSlot_Dex_RangerDuelistID = 34483;
-//
-//        /// <summary>
-//        /// Jewel slot west of Templar starting area
-//        /// </summary>
-//        public const ushort JSlot_StrInt_TemplarID = 26196;
-//
-//        /// <summary>
-//        /// Scion Jewel Slot west of starting area
-//        /// </summary>
-//        public const ushort JSlot_StrInt_ScionID = 6230;
-//
-//        /// <summary>
-//        /// Jewel slot east of Shadow starting area
-//        /// </summary>
-//        public const ushort JSlot_DexInt_ShadowID = 61834;
-//
-//        /// <summary>
-//        /// Scion jewel slot east of starting area
-//        /// </summary>
-//        public const ushort JSlot_DexInt_ScionID = 48768;
-//
-//        /// <summary>
-//        /// Scion Jewel Slot south of starting area
-//        /// </summary>
-//        public const ushort JSlot_StrDex_ScionID = 31683;
-//
-//        /// <summary>
-//        /// Jewel slot south of Duelist starting area
-//        /// </summary>
-//        public const ushort JSlot_StrDex_DuelistID = 54127;
-//
-//        /// <summary>
-//        /// Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel (Non-Threshold Jewel Slot)
-//        /// </summary>
-//        public const ushort JSlot_Neutral_AcrobaticsID = 32763;
-//
-//        /// <summary>
-//        /// Jewel slot far south-west of center; Located between Marauder and Duelist areas next to Iron Grip (Non-Threshold jewel slot)
-//        /// </summary>
-//        public const ushort JSlot_Neutral_IronGripID = 2491;
-//
-//        /// <summary>
-//        /// Jewel slot far south-east of center; Located between Duelist and Ranger areas next to Point Blank (Non-Threshold jewel slot)
-//        /// </summary>
-//        public const ushort JSlot_Neutral_PointBlankID = 46882;
-//
-//        /// <summary>
-//        /// Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability (Non-Threshold jewel slot)
-//        /// </summary>
-//        public const ushort JSlot_Neutral_MinionInstabilityID = 7960;
-
-        /// <summary>
+         /// <summary>
         /// The fake intuitive leap support attribute
         /// </summary>
         public static readonly string FakeIntuitiveLeapSupportAttribute = "IntuitiveLeapSupported";
@@ -534,145 +309,28 @@ namespace POESKillTree
             }
         }
 
-        public class JewelUpdateData
-        {
-            public ushort NodeID;
-            public POESKillTree.Model.Items.Item CurrentJewelData;
-            public SkillNode CurrentNode;
-
-            public JewelUpdateData(ushort nodeID, Item currentJewelData)
-            {
-                NodeID = nodeID;
-                CurrentJewelData = currentJewelData;
-                CurrentNode = null;
-            }
-
-            public JewelUpdateData(ushort nodeID, Item currentJewelData, SkillNode currentNode)
-            {
-                NodeID = nodeID;
-                CurrentJewelData = currentJewelData;
-                CurrentNode = currentNode;
-            }
-        }
-
-        /// <summary>
-        /// Jewels the based stat initial update.
-        /// </summary>
-        /// <param name="JewelIndex">Index of the jewel.</param>
-        /// <param name="ItemInfo">The item information.</param>
-        /// <returns></returns>
-        static public JewelUpdateData JewelBasedStatInitialUpdate(int JewelIndex, InventoryViewModel ItemInfo)
-        {
-            ushort NodeID;
-            POESKillTree.Model.Items.Item CurrentJewelData;
-
-            switch (JewelIndex)
-            {
-    //            case 0:
-    //                NodeID = JSlot_DexInt_ScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_DexInt_Scion.Item; break;
-    //            case 1:
-    //                NodeID = JSlot_DexInt_ShadowID;
-    //                CurrentJewelData = ItemInfo.JSlot_DexInt_Shadow.Item; break;
-    //            case 2:
-    //                NodeID = JSlot_Dex_RangerDuelistID;
-    //                CurrentJewelData = ItemInfo.JSlot_Dex_RangerDuelist.Item; break;
-    //            case 3:
-    //                NodeID = JSlot_Dex_RangerID;
-    //                CurrentJewelData = ItemInfo.JSlot_Dex_Ranger.Item; break;
-    //            case 4:
-    //                NodeID = JSlot_Dex_ShadowRangerID;
-    //                CurrentJewelData = ItemInfo.JSlot_Dex_ShadowRanger.Item; break;
-    //            case 5:
-    //                NodeID = JSlot_Int_ScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_Int_Scion.Item; break;
-    //            case 6:
-    //                NodeID = JSlot_Int_TemplarWitchID;
-    //                CurrentJewelData = ItemInfo.JSlot_Int_TemplarWitch.Item; break;
-    //            case 7:
-    //                NodeID = JSlot_Int_WitchID;
-    //                CurrentJewelData = ItemInfo.JSlot_Int_Witch.Item; break;
-    //            case 8:
-    //                NodeID = JSlot_Int_WitchShadowID;
-    //                CurrentJewelData = ItemInfo.JSlot_Int_WitchShadow.Item; break;
-    //            case 9:
-    //                NodeID = JSlot_StrDex_DuelistID;
-    //                CurrentJewelData = ItemInfo.JSlot_StrDex_Duelist.Item; break;
-    //            case 10:
-    //                NodeID = JSlot_StrDex_ScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_StrDex_Scion.Item; break;
-    //            case 11:
-    //                NodeID = JSlot_StrInt_ScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_StrInt_Scion.Item; break;
-    //            case 12:
-    //                NodeID = JSlot_StrInt_TemplarID;
-    //                CurrentJewelData = ItemInfo.JSlot_StrInt_Templar.Item; break;
-    //            case 13:
-    //                NodeID = JSlot_Str_FarWarTempScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_Str_FarWarTempScion.Item; break;
-    //            case 14:
-    //                NodeID = JSlot_Str_WarriorDuelistID;
-    //                CurrentJewelData = ItemInfo.JSlot_Str_WarriorDuelist.Item; break;
-    //            case 15:
-    //                NodeID = JSlot_Str_WarriorID;
-    //                CurrentJewelData = ItemInfo.JSlot_Str_Warrior.Item; break;
-    //            case 16:
-    //                NodeID = JSlot_Str_WarriorTemplarScionID;
-    //                CurrentJewelData = ItemInfo.JSlot_Str_WarriorTemplarScion.Item; break;
-    //            //Non-Threshold Jewel Slots below
-    //            case 17:
-    //                NodeID = JSlot_Neutral_AcrobaticsID;
-    //                CurrentJewelData = ItemInfo.JSlot_Neutral_Acrobatics.Item; break;
-    //            case 18:
-    //                NodeID = JSlot_Neutral_IronGripID;
-    //                CurrentJewelData = ItemInfo.JSlot_Neutral_IronGrip.Item; break;
-    //            case 19:
-    //                NodeID = JSlot_Neutral_MinionInstabilityID;
-    //                CurrentJewelData = ItemInfo.JSlot_Neutral_MinionInstability.Item; break;
-    //            case 20:
-    //                NodeID = JSlot_Neutral_PointBlankID;
-    //                CurrentJewelData = ItemInfo.JSlot_Neutral_PointBlank.Item; break;
-                default://Shouldn't ever use this part
-                    NodeID = 0;
-                    CurrentJewelData = null;
-                    break;
-            }
-
-            if (NodeID == 0)
-            {
-                return new JewelUpdateData(NodeID, CurrentJewelData);
-            }
-            else
-            {
-                return new JewelUpdateData(NodeID, CurrentJewelData, SkillTree.Skillnodes[NodeID]);
-            }
-        }
-
         /// <summary>
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
         /// <param name="attrlist">The attrlist.</param>
-        /// <param name="ItemInfo">The item information.</param>
         /// <param name="Tree">The tree.</param>
         /// <returns></returns>
-        static public Dictionary<string, List<float>> JewelBasedStatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
+        static public Dictionary<string, List<float>> JewelBasedStatUpdater(Dictionary<string, List<float>> attrlist, SkillTree Tree)
         {
             float AreaStats;
             ushort NodeID;
             SkillNode CurrentNode;
             POESKillTree.Model.Items.Item CurrentJewelData;
-            JewelUpdateData updateData;
             int GrandSpectrumTotal = 0;
             int ElemGrandSpectrums = 0;
             int ArmourGrandSpectrums = 0;
             int ManaGrandSpectrums = 0;
 
-            for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
+            foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
-                updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
-                NodeID = updateData.NodeID;
-                CurrentNode = updateData.CurrentNode;
-                CurrentJewelData = updateData.CurrentJewelData;
+                NodeID = JewelElement.Key;
+                CurrentNode = SkillTree.Skillnodes[NodeID];
+                CurrentJewelData = JewelElement.Value.JewelData;
                 if (Tree.SkilledNodes.Contains(CurrentNode))
                 {
                     if (CurrentJewelData == null)//Jewel Not Equipped
@@ -1303,6 +961,7 @@ namespace POESKillTree
                     }
                 }
             }
+            //Accuracy subtotal
             return attrlist;
         }
 
@@ -1319,18 +978,16 @@ namespace POESKillTree
             ushort NodeID;
             SkillNode CurrentNode;
             POESKillTree.Model.Items.Item CurrentJewelData;
-            JewelUpdateData updateData;
             int GrandSpectrumTotal = 0;
             int ElemGrandSpectrums = 0;
             int ArmourGrandSpectrums = 0;
             int ManaGrandSpectrums = 0;
 
-            for (int JewelIndex = 0; JewelIndex < 21; ++JewelIndex)
+            foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
-                updateData = JewelBasedStatInitialUpdate(JewelIndex, ItemInfo);
-                NodeID = updateData.NodeID;
-                CurrentNode = updateData.CurrentNode;
-                CurrentJewelData = updateData.CurrentJewelData;
+                NodeID = JewelElement.Key;
+                CurrentNode = SkillTree.Skillnodes[NodeID];
+                CurrentJewelData = JewelElement.Value.JewelData;
                 if (Tree.SkilledNodes.Contains(CurrentNode))
                 {
                     if (CurrentJewelData == null)//Jewel Not Equipped
@@ -1935,6 +1592,8 @@ namespace POESKillTree
                 }
             }
 
+            //Accuracy Subtotal
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
             return attrlist;
         }
     }
@@ -2195,6 +1854,10 @@ namespace POESKillTree
     public static class GlobalSettings
     {
         /// <summary>
+        /// Stored JewelInfo
+        /// </summary>
+        public static JewelData JewelStorage;
+        /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
         public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
@@ -2205,6 +1868,20 @@ namespace POESKillTree
         {
             if (StaticPropertyChanged != null)
                 StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
+        }
+        /// <summary>
+        /// Stored JewelInfo
+        /// </summary>
+        public static JewelDictionary JewelInfo
+        {
+            get { return JewelStorage.JewelInfo; }
+            private set
+            {
+                if (value == JewelStorage.JewelInfo)
+                    return;
+                JewelStorage.JewelInfo = value;
+                NotifyStaticPropertyChanged("JewelInfo");
+            }
         }
         /// <summary>
         /// The tracked stats
@@ -2253,14 +1930,5 @@ namespace POESKillTree
                 NotifyStaticPropertyChanged("ItemInfo");
             }
         }
-
-/*
-        /// <summary>
-        /// Generate an update fake non-pseudo attributes such as total(before leveling+gear) accuracy
-        /// </summary>
-        static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
-        {
-            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
-        }*/
     }
 }
