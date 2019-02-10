@@ -395,7 +395,7 @@ namespace POESKillTree
         /// <param name="attrlist">The attrlist.</param>
         /// <param name="Tree">The tree.</param>
         /// <returns></returns>
-        static public Dictionary<string, List<float>> JewelBasedStatUpdater(Dictionary<string, List<float>> attrlist, SkillTree Tree)
+        static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, SkillTree Tree)
         {
             float AreaStats;
             ushort NodeID;
@@ -1052,7 +1052,7 @@ namespace POESKillTree
         /// <param name="ItemInfo">The item information.</param>
         /// <param name="Tree">The tree.</param>
         /// <returns></returns>
-        static public Dictionary<string, float> JewelBasedStatUpdater(Dictionary<string, float> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
+        static public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
         {
             float AreaStats;
             ushort NodeID;

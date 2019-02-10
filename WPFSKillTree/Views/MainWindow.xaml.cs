@@ -1288,7 +1288,7 @@ namespace POESKillTree.Views
                 }
             }
 
-            attritemp = JewelData.JewelBasedStatUpdater(attritemp, Tree);
+            attritemp = JewelData.StatUpdater(attritemp, Tree);
 
             if (GlobalSettings.TrackedStats.Count != 0)
             {
