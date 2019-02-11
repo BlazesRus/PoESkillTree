@@ -1928,8 +1928,8 @@ namespace POESKillTree.Views
             itemAttributes.PropertyChanged += ItemAttributesPropertyChanged;
             _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
-            InventoryViewModel = new InventoryViewModel(ExtendedDialogCoordinator.Instance,
-                PersistentData.EquipmentData, itemAttributes);
+            InventoryViewModel = new InventoryViewModel(_dialogCoordinator, itemAttributes);
+            if (GlobalSettings.JewelInfo.IsInitialized == false) { GlobalSettings.JewelInfo = new JewelData(_dialogCoordinator, new JewelItemAttributes())};
             UpdateUI();
         }
 
