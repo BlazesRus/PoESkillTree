@@ -2040,13 +2040,24 @@ namespace POESKillTree
         /// </summary>
         public static string StatTrackingSavePath
         {
-            get { return GlobalSettings.StatTrackingSavePathVal; }
-            private set
+            get
             {
-                if (GlobalSettings.StatTrackingSavePathVal==value)
-                    return;
-                GlobalSettings.StatTrackingSavePathVal = value;
-                NotifyStaticPropertyChanged("StatTrackingSavePath");
+                if (GlobalSettings.StatTrackingSavePathVal == null)
+                {
+                    return GlobalSettings.DefaultTrackingDir;
+                }
+                else
+                {
+                    return GlobalSettings.StatTrackingSavePathVal;
+                }
+            }
+            set
+            {
+                if (value != null && value != "" && StatTrackingSavePathVal != value)
+                {
+                    GlobalSettings.StatTrackingSavePathVal = value;
+                    NotifyStaticPropertyChanged("StatTrackingSavePath");
+                }
             }
         }
         /// <summary>

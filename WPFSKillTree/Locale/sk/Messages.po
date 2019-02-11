@@ -29,7 +29,7 @@ msgstr "OK"
 #: Controls\Dialogs\Views\MetroMessageBoxView.xaml:77
 #: Controls\Dialogs\Views\ValidatingInputDialogView.xaml:48
 #: ItemFilter\Views\ItemFilterEditWindow.xaml:138
-#: Views\Builds\EditBuildWindow.xaml:64 Views\Crafting\CraftingView.xaml:133
+#: Views\Builds\EditBuildWindow.xaml:64 Views\Crafting\CraftingView.xaml:137
 #: Views\Crafting\UniqueCraftingView.xaml:59
 #: Views\Equipment\SocketedGemsEditingView.xaml:187
 #: Views\Equipment\TabPicker.xaml:127
@@ -172,7 +172,7 @@ msgstr "Spustiť"
 msgid "Reset settings"
 msgstr "Resetovať nastavenia"
 
-#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177 Views\MainWindow.xaml:759
+#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177 Views\MainWindow.xaml:768
 msgid "Attributes"
 msgstr "Atribúty"
 
@@ -404,7 +404,7 @@ msgstr "Názov účtu"
 msgid "Crafting Window"
 msgstr "Okno výroby"
 
-#: Views\Crafting\CraftingView.xaml:128
+#: Views\Crafting\CraftingView.xaml:132
 #: Views\Crafting\UniqueCraftingView.xaml:54
 #, fuzzy
 msgid "Create Item"
@@ -922,114 +922,119 @@ msgid "C_ross-tag highlighted Nodes"
 msgstr "Označiť zvýraznené uzly preškrtnutím"
 
 #: Views\MainWindow.xaml:552
+#, fuzzy
+msgid "Load Tracked Stat"
+msgstr "Načítať strom"
+
+#: Views\MainWindow.xaml:561
 msgid "_Help"
 msgstr "_Pomocník"
 
-#: Views\MainWindow.xaml:556
+#: Views\MainWindow.xaml:565
 msgid "_Links"
 msgstr "O_dkazy"
 
-#: Views\MainWindow.xaml:563
+#: Views\MainWindow.xaml:572
 msgid "_Path of Exile Website"
 msgstr "_Path of Exile stránka"
 
-#: Views\MainWindow.xaml:568
+#: Views\MainWindow.xaml:577
 msgid "Path of Exile _Wiki"
 msgstr "Path of Exile _Wiki"
 
-#: Views\MainWindow.xaml:574
+#: Views\MainWindow.xaml:583
 msgid "View _Help"
 msgstr "Zobraziť _pomocníka"
 
-#: Views\MainWindow.xaml:582
+#: Views\MainWindow.xaml:591
 msgid "Hot_keys"
 msgstr "_Klávesové skratky"
 
-#: Views\MainWindow.xaml:590
+#: Views\MainWindow.xaml:599
 msgid "Check for _Updates"
 msgstr "Skontrolovať _aktualizácie"
 
-#: Views\MainWindow.xaml:598
+#: Views\MainWindow.xaml:607
 msgid "_About PoESkillTree"
 msgstr "_O PoESkillTree"
 
-#: Views\MainWindow.xaml:611
+#: Views\MainWindow.xaml:620
 msgid "Skill Tree"
 msgstr "Strom zručností"
 
-#: Views\MainWindow.xaml:617
+#: Views\MainWindow.xaml:626
 msgid "Equipment"
 msgstr "Vybavenie"
 
-#: Views\MainWindow.xaml:633
+#: Views\MainWindow.xaml:642
 #, fuzzy
 msgid "Bandit"
 msgstr "Baditi"
 
-#: Views\MainWindow.xaml:647
+#: Views\MainWindow.xaml:656
 msgid "Level"
 msgstr "Level"
 
-#: Views\MainWindow.xaml:654
+#: Views\MainWindow.xaml:663
 msgid "Used Passive Skill Points"
 msgstr "Použité pasívne body"
 
-#: Views\MainWindow.xaml:659
+#: Views\MainWindow.xaml:668
 msgid "Used Ascendancy Skill Points"
 msgstr "Použité Ascendancy body"
 
-#: Views\MainWindow.xaml:666
+#: Views\MainWindow.xaml:675
 msgid "Total Passive Skill Points"
 msgstr "Celkovo pasívnych bodov"
 
-#: Views\MainWindow.xaml:671
+#: Views\MainWindow.xaml:680
 msgid "Total Ascendancy Skill Points"
 msgstr "Celkovo Ascendancy bodov"
 
-#: Views\MainWindow.xaml:726
+#: Views\MainWindow.xaml:735
 #, fuzzy
 msgid "Craft new unique"
 msgstr "Vyrobiť nový predmet"
 
-#: Views\MainWindow.xaml:730
+#: Views\MainWindow.xaml:739
 msgid "Craft new item"
 msgstr "Vyrobiť nový predmet"
 
-#: Views\MainWindow.xaml:748
+#: Views\MainWindow.xaml:757
 msgid "Saved Builds"
 msgstr "Uložené zostavy"
 
-#: Views\MainWindow.xaml:782
+#: Views\MainWindow.xaml:791
 msgid "Passive Attributes"
 msgstr "Pasívne atribúty"
 
-#: Views\MainWindow.xaml:799
+#: Views\MainWindow.xaml:808
 msgid "Item Attributes"
 msgstr "Atribúty predmetov"
 
-#: Views\MainWindow.xaml:818
+#: Views\MainWindow.xaml:827
 msgid "Total Attributes"
 msgstr "Atribúty celkovo"
 
-#: Views\MainWindow.xaml:835
+#: Views\MainWindow.xaml:844
 msgid "ItemList"
 msgstr "Údaje predmetov"
 
-#: Views\MainWindow.xaml:877
+#: Views\MainWindow.xaml:886
 msgid "Character Sheet"
 msgstr "Postava"
 
-#: Views\MainWindow.xaml:883 SkillTreeFiles\Compute.cs:2301
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
+#: Views\MainWindow.xaml:892 SkillTreeFiles\Compute.cs:2301
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
 #: Utils\Converter\GroupStringConverter.cs:31
 msgid "Defense"
 msgstr "Obrana"
 
-#: Views\MainWindow.xaml:900
+#: Views\MainWindow.xaml:909
 msgid "Offense"
 msgstr "Útok"
 
-#: Views\MainWindow.xaml:943 Views\MainWindow.xaml:946
+#: Views\MainWindow.xaml:952 Views\MainWindow.xaml:955
 #, fuzzy
 msgid "Skill tree link"
 msgstr "Odkaz stromu:"
@@ -1051,7 +1056,7 @@ msgstr "Jazyk"
 msgid "Build save path"
 msgstr "Názov zostavy"
 
-#: Views\SettingsMenuWindow.xaml:100
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:50
 msgid "Change..."
 msgstr ""
 
@@ -1094,6 +1099,32 @@ msgstr "Resetovať Ascendancy strom zručností"
 #: Views\SettingsMenuWindow.xaml:215
 msgid "Reset selected bandits"
 msgstr "Resetovať zvolené odmeny banditov"
+
+#: Views\TrackedStatsMenu.xaml:41
+msgid "TrackedStats Path:"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:55
+#, fuzzy
+msgid "TargetFile:"
+msgstr "Cieľ"
+
+#: Views\TrackedStatsMenu.xaml:74
+msgid "Load File Names From TrackedStats Directory"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:84
+msgid "Load Tracked Stats from Target File"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:89
+#, fuzzy
+msgid "Reset Tracking"
+msgstr "Resetovať nastavenia"
+
+#: Views\TrackedStatsMenu.xaml:94
+msgid "Save Tracked Stats to Target File"
+msgstr ""
 
 #: Controls\Dialogs\ExtendedDialogManager.cs:57
 msgid "Confirmation"
@@ -1149,7 +1180,7 @@ msgstr ""
 msgid "Character"
 msgstr "Postava"
 
-#: SkillTreeFiles\SkillTree.cs:1237
+#: SkillTreeFiles\SkillTree.cs:1262
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1210,92 +1241,108 @@ msgstr "Pseudo-atribút je vnorený sám v sebe, alebo hĺbka vnorenia je príli
 msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"
 msgstr "Vnorený pseudo-atribút {0} neexistuje ako najvrchnejší pseudo-atribút"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:204
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:206
 msgid "Popular"
 msgstr "Populárne"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:213
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
 #: Utils\Converter\GroupStringConverter.cs:34
 msgid "Core Attributes"
 msgstr "Základné atribúty"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:214
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
 #: Utils\Converter\GroupStringConverter.cs:30
 msgid "General"
 msgstr "Všeobecné"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:217
 #: Utils\Converter\GroupStringConverter.cs:19
 msgid "Keystone"
 msgstr "Kľúčové"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
 #: Utils\Converter\GroupStringConverter.cs:21
 msgid "Charges"
 msgstr "Náboje"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:219
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:221
 #: Utils\Converter\GroupStringConverter.cs:29
 msgid "Block"
 msgstr "Blokovanie"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
 #: Utils\Converter\GroupStringConverter.cs:28
 msgid "Shield"
 msgstr "Štít"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
 #: Utils\Converter\GroupStringConverter.cs:20
 msgid "Weapon"
 msgstr "Zbraň"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:223
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:225
 #: Utils\Converter\GroupStringConverter.cs:32
 msgid "Spell"
 msgstr "Kúzlo"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
 #: Utils\Converter\GroupStringConverter.cs:27
 msgid "Critical Strike"
 msgstr "Kritický úder"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
 #: Utils\Converter\GroupStringConverter.cs:26
 msgid "Aura"
 msgstr "Aura"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:227
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
 #: Utils\Converter\GroupStringConverter.cs:25
 msgid "Curse"
 msgstr "Prekliatie"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
 #: Utils\Converter\GroupStringConverter.cs:22
 msgid "Minion"
 msgstr "Minion"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
 #: Utils\Converter\GroupStringConverter.cs:23
 msgid "Trap"
 msgstr "Pasca"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:24
 msgid "Totem"
 msgstr "Totem"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:33
 #: ItemFilter\Model\FilterManager.cs:674
 msgid "Flasks"
 msgstr "Fľaše"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
+msgid "Jewel Types"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+msgid "Tracked PseudoTotals"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
 #: Utils\Converter\GroupStringConverter.cs:35
 msgid "Everything Else"
 msgstr "Ostatné"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:603
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:237
+msgid "Calculated Other Totals"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:238
+msgid "Hidden"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:633
 msgid "Advanced"
 msgstr "Pokročilé"
 
@@ -1355,11 +1402,11 @@ msgstr "_Označené uzly"
 msgid "Please tag non-skilled nodes by right-clicking them."
 msgstr "Prosím označte nevycvičené uzly pomocou kliknutia pravým tlačidlom."
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:66
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:85
 msgid "The Skill Tree Generator is already open"
 msgstr "Generátor stromu zručností je už otverný"
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:81
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:100
 msgid "Could not open Skill Tree Generator"
 msgstr "Nepodarilo sa otvoriť generátor stromu zručností"
 
@@ -1535,7 +1582,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr ""
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:454
-#: Views\MainWindow.xaml.cs:957
+#: Views\MainWindow.xaml.cs:984
 msgid "Do you want to continue?"
 msgstr "Chcete pokračovať?"
 
@@ -1667,6 +1714,7 @@ msgid "Restart is needed"
 msgstr "Reštart je potrebný"
 
 #: ViewModels\SettingsMenuViewModel.cs:67
+#: ViewModels\TrackedStatsMenuModel.cs:101
 msgid ""
 "Select the directory where builds will be stored.\n"
 "It will be created if it does not yet exist."
@@ -1677,6 +1725,15 @@ msgid ""
 "There are unsaved builds. Do you want to save them before changing build directory?\n"
 "\n"
 "If you cancel, the build directory will not be changed."
+msgstr ""
+
+#: ViewModels\TrackedStatsMenuModel.cs:69
+#, fuzzy
+msgid "Tracked Stat Settings"
+msgstr "Resetovať nastavenia"
+
+#: ViewModels\TrackedStatsMenuModel.cs:100
+msgid "Select TrackedStat directory"
 msgstr ""
 
 #: Views\Builds\EditBuildWindow.xaml.cs:16
@@ -1692,63 +1749,64 @@ msgstr "Posledná zmena: {0}"
 msgid "Help file not found"
 msgstr "Súbor pomocníka nebol nájdený"
 
-#: Views\MainWindow.xaml.cs:357
+#: Views\MainWindow.xaml.cs:373
 msgid "Create New Attribute Group"
 msgstr "Vytvoriť novú skupinu atribútov"
 
-#: Views\MainWindow.xaml.cs:357
+#: Views\MainWindow.xaml.cs:373
 msgid "Group name"
 msgstr "Názov skupiny"
 
-#: Views\MainWindow.xaml.cs:362
+#: Views\MainWindow.xaml.cs:378
 msgid "A group with that name already exists."
 msgstr "Skupina s daným názvom už existuje."
 
-#: Views\MainWindow.xaml.cs:453
+#: Views\MainWindow.xaml.cs:480
 msgid "Initialization"
 msgstr "Inicializácia"
 
-#: Views\MainWindow.xaml.cs:454 Views\MainWindow.xaml.cs:553
-msgid "Initalizing window ..."
+#: Views\MainWindow.xaml.cs:481 Views\MainWindow.xaml.cs:580
+#, fuzzy
+msgid "Initializing window ..."
 msgstr "Inicializácia okna ..."
 
-#: Views\MainWindow.xaml.cs:481
+#: Views\MainWindow.xaml.cs:508
 msgid "Highlight nodes by attribute"
 msgstr "Zvýrazniť uzly podľa atribútu"
 
-#: Views\MainWindow.xaml.cs:486
+#: Views\MainWindow.xaml.cs:513
 msgid "Remove highlights by attribute"
 msgstr "Zrušiť zvýraznenia podľa atribútu"
 
-#: Views\MainWindow.xaml.cs:546
+#: Views\MainWindow.xaml.cs:573
 msgid "Loading skill tree assets ..."
 msgstr "Sťahujem údaje stromu zručností ..."
 
-#: Views\MainWindow.xaml.cs:576
+#: Views\MainWindow.xaml.cs:603
 msgid "Load Tree"
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:582
+#: Views\MainWindow.xaml.cs:609
 #, fuzzy
 msgid "Load as new build"
 msgstr "Nová zostava"
 
-#: Views\MainWindow.xaml.cs:774
+#: Views\MainWindow.xaml.cs:801
 msgid ""
 "There are unsaved builds. Do you want to save them before closing?\n"
 "\n"
 "Canceling stops the program from closing and does not save any builds."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:804
+#: Views\MainWindow.xaml.cs:831
 msgid "Are you sure?"
 msgstr "Ste si istý?"
 
-#: Views\MainWindow.xaml.cs:805
+#: Views\MainWindow.xaml.cs:832
 msgid "Untag All Skill Nodes"
 msgstr "Zrušiť označenie všetkých uzlov"
 
-#: Views\MainWindow.xaml.cs:878
+#: Views\MainWindow.xaml.cs:905
 #, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
@@ -1756,124 +1814,124 @@ msgstr[0] "{0}, {1} bod"
 msgstr[1] "{0}, {1} body"
 msgstr[2] "{0}, {1} bodov"
 
-#: Views\MainWindow.xaml.cs:912
+#: Views\MainWindow.xaml.cs:939
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Vaša zostava musí obsahovať aspoň jeden uzol pre vytvorenie snímky"
 
-#: Views\MainWindow.xaml.cs:948 Views\MainWindow.xaml.cs:2044
+#: Views\MainWindow.xaml.cs:975 Views\MainWindow.xaml.cs:2260
 msgid "An error occurred while copying to Clipboard."
 msgstr "Nastala chyba počas kopírovania do Schránky."
 
-#: Views\MainWindow.xaml.cs:954
+#: Views\MainWindow.xaml.cs:981
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:963
+#: Views\MainWindow.xaml.cs:990
 msgid "Downloading skill tree assets ..."
 msgstr "Sťahujem údaje stromu zručností ..."
 
-#: Views\MainWindow.xaml.cs:984
+#: Views\MainWindow.xaml.cs:1011
 msgid "An error occurred while downloading assets."
 msgstr "Nastala chyba počas sťahovania údajov."
 
-#: Views\MainWindow.xaml.cs:1039
+#: Views\MainWindow.xaml.cs:1071
 msgid "Checking for updates"
 msgstr "Kontrola aktualizácií"
 
-#: Views\MainWindow.xaml.cs:1044
+#: Views\MainWindow.xaml.cs:1076
 msgid "You have the latest version!"
 msgstr "Máte najnovšiu verziu!"
 
-#: Views\MainWindow.xaml.cs:1049
+#: Views\MainWindow.xaml.cs:1081
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Aktualizácia pre {0} ({1}) je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1052
+#: Views\MainWindow.xaml.cs:1084
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Po dokončení sťahovania bude aplikácia zatvorená, aby mohla aktualizácia prebehnúť."
 
-#: Views\MainWindow.xaml.cs:1053
+#: Views\MainWindow.xaml.cs:1085
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Nová verzia {0} je k dispozícii!"
 
-#: Views\MainWindow.xaml.cs:1056
+#: Views\MainWindow.xaml.cs:1088
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Nová verzia aplikácie bude nainštalovaná súbežne s predchádzajúcimi verziami."
 
-#: Views\MainWindow.xaml.cs:1060
+#: Views\MainWindow.xaml.cs:1092
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Upozornenie: Toto je predbežná verzia, ktorá môže obsahovať chyby!"
 
-#: Views\MainWindow.xaml.cs:1064
+#: Views\MainWindow.xaml.cs:1096
 msgid "Do you want to download and install the update?"
 msgstr "Chcete stiahnuť a nainštalovať aktualizáciu?"
 
-#: Views\MainWindow.xaml.cs:1065
+#: Views\MainWindow.xaml.cs:1097
 msgid "Do you want to download and install the new version?"
 msgstr "Chcete stiahnuť a nainštalovať novú verziu?"
 
-#: Views\MainWindow.xaml.cs:1067
+#: Views\MainWindow.xaml.cs:1099
 msgid "Continue installation?"
 msgstr "Pokračovať s inštaláciou?"
 
-#: Views\MainWindow.xaml.cs:1078
+#: Views\MainWindow.xaml.cs:1110
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Nastala chyba pri pokuse kontaktovať lokáciu pre aktualizácie."
 
-#: Views\MainWindow.xaml.cs:1086
+#: Views\MainWindow.xaml.cs:1118
 msgid "Downloading latest version"
 msgstr "Sťahujem najnovšiu verziu"
 
-#: Views\MainWindow.xaml.cs:1101 Views\MainWindow.xaml.cs:1116
+#: Views\MainWindow.xaml.cs:1133 Views\MainWindow.xaml.cs:1148
 msgid "An error occurred during the download operation."
 msgstr "Nastala chyba počas sťahovania."
 
-#: Views\MainWindow.xaml.cs:1129
+#: Views\MainWindow.xaml.cs:1161
 msgid "An error occurred while attempting to start the installation."
 msgstr "Nastala chyba pri pokuse spustiť inštaláciu."
 
-#: Views\MainWindow.xaml.cs:1775
+#: Views\MainWindow.xaml.cs:1991
 msgid "An error occurred while attempting to load item data."
 msgstr "Nastala chyba pri pokuse načítať údaje predmetov."
 
-#: Views\MainWindow.xaml.cs:1869 Views\MainWindow.xaml.cs:1912
+#: Views\MainWindow.xaml.cs:2085 Views\MainWindow.xaml.cs:2128
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Nastala chyba pri pokuse načítať strom zručností z URL."
 
-#: Views\MainWindow.xaml.cs:1891
+#: Views\MainWindow.xaml.cs:2107
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1892
+#: Views\MainWindow.xaml.cs:2108
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1893
+#: Views\MainWindow.xaml.cs:2109
 #, fuzzy
 msgid "Replace Bandits settings"
 msgstr "Resetovať nastavenia"
 
-#: Views\MainWindow.xaml.cs:1919
+#: Views\MainWindow.xaml.cs:2135
 #, fuzzy
 msgid "Current: "
 msgstr "Platidlo"
 
-#: Views\MainWindow.xaml.cs:1920
+#: Views\MainWindow.xaml.cs:2136
 #, fuzzy
 msgid "Loaded: "
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:2024
+#: Views\MainWindow.xaml.cs:2240
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Vytváranie Po_EUrl odkazu"
 
-#: Views\MainWindow.xaml.cs:2030
+#: Views\MainWindow.xaml.cs:2246
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Nastala chyba pri pokuse kontaktovať PoEUrl lokáciu."
 
-#: Views\MainWindow.xaml.cs:2040
+#: Views\MainWindow.xaml.cs:2256
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "PoEUrl odkaz bol skopírovaný do Schránky."
 
