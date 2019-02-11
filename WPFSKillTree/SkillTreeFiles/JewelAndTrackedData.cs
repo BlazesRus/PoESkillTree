@@ -1132,15 +1132,15 @@ namespace POESKillTree
                     }
                 }
             }
-            float AccuracySubtotal = 0.0f;
+            float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             if (attrlist.ContainsKey("+# Accuracy Rating"))
             {
-                AccuracySubtotal += attrlist["+# Accuracy Rating"][0];
+                Subtotal += attrlist["+# Accuracy Rating"][0];
             }
             if (attrlist.ContainsKey("+# to Accuracy Rating"))
             {
-                AccuracySubtotal += attrlist["+# to Accuracy Rating"][0];
+                Subtotal += attrlist["+# to Accuracy Rating"][0];
             }
             if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
             {
@@ -1157,15 +1157,39 @@ namespace POESKillTree
             if (TotalIncrease != 0.0f)
             {
                 TotalIncrease = (100.0f + TotalIncrease) / 100;
-                AccuracySubtotal *= TotalIncrease;
+                Subtotal *= TotalIncrease;
             }
             if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
             {
-                attrlist["# DualWand Accuracy Subtotal"][0] = AccuracySubtotal;
+                attrlist["# DualWand Accuracy Subtotal"][0] = Subtotal;
             }
             else
             {
-                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { AccuracySubtotal });
+                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = attrlist["+# to maximum Life"][0];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = attrlist["#% increased maximum Life"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# HP Subtotal"))
+            {
+                attrlist["# HP Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# HP Subtotal", new List<float>(1) { Subtotal });
             }
             return attrlist;
         }
@@ -1798,15 +1822,15 @@ namespace POESKillTree
             }
 
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
-            float AccuracySubtotal = 0.0f;
+            float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             if (attrlist.ContainsKey("+# Accuracy Rating"))
             {
-                AccuracySubtotal += attrlist["+# Accuracy Rating"];
+                Subtotal += attrlist["+# Accuracy Rating"];
             }
             if (attrlist.ContainsKey("+# to Accuracy Rating"))
             {
-                AccuracySubtotal += attrlist["+# to Accuracy Rating"];
+                Subtotal += attrlist["+# to Accuracy Rating"];
             }
             if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
             {
@@ -1823,15 +1847,39 @@ namespace POESKillTree
             if (TotalIncrease != 0.0f)
             {
                 TotalIncrease = (100.0f + TotalIncrease)/100;
-                AccuracySubtotal *= TotalIncrease;
+                Subtotal *= TotalIncrease;
             }
             if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
             {
-                attrlist["# DualWand Accuracy Subtotal"] = AccuracySubtotal;
+                attrlist["# DualWand Accuracy Subtotal"] = Subtotal;
             }
             else
             {
-                attrlist.Add("# DualWand Accuracy Subtotal", AccuracySubtotal);
+                attrlist.Add("# DualWand Accuracy Subtotal", Subtotal);
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = attrlist["+# to maximum Life"];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = attrlist["#% increased maximum Life"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# HP Subtotal"))
+            {
+                attrlist["# HP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# HP Subtotal", Subtotal);
             }
             return attrlist;
         }

@@ -1929,7 +1929,7 @@ namespace POESKillTree.Views
             _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
             InventoryViewModel = new InventoryViewModel(_dialogCoordinator, itemAttributes);
-            if (GlobalSettings.JewelInfo.IsInitialized == false) { GlobalSettings.JewelInfo = new JewelData(_dialogCoordinator, new JewelItemAttributes())};
+            if (GlobalSettings.JewelInfo.IsInitialized == false) { GlobalSettings.JewelInfo = new JewelData(_dialogCoordinator, new JewelItemAttributes()); };
             UpdateUI();
         }
 
