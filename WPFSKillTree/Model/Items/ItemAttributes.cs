@@ -9,7 +9,7 @@ using System.Windows.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Model.Items.Enums;
+using PoESkillTree.GameModel.Skills;
 using POESKillTree.Model.Items.Mods;
 using POESKillTree.Utils;
 using POESKillTree.ViewModels;
@@ -20,70 +20,12 @@ namespace POESKillTree.Model.Items
     {
         #region slotted items
 
-        public Item Armor
-        {
-            get { return GetItemInSlot(ItemSlot.BodyArmour); }
-            set { SetItemInSlot(value, ItemSlot.BodyArmour); }
-        }
+        private Item MainHand => GetItemInSlot(ItemSlot.MainHand);
 
-        public Item MainHand
-        {
-            get { return GetItemInSlot(ItemSlot.MainHand); }
-            set { SetItemInSlot(value, ItemSlot.MainHand); }
-        }
-
-        public Item OffHand
-        {
-            get { return GetItemInSlot(ItemSlot.OffHand); }
-            set { SetItemInSlot(value, ItemSlot.OffHand); }
-        }
-
-        public Item Ring
-        {
-            get { return GetItemInSlot(ItemSlot.Ring); }
-            set { SetItemInSlot(value, ItemSlot.Ring); }
-        }
-
-        public Item Ring2
-        {
-            get { return GetItemInSlot(ItemSlot.Ring2); }
-            set { SetItemInSlot(value, ItemSlot.Ring2); }
-        }
-
-        public Item Amulet
-        {
-            get { return GetItemInSlot(ItemSlot.Amulet); }
-            set { SetItemInSlot(value, ItemSlot.Amulet); }
-        }
-
-        public Item Helm
-        {
-            get { return GetItemInSlot(ItemSlot.Helm); }
-            set { SetItemInSlot(value, ItemSlot.Helm); }
-        }
-
-        public Item Gloves
-        {
-            get { return GetItemInSlot(ItemSlot.Gloves); }
-            set { SetItemInSlot(value, ItemSlot.Gloves); }
-        }
-
-        public Item Boots
-        {
-            get { return GetItemInSlot(ItemSlot.Boots); }
-            set { SetItemInSlot(value, ItemSlot.Boots); }
-        }
-
-        public Item Belt
-        {
-            get { return GetItemInSlot(ItemSlot.Belt); }
-            set { SetItemInSlot(value, ItemSlot.Belt); }
-        }
+        private Item OffHand => GetItemInSlot(ItemSlot.OffHand);
 
         public Item GetItemInSlot(ItemSlot slot)
-        {
-            return Equip.FirstOrDefault(i => i.Slot == slot);
-        }
+            => Equip.FirstOrDefault(i => i.Slot == slot);
 
         public void SetItemInSlot(Item value, ItemSlot slot)
         {
@@ -156,13 +98,14 @@ namespace POESKillTree.Model.Items
         private ListCollectionView _attributes;
         public ListCollectionView Attributes
         {
-            get { return _attributes; }
-            private set { SetProperty(ref _attributes, value); }
+            get => _attributes;
+            private set => SetProperty(ref _attributes, value);
         }
 
         public IReadOnlyList<ItemMod> NonLocalMods { get; private set; }
 
-        private readonly IPersistentData _persistentData;
+        private readonly EquipmentData _equipmentData;
+        private readonly SkillDefinitions _skillDefinitions;
 
         public event EventHandler ItemDataChanged;
 
@@ -180,46 +123,32 @@ namespace POESKillTree.Model.Items
             RefreshItemAttributes();
         }
 
-        public ItemAttributes(IPersistentData persistentData, string itemData)
+        public ItemAttributes(EquipmentData equipmentData, SkillDefinitions skillDefinitions, string itemData)
         {
-            _persistentData = persistentData;
+            _equipmentData = equipmentData;
+            _skillDefinitions = skillDefinitions;
             Equip = new ObservableCollection<Item>();
 
             var jObject = JObject.Parse(itemData);
             foreach (JObject jobj in (JArray)jObject["items"])
             {
-                switch (jobj["inventoryId"].Value<string>())
+                var inventoryId = jobj.Value<string>("inventoryId");
+                switch (inventoryId)
                 {
-                    case "BodyArmour":
-                        AddItem(jobj, ItemSlot.BodyArmour);
-                        break;
-                    case "Ring":
-                        AddItem(jobj, ItemSlot.Ring);
-                        break;
-                    case "Ring2":
-                        AddItem(jobj, ItemSlot.Ring2);
-                        break;
-                    case "Gloves":
-                        AddItem(jobj, ItemSlot.Gloves);
-                        break;
                     case "Weapon":
-                        AddItem(jobj, ItemSlot.MainHand);
+                        inventoryId = "MainHand";
                         break;
                     case "Offhand":
-                        AddItem(jobj, ItemSlot.OffHand);
+                        inventoryId = "OffHand";
                         break;
-                    case "Helm":
-                        AddItem(jobj, ItemSlot.Helm);
+                    case "Flask":
+                        inventoryId = $"Flask{jobj.Value<int>("x") + 1}";
                         break;
-                    case "Boots":
-                        AddItem(jobj, ItemSlot.Boots);
-                        break;
-                    case "Amulet":
-                        AddItem(jobj, ItemSlot.Amulet);
-                        break;
-                    case "Belt":
-                        AddItem(jobj, ItemSlot.Belt);
-                        break;
+                }
+
+                if (EnumsNET.Enums.TryParse(inventoryId, out ItemSlot slot))
+                {
+                    AddItem(jobj, slot);
                 }
             }
 
@@ -232,43 +161,10 @@ namespace POESKillTree.Model.Items
             foreach (var item in Equip)
             {
                 var jItem = item.JsonBase;
-                switch (item.Slot)
-                {
-                    case ItemSlot.BodyArmour:
-                        jItem["inventoryId"] = "BodyArmour";
-                        break;
-                    case ItemSlot.MainHand:
-                        jItem["inventoryId"] = "Weapon";
-                        break;
-                    case ItemSlot.OffHand:
-                        jItem["inventoryId"] = "Offhand";
-                        break;
-                    case ItemSlot.Ring:
-                        jItem["inventoryId"] = "Ring";
-                        break;
-                    case ItemSlot.Ring2:
-                        jItem["inventoryId"] = "Ring2";
-                        break;
-                    case ItemSlot.Amulet:
-                        jItem["inventoryId"] = "Amulet";
-                        break;
-                    case ItemSlot.Helm:
-                        jItem["inventoryId"] = "Helm";
-                        break;
-                    case ItemSlot.Gloves:
-                        jItem["inventoryId"] = "Gloves";
-                        break;
-                    case ItemSlot.Boots:
-                        jItem["inventoryId"] = "Boots";
-                        break;
-                    case ItemSlot.Belt:
-                        jItem["inventoryId"] = "Belt";
-                        break;
-                }
+                jItem["inventoryId"] = item.Slot.ToString();
                 items.Add(jItem);
             }
-            var jObj = new JObject();
-            jObj["items"] = items;
+            var jObj = new JObject { ["items"] = items };
             return jObj.ToString(Formatting.None);
         }
 
@@ -347,7 +243,7 @@ namespace POESKillTree.Model.Items
 
         private void AddItem(JObject val, ItemSlot islot)
         {
-            var item = new Item(_persistentData, val, islot);
+            var item = new Item(_equipmentData, _skillDefinitions, val, islot);
             Equip.Add(item);
             item.PropertyChanged += SlottedItemOnPropertyChanged;
         }
@@ -359,28 +255,20 @@ namespace POESKillTree.Model.Items
 
             private readonly List<float> _value;
 
-            private readonly string _group;
-            public string Group
-            {
-                get { return _group; }
-            }
+            public string Group { get; }
 
-            private readonly string _attribute;
-            public string TextAttribute
-            {
-                get { return _attribute; }
-            }
+            public string TextAttribute { get; }
 
             public string ValuedAttribute
             {
-                get { return _value.Aggregate(_attribute, (current, f) => Backreplace.Replace(current, f + "", 1)); }
+                get { return _value.Aggregate(TextAttribute, (current, f) => Backreplace.Replace(current, f + "", 1)); }
             }
 
             public Attribute(string s, IEnumerable<float> val, string grp)
             {
-                _attribute = s;
+                TextAttribute = s;
                 _value = new List<float>(val);
-                _group = grp;
+                Group = grp;
             }
 
             public void Add(IReadOnlyList<float> val)

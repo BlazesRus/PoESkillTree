@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Model.Items.Enums;
 using POESKillTree.Model.Items.Mods;
 
 namespace POESKillTree.Model.Items
@@ -71,11 +70,8 @@ namespace POESKillTree.Model.Items
         /// <param name="itemSlot">The slot the parent <see cref="Item"/> is slotted into.
         /// <see cref="ItemSlot.Unequipable"/> if is not equipped.</param>
         /// <param name="typeLine">The TypeLine property of the parent <see cref="Item"/>.</param>
-        /// <param name="weaponClass">A string representing the weapon class of the parent <see cref="Item"/>.
-        /// Can be null or empty if that item is not a weapon. The weapon class generally is a property without value.</param>
         /// <param name="frameType">The frame type of the item.</param>
-        public ItemBase(ItemImageService itemImageService,
-            ItemSlot itemSlot, string typeLine, string weaponClass, FrameType frameType)
+        public ItemBase(ItemImageService itemImageService, ItemSlot itemSlot, string typeLine, FrameType frameType)
         {
             // These don't matter as we won't create new items from this base.
             Level = 0;
@@ -127,18 +123,6 @@ namespace POESKillTree.Model.Items
                 {
                     ItemClass = ItemClass.Belt;
                 }
-                else if (!string.IsNullOrWhiteSpace(weaponClass))
-                {
-                    // This will not catch ThrustingOneHandSword and Sceptre,
-                    // but the distinction between those and OneHandSword and OneHandMace only matters for mod crafting
-                    var itemClassStr = weaponClass.Replace("Handed", "Hand")
-                        .Replace(" ", "").Trim();
-                    ItemClass type;
-                    if (Enum.TryParse(itemClassStr, true, out type))
-                    {
-                        ItemClass = type;
-                    }
-                }
             }
 
             // This might miss some tags, but those are only important for mod crafting, 
@@ -150,7 +134,7 @@ namespace POESKillTree.Model.Items
 
         /// <summary>
         /// Returns the <see cref="ItemClass"/> that fits <paramref name="itemSlot"/>
-        /// if it's not ambigous.
+        /// if it's not ambiguous.
         /// </summary>
         private static ItemClass ItemSlotToClass(ItemSlot itemSlot)
         {

@@ -380,11 +380,6 @@ namespace POESKillTree.TreeGenerator.ViewModels
         public LeafSetting<bool> TreePlusItemsMode { get; }
 
         /// <summary>
-        /// The item information sent along to enable TreePlusItemsMode to be used
-        /// </summary>
-        private InventoryViewModel _ItemInfo;
-
-        /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
         public InventoryViewModel ItemInfo
@@ -848,11 +843,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private Dictionary<string, float> CreateInitialAttributes()
         {
             // base attributes: SkillTree.BaseAttributes, SkillTree.CharBaseAttributes
-            var stats = new Dictionary<string, float>(SkillTree.BaseAttributes);
-            foreach (var attr in SkillTree.CharBaseAttributes[Tree.Chartype])
-            {
-                stats[attr.Key] = attr.Value;
-            }
+            var stats = SkillTree.BaseAttributes
+                .Concat(SkillTree.CharBaseAttributes[Tree.CharClass])
+                .ToDictionary();
             // Level attributes (flat mana, life, evasion and accuracy) are blacklisted, because they are also dependent
             // on core attributes, which are dependent on the actual tree and are pretty pointless as basic attributes anyway.
             // For the calculation of pseudo attributes, they need to be included however.

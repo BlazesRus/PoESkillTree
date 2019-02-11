@@ -30,6 +30,8 @@ namespace POESKillTree.Model.Items.Mods
 
         private readonly IEnumerable<IMod> _allMods;
 
+        public IMod DefaultMod => _allMods.First();
+
         public Affix()
             : this(new IMod[0])
         {
@@ -93,9 +95,7 @@ namespace POESKillTree.Model.Items.Mods
         public IEnumerable<IMod> QueryMods(IEnumerable<(int valueIndex, int value)> values)
         {
             if (!_trees.Any())
-            {
-                return Enumerable.Empty<IMod>();
-            }
+                return _allMods;
 
             // for each value: query matching tiers
             return values.Select(t => QueryModsSingleValue(t.valueIndex, t.value))

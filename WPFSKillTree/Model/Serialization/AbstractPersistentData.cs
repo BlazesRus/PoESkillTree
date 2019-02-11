@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PoESkillTree.GameModel;
 using POESKillTree.Controls;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Model.Builds;
@@ -51,13 +52,7 @@ namespace POESKillTree.Model.Serialization
             set { SetProperty(ref _equipmentData, value); }
         }
 
-        public string StatTrackingSavePath
-        {
-            get { return GlobalSettings.StatTrackingSavePathVal; }
-            set { SetProperty(ref GlobalSettings.StatTrackingSavePathVal, value); }
-        }
-
-        public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
+        public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator, GameData gameData);
 
         public abstract void Save();
 
@@ -72,5 +67,11 @@ namespace POESKillTree.Model.Serialization
         public abstract Task<PoEBuild> ImportBuildAsync(string buildXml);
 
         public abstract string ExportBuild(PoEBuild build);
+
+        public string StatTrackingSavePath
+        {
+            get { return GlobalSettings.StatTrackingSavePathVal; }
+            set { SetProperty(ref GlobalSettings.StatTrackingSavePathVal, value); }
+        }
     }
 }
