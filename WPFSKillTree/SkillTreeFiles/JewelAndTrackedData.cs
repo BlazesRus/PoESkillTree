@@ -1041,7 +1041,41 @@ namespace POESKillTree
                     }
                 }
             }
-            //Accuracy subtotal
+            float AccuracySubtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            {
+                AccuracySubtotal += attrlist["+# Accuracy Rating"][0];
+            }
+            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            {
+                AccuracySubtotal += attrlist["+# to Accuracy Rating"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating with Wands"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating while Dual Wielding"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += attrlist["+# increased Global Accuracy Rating"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                AccuracySubtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            {
+                attrlist["# DualWand Accuracy Subtotal"][0] = AccuracySubtotal;
+            }
+            else
+            {
+                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { AccuracySubtotal });
+            }
             return attrlist;
         }
 
@@ -1672,8 +1706,42 @@ namespace POESKillTree
                 }
             }
 
-            //Accuracy Subtotal
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
+            float AccuracySubtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            {
+                AccuracySubtotal += attrlist["+# Accuracy Rating"];
+            }
+            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            {
+                AccuracySubtotal += attrlist["+# to Accuracy Rating"];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating with Wands"];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating while Dual Wielding"];
+            }
+            if (attrlist.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += attrlist["+# increased Global Accuracy Rating"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease)/100;
+                AccuracySubtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            {
+                attrlist["# DualWand Accuracy Subtotal"] = AccuracySubtotal;
+            }
+            else
+            {
+                attrlist.Add("# DualWand Accuracy Subtotal", AccuracySubtotal);
+            }
             return attrlist;
         }
     }
