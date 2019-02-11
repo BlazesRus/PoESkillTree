@@ -47,10 +47,10 @@ namespace POESKillTree
 
     /// <summary>
     /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.Dictionary{System.Int32, POESKillTree.JewelNodeData}" />
-    public class JewelDictionary : Dictionary<ushort, JewelNodeData>
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
+    public class JewelData : Dictionary<ushort, JewelNodeData>
     {
         /// <summary>
         /// Keys for Strength Threshold Jewel Slots
@@ -83,7 +83,7 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
         /// </summary>
-        public JewelDictionary() : base()
+        public JewelData() : base()
         {
             StrJewelSlots = new System.Collections.Generic.List<ushort>();
             IntJewelSlots = new System.Collections.Generic.List<ushort>();
@@ -165,7 +165,7 @@ namespace POESKillTree
                     if (IsIntThreshold)
                     {
                         StrIntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Int Based Jewel","Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Int Based Jewel", "Jewel Socket ID: " + NodeID };
                     }
                     else if (IsDexThreshold)
                     {
@@ -199,34 +199,20 @@ namespace POESKillTree
                 else//Neutral(often ineffective corner jewels)
                 {
                     NeutralJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket","Jewel Socket ID: "+NodeID };
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "Jewel Socket ID: " + NodeID };
                 }
             }
 
         }
-
-        public static explicit operator System.Collections.Generic.List<ushort>(JewelDictionary self)
+        public static explicit operator System.Collections.Generic.List<ushort>(JewelData self)
         {
             return new List<ushort>(self.Keys);
-        }
-    }
-
-    public class JewelData
-    {
-        /// <summary>
-        ///  Stored information for linked node IDs with Jewel items in tree
-        /// </summary>
-        public JewelDictionary JewelInfo;
-
-        public JewelData()
-        {
-            JewelInfo = new JewelDictionary();
         }
 
         /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) JewelInfo; } }
+        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) this; } }
 
       //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
       //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
@@ -404,7 +390,7 @@ namespace POESKillTree
             float AreaStats;
             ushort NodeID;
             SkillNode CurrentNode;
-            POESKillTree.Model.Items.Item CurrentJewelData;
+            JewelItem CurrentJewelData;
             int GrandSpectrumTotal = 0;
             int ElemGrandSpectrums = 0;
             int ArmourGrandSpectrums = 0;
@@ -1090,12 +1076,12 @@ namespace POESKillTree
         /// <param name="ItemInfo">The item information.</param>
         /// <param name="Tree">The tree.</param>
         /// <returns></returns>
-        static public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, InventoryViewModel ItemInfo, SkillTree Tree)
+        static public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, SkillTree Tree)
         {
             float AreaStats;
             ushort NodeID;
             SkillNode CurrentNode;
-            POESKillTree.Model.Items.Item CurrentJewelData;
+            JewelItem CurrentJewelData;
             int GrandSpectrumTotal = 0;
             int ElemGrandSpectrums = 0;
             int ArmourGrandSpectrums = 0;
@@ -2015,14 +2001,14 @@ namespace POESKillTree
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
-        public static JewelDictionary JewelInfo
+        public static JewelData JewelInfo
         {
-            get { return JewelStorage.JewelInfo; }
-            private set
+            get { return JewelStorage; }
+            set
             {
-                if (value == JewelStorage.JewelInfo)
+                if (value == JewelStorage)
                     return;
-                JewelStorage.JewelInfo = value;
+                JewelStorage = value;
                 NotifyStaticPropertyChanged("JewelInfo");
             }
         }
@@ -2065,7 +2051,7 @@ namespace POESKillTree
             }
         }
         /// <summary>
-        /// Saved slot for item slot that are removing Intuitive leap support from
+        /// Saved slot for item slot that are removing Intuitive leap support from node id on tree
         /// </summary>
         public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
         /// <summary>
@@ -2090,7 +2076,7 @@ namespace POESKillTree
         public static InventoryViewModel ItemInfo
         {
             get { return ItemInfoVal; }
-            private set
+            set
             {
                 if (value == ItemInfoVal)
                     return;
@@ -2098,5 +2084,7 @@ namespace POESKillTree
                 NotifyStaticPropertyChanged("ItemInfo");
             }
         }
+
+        public const string LeapedNode = "Intuitive Leaped";
     }
 }

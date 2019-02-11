@@ -63,6 +63,11 @@ namespace POESKillTree.ViewModels.Equipment
             DeleteCommand = new RelayCommand(Delete, CanDelete);
         }
 
+        public static explicit operator DraggableJewelItemViewModel(DraggableItemViewModel self)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Delete()
         {
             Item = null;

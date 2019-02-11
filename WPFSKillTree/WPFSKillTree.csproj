@@ -210,6 +210,8 @@
     <Compile Include="Controls\SearchableComboBox.cs" />
     <Compile Include="Model\Builds\GGGBuild.cs" />
     <Compile Include="Model\GameDataWithOldTreeModel.cs" />
+    <Compile Include="Model\Items\JewelItem.cs" />
+    <Compile Include="Model\Items\JewelItemAttributes.cs" />
     <Compile Include="Model\Items\Mods\ModGroup.cs" />
     <Compile Include="Model\Items\Mods\IMod.cs" />
     <Compile Include="Model\Items\Mods\JsonCraftingBenchOption.cs" />
@@ -240,6 +242,8 @@
     <Compile Include="ViewModels\Crafting\ModSelectorViewModel.cs" />
     <Compile Include="ViewModels\Crafting\SliderGroupViewModel.cs" />
     <Compile Include="ViewModels\Crafting\SliderViewModel.cs" />
+    <Compile Include="ViewModels\Equipment\DraggeableJewelItemViewModel.cs" />
+    <Compile Include="ViewModels\Equipment\JewelItemViewModel.cs" />
     <Compile Include="ViewModels\Equipment\SocketedGemsEditingViewModel.cs" />
     <Compile Include="ViewModels\Crafting\UniqueCraftingViewModel.cs" />
     <Compile Include="ViewModels\Equipment\BinViewModel.cs" />
