@@ -102,14 +102,8 @@ namespace POESKillTree.Views
         /// </summary>
         public InventoryViewModel InventoryViewModel
         {
-            get { return GlobalSettings.ItemInfoVal; }
-            private set
-            {
-                if (value == GlobalSettings.ItemInfoVal)
-                    return;
-                GlobalSettings.ItemInfoVal = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InventoryViewModel)));
-            }
+            get => GlobalSettings.ItemInfoVal;
+            private set => SetProperty(ref GlobalSettings.ItemInfoVal, value);
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel();
