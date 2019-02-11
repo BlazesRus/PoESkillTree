@@ -34,8 +34,7 @@ namespace POESKillTree.ViewModels.Equipment
         public override DragDropEffects DropOnInventoryEffect => DragDropEffects.Link;
         public override DragDropEffects DropOnStashEffect => DragDropEffects.Copy;
 
-        public JewelItemViewModel(IExtendedDialogCoordinator dialogCoordinator,
-            JewelItemAttributes itemAttributes, ushort slot)
+        public JewelItemViewModel(IExtendedJewelDialogCoordinator dialogCoordinator,JewelItemAttributes itemAttributes, ushort slot)
             : base(dialogCoordinator)
         {
             _itemAttributes = itemAttributes;
