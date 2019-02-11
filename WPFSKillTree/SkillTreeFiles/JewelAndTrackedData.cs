@@ -91,8 +91,15 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
         /// </summary>
-        public JewelDictionary()
+        public JewelDictionary() : base()
         {
+            StrJewelSlots = new System.Collections.Generic.List<ushort>();
+            IntJewelSlots = new System.Collections.Generic.List<ushort>();
+            DexJewelSlots = new System.Collections.Generic.List<ushort>();
+            StrIntJewelSlots = new System.Collections.Generic.List<ushort>();
+            StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
+            IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
+            NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
 
         }
         /// <summary>
@@ -218,6 +225,11 @@ namespace POESKillTree
         ///  Stored information for linked node IDs with Jewel items in tree
         /// </summary>
         public JewelDictionary JewelInfo;
+
+        public JewelData()
+        {
+            JewelInfo = new JewelDictionary();
+        }
 
         /// <summary>
         /// Property that converts JewelDictionary into List of node ids
@@ -1995,7 +2007,7 @@ namespace POESKillTree
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
-        public static JewelData JewelStorage;
+        public static JewelData JewelStorage = new JewelData();
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
