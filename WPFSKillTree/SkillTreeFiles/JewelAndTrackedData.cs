@@ -29,12 +29,12 @@ namespace POESKillTree
         /// <summary>
         /// The item model
         /// </summary>
-        public InventoryItemViewModel ItemModel;
+        public JewelItemViewModel ItemModel;
         /// <summary>
         /// Gets the jewel data.
         /// </summary>
         /// <value>The jewel data.</value>
-        public POESKillTree.Model.Items.Item JewelData { get { return ItemModel.Item; } }
+        public JewelItem JewelData { get { return ItemModel.Item; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
@@ -42,15 +42,7 @@ namespace POESKillTree
         public JewelNodeData()
         {
             ItemModel = null;//CreateSlotVm();
-        }/*
-        private InventoryItemViewModel CreateSlotVm()
-        {
-            var imageName = "Jewel";
-            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, PoESkillTree.GameModel.Items.ItemSlot.JSlot_Dex_Ranger)
-            {
-                EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
-            };
-        }*/
+        }
     }
 
     /// <summary>
