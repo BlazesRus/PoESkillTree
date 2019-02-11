@@ -247,7 +247,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket", "+# Str Based Jewel", "+# Int Based Jewel", "+# Dex Based Jewel"
+            "+# to Jewel Socket", "+# Str Based Jewel", "+# Int Based Jewel", "+# Dex Based Jewel",
+            "# DualWand Accuracy Subtotal", "# HP Subtotal"
         };
 
         /// <summary>
@@ -271,7 +272,13 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "+# Accuracy Rating",
             "+# to maximum Energy Shield",
             "Jewel Socket ID: #",
-            "IntuitiveLeapSupported"
+            "IntuitiveLeapSupported",
+            "Strength from Passives in Radius is Transformed to Intelligence",
+            "Strength from Passives in Radius is Transformed to Dexterity",
+            "Dexterity from Passives in Radius is Transformed to Intelligence",
+            "Dexterity from Passives in Radius is Transformed to Strength",
+            "Intelligence from Passives in Radius is Transformed to Strength",
+            "Intelligence from Passives in Radius is Transformed to Dexterity"
         };
 
         #endregion
