@@ -108,7 +108,7 @@ namespace POESKillTree
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            Add(nodeID, default(JewelNodeData));
+            Add(nodeID, new JewelNodeData());
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
