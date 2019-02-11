@@ -153,12 +153,13 @@ namespace POESKillTree.ViewModels.Equipment
                     case 9:
                         ItemData = Belt.Item; break;
                     default:
+                        JewelItem JewelItemData;
                         foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
                         {
-                            ItemData = JewelSlotData.Value.JewelData;
-                            if (ItemData != null)
+                            JewelItemData = JewelSlotData.Value.JewelData;
+                            if (JewelItemData != null)
                             {
-                                foreach (var TargetMod in ItemData.Mods)
+                                foreach (var TargetMod in JewelItemData.Mods)
                                 {
                                     if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
                                     {
@@ -176,7 +177,7 @@ namespace POESKillTree.ViewModels.Equipment
                         }
                         ItemData = null;ContinueCalc=false; break;
                 }
-                if (ItemData != null)
+                if (ItemData != null&& ContinueCalc)
                 {
                     foreach (var TargetMod in ItemData.Mods)
                     {
