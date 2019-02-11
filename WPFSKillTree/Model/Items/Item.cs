@@ -647,5 +647,10 @@ namespace POESKillTree.Model.Items
             }
             return dict;
         }
+		
+		public static explicit operator Item(JewelItem self)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
