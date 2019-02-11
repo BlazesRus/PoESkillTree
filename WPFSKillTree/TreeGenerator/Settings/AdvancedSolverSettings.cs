@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.SkillTreeFiles;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.Settings
 {

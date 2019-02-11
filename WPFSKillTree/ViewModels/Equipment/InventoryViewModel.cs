@@ -2,6 +2,7 @@
 using POESKillTree.Model.Items;
 using POESKillTree.Model.Items.Enums;
 using POESKillTree.Utils;
+using System.Collections.Generic;
 
 namespace POESKillTree.ViewModels.Equipment
 {
@@ -130,7 +131,6 @@ namespace POESKillTree.ViewModels.Equipment
         {
             Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
             POESKillTree.Model.Items.Item ItemData;
-            int JewelIndex = 0;
             bool ContinueCalc = true;
             for (int Index = 0; ContinueCalc; ++Index)
             {
@@ -157,9 +157,9 @@ namespace POESKillTree.ViewModels.Equipment
                     case 9:
                         ItemData = Belt.Item; break;
                     default:
-                        foreach (KeyValuePair<int, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
+                        foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
                         {
-                            ItemData = JewelSlotData.JewelData;
+                            ItemData = JewelSlotData.Value.JewelData;
                             if (ItemData != null)
                             {
                                 foreach (var TargetMod in ItemData.Mods)

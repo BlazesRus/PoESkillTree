@@ -7,6 +7,7 @@ using POESKillTree.Model;
 using POESKillTree.SkillTreeFiles;
 using POESKillTree.TreeGenerator.Views;
 using POESKillTree.Utils;
+using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
@@ -25,7 +26,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
 
-		    /// <summary>
+            /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
         public InventoryViewModel ItemInfo

@@ -51,6 +51,12 @@ namespace POESKillTree.Model.Serialization
             set { SetProperty(ref _equipmentData, value); }
         }
 
+        public string StatTrackingSavePath
+        {
+            get { return GlobalSettings.StatTrackingSavePathVal; }
+            set { SetProperty(ref GlobalSettings.StatTrackingSavePathVal, value); }
+        }
+
         public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 
         public abstract void Save();
