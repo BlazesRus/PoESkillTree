@@ -1764,7 +1764,8 @@ namespace POESKillTree.Views
                     ushort ID = node.Id;
                     sp.Children.Add(new Separator());
 
-                    if (GlobalSettings.JewelInfo.ContainsKey(ID))
+                    JewelNodeData JewelValue;
+                    if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
                     {
                         JewelItem EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
                         if (EquippedJewel != null)
