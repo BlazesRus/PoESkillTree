@@ -18,6 +18,7 @@ using POESKillTree.ViewModels.Equipment;
 using POESKillTree.SkillTreeFiles;
 
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
+using POESKillTree.ViewModels;
 
 namespace POESKillTree
 {
@@ -41,9 +42,13 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
         /// </summary>
-        public JewelNodeData()
+        private JewelNodeData()
         {
-            ItemModel = null;//CreateSlotVm();
+            ItemModel = null;
+        }
+        public JewelNodeData(JewelData TargetJewelData, ushort slot)
+        {
+            ItemModel = TargetJewelData.CreateSlotVm(slot);
         }
     }
 
@@ -113,7 +118,25 @@ namespace POESKillTree
             t.PropertyChanging = null;
             return t;
         }
-#endregion
+        #endregion
+
+        private readonly IExtendedJewelDialogCoordinator _dialogCoordinator;
+        private readonly JewelItemAttributes _itemAttributes;
+
+        public JewelData(IExtendedJewelDialogCoordinator dialogCoordinator, JewelItemAttributes itemAttributes)
+        {
+            _dialogCoordinator = dialogCoordinator;
+            _itemAttributes = itemAttributes;
+        }
+
+        public JewelItemViewModel CreateSlotVm(ushort slot)
+        {
+            var imageName = "Jewel";
+            return new JewelItemViewModel(_dialogCoordinator, _itemAttributes, slot)
+            {
+                EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
+            };
+        }
 
         /// <summary>
         /// Keys for Strength Threshold Jewel Slots
@@ -163,7 +186,7 @@ namespace POESKillTree
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            Add(nodeID, new JewelNodeData());
+            Add(nodeID, new JewelNodeData(this,nodeID));
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view

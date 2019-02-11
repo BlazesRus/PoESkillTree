@@ -14,7 +14,7 @@ namespace POESKillTree.ViewModels.Equipment
     /// </summary>
     public abstract class DraggableJewelItemViewModel : Notifier, IDragSource
     {
-        private readonly IExtendedDialogCoordinator _dialogCoordinator;
+        private readonly IExtendedJewelDialogCoordinator _dialogCoordinator;
 
         /// <summary>
         /// Gets or sets the item this view models shows.
@@ -56,7 +56,7 @@ namespace POESKillTree.ViewModels.Equipment
         public ICommand DeleteCommand { get; }
         public ICommand EditSocketedGemsCommand { get; }
 
-        protected DraggableJewelItemViewModel(IExtendedDialogCoordinator dialogCoordinator)
+        protected DraggableJewelItemViewModel(IExtendedJewelDialogCoordinator dialogCoordinator)
         {
             _dialogCoordinator = dialogCoordinator;
 
