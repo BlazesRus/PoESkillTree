@@ -42,7 +42,7 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
         /// </summary>
-        private JewelNodeData()
+        public JewelNodeData()
         {
             ItemModel = null;
         }
@@ -120,14 +120,22 @@ namespace POESKillTree
         }
         #endregion
 
-        private readonly IExtendedJewelDialogCoordinator _dialogCoordinator;
-        private readonly JewelItemAttributes _itemAttributes;
+        private readonly IExtendedDialogCoordinator _dialogCoordinator;
+        private JewelItemAttributes _itemAttributes;
+        public JewelItemAttributes JewelAttributes
+        {
+            get { return _itemAttributes; }
+        }
 
-        public JewelData(IExtendedJewelDialogCoordinator dialogCoordinator, JewelItemAttributes itemAttributes)
+        public JewelData(IExtendedDialogCoordinator dialogCoordinator, JewelItemAttributes itemAttributes)
         {
             _dialogCoordinator = dialogCoordinator;
             _itemAttributes = itemAttributes;
+            IsInitialized = true;
         }
+
+        //Initialized
+        public bool IsInitialized = false;
 
         public JewelItemViewModel CreateSlotVm(ushort slot)
         {
@@ -186,7 +194,14 @@ namespace POESKillTree
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            Add(nodeID, new JewelNodeData(this,nodeID));
+            if (IsInitialized)
+            {
+                Add(nodeID, new JewelNodeData(this, nodeID));
+            }
+            else
+            {
+                Add(nodeID, new JewelNodeData());
+            }
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view

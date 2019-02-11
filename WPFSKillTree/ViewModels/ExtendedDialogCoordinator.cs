@@ -20,13 +20,6 @@ namespace POESKillTree.ViewModels
         Task<TabPickerResult> EditStashTabAsync(object context, TabPickerViewModel tabPickerViewModel);
     }
 
-    public interface IExtendedJewelDialogCoordinator : IDialogCoordinator
-    {
-        Task<bool> EditBuildAsync(object context, IBuildViewModel<PoEBuild> buildVm, BuildValidator buildValidator);
-
-        Task<TabPickerResult> EditStashTabAsync(object context, TabPickerViewModel tabPickerViewModel);
-    }
-
     public class ExtendedDialogCoordinator : DialogCoordinator, IExtendedDialogCoordinator
     {
         private readonly GameData _gameData;
