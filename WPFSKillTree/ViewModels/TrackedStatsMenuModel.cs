@@ -30,28 +30,14 @@ namespace POESKillTree.ViewModels
         /// <value>
         /// The stat tracking save path.
         /// </value>
-        public string StatTrackingSavePath
+        string StatTrackingSavePath
         {
-            get
-            {
-                if (GlobalSettings.StatTrackingSavePath == null)
-                {
-                    return GlobalSettings.DefaultTrackingDir;
-                }
-                else
-                {
-                    return GlobalSettings.StatTrackingSavePath;
-                }
-            }
+            get { return GlobalSettings.StatTrackingSavePathVal; }
             set
             {
-                SetProperty(ref GlobalSettings.StatTrackingSavePath, value, () =>
-                {
-                    if (value != null && value != "" && StatTrackingSavePath != value)
-                    {
-                        SetProperty(ref GlobalSettings.StatTrackingSavePath, value);
-                    }
-                });
+                if (GlobalSettings.StatTrackingSavePathVal == value)
+                    return;
+                GlobalSettings.StatTrackingSavePathVal = value;
             }
         }
 

@@ -1748,15 +1748,6 @@ namespace POESKillTree
 
     public class TrackedAttributes : System.Collections.Generic.List<PseudoAttribute>
     {
-        /// <summary>
-        /// Adds the specified attribute.
-        /// </summary>
-        /// <param name="Attribute">The attribute.</param>
-        public void Add(PseudoAttribute Attribute)
-        {
-            Add(Attribute);
-        }
-
         public TrackedAttributes CloneSelf()
         {
             TrackedAttributes NewSelf = this;
@@ -2043,7 +2034,21 @@ namespace POESKillTree
         /// <summary>
         /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
         /// </summary>
-        public static string StatTrackingSavePath = DefaultTrackingDir;
+        public static string StatTrackingSavePathVal = DefaultTrackingDir;
+        /// <summary>
+        /// The stat tracking save path (Shared between TrackedStatsMenuModel and TrackedStatsMenu)
+        /// </summary>
+        public static string StatTrackingSavePath
+        {
+            get { return GlobalSettings.StatTrackingSavePathVal; }
+            private set
+            {
+                if (GlobalSettings.StatTrackingSavePathVal==value)
+                    return;
+                GlobalSettings.StatTrackingSavePathVal = value;
+                NotifyStaticPropertyChanged("StatTrackingSavePath");
+            }
+        }
         /// <summary>
         /// Saved slot for item slot that are removing Intuitive leap support from
         /// </summary>
