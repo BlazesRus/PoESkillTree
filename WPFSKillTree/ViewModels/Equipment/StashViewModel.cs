@@ -41,7 +41,7 @@ namespace POESKillTree.ViewModels.Equipment
         private IExtendedDialogCoordinator _dialogCoordinator;
 
         // The view model is created before the window is loaded, PersistentData is not available at that point.
-        // This is done because some WPF things don't like DataContext initially being null and don't recognize it 
+        // This is done because some WPF things don't like DataContext initially being null and don't recognize it
         // changing to a valid value.
         private IPersistentData _persistentData;
 
@@ -235,7 +235,7 @@ namespace POESKillTree.ViewModels.Equipment
                 i.FlavourText,
                 i.Name
             }.Union(i.Properties.Select(p => p.Attribute)).Union(i.Mods.Select(m => m.Attribute));
-            
+
             return modstrings.Any(s => s != null && s.ToLower().Contains(SearchText));
         }
 
@@ -254,7 +254,7 @@ namespace POESKillTree.ViewModels.Equipment
             _inBatchUpdate = true;
             _smallestAddedItemY = int.MaxValue;
         }
-        
+
         /// <summary>
         /// Ends a batch update. Call this after adding multiple items to the stash.
         /// </summary>
@@ -271,6 +271,25 @@ namespace POESKillTree.ViewModels.Equipment
         public void AddItem(Item item, bool scrollToItem)
         {
             var itemVm = new StashItemViewModel(_dialogCoordinator, item);
+            Items.Add(itemVm);
+
+            if (!scrollToItem)
+            {
+                return;
+            }
+            if (!_inBatchUpdate)
+            {
+                ScrollBarValue = item.Y;
+            }
+            else if (item.Y < _smallestAddedItemY)
+            {
+                _smallestAddedItemY = item.Y;
+            }
+        }
+
+        public void AddItem(JewelItem item, bool scrollToItem)
+        {
+            var itemVm = new StashItemViewModel(_dialogCoordinator, (Item)item);
             Items.Add(itemVm);
 
             if (!scrollToItem)
@@ -585,7 +604,7 @@ namespace POESKillTree.ViewModels.Equipment
 
 
         /// <summary>
-        /// DropTargetAdorner for dragging tabs/bookmarks over the stash. Shows a rectangle at the position the 
+        /// DropTargetAdorner for dragging tabs/bookmarks over the stash. Shows a rectangle at the position the
         /// bookmark would cover if dropped.
         /// </summary>
         private class BookmarkDropTargetAdorner : DropTargetAdorner

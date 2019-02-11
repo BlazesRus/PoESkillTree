@@ -57,6 +57,7 @@ namespace POESKillTree
     /// Implements the <see cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
     /// </summary>
     /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
+    [Serializable]
     public class JewelData : Dictionary<ushort, JewelNodeData>
     {//Notifier combined directly into class since can't have 2 base classes
         #region NotifierCode
