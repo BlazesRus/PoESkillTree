@@ -66,8 +66,6 @@ namespace POESKillTree.Model.Items
         public IReadOnlyList<ItemMod> NonLocalMods { get; private set; }
 
         private readonly EquipmentData _equipmentData;
-        private readonly SkillDefinitions _skillDefinitions;
-
         public event EventHandler ItemDataChanged;
 
         private void SlottedItemOnPropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -84,10 +82,9 @@ namespace POESKillTree.Model.Items
             RefreshItemAttributes();
         }
 
-        public JewelItemAttributes(EquipmentData equipmentData, SkillDefinitions skillDefinitions, string itemData)
+        public JewelItemAttributes(EquipmentData equipmentData, string itemData)
         {
             _equipmentData = equipmentData;
-            _skillDefinitions = skillDefinitions;
             Equip = new ObservableCollection<JewelItem>();
 
             var jObject = JObject.Parse(itemData);
@@ -204,7 +201,7 @@ namespace POESKillTree.Model.Items
 
         private void AddItem(JObject val, ushort islot)
         {
-            var item = new JewelItem(_equipmentData, _skillDefinitions, val, islot);
+            JewelItem item = new JewelItem(_equipmentData, val, islot);
             Equip.Add(item);
             item.PropertyChanged += SlottedItemOnPropertyChanged;
         }
