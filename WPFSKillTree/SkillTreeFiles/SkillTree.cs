@@ -295,6 +295,8 @@ namespace POESKillTree.SkillTreeFiles
                 else if (inTree.nodesDict != null && inTree.nodesDict.Any())
                     BuildNodeList(inTree.nodesDict.Values.ToArray());
 
+                GlobalSettings.JewelInfo = new JewelData(GlobalSettings._dialogCoordinator, new Model.Items.JewelItemAttributes());
+
                 void BuildNodeList(Node[] nodes)
                 {
                     foreach (var nd in nodes)
