@@ -625,10 +625,70 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            if (temp.ContainsKey("+# Accuracy Rating"))
+            {
+                Subtotal += temp["+# Accuracy Rating"][0];
+            }
+            if (temp.ContainsKey("+# to Accuracy Rating"))
+            {
+                Subtotal += temp["+# to Accuracy Rating"][0];
+            }
+            if (temp.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += temp["+# increased Accuracy Rating with Wands"][0];
+            }
+            if (temp.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += temp["+# increased Accuracy Rating while Dual Wielding"][0];
+            }
+            if (temp.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += temp["+# increased Global Accuracy Rating"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (temp.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            {
+                temp["# DualWand Accuracy Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (temp.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = temp["+# to maximum Life"][0];
+            }
+            if (temp.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = temp["#% increased maximum Life"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (temp.ContainsKey("# HP Subtotal"))
+            {
+                temp["# HP Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add("# HP Subtotal", new List<float>(1) { Subtotal });
+            }
             if (GlobalSettings.TrackedStats.Count != 0)
             {
                 temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
+
             return temp;
         }
 

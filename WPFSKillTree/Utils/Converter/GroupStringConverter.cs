@@ -101,7 +101,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Minions have", Minion},
             new[] {"Minions Leech", Minion},
             new[] {"Minions Regenerate", Minion},
-      			new[] {"Skeletons", Minion},
+            new[] {"Skeletons", Minion},
             new[] {"Mine Damage", Trap},
             new[] {"Trap Damage", Trap},
             new[] {"Trap Duration", Trap},
@@ -189,7 +189,6 @@ namespace POESKillTree.Utils.Converter
             new[] {"Enemies Cannot Leech Mana From You", Defense},
             new[] {"Ignore all Movement Penalties", Defense},
             new[] {"Physical Damage Reduction", Defense},
-            new[] {"HP Subtotal", Defense},
             new[] {"Poison on Hit", General},
             new[] {"Hits that Stun Enemies have Culling Strike", General},
             new[] {"increased Damage against Frozen, Shocked or Ignited Enemies", General},
@@ -244,6 +243,10 @@ namespace POESKillTree.Utils.Converter
             new[] {"Melee Physical Damage", Weapon},
             new[] {"with Swords", Weapon},
             new[] {"with Wands", Weapon},
+            new[] {"Cold Damage with Attack Skills", Weapon},
+            new[] {"Fire Damage with Attack Skills", Weapon},
+            new[] {"Lightning Damage with Attack Skills", Weapon},
+            new[] {"Elemental Damage with Attack Skills", Weapon},
             new[] {"Cold Damage with Weapons", Weapon},
             new[] {"Fire Damage with Weapons", Weapon},
             new[] {"Lightning Damage with Weapons", Weapon},
@@ -275,6 +278,11 @@ namespace POESKillTree.Utils.Converter
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
             new[] {"DualWand Accuracy Subtotal", Weapon},
+            new[] {"HP Subtotal", Defense},
+            new[] {"Jewel Socket ID:", Hidden},
+            new[] {"Radius:", Hidden },
+            new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
+            new[] {"Intuitive Leaped", Hidden },
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
@@ -294,7 +302,7 @@ namespace POESKillTree.Utils.Converter
             {
                 if (!AttributeGroups.ContainsKey(group[1]))
                 {
-                    AttributeGroups.Add(group[1], new AttributeGroup("Custom: "+group[1]));
+                    AttributeGroups.Add(group[1], new AttributeGroup("Custom: " + group[1]));
                 }
             }
             AttributeGroups.Add(MiscLabel, new AttributeGroup(MiscLabel));

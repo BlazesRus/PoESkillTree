@@ -1626,7 +1626,7 @@ namespace POESKillTree.Views
                             }
                             else
                             {
-                                if (node.Attributes.ContainsKey(JewelData.FakeIntuitiveLeapSupportAttribute))
+                                if (node.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
                                 {
                                     Tree.SkilledNodes.Add(node);
                                     AddLeapTagToNode(node);
