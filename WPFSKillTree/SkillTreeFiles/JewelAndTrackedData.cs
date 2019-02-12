@@ -121,27 +121,34 @@ namespace POESKillTree
         }
         #endregion
 
-        private readonly IExtendedDialogCoordinator _dialogCoordinator;
         private JewelItemAttributes _itemAttributes;
         public JewelItemAttributes JewelAttributes
         {
             get { return _itemAttributes; }
+            set
+            {
+                if (value == _itemAttributes)
+                    return;
+                _itemAttributes = value;
+            }
         }
 
-        public JewelData(IExtendedDialogCoordinator dialogCoordinator, JewelItemAttributes itemAttributes)
+        private JewelData(JewelItemAttributes itemAttributes):base()
         {
-            _dialogCoordinator = dialogCoordinator;
             _itemAttributes = itemAttributes;
-            IsInitialized = true;
+            StrJewelSlots = new System.Collections.Generic.List<ushort>();
+            IntJewelSlots = new System.Collections.Generic.List<ushort>();
+            DexJewelSlots = new System.Collections.Generic.List<ushort>();
+            StrIntJewelSlots = new System.Collections.Generic.List<ushort>();
+            StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
+            IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
+            NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
         }
-
-        //Initialized
-        public bool IsInitialized = false;
 
         public JewelItemViewModel CreateSlotVm(ushort slot)
         {
             var imageName = "Jewel";
-            return new JewelItemViewModel(_dialogCoordinator, _itemAttributes, slot)
+            return new JewelItemViewModel(GlobalSettings.SharedDialogCoordinator, JewelAttributes, slot)
             {
                 EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };
@@ -178,8 +185,9 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
         /// </summary>
-        public JewelData() : base()
+        public JewelData() : base(21)
         {
+            JewelAttributes = new JewelItemAttributes();
             StrJewelSlots = new System.Collections.Generic.List<ushort>();
             IntJewelSlots = new System.Collections.Generic.List<ushort>();
             DexJewelSlots = new System.Collections.Generic.List<ushort>();
@@ -187,7 +195,6 @@ namespace POESKillTree
             StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
             IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
             NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
-
         }
         /// <summary>
         /// Adds the jewel slot.
@@ -195,31 +202,31 @@ namespace POESKillTree
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            if (IsInitialized)
-            {
-                Add(nodeID, new JewelNodeData(this, nodeID));
-            }
-            else
-            {
-                Add(nodeID, new JewelNodeData());
-            }
+            Add(nodeID, new JewelNodeData(this, nodeID));
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
         /// </summary>
         public void CategorizeJewelSlots()
         {
-            bool IsStrThreshold = false;
-            bool IsIntThreshold = false;
-            bool IsDexThreshold = false;
+            bool IsStrThreshold;
+            bool IsIntThreshold;
+            bool IsDexThreshold;
 
-            SkillNode CurrentNode;
+            SkillNode CurrentNode = null;
             ushort NodeID;
+            string IDLabel;
+            string AttributeName = "";
+            float AttributeTotal;
+            Vector2D nodePosition;
+            IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes;
             foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
                 NodeID = JewelElement.Key;
-                string AttributeName;
-                float AttributeTotal;
+                IDLabel = "Jewel Socket ID: " + NodeID;
+                IsStrThreshold = false;
+                IsIntThreshold = false;
+                IsDexThreshold = false;
                 for (int AttrIndex = 0; AttrIndex < 3; ++AttrIndex)
                 {
                     AttributeTotal = 0.0f;
@@ -235,13 +242,12 @@ namespace POESKillTree
                             AttributeName = " +# to Strength";
                             break;
                     }
-                    Vector2D nodePosition = SkillTree.Skillnodes[NodeID].Position;
-                    IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
-                        SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 1200)).ToList();
+                    nodePosition = SkillTree.Skillnodes[NodeID].Position;
+                    affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 1200.0)).ToList();
                     foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
                     {
                         CurrentNode = NodePair.Value;
-                        if (CurrentNode.Attributes.ContainsKey(AttributeName))
+                        if (CurrentNode.Attributes!=null&&CurrentNode.Attributes.ContainsKey(AttributeName))
                         {
                             AttributeTotal += CurrentNode.Attributes[AttributeName][0];
                         }
@@ -264,47 +270,53 @@ namespace POESKillTree
                 }
                 if (IsStrThreshold)//No support for all 3 attribute types at once for now
                 {
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Str Based Jewel", new List<float>(1));
                     if (IsIntThreshold)
                     {
                         StrIntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Int Based Jewel", "Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Int Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Dex Based Jewel", "Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Dex Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", IDLabel};
                     }
                 }
                 else if (IsIntThreshold)
                 {
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
                     if (IsDexThreshold)
                     {
                         IntDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", "+1 Dex Based Jewel", "Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", "+1 Dex Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", "Jewel Socket ID: " + NodeID };
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", IDLabel};
                     }
                 }
                 else if (IsDexThreshold)
                 {
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     DexJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Dex Based Jewel", "Jewel Socket ID: " + NodeID };
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Dex Based Jewel", IDLabel};
                 }
                 else//Neutral(often ineffective corner jewels)
                 {
                     NeutralJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "Jewel Socket ID: " + NodeID };
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", IDLabel};
                 }
+                SkillTree.Skillnodes[NodeID].Attributes.Add("Jewel Socket ID: #", new List<float>(NodeID));
             }
-
         }
         public static explicit operator System.Collections.Generic.List<ushort>(JewelData self)
         {
@@ -2135,7 +2147,7 @@ namespace POESKillTree
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
-        public static JewelData JewelStorage = new JewelData();
+        public static JewelData JewelStorage;
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
@@ -2236,5 +2248,25 @@ namespace POESKillTree
         }
 
         public const string LeapedNode = "Intuitive Leaped";
+
+        /// <summary>
+        /// The dialog coordinator
+        /// </summary>
+        private static IExtendedDialogCoordinator _dialogCoordinatorVal;
+
+        /// <summary>
+        /// The dialog coordinator
+        /// </summary>
+        public static IExtendedDialogCoordinator SharedDialogCoordinator
+        {
+            get { return _dialogCoordinatorVal; }
+            set
+            {
+                if (value == _dialogCoordinatorVal)
+                    return;
+                _dialogCoordinatorVal = value;
+                NotifyStaticPropertyChanged("SharedDialogCoordinator");
+            }
+        }
     }
 }

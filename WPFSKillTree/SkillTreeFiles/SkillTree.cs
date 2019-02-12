@@ -290,6 +290,8 @@ namespace POESKillTree.SkillTreeFiles
                 StartNodeDictionary = new Dictionary<ushort, ushort>();
                 AscRootNodeList = new HashSet<SkillNode>();
 
+                GlobalSettings.JewelStorage = new JewelData();
+
                 if (inTree.nodes != null && inTree.nodes.Any())
                     BuildNodeList(inTree.nodes);
                 else if (inTree.nodesDict != null && inTree.nodesDict.Any())
@@ -419,8 +421,6 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
 
-                GlobalSettings.JewelInfo.CategorizeJewelSlots();
-
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 foreach (var skillnode in Skillnodes)
                 {
@@ -450,6 +450,8 @@ namespace POESKillTree.SkillTreeFiles
                         skillnode.Value.Attributes[cs] = values;
                     }
                 }
+
+                GlobalSettings.JewelInfo.CategorizeJewelSlots();
 
                 NodeGroups = new List<SkillNodeGroup>();
                 foreach (var gp in inTree.groups)

@@ -564,6 +564,7 @@ namespace POESKillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
+            GlobalSettings.SharedDialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             // Set theme & accent.
@@ -1919,7 +1920,6 @@ namespace POESKillTree.Views
             _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
             InventoryViewModel = new InventoryViewModel(_dialogCoordinator, itemAttributes);
-            if (GlobalSettings.JewelInfo.IsInitialized == false) { GlobalSettings.JewelInfo = new JewelData(_dialogCoordinator, new JewelItemAttributes()); };
             UpdateUI();
         }
 

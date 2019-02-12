@@ -208,7 +208,7 @@ namespace POESKillTree.Model.Items
             Height = source.Height;
         }
 
-        public JewelItem(EquipmentData equipmentData, SkillDefinitions skillDefinitions, JObject val, ushort itemSlot = 0, bool AbyssJewel=false)
+        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool AbyssJewel=false)
         {
             JsonBase = val;
             Slot = itemSlot;
