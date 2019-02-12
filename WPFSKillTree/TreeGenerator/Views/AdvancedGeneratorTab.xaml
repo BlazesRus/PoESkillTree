@@ -417,7 +417,7 @@
                     <metroControls:ToggleSwitch Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="5,0,0,5"
                                                 HorizontalAlignment="Center"
                                                 IsChecked="{Binding TreePlusItemsMode.Value}"
-                                                Visibility="Collapsed">
+                                                Visibility="Visible">
                         <metroControls:ToggleSwitch.OnLabel>
                             <l:Catalog Message="Tree + Items"/>
                         </metroControls:ToggleSwitch.OnLabel>

@@ -16,6 +16,23 @@ namespace POESKillTree.TreeGenerator.Solver
     /// </summary>
     public class AdvancedSolver : AbstractGeneticSolver<AdvancedSolverSettings>
     {
+        private class ConstraintValues
+        {
+            public float TargetValue;
+            public double Weight;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+            /// </summary>
+            /// <param name="targetValue">The target value.</param>
+            /// <param name="weight">The weight.</param>
+            public ConstraintValues(float targetValue, double weight)
+            {
+                TargetValue = targetValue;
+                Weight = weight;
+            }
+        }
+
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
         /// into the applicable attributes and their conversion multiplier.
@@ -394,10 +411,44 @@ namespace POESKillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            for (var i = 0; i < _attrConstraints.Length; i++)
+            if(Settings.TreePlusItemsMode)
             {
-                var stat = _attrConstraints[i];
-                csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
+                string StatName;
+                Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
+                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+                int attrIndex;
+                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
+                {
+                    attrIndex = ConversionKey.Item2;
+                    StatName = ConversionKey.Item1;
+                    var stat = _attrConstraints[attrIndex];
+                    ConstraintDictionary.Add(StatName, new ConstraintValues(stat.Item1, stat.Item2));
+                    var currentValue = totalStats[attrIndex];
+                    StatTotals.Add(StatName, currentValue);
+                }
+                StatTotals = ConvertedJewelData.StatUpdater(StatTotals,Settings.ItemInfo, Settings.TreeInfo);
+                Dictionary<string, float> ItemStatTotals = Settings.ItemInfo.CalculateTotalSingleAttributes();
+                float StatTotal;
+                ConstraintValues StatConstraint;
+                foreach (var keyName in StatTotals.Keys)
+                {
+                    StatTotal = StatTotals[keyName];
+                    if(ItemStatTotals.ContainsKey(keyName))
+                    {
+                        StatTotal += ItemStatTotals[keyName];
+                    }
+                    StatConstraint = ConstraintDictionary[keyName];
+                    csvs *= CalcCsv(StatTotal, StatConstraint.Weight, StatConstraint.TargetValue);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < _attrConstraints.Length; i++)
+                {
+                    var stat = _attrConstraints[i];
+                    var currentValue = totalStats[i];
+                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                }
             }
 
             // Total points spent is another csv.

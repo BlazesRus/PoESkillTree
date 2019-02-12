@@ -108,7 +108,7 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         }
 
         /// <summary>
-        /// Convertes the given XmlPseudoAttributes into PseudoAttributes.
+        /// Converts the given XmlPseudoAttributes into PseudoAttributes.
         /// Does not resolve nesting so there may be duplicates.
         /// </summary>
         private IEnumerable<PseudoAttribute> ConvertFromXml(IEnumerable<XmlPseudoAttribute> xmlPseudoAttributes)
