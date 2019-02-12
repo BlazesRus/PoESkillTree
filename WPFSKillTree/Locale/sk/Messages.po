@@ -1333,7 +1333,7 @@ msgstr ""
 msgid "Everything Else"
 msgstr "Ostatné"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:634
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:638
 msgid "Advanced"
 msgstr "Pokročilé"
 

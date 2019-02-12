@@ -233,8 +233,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {L10n.Message("Flasks"), 15 },
             {L10n.Message("Jewel Types"), 16},
             {L10n.Message("Tracked PseudoTotals"), 17},
-            {L10n.Message("Hidden"), 19},
-            {L10n.Message("Everything Else"), 18},
+            {L10n.Message("Hidden"), 18},
+            {L10n.Message("Everything Else"), 19},
         };
 
         /// <summary>
@@ -246,8 +246,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket", "+# to Str Based Jewel", "+# to Int Based Jewel", "+# to Dex Based Jewel",
-            "# DualWand Accuracy Subtotal", "# HP Subtotal"
+            "+# to Jewel Socket", "# DualWand Accuracy Subtotal", "# HP Subtotal"
         };
 
         /// <summary>
@@ -609,6 +608,11 @@ namespace POESKillTree.TreeGenerator.ViewModels
             };
 
             _attributes = CreatePossibleAttributes().ToList();
+            if (!_attributes.Contains("# DualWand Accuracy Subtotal")) { _attributes.Add("# DualWand Accuracy Subtotal"); }
+            if (!_attributes.Contains("# HP Subtotal")) { _attributes.Add("# HP Subtotal"); }
+            if (!_attributes.Contains("+# to Dex Based Jewel")) { _attributes.Add("+# to Dex Based Jewel"); }
+            if (!_attributes.Contains("+# to Str Based Jewel")) { _attributes.Add("+# to Str Based Jewel"); }
+            if (!_attributes.Contains("+# to Int Based Jewel")) { _attributes.Add("+# to Int Based Jewel"); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),
