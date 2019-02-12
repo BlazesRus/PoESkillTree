@@ -42,7 +42,7 @@ namespace POESKillTree
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
         /// </summary>
-        public JewelNodeData()
+        private JewelNodeData()
         {
             ItemModel = null;
         }
@@ -135,9 +135,6 @@ namespace POESKillTree
             IsInitialized = true;
         }
 
-        //Initialized
-        public bool IsInitialized = false;
-
         public JewelItemViewModel CreateSlotVm(ushort slot)
         {
             var imageName = "Jewel";
@@ -195,14 +192,7 @@ namespace POESKillTree
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            if (IsInitialized)
-            {
-                Add(nodeID, new JewelNodeData(this, nodeID));
-            }
-            else
-            {
-                Add(nodeID, new JewelNodeData());
-            }
+            Add(nodeID, new JewelNodeData(this, nodeID));
         }
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
@@ -2236,5 +2226,22 @@ namespace POESKillTree
         }
 
         public const string LeapedNode = "Intuitive Leaped";
+
+        /// <summary>
+        /// The dialog coordinator
+        /// </summary>
+        public static IExtendedDialogCoordinator _dialogCoordinatorVal;
+
+        public static IExtendedDialogCoordinator _dialogCoordinator
+        {
+            get { return _dialogCoordinatorVal; }
+            set
+            {
+                if (value == _dialogCoordinatorVal)
+                    return;
+                _dialogCoordinatorVal = value;
+                NotifyStaticPropertyChanged("_dialogCoordinatorVal");
+            }
+        }
     }
 }
