@@ -274,20 +274,20 @@ namespace POESKillTree
                     {
                         StrIntJewelSlots.Add(NodeID);
                         SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Int Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
                         SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Dex Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
                         SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", IDLabel};
                     }
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Str Based Jewel", new List<float>(1));
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Str Based Jewel", new List<float>(1));
                 }
                 else if (IsIntThreshold)
                 {
@@ -295,19 +295,20 @@ namespace POESKillTree
                     {
                         IntDexJewelSlots.Add(NodeID);
                         SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", "+1 to Dex Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
                         SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", IDLabel};
                     }
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                 }
                 else if (IsDexThreshold)
                 {
                     DexJewelSlots.Add(NodeID);
                     SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Dex Based Jewel", IDLabel};
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
 
                 }
                 else//Neutral(often ineffective corner jewels)
