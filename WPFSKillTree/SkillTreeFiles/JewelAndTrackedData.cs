@@ -239,7 +239,7 @@ namespace POESKillTree
                             AttributeName = "+# to Dexterity";
                             break;
                         default:
-                            AttributeName = " +# to Strength";
+                            AttributeName = "+# to Strength";
                             break;
                     }
                     nodePosition = SkillTree.Skillnodes[NodeID].Position;
@@ -270,50 +270,50 @@ namespace POESKillTree
                 }
                 if (IsStrThreshold)//No support for all 3 attribute types at once for now
                 {
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Str Based Jewel", new List<float>(1));
                     if (IsIntThreshold)
                     {
                         StrIntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Int Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Int Based Jewel", IDLabel};
                         SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", "+1 Dex Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Dex Based Jewel", IDLabel};
                         SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Str Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", IDLabel};
                     }
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Str Based Jewel", new List<float>(1));
                 }
                 else if (IsIntThreshold)
                 {
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
                     if (IsDexThreshold)
                     {
                         IntDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", "+1 Dex Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", "+1 to Dex Based Jewel", IDLabel};
                         SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Int Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", IDLabel};
                     }
+                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Int Based Jewel", new List<float>(1));
                 }
                 else if (IsDexThreshold)
                 {
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# Dex Based Jewel", new List<float>(1));
                     DexJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", "+1 Dex Based Jewel", IDLabel};
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Dex Based Jewel", IDLabel};
+
                 }
                 else//Neutral(often ineffective corner jewels)
                 {
                     NeutralJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 Jewel Socket", IDLabel};
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
                 }
                 SkillTree.Skillnodes[NodeID].Attributes.Add("Jewel Socket ID: #", new List<float>(NodeID));
             }
@@ -334,11 +334,6 @@ namespace POESKillTree
       //v = v * _multransform + _addtransform;
       //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
       //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
-
-         /// <summary>
-        /// The fake intuitive leap support attribute
-        /// </summary>
-        public static readonly string FakeIntuitiveLeapSupportAttribute = "IntuitiveLeapSupported";
 
         /// <summary>
         /// Calculates the total of target attribute inside jewel area.
@@ -439,16 +434,16 @@ namespace POESKillTree
             {
                 CurrentNode = NodePair.Value;
                 attributeSize = CurrentNode.attributes.Length;
-                if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute) && attributeSize != 0)
+                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute) && attributeSize != 0)
                 {
                     ExtendedAttribute = new string[attributeSize + 1];
                     for (int index = 0; index < attributeSize; ++index)
                     {
                         ExtendedAttribute[index] = CurrentNode.attributes[index];
                     }
-                    ExtendedAttribute[attributeSize] = FakeIntuitiveLeapSupportAttribute;
+                    ExtendedAttribute[attributeSize] = GlobalSettings.FakeIntuitiveLeapSupportAttribute;
                     CurrentNode.attributes = ExtendedAttribute;
-                    CurrentNode.Attributes.Add(FakeIntuitiveLeapSupportAttribute, BlankList);
+                    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, BlankList);
                 }
             }
         }
@@ -471,9 +466,9 @@ namespace POESKillTree
             foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
-                if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))
+                if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
                 {
-                    CurrentNode.Attributes.Remove(FakeIntuitiveLeapSupportAttribute);
+                    CurrentNode.Attributes.Remove(GlobalSettings.FakeIntuitiveLeapSupportAttribute);
                     attributeSize = CurrentNode.attributes.Length;
                     NewAttributeSize = attributeSize - 1;
                     ExtendedAttribute = new string[NewAttributeSize];
@@ -481,7 +476,7 @@ namespace POESKillTree
                     for (int index = 0; index < attributeSize; ++index)
                     {
                         CurrentAttri = CurrentNode.attributes[index];
-                        if (CurrentAttri != FakeIntuitiveLeapSupportAttribute)
+                        if (CurrentAttri != GlobalSettings.FakeIntuitiveLeapSupportAttribute)
                         {
                             ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
                             ++NewIndex;
@@ -519,7 +514,7 @@ namespace POESKillTree
                 {
                     if (CurrentJewelData == null)//Jewel Not Equipped
                     {
-                        if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
+                        if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
                         {
                             RemoveIntuitiveLeapSupport(CurrentNode);
                         }
@@ -592,7 +587,7 @@ namespace POESKillTree
                     }
                     if (CurrentJewelData.Name == "Intuitive Leap")
                     {
-                        if (!CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Only Apply IntuitiveLeap Area effect once equipped instead of even when only nearby nodes skilled etc
+                        if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))//Only Apply IntuitiveLeap Area effect once equipped instead of even when only nearby nodes skilled etc
                         {
                             ApplyIntuitiveLeapSupport(CurrentNode);
                         }
@@ -600,7 +595,7 @@ namespace POESKillTree
                     }
                     else
                     {
-                        if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Remove Intuitive Leap Area effect once switched for other jewel
+                        if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))//Remove Intuitive Leap Area effect once switched for other jewel
                         {
                             RemoveIntuitiveLeapSupport(CurrentNode);
                         }
@@ -1095,7 +1090,7 @@ namespace POESKillTree
                 }
                 else//SkillNode not active
                 {
-                    if (CurrentNode.Attributes.ContainsKey(FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
+                    if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))//Check to make sure Intuitive Leap Effect is removed when jewel is removed
                     {
                         RemoveIntuitiveLeapSupport(CurrentNode);
                     }
@@ -1144,65 +1139,6 @@ namespace POESKillTree
                         attrlist.Add("+# to maximum Mana", new List<float>(1) { Total });
                     }
                 }
-            }
-            float Subtotal = 0.0f;
-            float TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# Accuracy Rating"))
-            {
-                Subtotal += attrlist["+# Accuracy Rating"][0];
-            }
-            if (attrlist.ContainsKey("+# to Accuracy Rating"))
-            {
-                Subtotal += attrlist["+# to Accuracy Rating"][0];
-            }
-            if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
-            {
-                TotalIncrease += attrlist["+# increased Accuracy Rating with Wands"][0];
-            }
-            if (attrlist.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
-            {
-                TotalIncrease += attrlist["+# increased Accuracy Rating while Dual Wielding"][0];
-            }
-            if (attrlist.ContainsKey("+# increased Global Accuracy Rating"))
-            {
-                TotalIncrease += attrlist["+# increased Global Accuracy Rating"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
-            {
-                attrlist["# DualWand Accuracy Subtotal"][0] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
-            }
-            //MaxLife combined with increased life
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# to maximum Life"))
-            {
-                Subtotal = attrlist["+# to maximum Life"][0];
-            }
-            if (attrlist.ContainsKey("#% increased maximum Life"))
-            {
-                TotalIncrease = attrlist["#% increased maximum Life"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey("# HP Subtotal"))
-            {
-                attrlist["# HP Subtotal"][0] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add("# HP Subtotal", new List<float>(1) { Subtotal });
             }
             return attrlist;
         }
@@ -2246,6 +2182,11 @@ namespace POESKillTree
                 NotifyStaticPropertyChanged("ItemInfo");
             }
         }
+
+        /// <summary>
+        /// The fake intuitive leap support attribute
+        /// </summary>
+        public const string FakeIntuitiveLeapSupportAttribute = "IntuitiveLeapSupported";
 
         public const string LeapedNode = "Intuitive Leaped";
 

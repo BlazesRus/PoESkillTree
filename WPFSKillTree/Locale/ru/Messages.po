@@ -1204,7 +1204,7 @@ msgstr ""
 msgid "Could not import build"
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1250
+#: SkillTreeFiles\SkillTree.cs:1310
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1361,20 +1361,16 @@ msgid "Tracked PseudoTotals"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
-#: Utils\Converter\GroupStringConverter.cs:35
-msgid "Everything Else"
-msgstr ""
-
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:237
-msgid "Calculated Other Totals"
-msgstr ""
-
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:238
 #: Utils\Converter\GroupStringConverter.cs:38
 msgid "Hidden"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:635
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:237
+#: Utils\Converter\GroupStringConverter.cs:35
+msgid "Everything Else"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:634
 msgid "Advanced"
 msgstr ""
 

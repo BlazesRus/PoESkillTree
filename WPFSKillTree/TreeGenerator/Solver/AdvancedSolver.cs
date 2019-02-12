@@ -105,7 +105,7 @@ namespace POESKillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversions multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -271,7 +271,7 @@ namespace POESKillTree.TreeGenerator.Solver
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-            
+
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
@@ -280,7 +280,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     var name = attr.Name;
                     if (ContainsWildcardRegex.IsMatch(name))
                     {
-                        // Wildcards are resolverd by searching the skill tree attributes for each attribute
+                        // Wildcards are resolved by searching the skill tree attributes for each attribute
                         // that matches the attribute name ('{number}' replaced by '(.*)' for matching) and
                         // evaluating the attribute for each of those replacements.
                         if (!resolvedWildcardNames.ContainsKey(name))
@@ -426,7 +426,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     var currentValue = totalStats[attrIndex];
                     StatTotals.Add(StatName, currentValue);
                 }
-                StatTotals = ConvertedJewelData.StatUpdater(StatTotals,Settings.ItemInfo, Settings.TreeInfo);
+                StatTotals = JewelData.StatUpdater(StatTotals, Settings.TreeInfo);
                 Dictionary<string, float> ItemStatTotals = Settings.ItemInfo.CalculateTotalSingleAttributes();
                 float StatTotal;
                 ConstraintValues StatConstraint;
@@ -454,7 +454,7 @@ namespace POESKillTree.TreeGenerator.Solver
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }
