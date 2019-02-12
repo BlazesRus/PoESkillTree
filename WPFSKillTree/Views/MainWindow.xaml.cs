@@ -63,15 +63,7 @@ namespace POESKillTree.Views
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// The dialog coordinator
-        /// </summary>
-        private IExtendedDialogCoordinator _dialogCoordinator
-        {
-            get => GlobalSettings._dialogCoordinatorVal;
-            set => SetProperty(ref GlobalSettings._dialogCoordinatorVal, value);
-        }
-
+        private IExtendedDialogCoordinator _dialogCoordinator;
         public IPersistentData PersistentData { get; } = App.PersistentData;
 
         private readonly List<Attribute> _allAttributesList = new List<Attribute>();
@@ -1937,6 +1929,7 @@ namespace POESKillTree.Views
             _equipmentConverter.ConvertFrom(itemAttributes.Equip);
             ItemAttributes = itemAttributes;
             InventoryViewModel = new InventoryViewModel(_dialogCoordinator, itemAttributes);
+            if (GlobalSettings.JewelInfo.IsInitialized == false) { GlobalSettings.JewelInfo = new JewelData(_dialogCoordinator, new JewelItemAttributes()); };
             UpdateUI();
         }
 
