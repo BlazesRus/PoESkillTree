@@ -2368,15 +2368,15 @@ namespace POESKillTree
                 Subtotal += BaseAccuracy;
                 if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
                 {
-                    TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+                    TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"];
                 }
                 if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
                 {
-                    TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+                    TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"];
                 }
                 if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
                 {
-                    TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+                    TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"];
                 }
                 if (TotalIncrease != 0.0f)
                 {
@@ -2431,15 +2431,15 @@ namespace POESKillTree
             //    Subtotal += BaseAccuracy;
             //    if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
             //    {
-            //        TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+            //        TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"];
             //    }
             //    if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
             //    {
-            //        TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+            //        TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"];
             //    }
             //    if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
             //    {
-            //        TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+            //        TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"];
             //    }
             //    if (TotalIncrease != 0.0f)
             //    {
@@ -2463,104 +2463,131 @@ namespace POESKillTree
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
-                if (StatTotals.ContainsKey("+# Accuracy Rating"))
-                {
-                    BaseAccuracy += StatTotals["+# Accuracy Rating"];
-                }
-                if (StatTotals.ContainsKey("+# to Accuracy Rating"))
-                {
-                    BaseAccuracy += StatTotals["+# to Accuracy Rating"];
-                }
-                Subtotal += BaseAccuracy;
-                if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
-                {
-                    TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
-                }
-                if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
-                {
-                    TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
-                }
-                if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
-                {
-                    TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
-                }
-                if (TotalIncrease != 0.0f)
-                {
-                    TotalIncrease = (100.0f + TotalIncrease) / 100;
-                    Subtotal *= TotalIncrease;
-                }
-                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
-                {
-                    StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
-                }
-                else
-                {
-                    StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
-                }
+            if (StatTotals.ContainsKey("+# Accuracy Rating"))
+            {
+                BaseAccuracy += StatTotals["+# Accuracy Rating"];
+            }
+            if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+            {
+                BaseAccuracy += StatTotals["+# to Accuracy Rating"];
+            }
+            Subtotal += BaseAccuracy;
+            if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"];
+            }
+            if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"];
+            }
+            if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
+            {
+                StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+            }
+            else
+            {
+                StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+            }
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
-                if (StatTotals.ContainsKey("+# to maximum Life"))
-                {
-                    Subtotal = StatTotals["+# to maximum Life"];
-                }
-                if (StatTotals.ContainsKey("#% increased maximum Life"))
-                {
-                    TotalIncrease = StatTotals["#% increased maximum Life"];
-                }
-                if (TotalIncrease != 0.0f)
-                {
-                    TotalIncrease = (100.0f + TotalIncrease) / 100;
-                    Subtotal *= TotalIncrease;
-                }
-                if (StatTotals.ContainsKey("# HP Subtotal"))
-                {
-                    StatTotals["# HP Subtotal"] = Subtotal;
-                }
-                else
-                {
-                    StatTotals.Add("# HP Subtotal", Subtotal);
-                }
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            //"# PseudoAccuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on Target Weapon types)
-            //    if(BaseAccuracy==0.0f)
-            //    {
-            //        if (StatTotals.ContainsKey("+# Accuracy Rating"))
-            //        {
-            //            BaseAccuracy += StatTotals["+# Accuracy Rating"];
-            //        }
-            //        if (StatTotals.ContainsKey("+# to Accuracy Rating"))
-            //        {
-            //            BaseAccuracy += StatTotals["+# to Accuracy Rating"];
-            //        }
-            //    }
-            //    Subtotal += BaseAccuracy;
-            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
-            //    {
-            //        TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
-            //    }
-            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
-            //    {
-            //        TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
-            //    }
-            //    if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
-            //    {
-            //        TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
-            //    }
-            //    if (TotalIncrease != 0.0f)
-            //    {
-            //        TotalIncrease = (100.0f + TotalIncrease) / 100;
-            //        Subtotal *= TotalIncrease;
-            //    }
-            //    if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
-            //    {
-            //        StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
-            //    }
-            //    else
-            //    {
-            //        StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
-            //    }
+            if (StatTotals.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = StatTotals["+# to maximum Life"];
+            }
+            if (StatTotals.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = StatTotals["#% increased maximum Life"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (StatTotals.ContainsKey("# HP Subtotal"))
+            {
+                StatTotals["# HP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                StatTotals.Add("# HP Subtotal", Subtotal);
+            }
             return StatTotals;
+        }
+
+        internal static Dictionary<string, float> UpdateSubtotals(Dictionary<string, List<float>> StatTotals)
+        {
+            Dictionary<string, float> AttributeTotals = new Dictionary<string, float>(2);
+            float BaseAccuracy = 0.0f;
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
+            if (StatTotals.ContainsKey("+# Accuracy Rating"))
+            {
+                BaseAccuracy += StatTotals["+# Accuracy Rating"][0];
+            }
+            if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+            {
+                BaseAccuracy += StatTotals["+# to Accuracy Rating"][0];
+            }
+            Subtotal += BaseAccuracy;
+            if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"][0];
+            }
+            if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"][0];
+            }
+            if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
+            {
+                AttributeTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+            }
+            else
+            {
+                AttributeTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+            }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (StatTotals.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = StatTotals["+# to maximum Life"][0];
+            }
+            if (StatTotals.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = StatTotals["#% increased maximum Life"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (StatTotals.ContainsKey("# HP Subtotal"))
+            {
+                AttributeTotals["# HP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                AttributeTotals.Add("# HP Subtotal", Subtotal);
+            }
+            return AttributeTotals;
         }
 
         /// <summary>

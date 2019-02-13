@@ -1317,9 +1317,10 @@ namespace POESKillTree.Views
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
 
+            Dictionary<string, float> AttributeTotals;
             if (GlobalSettings.TrackedStats.Count != 0)
             {
-                Dictionary<string, float> AttributeTotals = GlobalSettings.TrackedStats.CreateAttributeDictionary(Tree.SelectedAttributes);
+                AttributeTotals = GlobalSettings.TrackedStats.CreateAttributeDictionary(Tree.SelectedAttributes);
                 foreach (var Element in AttributeTotals.Keys)
                 {
                     if (Tree.SelectedAttributes.ContainsKey(Element))
@@ -1334,6 +1335,22 @@ namespace POESKillTree.Views
                         TargetValue.Add(AttributeTotals[Element]);
                         Tree.SelectedAttributes.Add(Element, TargetValue);
                     }
+                }
+            }
+            AttributeTotals = GlobalSettings.UpdateSubtotals(Tree.SelectedAttributes);
+            foreach (var Element in AttributeTotals.Keys)
+            {
+                if (Tree.SelectedAttributes.ContainsKey(Element))
+                {
+                    List<float> TargetValue = new List<float>(1);
+                    TargetValue.Add(AttributeTotals[Element]);
+                    Tree.SelectedAttributes[Element] = TargetValue;
+                }
+                else
+                {
+                    List<float> TargetValue = new List<float>(1);
+                    TargetValue.Add(AttributeTotals[Element]);
+                    Tree.SelectedAttributes.Add(Element, TargetValue);
                 }
             }
 
