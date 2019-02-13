@@ -411,7 +411,13 @@ namespace POESKillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            if(Settings.TreePlusItemsMode)
+            bool AdvancedTreeSearch = false;
+            if (Settings.TreePlusItemsMode == false)
+            {
+                AdvancedTreeSearch = _attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") ? (_attrNameLookup.ContainsKey("# HP Subtotal") ?
+                (_attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal") ? true : false) : false) : false;
+            }
+            if (Settings.TreePlusItemsMode||AdvancedTreeSearch)
             {
                 string StatName;
                 Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
@@ -426,19 +432,57 @@ namespace POESKillTree.TreeGenerator.Solver
                     var currentValue = totalStats[attrIndex];
                     StatTotals.Add(StatName, currentValue);
                 }
-                StatTotals = JewelData.StatUpdater(StatTotals, Settings.TreeInfo);
-                Dictionary<string, float> ItemStatTotals = Settings.ItemInfo.CalculateTotalSingleAttributes();
-                float StatTotal;
                 ConstraintValues StatConstraint;
-                foreach (var keyName in StatTotals.Keys)
+                if (Settings.TreePlusItemsMode)
                 {
-                    StatTotal = StatTotals[keyName];
-                    if(ItemStatTotals.ContainsKey(keyName))
+                    StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
+                    //Subtotals should have been dealt with during StatUpdater
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
                     {
-                        StatTotal += ItemStatTotals[keyName];
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatTotals.ContainsKey(StatName))
+                        {
+                            csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
+                        else
+                        {
+                            csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
                     }
-                    StatConstraint = ConstraintDictionary[keyName];
-                    csvs *= CalcCsv(StatTotal, StatConstraint.Weight, StatConstraint.TargetValue);
+                }
+                else
+                {
+                    double ScoreMultiplier;
+                    Dictionary<string, float> SubTotals = GlobalSettings.CalculateSubtotalAttributes(Settings.TreeInfo);
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    {
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatName == "# DualWand Accuracy Subtotal" || StatName == "# HP Subtotal"|| StatName== "# PseudoAccuracy Subtotal")
+                        {
+                            if (SubTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(SubTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        else
+                        {
+                            if (StatTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        csvs *= ScoreMultiplier;
+                    }
                 }
             }
             else

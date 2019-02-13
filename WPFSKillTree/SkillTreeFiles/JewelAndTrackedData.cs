@@ -19,6 +19,8 @@ using POESKillTree.SkillTreeFiles;
 
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
 using POESKillTree.ViewModels;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace POESKillTree
 {
@@ -121,6 +123,8 @@ namespace POESKillTree
         }
         #endregion
 
+        public bool NotSetup;
+
         private JewelItemAttributes _itemAttributes;
         public JewelItemAttributes JewelAttributes
         {
@@ -195,6 +199,7 @@ namespace POESKillTree
             StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
             IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
             NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
+            NotSetup = true;
         }
         /// <summary>
         /// Adds the jewel slot.
@@ -227,6 +232,7 @@ namespace POESKillTree
                 IsStrThreshold = false;
                 IsIntThreshold = false;
                 IsDexThreshold = false;
+                var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
                 for (int AttrIndex = 0; AttrIndex < 3; ++AttrIndex)
                 {
                     AttributeTotal = 0.0f;
@@ -273,42 +279,42 @@ namespace POESKillTree
                     if (IsIntThreshold)
                     {
                         StrIntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Int Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot", IDLabel};
+                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", "+1 to Dex Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot", IDLabel};
+                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Str Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", IDLabel};
                     }
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Str Based Jewel", new List<float>(1));
+                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Str Based Jewel", new List<float>(1));
                 }
                 else if (IsIntThreshold)
                 {
                     if (IsDexThreshold)
                     {
                         IntDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", "+1 to Dex Based Jewel", IDLabel};
-                        SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot", IDLabel };
+                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Int Based Jewel", IDLabel};
+                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", IDLabel};
                     }
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
+                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                 }
                 else if (IsDexThreshold)
                 {
                     DexJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 to Dex Based Jewel", IDLabel};
-                    SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Dex Based Jewel", new List<float>(1));
+                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Dex JewelSlot", IDLabel};
+                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
 
                 }
                 else//Neutral(often ineffective corner jewels)
@@ -316,9 +322,27 @@ namespace POESKillTree
                     NeutralJewelSlots.Add(NodeID);
                     SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
                 }
-                SkillTree.Skillnodes[NodeID].Attributes.Add("Jewel Socket ID: #", new List<float>(NodeID));
+                //SkillTree.Skillnodes[NodeID].Attributes.Add("Jewel Socket ID: #", new List<float>(NodeID));
+                foreach (string s in SkillTree.Skillnodes[NodeID].attributes)
+                {
+                    if (s != "+1 to Jewel Socket")//Skip +1 to Jewel Socket
+                    {
+                        var values = new List<float>();
+
+                        foreach (Match m in regexAttrib.Matches(s))
+                        {
+                            if (m.Value == "")
+                                values.Add(float.NaN);
+                            else
+                                values.Add(float.Parse(m.Value, CultureInfo.InvariantCulture));
+                        }
+                        string cs = (regexAttrib.Replace(s, "#"));
+                        SkillTree.Skillnodes[NodeID].Attributes[cs] = values;
+                    }
+                }
             }
         }
+
         public static explicit operator System.Collections.Generic.List<ushort>(JewelData self)
         {
             return new List<ushort>(self.Keys);
@@ -1141,6 +1165,65 @@ namespace POESKillTree
                     }
                 }
             }
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            {
+                Subtotal += attrlist["+# Accuracy Rating"][0];
+            }
+            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            {
+                Subtotal += attrlist["+# to Accuracy Rating"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating with Wands"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += attrlist["+# increased Accuracy Rating while Dual Wielding"][0];
+            }
+            if (attrlist.ContainsKey("+# increased Global Accuracy Rating"))
+            {
+                TotalIncrease += attrlist["+# increased Global Accuracy Rating"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            {
+                attrlist["# DualWand Accuracy Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = attrlist["+# to maximum Life"][0];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = attrlist["#% increased maximum Life"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# HP Subtotal"))
+            {
+                attrlist["# HP Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# HP Subtotal", new List<float>(1) { Subtotal });
+            }
             return attrlist;
         }
 
@@ -1148,10 +1231,10 @@ namespace POESKillTree
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
         /// <param name="attrlist">The attrlist.</param>
-        /// <param name="ItemInfo">The item information.</param>
         /// <param name="Tree">The tree.</param>
-        /// <returns></returns>
-        static public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, SkillTree Tree)
+        /// <param name="InvModel">The item information sent from SkillTreeGenerator.</param>
+        /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
+        public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, SkillTree Tree, InventoryViewModel InvModel = null)
         {
             float AreaStats;
             ushort NodeID;
@@ -1771,7 +1854,96 @@ namespace POESKillTree
                 }
             }
 
-            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on ItemView)
+            //Calculate Equipment Stats+Jewels on SkilledNodes
+            if (InvModel != null)
+            {
+                Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
+                POESKillTree.Model.Items.Item ItemData;
+                bool ContinueCalc = true;
+                for (int Index = 0; ContinueCalc; ++Index)
+                {
+                    switch (Index)
+                    {
+                        case 0:
+                            ItemData = InvModel.Armor.Item; break;
+                        case 1:
+                            ItemData = InvModel.MainHand.Item; break;
+                        case 2:
+                            ItemData = InvModel.OffHand.Item; break;
+                        case 3:
+                            ItemData = InvModel.Ring.Item; break;
+                        case 4:
+                            ItemData = InvModel.Ring2.Item; break;
+                        case 5:
+                            ItemData = InvModel.Amulet.Item; break;
+                        case 6:
+                            ItemData = InvModel.Helm.Item; break;
+                        case 7:
+                            ItemData = InvModel.Gloves.Item; break;
+                        case 8:
+                            ItemData = InvModel.Boots.Item; break;
+                        case 9:
+                            ItemData = InvModel.Belt.Item; break;
+                        default:
+                            JewelItem JewelItemData;
+                            foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
+                            {
+                                NodeID = JewelSlotData.Key;
+                                CurrentNode = SkillTree.Skillnodes[NodeID];
+                                JewelItemData = JewelSlotData.Value.JewelData;
+                                if (JewelItemData != null&&Tree.SkilledNodes.Contains(CurrentNode))
+                                {
+                                    foreach (var TargetMod in JewelItemData.Mods)
+                                    {
+                                        if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                                        {
+                                            if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+                                            {
+                                                ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                                            }
+                                            else
+                                            {
+                                                ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ItemData = null; ContinueCalc = false; break;
+                    }
+                    if (ItemData != null)
+                    {
+                        foreach (var TargetMod in ItemData.Mods)
+                        {
+                            if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                            {
+                                if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+                                {
+                                    ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                                }
+                                else
+                                {
+                                    ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                                }
+                            }
+                        }
+                    }
+                }
+                string StatName;
+                foreach (var StatElement in ItemDictionary)
+                {
+                    StatName = StatElement.Key;
+                    if (attrlist.ContainsKey(StatName))
+                    {
+                        attrlist[StatName] += StatElement.Value;
+                    }
+                    else
+                    {
+                        attrlist.Add(StatName, StatElement.Value);
+                    }
+                }
+            }
+
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             if (attrlist.ContainsKey("+# Accuracy Rating"))
@@ -1832,6 +2004,85 @@ namespace POESKillTree
                 attrlist.Add("# HP Subtotal", Subtotal);
             }
             return attrlist;
+        }
+
+        /// <summary>
+        /// Calculates the total single attributes on Equipment.
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, float> CalculateTotalSingleAttributes(InventoryViewModel InvModel)
+        {
+            Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
+            POESKillTree.Model.Items.Item ItemData;
+            bool ContinueCalc = true;
+            for (int Index = 0; ContinueCalc; ++Index)
+            {
+                switch (Index)
+                {
+                    case 0:
+                        ItemData = InvModel.Armor.Item; break;
+                    case 1:
+                        ItemData = InvModel.MainHand.Item; break;
+                    case 2:
+                        ItemData = InvModel.OffHand.Item; break;
+                    case 3:
+                        ItemData = InvModel.Ring.Item; break;
+                    case 4:
+                        ItemData = InvModel.Ring2.Item; break;
+                    case 5:
+                        ItemData = InvModel.Amulet.Item; break;
+                    case 6:
+                        ItemData = InvModel.Helm.Item; break;
+                    case 7:
+                        ItemData = InvModel.Gloves.Item; break;
+                    case 8:
+                        ItemData = InvModel.Boots.Item; break;
+                    case 9:
+                        ItemData = InvModel.Belt.Item; break;
+                    default:
+                        JewelItem JewelItemData;
+                        foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
+                        {
+                            JewelItemData = JewelSlotData.Value.JewelData;
+                            if (JewelItemData != null)
+                            {
+                                foreach (var TargetMod in JewelItemData.Mods)
+                                {
+                                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                                    {
+                                        if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+                                        {
+                                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                                        }
+                                        else
+                                        {
+                                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        ItemData = null; ContinueCalc = false; break;
+                }
+                if (ItemData != null && ContinueCalc)
+                {
+                    foreach (var TargetMod in ItemData.Mods)
+                    {
+                        if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                        {
+                            if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+                            {
+                                ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                            }
+                            else
+                            {
+                                ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                            }
+                        }
+                    }
+                }
+            }
+            return ItemDictionary;
         }
     }
 
@@ -2097,6 +2348,124 @@ namespace POESKillTree
             if (StaticPropertyChanged != null)
                 StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
         }
+
+        public static Dictionary<string, float> CalculateSubtotalAttributes(SkillTree treeInfo)
+        {
+            Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+
+            float BaseAccuracy = 0.0f;
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
+            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
+            {
+                if (StatTotals.ContainsKey("+# Accuracy Rating"))
+                {
+                    BaseAccuracy += StatTotals["+# Accuracy Rating"];
+                }
+                if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+                {
+                    BaseAccuracy += StatTotals["+# to Accuracy Rating"];
+                }
+                Subtotal += BaseAccuracy;
+                if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+                {
+                    TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+                }
+                if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+                {
+                    TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+                }
+                if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+                {
+                    TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100;
+                    Subtotal *= TotalIncrease;
+                }
+                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+                {
+                    StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                }
+                else
+                {
+                    StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                }
+            }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (StatTotals.ContainsKey("# HP Subtotal"))
+            {
+                if (StatTotals.ContainsKey("+# to maximum Life"))
+                {
+                    Subtotal = StatTotals["+# to maximum Life"];
+                }
+                if (StatTotals.ContainsKey("#% increased maximum Life"))
+                {
+                    TotalIncrease = StatTotals["#% increased maximum Life"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100;
+                    Subtotal *= TotalIncrease;
+                }
+                if (StatTotals.ContainsKey("# HP Subtotal"))
+                {
+                    StatTotals["# HP Subtotal"] = Subtotal;
+                }
+                else
+                {
+                    StatTotals.Add("# HP Subtotal", Subtotal);
+                }
+            }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            //"# PseudoAccuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on Target Weapon types)
+            //if (StatTotals.ContainsKey("# PseudoAccuracy Subtotal"))
+            //{
+            //    if(BaseAccuracy==0.0f)
+            //    {
+            //        if (StatTotals.ContainsKey("+# Accuracy Rating"))
+            //        {
+            //            BaseAccuracy += StatTotals["+# Accuracy Rating"];
+            //        }
+            //        if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+            //        {
+            //            BaseAccuracy += StatTotals["+# to Accuracy Rating"];
+            //        }
+            //    }
+            //    Subtotal += BaseAccuracy;
+            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+            //    }
+            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+            //    }
+            //    if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+            //    }
+            //    if (TotalIncrease != 0.0f)
+            //    {
+            //        TotalIncrease = (100.0f + TotalIncrease) / 100;
+            //        Subtotal *= TotalIncrease;
+            //    }
+            //    if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            //    {
+            //        StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+            //    }
+            //    else
+            //    {
+            //        StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+            //    }
+            //}
+            return StatTotals;
+        }
+
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
@@ -2156,7 +2525,7 @@ namespace POESKillTree
         /// <summary>
         /// If true, automatically adds skilltree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
-        public static bool AutoTrackStats = false;
+        public static bool AutoTrackStats = true;
         /// <summary>
         /// Auto-updated value of types of weapons equipped (0:None;
         //  1: 2H Axe; 2: 2H Sword; 3: 2H Mace;
