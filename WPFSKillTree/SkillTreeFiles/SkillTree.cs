@@ -647,7 +647,7 @@ namespace POESKillTree.SkillTreeFiles
             }
             if (TotalIncrease != 0.0f)
             {
-                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
             if (temp.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
@@ -671,7 +671,7 @@ namespace POESKillTree.SkillTreeFiles
             }
             if (TotalIncrease != 0.0f)
             {
-                TotalIncrease = (100.0f + TotalIncrease) / 100;
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
             if (temp.ContainsKey("# HP Subtotal"))
