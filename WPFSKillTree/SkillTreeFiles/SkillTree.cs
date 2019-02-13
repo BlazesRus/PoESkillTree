@@ -633,17 +633,17 @@ namespace POESKillTree.SkillTreeFiles
             {
                 Subtotal += temp["+# to Accuracy Rating"][0];
             }
-            if (temp.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (temp.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += temp["+#% increased Accuracy Rating with Wands"][0];
+                TotalIncrease += temp["#% increased Accuracy Rating with Wands"][0];
             }
-            if (temp.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (temp.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += temp["+#% increased Accuracy Rating while Dual Wielding"][0];
+                TotalIncrease += temp["#% increased Accuracy Rating while Dual Wielding"][0];
             }
-            if (temp.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (temp.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += temp["+#% increased Global Accuracy Rating"][0];
+                TotalIncrease += temp["#% increased Global Accuracy Rating"][0];
             }
             if (TotalIncrease != 0.0f)
             {
