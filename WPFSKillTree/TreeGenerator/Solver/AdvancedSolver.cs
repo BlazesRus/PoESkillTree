@@ -414,8 +414,10 @@ namespace POESKillTree.TreeGenerator.Solver
             bool AdvancedTreeSearch = false;
             if (Settings.TreePlusItemsMode == false)
             {
-                AdvancedTreeSearch = _attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") ? (_attrNameLookup.ContainsKey("# HP Subtotal") ?
-                (_attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal") ? true : false) : false) : false;
+                if (_attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") || _attrNameLookup.ContainsKey("# HP Subtotal") || _attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal"))
+                {
+                    AdvancedTreeSearch = true;
+                }
             }
             if (Settings.TreePlusItemsMode||AdvancedTreeSearch)
             {
