@@ -1175,19 +1175,19 @@ namespace POESKillTree
             {
                 Subtotal += attrlist["+# to Accuracy Rating"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating with Wands"][0];
+                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating while Dual Wielding"][0];
+                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += attrlist["+#% increased Global Accuracy Rating"][0];
+                TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
             }
-            if (TotalIncrease != 0.0f)
+            if (TotalIncrease!=0.0f)
             {
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
@@ -1954,17 +1954,17 @@ namespace POESKillTree
             {
                 Subtotal += attrlist["+# to Accuracy Rating"];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating with Wands"];
+                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating while Dual Wielding"];
+                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"];
             }
-            if (attrlist.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += attrlist["+#% increased Global Accuracy Rating"];
+                TotalIncrease += attrlist["#% increased Global Accuracy Rating"];
             }
             if (TotalIncrease != 0.0f)
             {
@@ -2365,17 +2365,17 @@ namespace POESKillTree
             {
                 Subtotal += attrlist["+# to Accuracy Rating"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating with Wands"][0];
+                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += attrlist["+#% increased Accuracy Rating while Dual Wielding"][0];
+                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
             }
-            if (attrlist.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += attrlist["+#% increased Global Accuracy Rating"][0];
+                TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
             }
             if (TotalIncrease != 0.0f)
             {
@@ -2432,17 +2432,17 @@ namespace POESKillTree
                 BaseAccuracy += StatTotals["+# to Accuracy Rating"];
             }
             Subtotal += BaseAccuracy;
-            if (StatTotals.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (StatTotals.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"];
+                TotalIncrease += StatTotals["#% increased Accuracy Rating with Wands"];
             }
-            if (StatTotals.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (StatTotals.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"];
+                TotalIncrease += StatTotals["#% increased Accuracy Rating while Dual Wielding"];
             }
-            if (StatTotals.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (StatTotals.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"];
+                TotalIncrease += StatTotals["#% increased Global Accuracy Rating"];
             }
             if (TotalIncrease != 0.0f)
             {
@@ -2499,17 +2499,17 @@ namespace POESKillTree
                 BaseAccuracy += StatTotals["+# to Accuracy Rating"][0];
             }
             Subtotal += BaseAccuracy;
-            if (StatTotals.ContainsKey("+#% increased Accuracy Rating with Wands"))
+            if (StatTotals.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
-                TotalIncrease += StatTotals["+#% increased Accuracy Rating with Wands"][0];
+                TotalIncrease += StatTotals["#% increased Accuracy Rating with Wands"][0];
             }
-            if (StatTotals.ContainsKey("+#% increased Accuracy Rating while Dual Wielding"))
+            if (StatTotals.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
             {
-                TotalIncrease += StatTotals["+#% increased Accuracy Rating while Dual Wielding"][0];
+                TotalIncrease += StatTotals["#% increased Accuracy Rating while Dual Wielding"][0];
             }
-            if (StatTotals.ContainsKey("+#% increased Global Accuracy Rating"))
+            if (StatTotals.ContainsKey("#% increased Global Accuracy Rating"))
             {
-                TotalIncrease += StatTotals["+#% increased Global Accuracy Rating"][0];
+                TotalIncrease += StatTotals["#% increased Global Accuracy Rating"][0];
             }
             if (TotalIncrease != 0.0f)
             {
