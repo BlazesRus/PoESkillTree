@@ -1204,7 +1204,7 @@ msgstr ""
 msgid "Could not import build"
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1310
+#: SkillTreeFiles\SkillTree.cs:1308
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1370,7 +1370,7 @@ msgstr ""
 msgid "Everything Else"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:638
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:637
 msgid "Advanced"
 msgstr ""
 
@@ -1844,7 +1844,7 @@ msgstr[1] "{0}, {1} умений использовано"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2179
+#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2197
 msgid "An error occurred while copying to Clipboard."
 msgstr "Произошла ошибка при копировании."
 
@@ -1919,44 +1919,44 @@ msgstr "Произошла ошибка при загрузке."
 msgid "An error occurred while attempting to start the installation."
 msgstr "Произошла ошибка при попытке начать установку."
 
-#: Views\MainWindow.xaml.cs:1909
+#: Views\MainWindow.xaml.cs:1927
 msgid "An error occurred while attempting to load item data."
 msgstr "Произошла ошибка при попытке загрузки базы данных предметов."
 
-#: Views\MainWindow.xaml.cs:2004 Views\MainWindow.xaml.cs:2047
+#: Views\MainWindow.xaml.cs:2022 Views\MainWindow.xaml.cs:2065
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Произошла ошибка при попытке загрузить ссылку."
 
-#: Views\MainWindow.xaml.cs:2026
+#: Views\MainWindow.xaml.cs:2044
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2027
+#: Views\MainWindow.xaml.cs:2045
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2028
+#: Views\MainWindow.xaml.cs:2046
 msgid "Replace Bandits settings"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2054
+#: Views\MainWindow.xaml.cs:2072
 msgid "Current: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2055
+#: Views\MainWindow.xaml.cs:2073
 #, fuzzy
 msgid "Loaded: "
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:2159
+#: Views\MainWindow.xaml.cs:2177
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Создается ссылка PoEUrl"
 
-#: Views\MainWindow.xaml.cs:2165
+#: Views\MainWindow.xaml.cs:2183
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Произошла ошибка при попытке соединения с PoEUrl."
 
-#: Views\MainWindow.xaml.cs:2175
+#: Views\MainWindow.xaml.cs:2193
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Сссылка PoEUrl была скопирована."
 

@@ -45,7 +45,7 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
         {
             return Name;
         }
-		
+
         /// <summary>
         /// Calculates updated value
         /// </summary>
@@ -67,6 +67,13 @@ namespace POESKillTree.TreeGenerator.Model.PseudoAttributes
                 }
             }
             return TotalStat;
+        }
+
+        public PseudoAttribute(PseudoAttribute Target, string name)
+        {
+            Name = name;
+            Group = Target.Group;
+            Attributes = Target.Attributes;
         }
     }
 }

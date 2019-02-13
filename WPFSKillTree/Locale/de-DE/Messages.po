@@ -1152,7 +1152,7 @@ msgstr "Build ist von einer älteren Version und kann nicht importiert werden."
 msgid "Could not import build"
 msgstr "Konnte Build nicht importieren"
 
-#: SkillTreeFiles\SkillTree.cs:1310
+#: SkillTreeFiles\SkillTree.cs:1308
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr "Manche Knoten ({unknownNodes}) sind unbekannt und wurden weggelassen."
 
@@ -1319,7 +1319,7 @@ msgstr ""
 msgid "Everything Else"
 msgstr "Alles andere"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:638
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:637
 msgid "Advanced"
 msgstr "Erweitert"
 
@@ -1797,7 +1797,7 @@ msgstr[1] "{0} Punkte"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Dein Build muss mindestens einen Knoten ausgewählt haben, damit ein Screenshot generiert werden kann."
 
-#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2179
+#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2197
 msgid "An error occurred while copying to Clipboard."
 msgstr "Beim Kopieren in den Zwischenspeicher ist ein Fehler aufgetreten."
 
@@ -1871,45 +1871,45 @@ msgstr "Während des Herunterladens ist ein Fehler aufgetreten."
 msgid "An error occurred while attempting to start the installation."
 msgstr "Beim Versuch die Installation zu starten ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:1909
+#: Views\MainWindow.xaml.cs:1927
 msgid "An error occurred while attempting to load item data."
 msgstr "Beim Versuch die Gegenstandsdaten zu laden ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:2004 Views\MainWindow.xaml.cs:2047
+#: Views\MainWindow.xaml.cs:2022 Views\MainWindow.xaml.cs:2065
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Beim Versuch den Fähigkeitenbaum von der URL zu laden ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:2026
+#: Views\MainWindow.xaml.cs:2044
 msgid "The build you are loading contains information about selected bandits."
 msgstr "Der Build enthält Informationen über ausgewählte Banditen."
 
-#: Views\MainWindow.xaml.cs:2027
+#: Views\MainWindow.xaml.cs:2045
 msgid "Do you want to use it and overwrite current settings?"
 msgstr "Möchtest Du es verwenden und die derzeitige Einstellungen überschreiben?"
 
-#: Views\MainWindow.xaml.cs:2028
+#: Views\MainWindow.xaml.cs:2046
 msgid "Replace Bandits settings"
 msgstr "Ersetze Einstellungen für Banditen"
 
-#: Views\MainWindow.xaml.cs:2054
+#: Views\MainWindow.xaml.cs:2072
 #, fuzzy
 msgid "Current: "
 msgstr "Aktuell:"
 
-#: Views\MainWindow.xaml.cs:2055
+#: Views\MainWindow.xaml.cs:2073
 #, fuzzy
 msgid "Loaded: "
 msgstr "Geladen:"
 
-#: Views\MainWindow.xaml.cs:2159
+#: Views\MainWindow.xaml.cs:2177
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Generiere PoEUrl des Fähigkeitenbaums"
 
-#: Views\MainWindow.xaml.cs:2165
+#: Views\MainWindow.xaml.cs:2183
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Beim Versuch die PoEUrl zu kontaktieren ist ein Fehler aufgetreten."
 
-#: Views\MainWindow.xaml.cs:2175
+#: Views\MainWindow.xaml.cs:2193
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Der PoEUrl Link wurde in die Zwischenablage kopiert."
 

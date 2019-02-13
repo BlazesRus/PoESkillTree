@@ -2187,15 +2187,28 @@ namespace POESKillTree
         /// Starts the tracking.
         /// </summary>
         /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints.</param>
-        public void StartTracking(Dictionary<PseudoAttribute, System.Tuple<float, double>> pseudoAttributeConstraints)
+        public void StartTracking(Dictionary<string, Tuple<float, double>> attributeConstraints, Dictionary<PseudoAttribute, System.Tuple<float, double>> pseudoAttributeConstraints, WeaponClass value, OffHand value1, SkillTree treeInfo)
         {
             int Index;
-            foreach (var Attribute in pseudoAttributeConstraints.Keys)//Don't need target value and weight
+            Dictionary<string, List<float>> attrlist = treeInfo.SelectedAttributes;
+            string StatName;
+            string CustomName;
+            //bool CreateCustomTrackedAttribute = false;
+            foreach (PseudoAttribute Attribute in pseudoAttributeConstraints.Keys)//Don't need target value and weight
             {
                 Index = GetIndexOfAttribute(Attribute);
                 if (Index == -1)
-                {
-                    this.Add(Attribute);
+                {//Make sure TrackedPseudoAttribute doesn't conflict with normal attributes(Tagged PseudoAttributes etc)
+                    StatName = Attribute.Name;
+                    if (attrlist.ContainsKey(StatName))
+                    {
+                        CustomName = StatName + " (TrackedAttr)";
+                        this.Add(new PseudoAttribute(Attribute,CustomName));
+                    }
+                    else
+                    {
+                        this.Add(Attribute);
+                    }
                 }
                 else
                 {
@@ -2483,7 +2496,7 @@ namespace POESKillTree
             return StatTotals;
         }
 
-        internal static Dictionary<string, float> UpdateSubtotals(Dictionary<string, List<float>> StatTotals)
+        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, List<float>> StatTotals)
         {
             Dictionary<string, float> AttributeTotals = new Dictionary<string, float>(2);
             float BaseAccuracy = 0.0f;

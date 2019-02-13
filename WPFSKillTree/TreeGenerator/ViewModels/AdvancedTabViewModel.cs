@@ -845,7 +845,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
                 pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo, TreePlusItemsMode.Value));
-            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(pseudoConstraints);}
+            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo);}
             return Task.FromResult<ISolver>(solver);
         }
 

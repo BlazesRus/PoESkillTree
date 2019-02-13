@@ -281,6 +281,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Radius:", Hidden },
             new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
             new[] {"Intuitive Leaped", Hidden },
+			new[] {" (TrackedAttr)", PseudoTotal},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
