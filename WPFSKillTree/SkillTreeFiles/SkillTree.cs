@@ -451,8 +451,6 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
 
-                GlobalSettings.JewelInfo.CategorizeJewelSlots();
-
                 NodeGroups = new List<SkillNodeGroup>();
                 foreach (var gp in inTree.groups)
                 {

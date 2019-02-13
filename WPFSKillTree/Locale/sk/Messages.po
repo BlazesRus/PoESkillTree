@@ -1809,7 +1809,7 @@ msgstr[2] "{0}, {1} bodov"
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Vaša zostava musí obsahovať aspoň jeden uzol pre vytvorenie snímky"
 
-#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2178
+#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2179
 msgid "An error occurred while copying to Clipboard."
 msgstr "Nastala chyba počas kopírovania do Schránky."
 
@@ -1883,46 +1883,46 @@ msgstr "Nastala chyba počas sťahovania."
 msgid "An error occurred while attempting to start the installation."
 msgstr "Nastala chyba pri pokuse spustiť inštaláciu."
 
-#: Views\MainWindow.xaml.cs:1908
+#: Views\MainWindow.xaml.cs:1909
 msgid "An error occurred while attempting to load item data."
 msgstr "Nastala chyba pri pokuse načítať údaje predmetov."
 
-#: Views\MainWindow.xaml.cs:2003 Views\MainWindow.xaml.cs:2046
+#: Views\MainWindow.xaml.cs:2004 Views\MainWindow.xaml.cs:2047
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Nastala chyba pri pokuse načítať strom zručností z URL."
 
-#: Views\MainWindow.xaml.cs:2025
+#: Views\MainWindow.xaml.cs:2026
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2026
+#: Views\MainWindow.xaml.cs:2027
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2027
+#: Views\MainWindow.xaml.cs:2028
 #, fuzzy
 msgid "Replace Bandits settings"
 msgstr "Resetovať nastavenia"
 
-#: Views\MainWindow.xaml.cs:2053
+#: Views\MainWindow.xaml.cs:2054
 #, fuzzy
 msgid "Current: "
 msgstr "Platidlo"
 
-#: Views\MainWindow.xaml.cs:2054
+#: Views\MainWindow.xaml.cs:2055
 #, fuzzy
 msgid "Loaded: "
 msgstr "Načítať strom"
 
-#: Views\MainWindow.xaml.cs:2158
+#: Views\MainWindow.xaml.cs:2159
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Vytváranie Po_EUrl odkazu"
 
-#: Views\MainWindow.xaml.cs:2164
+#: Views\MainWindow.xaml.cs:2165
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Nastala chyba pri pokuse kontaktovať PoEUrl lokáciu."
 
-#: Views\MainWindow.xaml.cs:2174
+#: Views\MainWindow.xaml.cs:2175
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "PoEUrl odkaz bol skopírovaný do Schránky."
 

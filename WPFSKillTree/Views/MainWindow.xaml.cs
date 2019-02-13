@@ -1284,6 +1284,8 @@ namespace POESKillTree.Views
             }
 
             attritemp = JewelData.StatUpdater(attritemp, Tree);
+            if (GlobalSettings.JewelInfo.NotSetup) {
+                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false; }
 
             if (GlobalSettings.TrackedStats.Count != 0)
             {

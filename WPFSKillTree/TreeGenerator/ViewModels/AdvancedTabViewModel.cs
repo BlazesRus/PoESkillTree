@@ -378,6 +378,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         /// </summary>
         public SkillTree TreeInfo;
 
+
         /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
         /// </summary>
@@ -608,10 +609,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
 
             _attributes = CreatePossibleAttributes().ToList();
             if (!_attributes.Contains("# DualWand Accuracy Subtotal")) { _attributes.Add("# DualWand Accuracy Subtotal"); }
+            if (!_attributes.Contains("# PseudoAccuracy Subtotal")) { _attributes.Add("# PseudoAccuracy Subtotal"); }
             if (!_attributes.Contains("# HP Subtotal")) { _attributes.Add("# HP Subtotal"); }
-            if (!_attributes.Contains("+# to Dex Based Jewel")) { _attributes.Add("+# to Dex Based Jewel"); }
-            if (!_attributes.Contains("+# to Str Based Jewel")) { _attributes.Add("+# to Str Based Jewel"); }
-            if (!_attributes.Contains("+# to Int Based Jewel")) { _attributes.Add("+# to Int Based Jewel"); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),

@@ -125,75 +125,20 @@ namespace POESKillTree.ViewModels.Equipment
 
         private static string SlotToImageName(ItemSlot slot)
         {
-            Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-            POESKillTree.Model.Items.Item ItemData;
-            bool ContinueCalc = true;
-            for (int Index = 0; ContinueCalc; ++Index)
+            if (slot.IsFlask())
+                return "LifeFlask";
+            switch (slot)
             {
-                switch (Index)
-                {
-                    case 0:
-                        ItemData = Armor.Item; break;
-                    case 1:
-                        ItemData = MainHand.Item; break;
-                    case 2:
-                        ItemData = OffHand.Item; break;
-                    case 3:
-                        ItemData = Ring.Item; break;
-                    case 4:
-                        ItemData = Ring2.Item; break;
-                    case 5:
-                        ItemData = Amulet.Item; break;
-                    case 6:
-                        ItemData = Helm.Item; break;
-                    case 7:
-                        ItemData = Gloves.Item; break;
-                    case 8:
-                        ItemData = Boots.Item; break;
-                    case 9:
-                        ItemData = Belt.Item; break;
-                    default:
-                        JewelItem JewelItemData;
-                        foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in GlobalSettings.JewelInfo)
-                        {
-                            JewelItemData = JewelSlotData.Value.JewelData;
-                            if (JewelItemData != null)
-                            {
-                                foreach (var TargetMod in JewelItemData.Mods)
-                                {
-                                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-                                    {
-                                        if(ItemDictionary.ContainsKey(TargetMod.Attribute))
-                                        {
-                                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-                                        }
-                                        else
-                                        {
-                                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        ItemData = null;ContinueCalc=false; break;
-                }
-                if (ItemData != null&& ContinueCalc)
-                {
-                    foreach (var TargetMod in ItemData.Mods)
-                    {
-                        if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-                        {
-                            if(ItemDictionary.ContainsKey(TargetMod.Attribute))
-                            {
-                                ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-                            }
-                            else
-                            {
-                                ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-                            }
-                        }
-                    }
-                }
+                case ItemSlot.MainHand:
+                    return "TwoHandSword";
+                case ItemSlot.OffHand:
+                    return "Shield";
+                case ItemSlot.Ring2:
+                    return "Ring";
+                case ItemSlot.Helm:
+                    return "Helmet";
+                default:
+                    return slot.ToString();
             }
         }
     }
