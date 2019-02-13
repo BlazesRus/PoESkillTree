@@ -2006,84 +2006,84 @@ namespace POESKillTree
             return attrlist;
         }
 
-        /// <summary>
-        /// Calculates the total single attributes on Equipment.
-        /// </summary>
-        /// <returns></returns>
-        private Dictionary<string, float> CalculateTotalSingleAttributes(InventoryViewModel InvModel)
-        {
-            Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-            POESKillTree.Model.Items.Item ItemData;
-            bool ContinueCalc = true;
-            for (int Index = 0; ContinueCalc; ++Index)
-            {
-                switch (Index)
-                {
-                    case 0:
-                        ItemData = InvModel.Armor.Item; break;
-                    case 1:
-                        ItemData = InvModel.MainHand.Item; break;
-                    case 2:
-                        ItemData = InvModel.OffHand.Item; break;
-                    case 3:
-                        ItemData = InvModel.Ring.Item; break;
-                    case 4:
-                        ItemData = InvModel.Ring2.Item; break;
-                    case 5:
-                        ItemData = InvModel.Amulet.Item; break;
-                    case 6:
-                        ItemData = InvModel.Helm.Item; break;
-                    case 7:
-                        ItemData = InvModel.Gloves.Item; break;
-                    case 8:
-                        ItemData = InvModel.Boots.Item; break;
-                    case 9:
-                        ItemData = InvModel.Belt.Item; break;
-                    default:
-                        JewelItem JewelItemData;
-                        foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
-                        {
-                            JewelItemData = JewelSlotData.Value.JewelData;
-                            if (JewelItemData != null)
-                            {
-                                foreach (var TargetMod in JewelItemData.Mods)
-                                {
-                                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-                                    {
-                                        if (ItemDictionary.ContainsKey(TargetMod.Attribute))
-                                        {
-                                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-                                        }
-                                        else
-                                        {
-                                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        ItemData = null; ContinueCalc = false; break;
-                }
-                if (ItemData != null && ContinueCalc)
-                {
-                    foreach (var TargetMod in ItemData.Mods)
-                    {
-                        if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-                        {
-                            if (ItemDictionary.ContainsKey(TargetMod.Attribute))
-                            {
-                                ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-                            }
-                            else
-                            {
-                                ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-                            }
-                        }
-                    }
-                }
-            }
-            return ItemDictionary;
-        }
+    //    /// <summary>
+    //    /// Calculates the total single attributes on Equipment.
+    //    /// </summary>
+    //    /// <returns></returns>
+    //    private Dictionary<string, float> CalculateTotalSingleAttributes(InventoryViewModel InvModel)
+    //    {
+    //        Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
+    //        POESKillTree.Model.Items.Item ItemData;
+    //        bool ContinueCalc = true;
+    //        for (int Index = 0; ContinueCalc; ++Index)
+    //        {
+    //            switch (Index)
+    //            {
+    //                case 0:
+    //                    ItemData = InvModel.Armor.Item; break;
+    //                case 1:
+    //                    ItemData = InvModel.MainHand.Item; break;
+    //                case 2:
+    //                    ItemData = InvModel.OffHand.Item; break;
+    //                case 3:
+    //                    ItemData = InvModel.Ring.Item; break;
+    //                case 4:
+    //                    ItemData = InvModel.Ring2.Item; break;
+    //                case 5:
+    //                    ItemData = InvModel.Amulet.Item; break;
+    //                case 6:
+    //                    ItemData = InvModel.Helm.Item; break;
+    //                case 7:
+    //                    ItemData = InvModel.Gloves.Item; break;
+    //                case 8:
+    //                    ItemData = InvModel.Boots.Item; break;
+    //                case 9:
+    //                    ItemData = InvModel.Belt.Item; break;
+    //                default:
+    //                    JewelItem JewelItemData;
+    //                    foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
+    //                    {
+    //                        JewelItemData = JewelSlotData.Value.JewelData;
+    //                        if (JewelItemData != null)
+    //                        {
+    //                            foreach (var TargetMod in JewelItemData.Mods)
+    //                            {
+    //                                if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+    //                                {
+    //                                    if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+    //                                    {
+    //                                        ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+    //                                    }
+    //                                    else
+    //                                    {
+    //                                        ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+    //                                    }
+    //                                }
+    //                            }
+    //                        }
+    //                    }
+    //                    ItemData = null; ContinueCalc = false; break;
+    //            }
+    //            if (ItemData != null && ContinueCalc)
+    //            {
+    //                foreach (var TargetMod in ItemData.Mods)
+    //                {
+    //                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+    //                    {
+    //                        if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+    //                        {
+    //                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+    //                        }
+    //                        else
+    //                        {
+    //                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return ItemDictionary;
+    //    }
     }
 
     public class TrackedAttributes : System.Collections.Generic.List<PseudoAttribute>
@@ -2357,8 +2357,6 @@ namespace POESKillTree
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
-            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
-            {
                 if (StatTotals.ContainsKey("+# Accuracy Rating"))
                 {
                     BaseAccuracy += StatTotals["+# Accuracy Rating"];
@@ -2385,7 +2383,7 @@ namespace POESKillTree
                     TotalIncrease = (100.0f + TotalIncrease) / 100;
                     Subtotal *= TotalIncrease;
                 }
-                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
                 {
                     StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
                 }
@@ -2393,11 +2391,8 @@ namespace POESKillTree
                 {
                     StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
                 }
-            }
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
-            if (StatTotals.ContainsKey("# HP Subtotal"))
-            {
                 if (StatTotals.ContainsKey("+# to maximum Life"))
                 {
                     Subtotal = StatTotals["+# to maximum Life"];
@@ -2419,12 +2414,9 @@ namespace POESKillTree
                 {
                     StatTotals.Add("# HP Subtotal", Subtotal);
                 }
-            }
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
             //"# PseudoAccuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on Target Weapon types)
-            //if (StatTotals.ContainsKey("# PseudoAccuracy Subtotal"))
-            //{
             //    if(BaseAccuracy==0.0f)
             //    {
             //        if (StatTotals.ContainsKey("+# Accuracy Rating"))
@@ -2462,7 +2454,112 @@ namespace POESKillTree
             //    {
             //        StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
             //    }
-            //}
+            return StatTotals;
+        }
+
+        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, float> StatTotals)
+        {
+            float BaseAccuracy = 0.0f;
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
+                if (StatTotals.ContainsKey("+# Accuracy Rating"))
+                {
+                    BaseAccuracy += StatTotals["+# Accuracy Rating"];
+                }
+                if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+                {
+                    BaseAccuracy += StatTotals["+# to Accuracy Rating"];
+                }
+                Subtotal += BaseAccuracy;
+                if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+                {
+                    TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+                }
+                if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+                {
+                    TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+                }
+                if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+                {
+                    TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100;
+                    Subtotal *= TotalIncrease;
+                }
+                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
+                {
+                    StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                }
+                else
+                {
+                    StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+                if (StatTotals.ContainsKey("+# to maximum Life"))
+                {
+                    Subtotal = StatTotals["+# to maximum Life"];
+                }
+                if (StatTotals.ContainsKey("#% increased maximum Life"))
+                {
+                    TotalIncrease = StatTotals["#% increased maximum Life"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100;
+                    Subtotal *= TotalIncrease;
+                }
+                if (StatTotals.ContainsKey("# HP Subtotal"))
+                {
+                    StatTotals["# HP Subtotal"] = Subtotal;
+                }
+                else
+                {
+                    StatTotals.Add("# HP Subtotal", Subtotal);
+                }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            //"# PseudoAccuracy Subtotal" = Dex Based Accuracy x Accuracy increase (based on Target Weapon types)
+            //    if(BaseAccuracy==0.0f)
+            //    {
+            //        if (StatTotals.ContainsKey("+# Accuracy Rating"))
+            //        {
+            //            BaseAccuracy += StatTotals["+# Accuracy Rating"];
+            //        }
+            //        if (StatTotals.ContainsKey("+# to Accuracy Rating"))
+            //        {
+            //            BaseAccuracy += StatTotals["+# to Accuracy Rating"];
+            //        }
+            //    }
+            //    Subtotal += BaseAccuracy;
+            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating with Wands"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Accuracy Rating with Wands"];
+            //    }
+            //    if (StatTotals.ContainsKey("+# increased Accuracy Rating while Dual Wielding"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Accuracy Rating while Dual Wielding"];
+            //    }
+            //    if (StatTotals.ContainsKey("+# increased Global Accuracy Rating"))
+            //    {
+            //        TotalIncrease += StatTotals["+# increased Global Accuracy Rating"];
+            //    }
+            //    if (TotalIncrease != 0.0f)
+            //    {
+            //        TotalIncrease = (100.0f + TotalIncrease) / 100;
+            //        Subtotal *= TotalIncrease;
+            //    }
+            //    if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            //    {
+            //        StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+            //    }
+            //    else
+            //    {
+            //        StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+            //    }
             return StatTotals;
         }
 
