@@ -666,6 +666,6 @@ Average of 57.65% of Non-chaos is Physical
         <Attribute Name="+#% to Fire Resistance" />
         <Attribute Name="+#% to Cold Resistance" />
         <Attribute Name="+#% to Lightning Resistance" />
-        <PseudoAttribute Name="+#% to all Elemental Resistances"  ConversionMultiplier="3.0"/>
+        <Attribute Name="+#% to all Elemental Resistances"  ConversionMultiplier="3.0"/>
     </PseudoAttribute>
 </PseudoAttributes>
