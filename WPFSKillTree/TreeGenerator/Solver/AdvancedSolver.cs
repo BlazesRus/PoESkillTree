@@ -412,13 +412,14 @@ namespace POESKillTree.TreeGenerator.Solver
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
             bool AdvancedTreeSearch = false;
-            if (Settings.TreePlusItemsMode == false)
-            {
-                if (_attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") || _attrNameLookup.ContainsKey("# HP Subtotal") || _attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal"))
-                {
-                    AdvancedTreeSearch = true;
-                }
-            }
+			//Check if looking for calculated attributes at start solver once instead of checking each iteration(store inside shared static value)
+   //         if (Settings.TreePlusItemsMode == false)
+   //         {
+   //             if (_attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") || _attrNameLookup.ContainsKey("# HP Subtotal") || _attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal"))
+   //             {
+   //                 AdvancedTreeSearch = true;
+   //             }
+   //         }
             if (Settings.TreePlusItemsMode||AdvancedTreeSearch)
             {
                 string StatName;
