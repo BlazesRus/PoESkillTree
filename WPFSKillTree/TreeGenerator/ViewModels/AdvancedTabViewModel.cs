@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MoreLinq;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.Utils.Extensions;
 using POESKillTree.Common.ViewModels;
 using POESKillTree.Controls.Dialogs;
 using POESKillTree.Localization;
@@ -20,8 +21,6 @@ using POESKillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.TreeGenerator.Settings;
 using POESKillTree.TreeGenerator.Solver;
 using POESKillTree.Utils.Converter;
-using POESKillTree.Utils.Extensions;
-using POESKillTree.ViewModels.Equipment;
 
 namespace POESKillTree.TreeGenerator.ViewModels
 {
