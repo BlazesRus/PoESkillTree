@@ -842,6 +842,50 @@ namespace POESKillTree.TreeGenerator.ViewModels
             var pseudoConstraints = PseudoAttributeConstraints.ToDictionary(
                 constraint => constraint.Data,
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
+            //             if (_attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") || _attrNameLookup.ContainsKey("# HP Subtotal") || _attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal"))
+            //             {
+            //                 AdvancedTreeSearch = true;
+            //             }
+            if (attributeConstraints.ContainsKey("# DualWand Accuracy Subtotal")&& attributeConstraints["# DualWand Accuracy Subtotal"].Item1>0)
+            {
+                GlobalSettings.ScanDualWandAcc = true;
+            }
+            else
+            {
+                GlobalSettings.ScanDualWandAcc = false;
+            }
+            if (attributeConstraints.ContainsKey("# PseudoAccuracy Subtotal") && attributeConstraints["# PseudoAccuracy Subtotal"].Item1 > 0)
+            {
+                GlobalSettings.ScanPseudoAccuracy = true;
+            }
+            else
+            {
+                GlobalSettings.ScanPseudoAccuracy = false;
+            }
+            if (attributeConstraints.ContainsKey("# HP Subtotal") && attributeConstraints["# HP Subtotal"].Item1 > 0)
+            {
+                GlobalSettings.ScanHPTotal = true;
+            }
+            else
+            {
+                GlobalSettings.ScanHPTotal = false;
+            }
+            if (attributeConstraints.ContainsKey("# HybridHP Subtotal") && attributeConstraints["# HybridHP Subtotal"].Item1 > 0)
+            {
+                GlobalSettings.ScanHybridHP = true;
+            }
+            else
+            {
+                GlobalSettings.ScanHybridHP = false;
+            }
+            if (GlobalSettings.ScanDualWandAcc|| GlobalSettings.ScanPseudoAccuracy|| GlobalSettings.ScanHPTotal|| GlobalSettings.ScanHybridHP)
+            {
+                GlobalSettings.AdvancedTreeSearch = true;
+            }
+            else
+            {
+                GlobalSettings.AdvancedTreeSearch = false;
+            }
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
                 pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo, TreePlusItemsMode.Value));

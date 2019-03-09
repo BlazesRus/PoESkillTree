@@ -124,6 +124,18 @@
         <Attribute Name="#% increased Spell Damage" />
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Lightning Penatration" Group="Damage">
+        <Attribute Name="Damage Penatrates #% Lightning Resistance"/>
+        <Attribute Name="Damage Penatrates #% Elemental Resistances"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Area Spell with 60% converted to Lightning[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
     <!-- Physical to Lightning Conversion based on https://www.reddit.com/r/pathofexile/comments/6rjnwe/glacial_cascade_dmg_conversion_to_lightning/-->
     <PseudoAttribute Name="#% increased Glacial Cascade Damage with Physical to Lightning Gem[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage"/>
