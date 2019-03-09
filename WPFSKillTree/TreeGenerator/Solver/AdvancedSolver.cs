@@ -150,46 +150,46 @@ namespace POESKillTree.TreeGenerator.Solver
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
-            if (settings.AttributeConstraints.ContainsKey("# DualWand Accuracy Subtotal") && settings.AttributeConstraints["# DualWand Accuracy Subtotal"].Item1 > 0)
-            {
-                GlobalSettings.ScanDualWandAcc = true;
-            }
-            else
-            {
-                GlobalSettings.ScanDualWandAcc = false;
-            }
-            //if (settings.AttributeConstraints.ContainsKey("# PseudoAccuracy Subtotal") && settings.AttributeConstraints["# PseudoAccuracy Subtotal"].Item1 > 0)
+            //if (settings.AttributeConstraints.ContainsKey(DualWandAccKey) && settings.AttributeConstraints[DualWandAccKey].Item1 > 0)
             //{
-            //    GlobalSettings.ScanPseudoAccuracy = true;
+            //    GlobalSettings.ScanDualWandAcc = true;
             //}
             //else
             //{
-            //    GlobalSettings.ScanPseudoAccuracy = false;
+            //    GlobalSettings.ScanDualWandAcc = false;
             //}
-            if (settings.AttributeConstraints.ContainsKey("# HP Subtotal") && settings.AttributeConstraints["# HP Subtotal"].Item1 > 0)
-            {
-                GlobalSettings.ScanHPTotal = true;
-            }
-            else
-            {
-                GlobalSettings.ScanHPTotal = false;
-            }
-            if (settings.AttributeConstraints.ContainsKey("# HybridHP Subtotal") && settings.AttributeConstraints["# HybridHP Subtotal"].Item1 > 0)
-            {
-                GlobalSettings.ScanHybridHP = true;
-            }
-            else
-            {
-                GlobalSettings.ScanHybridHP = false;
-            }
-            if (GlobalSettings.ScanDualWandAcc || GlobalSettings.ScanPseudoAccuracy || GlobalSettings.ScanHPTotal || GlobalSettings.ScanHybridHP)
-            {
-                GlobalSettings.AdvancedTreeSearch = true;
-            }
-            else
-            {
-                GlobalSettings.AdvancedTreeSearch = false;
-            }
+            ////if (settings.AttributeConstraints.ContainsKey(PseudoAccKey) && settings.AttributeConstraints[PseudoAccKey].Item1 > 0)
+            ////{
+            ////    GlobalSettings.ScanPseudoAccuracy = true;
+            ////}
+            ////else
+            ////{
+            ////    GlobalSettings.ScanPseudoAccuracy = false;
+            ////}
+            //if (settings.AttributeConstraints.ContainsKey(HPTotalKey) && settings.AttributeConstraints[HPTotalKey].Item1 > 0)
+            //{
+            //    GlobalSettings.ScanHPTotal = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.ScanHPTotal = false;
+            //}
+            //if (settings.AttributeConstraints.ContainsKey(HybridHPKey) && settings.AttributeConstraints[HybridHPKey].Item1 > 0)
+            //{
+            //    GlobalSettings.ScanHybridHP = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.ScanHybridHP = false;
+            //}
+            //if (GlobalSettings.ScanDualWandAcc || GlobalSettings.ScanPseudoAccuracy || GlobalSettings.ScanHPTotal || GlobalSettings.ScanHybridHP)
+            //{
+            //    GlobalSettings.AdvancedTreeSearch = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.AdvancedTreeSearch = false;
+            //}
         }
 
         public override void Initialize()
@@ -493,7 +493,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     {
                         StatName = Element.Key;
                         StatConstraint = Element.Value;
-                        if (StatName == "# DualWand Accuracy Subtotal" || StatName == "# HP Subtotal"|| StatName== "# PseudoAccuracy Subtotal"|| StatName == "# HybridHP Subtotal")
+                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName== GlobalSettings.PseudoAccKey || StatName == GlobalSettings.HybridHPKey)
                         {
                             if (SubTotals.ContainsKey(StatName))
                             {

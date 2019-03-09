@@ -245,7 +245,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket", "# DualWand Accuracy Subtotal", "# HP Subtotal", "# HybridHP Subtotal"
+            "+# to Jewel Socket", GlobalSettings.DualWandAccKey, GlobalSettings.HPTotalKey, GlobalSettings.HybridHPKey
         };
 
         /// <summary>
@@ -608,10 +608,10 @@ namespace POESKillTree.TreeGenerator.ViewModels
             };
 
             _attributes = CreatePossibleAttributes().ToList();
-            if (!_attributes.Contains("# DualWand Accuracy Subtotal")) { _attributes.Add("# DualWand Accuracy Subtotal"); }
-            //if (!_attributes.Contains("# PseudoAccuracy Subtotal")) { _attributes.Add("# PseudoAccuracy Subtotal"); }
-            if (!_attributes.Contains("# HP Subtotal")) { _attributes.Add("# HP Subtotal"); }
-            if (!_attributes.Contains("# HybridHP Subtotal")) { _attributes.Add("# HybridHP Subtotal"); }
+            if (!_attributes.Contains(GlobalSettings.DualWandAccKey)) { _attributes.Add(GlobalSettings.DualWandAccKey); }
+            //if (!_attributes.Contains(GlobalSettings.PseudoAccKey)) { _attributes.Add(GlobalSettings.PseudoAccKey); }
+            if (!_attributes.Contains(GlobalSettings.HPTotalKey)) { _attributes.Add(GlobalSettings.HPTotalKey); }
+            if (!_attributes.Contains(GlobalSettings.HybridHPKey)) { _attributes.Add(GlobalSettings.HybridHPKey); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),
