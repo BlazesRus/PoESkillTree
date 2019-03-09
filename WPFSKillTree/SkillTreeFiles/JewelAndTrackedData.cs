@@ -2430,6 +2430,11 @@ namespace POESKillTree
             return StatTotals;
         }
 
+        /// <summary>
+        /// Updates the subtotals.
+        /// </summary>
+        /// <param name="StatTotals">The stat totals.</param>
+        /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
         public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, float> StatTotals)
         {
             float BaseAccuracy = 0.0f;
@@ -2581,6 +2586,15 @@ namespace POESKillTree
         /// The tracked stats
         /// </summary>
         public static TrackedAttributes TrackedStats = new TrackedAttributes();
+
+        //Check once during creation of AdvancedSolver
+        #region AdvancedSolverToggles
+        public static bool AdvancedTreeSearch = false;
+        public static bool ScanDualWandAcc = false;
+        public static bool ScanHybridHP = false;
+        public static bool ScanHPTotal = false;
+        public static bool ScanPseudoAccuracy = false;
+        #endregion AdvancedSolverToggles
 
         /// <summary>
         /// The default tracking directory
