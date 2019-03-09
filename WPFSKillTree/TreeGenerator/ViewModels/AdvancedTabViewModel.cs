@@ -842,10 +842,6 @@ namespace POESKillTree.TreeGenerator.ViewModels
             var pseudoConstraints = PseudoAttributeConstraints.ToDictionary(
                 constraint => constraint.Data,
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
-            //             if (_attrNameLookup.ContainsKey("# DualWand Accuracy Subtotal") || _attrNameLookup.ContainsKey("# HP Subtotal") || _attrNameLookup.ContainsKey("# PseudoAccuracy Subtotal"))
-            //             {
-            //                 AdvancedTreeSearch = true;
-            //             }
             if (attributeConstraints.ContainsKey("# DualWand Accuracy Subtotal")&& attributeConstraints["# DualWand Accuracy Subtotal"].Item1>0)
             {
                 GlobalSettings.ScanDualWandAcc = true;

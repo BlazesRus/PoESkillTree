@@ -453,7 +453,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     {
                         StatName = Element.Key;
                         StatConstraint = Element.Value;
-                        if (StatName == "# DualWand Accuracy Subtotal" || StatName == "# HP Subtotal"|| StatName== "# PseudoAccuracy Subtotal")
+                        if (StatName == "# DualWand Accuracy Subtotal" || StatName == "# HP Subtotal"|| StatName== "# PseudoAccuracy Subtotal"|| StatName == "# HybridHP Subtotal")
                         {
                             if (SubTotals.ContainsKey(StatName))
                             {
