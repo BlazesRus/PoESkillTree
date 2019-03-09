@@ -592,7 +592,7 @@ namespace POESKillTree.SkillTreeFiles
                 return;
             var canSwitch = CanSwitchClass(charClass);
             CharClass = charClass;
-            
+
             var remove = canSwitch ? SkilledNodes.Where(n => n.ascendancyName != null || n.IsRootNode) : SkilledNodes;
             var add = Skillnodes[RootNodeClassDictionary[charClass]];
             SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
@@ -687,6 +687,35 @@ namespace POESKillTree.SkillTreeFiles
             {
                 temp.Add("# HP Subtotal", new List<float>(1) { Subtotal });
             }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (temp.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = temp["+# to maximum Energy Shield"][0];
+            }
+            if (temp.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = temp["#% increased maximum Energy Shield"][0];
+            }
+            if (temp.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += temp["+# to Intelligence"][0] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (temp.ContainsKey("# HybridHP Subtotal"))
+            {
+                temp["# HybridHP Subtotal"][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add("# HybridHP Subtotal", new List<float>(1) { Subtotal });
+            }
+
             if (GlobalSettings.TrackedStats.Count != 0)
             {
                 temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
