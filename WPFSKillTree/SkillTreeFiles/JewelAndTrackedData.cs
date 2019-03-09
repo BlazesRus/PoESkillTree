@@ -1192,13 +1192,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
             {
-                attrlist["# DualWand Accuracy Subtotal"][0] = Subtotal;
+                attrlist[GlobalSettings.DualWandAccKey][0] = Subtotal;
             }
             else
             {
-                attrlist.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
+                attrlist.Add(GlobalSettings.DualWandAccKey, new List<float>(1) { Subtotal });
             }
             //MaxLife combined with increased life
             Subtotal = 0.0f;
@@ -1216,13 +1216,41 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# HP Subtotal"))
+            if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
             {
-                attrlist["# HP Subtotal"][0] = Subtotal;
+                attrlist[GlobalSettings.HPTotalKey][0] = Subtotal;
             }
             else
             {
-                attrlist.Add("# HP Subtotal", new List<float>(1) { Subtotal });
+                attrlist.Add(GlobalSettings.HPTotalKey, new List<float>(1) { Subtotal });
+            }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = attrlist["+# to maximum Energy Shield"][0];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = attrlist["#% increased maximum Energy Shield"][0];
+            }
+            if (attrlist.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += attrlist["+# to Intelligence"][0] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
+            {
+                attrlist[GlobalSettings.HybridHPKey][0] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add(GlobalSettings.HybridHPKey, new List<float>(1) { Subtotal });
             }
             return attrlist;
         }
@@ -1971,13 +1999,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease)/100;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
             {
-                attrlist["# DualWand Accuracy Subtotal"] = Subtotal;
+                attrlist[GlobalSettings.DualWandAccKey] = Subtotal;
             }
             else
             {
-                attrlist.Add("# DualWand Accuracy Subtotal", Subtotal);
+                attrlist.Add(GlobalSettings.DualWandAccKey, Subtotal);
             }
             //MaxLife combined with increased life
             Subtotal = 0.0f;
@@ -1995,13 +2023,41 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# HP Subtotal"))
+            if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
             {
-                attrlist["# HP Subtotal"] = Subtotal;
+                attrlist[GlobalSettings.HPTotalKey] = Subtotal;
             }
             else
             {
-                attrlist.Add("# HP Subtotal", Subtotal);
+                attrlist.Add(GlobalSettings.HPTotalKey, Subtotal);
+            }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = attrlist["+# to maximum Energy Shield"];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = attrlist["#% increased maximum Energy Shield"];
+            }
+            if (attrlist.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += attrlist["+# to Intelligence"] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
+            {
+                attrlist[GlobalSettings.HybridHPKey] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add(GlobalSettings.HybridHPKey, Subtotal);
             }
             return attrlist;
         }
@@ -2345,6 +2401,20 @@ namespace POESKillTree
 
     public static class GlobalSettings
     {
+        //Check once during creation of AdvancedSolver
+        #region AdvancedSolverToggles
+        public const string HybridHPKey = "# HybridHP Subtotal";
+        public const string DualWandAccKey = "# DualWand Accuracy Subtotal";
+        public const string HPTotalKey = "# HP Subtotal";
+        public const string PseudoAccKey = "# PseudoAccuracy Subtotal";
+
+        public static bool AdvancedTreeSearch = false;
+        public static bool ScanDualWandAcc = false;
+        public static bool ScanHybridHP = false;
+        public static bool ScanHPTotal = false;
+        public static bool ScanPseudoAccuracy = false;
+        #endregion AdvancedSolverToggles
+
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
@@ -2397,13 +2467,13 @@ namespace POESKillTree
                     TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                     Subtotal *= TotalIncrease;
                 }
-                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+                if (StatTotals.ContainsKey(DualWandAccKey))//"# Accuracy Subtotal"
                 {
-                    StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                    StatTotals[DualWandAccKey] = Subtotal;
                 }
                 else
                 {
-                    StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                    StatTotals.Add(DualWandAccKey, Subtotal);
                 }
             }
             //MaxLife combined with increased life
@@ -2426,13 +2496,13 @@ namespace POESKillTree
                 }
                 if (ScanHPTotal)
                 {
-                    if (StatTotals.ContainsKey("# HP Subtotal"))
+                    if (StatTotals.ContainsKey(HPTotalKey))
                     {
-                        StatTotals["# HP Subtotal"] = Subtotal;
+                        StatTotals[HPTotalKey] = Subtotal;
                     }
                     else
                     {
-                        StatTotals.Add("# HP Subtotal", Subtotal);
+                        StatTotals.Add(HPTotalKey, Subtotal);
                     }
                 }
                 if (ScanHybridHP)
@@ -2457,13 +2527,13 @@ namespace POESKillTree
                         ESSubtotal *= ESIncrease;
                     }
                     Subtotal += ESSubtotal;
-                    if (StatTotals.ContainsKey("# HybridHP Subtotal"))
+                    if (StatTotals.ContainsKey(HybridHPKey))
                     {
-                        StatTotals["# HybridHP Subtotal"] = Subtotal;
+                        StatTotals[HybridHPKey] = Subtotal;
                     }
                     else
                     {
-                        StatTotals.Add("# HybridHP Subtotal", Subtotal);
+                        StatTotals.Add(HybridHPKey, Subtotal);
                     }
                 }
             }
@@ -2507,13 +2577,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))
+            if (attrlist.ContainsKey(DualWandAccKey))
             {
-                attrlist["# DualWand Accuracy Subtotal"] = Subtotal;
+                attrlist[DualWandAccKey] = Subtotal;
             }
             else
             {
-                attrlist.Add("# DualWand Accuracy Subtotal", Subtotal);
+                attrlist.Add(DualWandAccKey, Subtotal);
             }
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
@@ -2530,13 +2600,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# HP Subtotal"))
+            if (attrlist.ContainsKey(HPTotalKey))
             {
-                attrlist["# HP Subtotal"] = Subtotal;
+                attrlist[HPTotalKey] = Subtotal;
             }
             else
             {
-                attrlist.Add("# HP Subtotal", Subtotal);
+                attrlist.Add(HPTotalKey, Subtotal);
             }
             float ESSubtotal = 0.0f;
             float ESIncrease = 0.0f;
@@ -2558,13 +2628,13 @@ namespace POESKillTree
                 ESSubtotal *= ESIncrease;
             }
             Subtotal += ESSubtotal;
-            if (attrlist.ContainsKey("# HybridHP Subtotal"))
+            if (attrlist.ContainsKey(HybridHPKey))
             {
-                attrlist["# HybridHP Subtotal"] = Subtotal;
+                attrlist[HybridHPKey] = Subtotal;
             }
             else
             {
-                attrlist.Add("# HybridHP Subtotal", Subtotal);
+                attrlist.Add(HybridHPKey, Subtotal);
             }
             return attrlist;
         }
@@ -2602,13 +2672,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))
+            if (attrlist.ContainsKey(DualWandAccKey))
             {
-                AttributeTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                AttributeTotals[DualWandAccKey] = Subtotal;
             }
             else
             {
-                AttributeTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                AttributeTotals.Add(DualWandAccKey, Subtotal);
             }
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
@@ -2625,13 +2695,13 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (attrlist.ContainsKey("# HP Subtotal"))
+            if (attrlist.ContainsKey(HPTotalKey))
             {
-                AttributeTotals["# HP Subtotal"] = Subtotal;
+                AttributeTotals[HPTotalKey] = Subtotal;
             }
             else
             {
-                AttributeTotals.Add("# HP Subtotal", Subtotal);
+                AttributeTotals.Add(HPTotalKey, Subtotal);
             }
             float ESSubtotal = 0.0f;
             float ESIncrease = 0.0f;
@@ -2653,13 +2723,13 @@ namespace POESKillTree
                 ESSubtotal *= ESIncrease;
             }
             Subtotal += ESSubtotal;
-            if (attrlist.ContainsKey("# HybridHP Subtotal"))
+            if (attrlist.ContainsKey(HybridHPKey))
             {
-                AttributeTotals["# HybridHP Subtotal"] = Subtotal;
+                AttributeTotals[HybridHPKey] = Subtotal;
             }
             else
             {
-                AttributeTotals.Add("# HybridHP Subtotal", Subtotal);
+                AttributeTotals.Add(HybridHPKey, Subtotal);
             }
             return AttributeTotals;
         }
@@ -2682,15 +2752,6 @@ namespace POESKillTree
         /// The tracked stats
         /// </summary>
         public static TrackedAttributes TrackedStats = new TrackedAttributes();
-
-        //Check once during creation of AdvancedSolver
-        #region AdvancedSolverToggles
-        public static bool AdvancedTreeSearch = false;
-        public static bool ScanDualWandAcc = false;
-        public static bool ScanHybridHP = false;
-        public static bool ScanHPTotal = false;
-        public static bool ScanPseudoAccuracy = false;
-        #endregion AdvancedSolverToggles
 
         /// <summary>
         /// The default tracking directory

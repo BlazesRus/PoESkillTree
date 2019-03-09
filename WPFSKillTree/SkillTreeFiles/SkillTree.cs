@@ -655,13 +655,13 @@ namespace POESKillTree.SkillTreeFiles
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (temp.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            if (temp.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
             {
-                temp["# DualWand Accuracy Subtotal"][0] = Subtotal;
+                temp[GlobalSettings.DualWandAccKey][0] = Subtotal;
             }
             else
             {
-                temp.Add("# DualWand Accuracy Subtotal", new List<float>(1) { Subtotal });
+                temp.Add(GlobalSettings.DualWandAccKey, new List<float>(1) { Subtotal });
             }
             //MaxLife combined with increased life
             Subtotal = 0.0f;
@@ -679,13 +679,13 @@ namespace POESKillTree.SkillTreeFiles
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (temp.ContainsKey("# HP Subtotal"))
+            if (temp.ContainsKey(GlobalSettings.HPTotalKey))
             {
-                temp["# HP Subtotal"][0] = Subtotal;
+                temp[GlobalSettings.HPTotalKey][0] = Subtotal;
             }
             else
             {
-                temp.Add("# HP Subtotal", new List<float>(1) { Subtotal });
+                temp.Add(GlobalSettings.HPTotalKey, new List<float>(1) { Subtotal });
             }
             float ESSubtotal = 0.0f;
             float ESIncrease = 0.0f;
@@ -707,13 +707,13 @@ namespace POESKillTree.SkillTreeFiles
                 ESSubtotal *= ESIncrease;
             }
             Subtotal += ESSubtotal;
-            if (temp.ContainsKey("# HybridHP Subtotal"))
+            if (temp.ContainsKey(GlobalSettings.HybridHPKey))
             {
-                temp["# HybridHP Subtotal"][0] = Subtotal;
+                temp[GlobalSettings.HybridHPKey][0] = Subtotal;
             }
             else
             {
-                temp.Add("# HybridHP Subtotal", new List<float>(1) { Subtotal });
+                temp.Add(GlobalSettings.HybridHPKey, new List<float>(1) { Subtotal });
             }
 
             if (GlobalSettings.TrackedStats.Count != 0)
