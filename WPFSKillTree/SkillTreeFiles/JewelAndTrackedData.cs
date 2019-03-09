@@ -2370,14 +2370,221 @@ namespace POESKillTree
             //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
+            if (ScanDualWandAcc)
+            {
+                if (attrlist.ContainsKey("+# Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# Accuracy Rating"][0];
+                }
+                if (attrlist.ContainsKey("+# to Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# to Accuracy Rating"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
+                {
+                    TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                    Subtotal *= TotalIncrease;
+                }
+                if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+                {
+                    StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                }
+                else
+                {
+                    StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                }
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (ScanHPTotal || ScanHybridHP)
+            {
+                if (attrlist.ContainsKey("+# to maximum Life"))
+                {
+                    Subtotal = attrlist["+# to maximum Life"][0];
+                }
+                if (attrlist.ContainsKey("#% increased maximum Life"))
+                {
+                    TotalIncrease = attrlist["#% increased maximum Life"][0];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                    Subtotal *= TotalIncrease;
+                }
+                if (ScanHPTotal)
+                {
+                    if (StatTotals.ContainsKey("# HP Subtotal"))
+                    {
+                        StatTotals["# HP Subtotal"] = Subtotal;
+                    }
+                    else
+                    {
+                        StatTotals.Add("# HP Subtotal", Subtotal);
+                    }
+                }
+                if (ScanHybridHP)
+                {
+                    float ESSubtotal = 0.0f;
+                    float ESIncrease = 0.0f;
+                    if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+                    {
+                        ESSubtotal = attrlist["+# to maximum Energy Shield"][0];
+                    }
+                    if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+                    {
+                        ESIncrease = attrlist["#% increased maximum Energy Shield"][0];
+                    }
+                    if (attrlist.ContainsKey("+# to Intelligence"))
+                    {
+                        ESIncrease += attrlist["+# to Intelligence"][0] / 10.0f;
+                    }
+                    if (ESIncrease != 0.0f)
+                    {
+                        ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                        ESSubtotal *= ESIncrease;
+                    }
+                    Subtotal += ESSubtotal;
+                    if (StatTotals.ContainsKey("# HybridHP Subtotal"))
+                    {
+                        StatTotals["# HybridHP Subtotal"] = Subtotal;
+                    }
+                    else
+                    {
+                        StatTotals.Add("# HybridHP Subtotal", Subtotal);
+                    }
+                }
+            }
+            return StatTotals;
+        }
+
+        /// <summary>
+        /// Updates the subtotals.
+        /// </summary>
+        /// <param name="attrlist">The stat totals.</param>
+        /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
+        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, float> attrlist)
+        {
+            float BaseAccuracy = 0.0f;
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
             if (attrlist.ContainsKey("+# Accuracy Rating"))
             {
-                Subtotal += attrlist["+# Accuracy Rating"][0];
+                BaseAccuracy += attrlist["+# Accuracy Rating"];
             }
             if (attrlist.ContainsKey("+# to Accuracy Rating"))
             {
-                Subtotal += attrlist["+# to Accuracy Rating"][0];
+                BaseAccuracy += attrlist["+# to Accuracy Rating"];
             }
+            Subtotal += BaseAccuracy;
+            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"];
+            }
+            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"];
+            }
+            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
+            {
+                TotalIncrease += attrlist["#% increased Global Accuracy Rating"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))
+            {
+                attrlist["# DualWand Accuracy Subtotal"] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# DualWand Accuracy Subtotal", Subtotal);
+            }
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = attrlist["+# to maximum Life"];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = attrlist["#% increased maximum Life"];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                Subtotal *= TotalIncrease;
+            }
+            if (attrlist.ContainsKey("# HP Subtotal"))
+            {
+                attrlist["# HP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# HP Subtotal", Subtotal);
+            }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = attrlist["+# to maximum Energy Shield"];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = attrlist["#% increased maximum Energy Shield"];
+            }
+            if (attrlist.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += attrlist["+# to Intelligence"] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (attrlist.ContainsKey("# HybridHP Subtotal"))
+            {
+                attrlist["# HybridHP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                attrlist.Add("# HybridHP Subtotal", Subtotal);
+            }
+            return attrlist;
+        }
+
+        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, List<float>> attrlist)
+        {
+            Dictionary<string, float> AttributeTotals = new Dictionary<string, float>(2);
+            float BaseAccuracy = 0.0f;
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
+            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            {
+                BaseAccuracy += attrlist["+# Accuracy Rating"][0];
+            }
+            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            {
+                BaseAccuracy += attrlist["+# to Accuracy Rating"][0];
+            }
+            Subtotal += BaseAccuracy;
             if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
             {
                 TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
@@ -2395,15 +2602,14 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))//"# Accuracy Subtotal"
+            if (attrlist.ContainsKey("# DualWand Accuracy Subtotal"))
             {
-                StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
+                AttributeTotals["# DualWand Accuracy Subtotal"] = Subtotal;
             }
             else
             {
-                StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
+                AttributeTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
             }
-            //MaxLife combined with increased life
             Subtotal = 0.0f;
             TotalIncrease = 0.0f;
             if (attrlist.ContainsKey("+# to maximum Life"))
@@ -2419,151 +2625,41 @@ namespace POESKillTree
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
             }
-            if (StatTotals.ContainsKey("# HP Subtotal"))
-            {
-                StatTotals["# HP Subtotal"] = Subtotal;
-            }
-            else
-            {
-                StatTotals.Add("# HP Subtotal", Subtotal);
-            }
-            return StatTotals;
-        }
-
-        /// <summary>
-        /// Updates the subtotals.
-        /// </summary>
-        /// <param name="StatTotals">The stat totals.</param>
-        /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
-        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, float> StatTotals)
-        {
-            float BaseAccuracy = 0.0f;
-            float Subtotal = 0.0f;
-            float TotalIncrease = 0.0f;
-            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
-            if (StatTotals.ContainsKey("+# Accuracy Rating"))
-            {
-                BaseAccuracy += StatTotals["+# Accuracy Rating"];
-            }
-            if (StatTotals.ContainsKey("+# to Accuracy Rating"))
-            {
-                BaseAccuracy += StatTotals["+# to Accuracy Rating"];
-            }
-            Subtotal += BaseAccuracy;
-            if (StatTotals.ContainsKey("#% increased Accuracy Rating with Wands"))
-            {
-                TotalIncrease += StatTotals["#% increased Accuracy Rating with Wands"];
-            }
-            if (StatTotals.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
-            {
-                TotalIncrease += StatTotals["#% increased Accuracy Rating while Dual Wielding"];
-            }
-            if (StatTotals.ContainsKey("#% increased Global Accuracy Rating"))
-            {
-                TotalIncrease += StatTotals["#% increased Global Accuracy Rating"];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
-            {
-                StatTotals["# DualWand Accuracy Subtotal"] = Subtotal;
-            }
-            else
-            {
-                StatTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
-            }
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            if (StatTotals.ContainsKey("+# to maximum Life"))
-            {
-                Subtotal = StatTotals["+# to maximum Life"];
-            }
-            if (StatTotals.ContainsKey("#% increased maximum Life"))
-            {
-                TotalIncrease = StatTotals["#% increased maximum Life"];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (StatTotals.ContainsKey("# HP Subtotal"))
-            {
-                StatTotals["# HP Subtotal"] = Subtotal;
-            }
-            else
-            {
-                StatTotals.Add("# HP Subtotal", Subtotal);
-            }
-            return StatTotals;
-        }
-
-        public static Dictionary<string, float> UpdateSubtotals(Dictionary<string, List<float>> StatTotals)
-        {
-            Dictionary<string, float> AttributeTotals = new Dictionary<string, float>(2);
-            float BaseAccuracy = 0.0f;
-            float Subtotal = 0.0f;
-            float TotalIncrease = 0.0f;
-            //"# Accuracy Subtotal" = Dex Based Accuracy x Accuracy increase
-            if (StatTotals.ContainsKey("+# Accuracy Rating"))
-            {
-                BaseAccuracy += StatTotals["+# Accuracy Rating"][0];
-            }
-            if (StatTotals.ContainsKey("+# to Accuracy Rating"))
-            {
-                BaseAccuracy += StatTotals["+# to Accuracy Rating"][0];
-            }
-            Subtotal += BaseAccuracy;
-            if (StatTotals.ContainsKey("#% increased Accuracy Rating with Wands"))
-            {
-                TotalIncrease += StatTotals["#% increased Accuracy Rating with Wands"][0];
-            }
-            if (StatTotals.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
-            {
-                TotalIncrease += StatTotals["#% increased Accuracy Rating while Dual Wielding"][0];
-            }
-            if (StatTotals.ContainsKey("#% increased Global Accuracy Rating"))
-            {
-                TotalIncrease += StatTotals["#% increased Global Accuracy Rating"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (StatTotals.ContainsKey("# DualWand Accuracy Subtotal"))
-            {
-                AttributeTotals["# DualWand Accuracy Subtotal"] = Subtotal;
-            }
-            else
-            {
-                AttributeTotals.Add("# DualWand Accuracy Subtotal", Subtotal);
-            }
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            if (StatTotals.ContainsKey("+# to maximum Life"))
-            {
-                Subtotal = StatTotals["+# to maximum Life"][0];
-            }
-            if (StatTotals.ContainsKey("#% increased maximum Life"))
-            {
-                TotalIncrease = StatTotals["#% increased maximum Life"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (StatTotals.ContainsKey("# HP Subtotal"))
+            if (attrlist.ContainsKey("# HP Subtotal"))
             {
                 AttributeTotals["# HP Subtotal"] = Subtotal;
             }
             else
             {
                 AttributeTotals.Add("# HP Subtotal", Subtotal);
+            }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = attrlist["+# to maximum Energy Shield"][0];
+            }
+            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = attrlist["#% increased maximum Energy Shield"][0];
+            }
+            if (attrlist.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += attrlist["+# to Intelligence"][0] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (attrlist.ContainsKey("# HybridHP Subtotal"))
+            {
+                AttributeTotals["# HybridHP Subtotal"] = Subtotal;
+            }
+            else
+            {
+                AttributeTotals.Add("# HybridHP Subtotal", Subtotal);
             }
             return AttributeTotals;
         }
