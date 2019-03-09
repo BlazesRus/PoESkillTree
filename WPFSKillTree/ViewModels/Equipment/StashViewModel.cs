@@ -289,7 +289,7 @@ namespace POESKillTree.ViewModels.Equipment
 
         public void AddItem(JewelItem item, bool scrollToItem)
         {
-            var itemVm = new StashItemViewModel(_dialogCoordinator, (Item)item);
+            var itemVm = new StashItemViewModel((Item)item);
             Items.Add(itemVm);
 
             if (!scrollToItem)

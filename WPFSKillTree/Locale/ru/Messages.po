@@ -31,7 +31,7 @@ msgstr "OK"
 #: ItemFilter\Views\ItemFilterEditWindow.xaml:138
 #: Views\Builds\EditBuildWindow.xaml:64 Views\Crafting\CraftingView.xaml:137
 #: Views\Crafting\UniqueCraftingView.xaml:59
-#: Views\Equipment\SocketedGemsEditingView.xaml:187
+#: Views\Equipment\SocketedGemsEditingView.xaml:181
 #: Views\Equipment\TabPicker.xaml:127
 #: Controls\Dialogs\ExtendedDialogManager.cs:79
 #: Controls\Dialogs\ExtendedDialogManager.cs:91
@@ -507,8 +507,12 @@ msgstr "Загрузить секцию"
 msgid "Load stash tab from clipboard"
 msgstr "Загрузить список секций личного сундука"
 
-#: Views\Equipment\SocketedGemsEditingView.xaml:182
-msgid "Change socketed gems"
+#: Views\Equipment\SocketedGemsEditingView.xaml:166
+msgid "Equipped item's maximum number of sockets:"
+msgstr ""
+
+#: Views\Equipment\SocketedGemsEditingView.xaml:176
+msgid "Save socketed gems"
 msgstr ""
 
 #: Views\Equipment\TabPicker.xaml:18
@@ -1170,41 +1174,41 @@ msgstr "Предупреждение"
 msgid "Information"
 msgstr "Информация"
 
-#: Model\Serialization\AbstractPersistentDataDeserializer.cs:84
+#: Model\Serialization\AbstractPersistentDataDeserializer.cs:94
 msgid "Directory must be empty."
 msgstr ""
 
-#: Model\Serialization\AbstractPersistentDataDeserializer.cs:88
+#: Model\Serialization\AbstractPersistentDataDeserializer.cs:98
 #: ViewModels\SettingsMenuViewModel.cs:66
 msgid "Select build directory"
 msgstr ""
 
-#: Model\Serialization\AbstractPersistentDataDeserializer.cs:89
+#: Model\Serialization\AbstractPersistentDataDeserializer.cs:99
 msgid ""
 "Select the directory where builds will be stored.\n"
 "It will be created if it does not yet exist. You can change it in the settings later."
 msgstr ""
 
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:74
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:75
 #, csharp-format
 msgid "Could not import build file, only existing files with the extension {0} can be imported."
 msgstr ""
 
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:76
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:138
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:147
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:77
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:139
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:148
 msgid "Import failed"
 msgstr ""
 
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:137
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:138
 msgid "Build is of an old version and can't be imported"
 msgstr ""
 
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:146
+#: Model\Serialization\PersistentDataDeserializerCurrent.cs:147
 msgid "Could not import build"
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1308
+#: SkillTreeFiles\SkillTree.cs:1350
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1265,107 +1269,107 @@ msgstr ""
 msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:206
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:205
 msgid "Popular"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:214
 #: Utils\Converter\GroupStringConverter.cs:34
 msgid "Core Attributes"
 msgstr "Главние атрибуты"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
 #: Utils\Converter\GroupStringConverter.cs:30
 msgid "General"
 msgstr "Общее"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:217
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
 #: Utils\Converter\GroupStringConverter.cs:19
 msgid "Keystone"
 msgstr "Ключевые пассивное навики"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:218
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:217
 #: Utils\Converter\GroupStringConverter.cs:21
 msgid "Charges"
 msgstr "Заряды"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:219
 #: Utils\Converter\GroupStringConverter.cs:31
 msgid "Defense"
 msgstr "Защита"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:221
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
 #: Utils\Converter\GroupStringConverter.cs:29
 msgid "Block"
 msgstr "Шанс заблокировать удар"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:222
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:221
 #: Utils\Converter\GroupStringConverter.cs:28
 msgid "Shield"
 msgstr "Щит"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:223
 #: Utils\Converter\GroupStringConverter.cs:20
 msgid "Weapon"
 msgstr "Оружие"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:225
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
 #: Utils\Converter\GroupStringConverter.cs:32
 msgid "Spell"
 msgstr "Чары"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:226
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:225
 #: Utils\Converter\GroupStringConverter.cs:27
 msgid "Critical Strike"
 msgstr "Критический удар"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:227
 #: Utils\Converter\GroupStringConverter.cs:26
 msgid "Aura"
 msgstr "Аура"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
 #: Utils\Converter\GroupStringConverter.cs:25
 msgid "Curse"
 msgstr "Проклятья"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
 #: Utils\Converter\GroupStringConverter.cs:22
 msgid "Minion"
 msgstr "Приспешник"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
 #: Utils\Converter\GroupStringConverter.cs:23
 msgid "Trap"
 msgstr "Ловушки"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
 #: Utils\Converter\GroupStringConverter.cs:24
 msgid "Totem"
 msgstr "Тотемы"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:33
 #: ItemFilter\Model\FilterManager.cs:674
 msgid "Flasks"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:36
 msgid "Jewel Types"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
 #: Utils\Converter\GroupStringConverter.cs:37
 msgid "Tracked PseudoTotals"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
 #: Utils\Converter\GroupStringConverter.cs:38
 msgid "Hidden"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:237
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
 #: Utils\Converter\GroupStringConverter.cs:35
 msgid "Everything Else"
 msgstr ""
@@ -1607,7 +1611,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr ""
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:456
-#: Views\MainWindow.xaml.cs:971
+#: Views\MainWindow.xaml.cs:976
 msgid "Do you want to continue?"
 msgstr "Хотите продолжить?"
 
@@ -1703,16 +1707,16 @@ msgstr "Загрузить и импортировать личный сунду
 msgid "Could not load the currently running leagues."
 msgstr ""
 
-#: ViewModels\Equipment\DownloadStashViewModel.cs:190
-#: ViewModels\Equipment\DownloadStashViewModel.cs:247
+#: ViewModels\Equipment\DownloadStashViewModel.cs:195
+#: ViewModels\Equipment\DownloadStashViewModel.cs:252
 msgid "An error occurred while attempting to load stash data."
 msgstr "Произошла ошибка при попытке загрузить данные личного сундука."
 
-#: ViewModels\Equipment\DownloadStashViewModel.cs:241
+#: ViewModels\Equipment\DownloadStashViewModel.cs:246
 msgid "New tab added"
 msgstr ""
 
-#: ViewModels\Equipment\DownloadStashViewModel.cs:242
+#: ViewModels\Equipment\DownloadStashViewModel.cs:247
 #, fuzzy, csharp-format
 msgid "New tab with {0} items was added to stash."
 msgstr "Была добавлена новая секция с {0} предметами"
@@ -1790,173 +1794,173 @@ msgstr ""
 msgid "Initialization"
 msgstr "Подождите..."
 
-#: Views\MainWindow.xaml.cs:469 Views\MainWindow.xaml.cs:486
+#: Views\MainWindow.xaml.cs:469 Views\MainWindow.xaml.cs:489
 #, fuzzy
 msgid "Initializing window ..."
 msgstr "Подождите..."
 
-#: Views\MainWindow.xaml.cs:482
+#: Views\MainWindow.xaml.cs:484
 #, fuzzy
 msgid "Loading skill tree assets ..."
 msgstr "Загрузить активы"
 
-#: Views\MainWindow.xaml.cs:514
+#: Views\MainWindow.xaml.cs:519
 msgid "Highlight nodes by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:519
+#: Views\MainWindow.xaml.cs:524
 msgid "Remove highlights by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:600
+#: Views\MainWindow.xaml.cs:605
 msgid "Load Tree"
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:606
+#: Views\MainWindow.xaml.cs:611
 #, fuzzy
 msgid "Load as new build"
 msgstr "Сохранить билд"
 
-#: Views\MainWindow.xaml.cs:788
+#: Views\MainWindow.xaml.cs:793
 msgid ""
 "There are unsaved builds. Do you want to save them before closing?\n"
 "\n"
 "Canceling stops the program from closing and does not save any builds."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:818
+#: Views\MainWindow.xaml.cs:823
 msgid "Are you sure?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:819
+#: Views\MainWindow.xaml.cs:824
 #, fuzzy
 msgid "Untag All Skill Nodes"
 msgstr "Убрать все отметки"
 
-#: Views\MainWindow.xaml.cs:892
+#: Views\MainWindow.xaml.cs:897
 #, fuzzy, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
 msgstr[0] "{0}, {1} умений использовано"
 msgstr[1] "{0}, {1} умений использовано"
 
-#: Views\MainWindow.xaml.cs:926
+#: Views\MainWindow.xaml.cs:931
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:962 Views\MainWindow.xaml.cs:2197
+#: Views\MainWindow.xaml.cs:967 Views\MainWindow.xaml.cs:2194
 msgid "An error occurred while copying to Clipboard."
 msgstr "Произошла ошибка при копировании."
 
-#: Views\MainWindow.xaml.cs:968
+#: Views\MainWindow.xaml.cs:973
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:977
+#: Views\MainWindow.xaml.cs:982
 #, fuzzy
 msgid "Downloading skill tree assets ..."
 msgstr "Загрузить активы"
 
-#: Views\MainWindow.xaml.cs:998
+#: Views\MainWindow.xaml.cs:1003
 msgid "An error occurred while downloading assets."
 msgstr "Произошла ошибка при загрузке активов."
 
-#: Views\MainWindow.xaml.cs:1058
+#: Views\MainWindow.xaml.cs:1063
 msgid "Checking for updates"
 msgstr "Проверяется наличие обновлений"
 
-#: Views\MainWindow.xaml.cs:1063
+#: Views\MainWindow.xaml.cs:1068
 msgid "You have the latest version!"
 msgstr "Вы используете последнюю версию!"
 
-#: Views\MainWindow.xaml.cs:1068
+#: Views\MainWindow.xaml.cs:1073
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Доступно обновление {0} ({1})"
 
-#: Views\MainWindow.xaml.cs:1071
+#: Views\MainWindow.xaml.cs:1076
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Приложение будет закрыито по завершению загрузки для продолжения обновления."
 
-#: Views\MainWindow.xaml.cs:1072
+#: Views\MainWindow.xaml.cs:1077
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Длступна новая версия {0}!"
 
-#: Views\MainWindow.xaml.cs:1075
+#: Views\MainWindow.xaml.cs:1080
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Новая версия прилодения будет установлена поверх предидущей."
 
-#: Views\MainWindow.xaml.cs:1079
+#: Views\MainWindow.xaml.cs:1084
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Внимание! Это пре-релизная версия, что значит, что моут возникать баги."
 
-#: Views\MainWindow.xaml.cs:1083
+#: Views\MainWindow.xaml.cs:1088
 msgid "Do you want to download and install the update?"
 msgstr "Хотите загрузить и установить обновление?"
 
-#: Views\MainWindow.xaml.cs:1084
+#: Views\MainWindow.xaml.cs:1089
 msgid "Do you want to download and install the new version?"
 msgstr "Хотите загрузить и установить новую версию?"
 
-#: Views\MainWindow.xaml.cs:1086
+#: Views\MainWindow.xaml.cs:1091
 msgid "Continue installation?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1097
+#: Views\MainWindow.xaml.cs:1102
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Произошла ошибка при попытке соединения."
 
-#: Views\MainWindow.xaml.cs:1105
+#: Views\MainWindow.xaml.cs:1110
 msgid "Downloading latest version"
 msgstr "Загрузить последнюю версию"
 
-#: Views\MainWindow.xaml.cs:1120 Views\MainWindow.xaml.cs:1135
+#: Views\MainWindow.xaml.cs:1125 Views\MainWindow.xaml.cs:1140
 msgid "An error occurred during the download operation."
 msgstr "Произошла ошибка при загрузке."
 
-#: Views\MainWindow.xaml.cs:1148
+#: Views\MainWindow.xaml.cs:1153
 msgid "An error occurred while attempting to start the installation."
 msgstr "Произошла ошибка при попытке начать установку."
 
-#: Views\MainWindow.xaml.cs:1927
+#: Views\MainWindow.xaml.cs:1930
 msgid "An error occurred while attempting to load item data."
 msgstr "Произошла ошибка при попытке загрузки базы данных предметов."
 
-#: Views\MainWindow.xaml.cs:2022 Views\MainWindow.xaml.cs:2065
+#: Views\MainWindow.xaml.cs:2019 Views\MainWindow.xaml.cs:2062
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Произошла ошибка при попытке загрузить ссылку."
 
-#: Views\MainWindow.xaml.cs:2044
+#: Views\MainWindow.xaml.cs:2041
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2045
+#: Views\MainWindow.xaml.cs:2042
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2046
+#: Views\MainWindow.xaml.cs:2043
 msgid "Replace Bandits settings"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2072
+#: Views\MainWindow.xaml.cs:2069
 msgid "Current: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2073
+#: Views\MainWindow.xaml.cs:2070
 #, fuzzy
 msgid "Loaded: "
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:2177
+#: Views\MainWindow.xaml.cs:2174
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Создается ссылка PoEUrl"
 
-#: Views\MainWindow.xaml.cs:2183
+#: Views\MainWindow.xaml.cs:2180
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Произошла ошибка при попытке соединения с PoEUrl."
 
-#: Views\MainWindow.xaml.cs:2193
+#: Views\MainWindow.xaml.cs:2190
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Сссылка PoEUrl была скопирована."
 
