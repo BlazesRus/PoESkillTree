@@ -493,7 +493,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     {
                         StatName = Element.Key;
                         StatConstraint = Element.Value;
-                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName== GlobalSettings.PseudoAccKey || StatName == GlobalSettings.HybridHPKey)
+                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName == GlobalSettings.HybridHPKey || StatName == GlobalSettings.PseudoAccKey)
                         {
                             if (SubTotals.ContainsKey(StatName))
                             {
