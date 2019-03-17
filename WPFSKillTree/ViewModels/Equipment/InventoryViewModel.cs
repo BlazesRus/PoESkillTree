@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Model.Items;
-using POESKillTree.Utils;
-using System.Collections.Generic;
+using PoESkillTree.Utils;
+using PoESkillTree.Model.Items;
 
-namespace POESKillTree.ViewModels.Equipment
+namespace PoESkillTree.ViewModels.Equipment
 {
     /// <summary>
     /// View model for the inventory. Only a collection of the the InventoryItemViewModels for the slots.
@@ -93,33 +92,7 @@ namespace POESKillTree.ViewModels.Equipment
             var imageName = SlotToImageName(slot);
             return new InventoryItemViewModel(_dialogCoordinator, _itemAttributes, slot)
             {
-                imageName = "TwoHandSword";
-            }
-            else if (slot == ItemSlot.OffHand)
-            {
-                imageName = "Shield";
-            }
-            else if (slot == ItemSlot.Ring2)
-            {
-                imageName = "Ring";
-            }
-            else if (slot == ItemSlot.Helm)
-            {
-                imageName = "Helmet";
-            }
-   //         //(replace with dynamic jewel slots later)
-   //         else if(slot == ItemSlot.JSlot_Int_Witch || slot == ItemSlot.JSlot_Int_Scion || slot == ItemSlot.JSlot_Int_WitchShadow || slot == ItemSlot.JSlot_DexInt_Scion || slot == ItemSlot.JSlot_StrInt_Scion
-   //         || slot == ItemSlot.JSlot_StrDex_Scion || slot == ItemSlot.JSlot_Neutral_Acrobatics || slot == ItemSlot.JSlot_Dex_ShadowRanger || slot == ItemSlot.JSlot_DexInt_Shadow || slot == ItemSlot.JSlot_Dex_Ranger
-   //         || slot == ItemSlot.JSlot_Dex_RangerDuelist || slot == ItemSlot.JSlot_Str_WarriorDuelist || slot == ItemSlot.JSlot_Str_WarriorTemplarScion || slot == ItemSlot.JSlot_Int_TemplarWitch || slot == ItemSlot.JSlot_Str_FarWarTempScion
-   //         || slot == ItemSlot.JSlot_StrInt_Templar || slot == ItemSlot.JSlot_StrDex_Duelist || slot == ItemSlot.JSlot_Neutral_IronGrip || slot == ItemSlot.JSlot_Neutral_PointBlank || slot == ItemSlot.JSlot_Neutral_MinionInstability
-   //         || slot == ItemSlot.JSlot_Str_Warrior)
-   //         {
-   //             imageName = "Jewel";
-   //         }
-
-            return new InventoryItemViewModel(_dialogCoordinator, _equipmentData, _itemAttributes, slot)
-            {
-                EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
+                EmptyBackgroundImagePath = $"/PoESkillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
             };
         }
 

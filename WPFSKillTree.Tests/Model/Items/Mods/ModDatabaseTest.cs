@@ -5,8 +5,8 @@ using MoreLinq;
 using NUnit.Framework;
 using PoESkillTree.GameModel;
 using PoESkillTree.GameModel.Items;
-using PoESkillTree.GameModel.Modifiers;
-using POESKillTree.Model.Items.Mods;
+using PoESkillTree.Model.Items.Enums;
+using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items.Mods
 {
