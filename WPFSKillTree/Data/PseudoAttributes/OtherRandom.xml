@@ -116,6 +116,15 @@
         <Attribute Name="#% increased Spell Damage" />
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Conversion Phys AOE Spell Damage(Lightning+Some Fire)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.77"/>
+	    <Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.23"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
         <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
