@@ -1,5 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PseudoAttributes>
+    <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Staff-Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+		<Attribute Name="#% increased Physical Damage with Two Handed Weapons" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Physical Damage with Staffs" ConversionMultiplier="0.5"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Average HalfFire AOE Spell+Cyclone[SpellBlade Staff-Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+		<Attribute Name="#% increased Physical Damage with Two Handed Weapons" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Physical Damage with Staffs" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.5"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Staff-Minion-Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+		<Attribute Name="#% increased Physical Damage with Two Handed Weapons" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Physical Damage with Staffs" ConversionMultiplier="0.5"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Ethereal Knives Damage with Herald of Ash[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.15"/>
         <Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.15"/>
