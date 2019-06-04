@@ -125,6 +125,22 @@
         <Attribute Name="#% increased Spell Damage" />
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Elemental Conversion Phys AOE Spell Damage(HalfLightning)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Full Elemental Conversion Phys AOE Attack Damage(HalfLightning)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Attack Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
         <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
@@ -144,6 +160,23 @@
         <Attribute Name="#% increased Area Damage" />
         <Attribute Name="#% increased Spell Damage" />
         <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="Lightning Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Lightning Spells have #% of Physical Damage Converted to Lightning Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+        <!--Attribute Name="#% of Physical Damage Converted to Fire Damage" /-->
+        <!--Attribute Name="#% of Physical Damage Converted to Lightning Damage" /-->
+    </PseudoAttribute>
+	<PseudoAttribute Name="Cold Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Cold Spells have #% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+    </PseudoAttribute>
+	<PseudoAttribute Name="Fire Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Fire Spells have #% of Physical Damage Converted to Fire Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Fire Damage" />
     </PseudoAttribute>
     <!-- Physical to Lightning Conversion based on https://www.reddit.com/r/pathofexile/comments/6rjnwe/glacial_cascade_dmg_conversion_to_lightning/-->
     <PseudoAttribute Name="#% increased Glacial Cascade Damage with Physical to Lightning Gem[Non-Tagged]" Group="Damage">
@@ -285,8 +318,8 @@
         <Attribute Name="#% increased Critical Strike Chance for Spells" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Multiplier with Spells[Non-Tagged]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Multiplier" />
-        <Attribute Name="#% increased Critical Strike Multiplier for Spells" />
+        <Attribute Name="+# to Critical Strike Multiplier" />
+		<Attribute Name="+# to Critical Strike Multiplier for Spells" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Chance with One-Handed Sword Attacks[Non-Tagged]" Group="Critical Strike">
         <Attribute Name="#% increased Critical Strike Chance" />
