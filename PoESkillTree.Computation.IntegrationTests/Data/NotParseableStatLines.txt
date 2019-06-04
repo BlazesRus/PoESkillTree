@@ -54,7 +54,6 @@ Creates Corpses with Level 80
 Maximum of 10 Corpses allowed
 Deals 150% more Damage while Channelling if Illusion has finished moving
 Illusion moves at 130% of your Movement Speed
-Final wave deals 75% of Damage per stage
 Creates 4 explosions
 Modifiers to Skill Effect Duration also apply to this Skill's Soul Gain Prevention
 Modifiers to Buff Duration also apply to this Skill's Soul Gain Prevention
@@ -142,7 +141,7 @@ Supported Skills also fire Projectiles from up to 2 points on each side of you
 Summons a Totem which uses the Supported Skill
 Supported Area of Effect skills also affect areas in front and behind the targeted area
 Supported Attack Skills also target 2 nearby Enemies
-Supported Curse Spells are Cast as Auras
+Supported Curses are Cast as Auras
 Supported Skills throw up to 2 additional Traps
 Supported Skills place 2 additional Mines
 Supported Attack Skills cannot be used with Melee Weapons
@@ -162,6 +161,15 @@ Gain 1 Stage when you Kill an Enemy while carrying the Banner
 Enemies in Chilling Areas from Supported Skills take 29% increased Cold Damage over Time
 Enemies in Chilling Areas from Supported Skills have Cold Damage taken increased by Chill Effect
 Supported Skills Summon two Totems instead of one
+Infusion lasts 6 seconds after you finish Channelling
+10% increased beam length
+Only applies Curses from Skill Gems requiring Level 70 or lower
+Damages 5 nearby Enemies when you gain Stages
+40% chance to gain an additional Stage when Hitting a Normal or Magic Enemy
+Gains an additional Stage when Hitting a Rare or Unique Enemy
++6 to radius of Consecrated Ground
+You and nearby allies have a 10% chance to create Consecrated Ground on Hitting a Rare or Unique Enemy, lasting 8 seconds
+Supported Skills gain Intensity when used, up to a maximum of 4 Supported Skills lose Intensity every 0.25 seconds while moving, or immediately if you teleport
 // passive skills: =====================================================================================================
 10% Chance for Traps to Trigger an additional time
 Share Endurance, Frenzy and Power Charges with nearby party members
@@ -227,8 +235,8 @@ Nearby Enemies cannot gain Power, Frenzy or Endurance Charges
 You and Nearby Party Members Share Power, Frenzy and Endurance Charges with each other
 // - Inquisitor
 10% chance to create Consecrated Ground when you Hit a Rare or Unique Enemy, lasting 8 seconds
-30% chance to create Consecrated Ground on Kill, lasting 8 seconds
-30% chance to create Consecrated Ground when Hit, lasting 8 seconds
+Effects of Consecrated Ground you create Linger for 4 seconds
+You have Consecrated Ground around you while stationary
 // - Hierophant
 Skills that would Summon a Totem Summon two Totems instead
 // - Assassin

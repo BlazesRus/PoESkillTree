@@ -222,9 +222,10 @@ namespace PoESkillTree.Computation.Data.GivenStats
                     Stat.BaseCastTime.With(DamageSource.Secondary).Value.Invert
                 },
                 {
-                    TotalOverride, MetaStats.CastRate,
+                    BaseSet, MetaStats.CastRate,
                     CombineSourceDefaultingToSpell(Stat.CastRate, CombineHandsByAverage)
                 },
+                { BaseAdd, MetaStats.CastRate, Stat.AdditionalCastRate.Value },
                 { TotalOverride, MetaStats.CastTime, MetaStats.CastRate.Value.Invert },
                 { PercentMore, Stat.MovementSpeed, ActionSpeedValueForPercentMore },
                 {
@@ -246,6 +247,10 @@ namespace PoESkillTree.Computation.Data.GivenStats
                 { TotalOverride, MetaStats.ResistanceAgainstHits(DamageType.Cold), Cold.Resistance.Value },
                 { TotalOverride, MetaStats.ResistanceAgainstHits(DamageType.Fire), Fire.Resistance.Value },
                 { TotalOverride, MetaStats.ResistanceAgainstHits(DamageType.Chaos), Chaos.Resistance.Value },
+                {
+                    BaseAdd, dt => DamageTypeBuilders.From(dt).Resistance,
+                    dt => DamageTypeBuilders.From(dt).Exposure.Value
+                },
                 // damage mitigation (1 - (1 - resistance / 100) * damage taken)
                 {
                     TotalOverride, MetaStats.MitigationAgainstHits,
@@ -318,11 +323,11 @@ namespace PoESkillTree.Computation.Data.GivenStats
                 { TotalOverride, MetaStats.EffectiveLeechRate, p => p.Leech.Rate.Value * p.RecoveryRate.Value },
                 {
                     TotalOverride, MetaStats.AbsoluteLeechRate,
-                    p => MetaStats.LeechTargetPoolValue(p) * MetaStats.EffectiveLeechRate(p).Value.AsPercentage
+                    p => Stat.Pool.From(p).Value * MetaStats.EffectiveLeechRate(p).Value.AsPercentage
                 },
                 {
                     TotalOverride, MetaStats.AbsoluteLeechRateLimit,
-                    p => MetaStats.LeechTargetPoolValue(p) * Stat.Pool.From(p).Leech.RateLimit.Value.AsPercentage
+                    p => Stat.Pool.From(p).Value * Stat.Pool.From(p).Leech.RateLimit.Value.AsPercentage
                 },
                 {
                     TotalOverride, MetaStats.TimeToReachLeechRateLimit,

@@ -75,9 +75,6 @@ namespace PoESkillTree.Computation.Builders.Stats
         public IStat RegenTargetPool(Entity entity, Pool regenPool) =>
             GetOrAdd($"{regenPool}.Regen.TargetPool", entity, typeof(Pool));
 
-        public IStat LeechTargetPool(Entity entity, Pool leechPool) =>
-            GetOrAdd($"{leechPool}.Leech.TargetPool", entity, typeof(Pool));
-
         public IStat MainSkillId(Entity entity) =>
             GetOrAdd("MainSkill.Id", entity, typeof(int));
 
@@ -139,6 +136,10 @@ namespace PoESkillTree.Computation.Builders.Stats
 
         public IStat DamageBaseSetEffectiveness(Entity entity) =>
             GetOrAdd("DamageBaseSetEffectiveness", entity, typeof(double));
+
+        public IStat Exposure(Entity entity, DamageType damageType)
+            => GetOrAdd(damageType + ".Exposure", entity, typeof(int),
+                behaviors: () => _behaviorFactory.Exposure(entity, damageType));
 
         public IStat StatIsAffectedByModifiersToOtherStat(IStat stat, IStat otherStat, Form form)
             => GetOrAdd($"ModifiersTo({otherStat}).Affect({stat}).ForForm({form})", stat.Entity, typeof(bool),

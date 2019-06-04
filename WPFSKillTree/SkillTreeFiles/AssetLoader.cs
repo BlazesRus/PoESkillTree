@@ -9,10 +9,8 @@ using log4net;
 using Newtonsoft.Json;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
-using POESKillTree.Utils;
-using POESKillTree.Utils.Extensions;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     /// <summary>
     /// Contains methods to download all assets required for the skill tree
@@ -109,8 +107,8 @@ namespace POESKillTree.SkillTreeFiles
             foreach (var obj in inTree.skillSprites)
             {
                 var sprite = obj.Value[Constants.AssetZoomLevel];
-                var path = _tempAssetsPath + sprite.filename;
-                var url = SpriteUrl + sprite.filename;
+                var path = _tempAssetsPath + sprite.FileName;
+                var url = SpriteUrl + sprite.FileName;
                 if (path.Contains('?'))
                     path = path.Remove(path.IndexOf('?'));
                 await DownloadAsync(url, path);
@@ -163,15 +161,7 @@ namespace POESKillTree.SkillTreeFiles
             var optsTask = DownloadOptsToFileAsync();
 
             var treeString = await skillTreeTask;
-            var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treeString, new JsonSerializerSettings
-            {
-                Error = (sender, args) =>
-                {
-                    if (args.ErrorContext.Path != "groups.515.oo")
-                        Log.Error("Exception while deserializing Json tree", args.ErrorContext.Error);
-                    args.ErrorContext.Handled = true;
-                }
-            });
+            var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treeString, new PoESkillTreeConverter());
             var spritesTask = DownloadSkillNodeSpritesAsync(inTree);
             var assetsTask = DownloadAssetsAsync(inTree);
 

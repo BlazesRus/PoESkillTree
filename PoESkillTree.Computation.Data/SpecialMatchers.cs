@@ -52,7 +52,9 @@ namespace PoESkillTree.Computation.Data
                 },
                 {
                     "ignore all movement penalties from armour",
-                    TotalOverride, 1, Flag.IgnoreMovementSpeedPenalties
+                    TotalOverride, 0,
+                    Stat.MovementSpeed.AsItemPropertyForSlot(ItemSlot.BodyArmour),
+                    Stat.MovementSpeed.AsItemPropertyForSlot(ItemSlot.OffHand)
                 },
                 {
                     "your critical strike chance is lucky",
@@ -100,6 +102,10 @@ namespace PoESkillTree.Computation.Data
                     TotalOverride, 1,
                     Flag.IncreasesToSourceApplyToTarget(Stat.CastRate.With(DamageSource.Spell), Stat.HitRate)
                 },
+                {
+                    "({StatMatchers}) is doubled",
+                    PercentMore, 100, Reference.AsStat
+                },
                 // skills
                 {
                     // Dread Banner, War Banner
@@ -122,6 +128,17 @@ namespace PoESkillTree.Computation.Data
                     BaseSet, Value.AsPercentage * Stat.SkillStage.Value *
                              Physical.Damage.WithSkills.With(AttackDamageHand.MainHand).ValueFor(NodeType.Base),
                     Fire.Damage.WithSkills(DamageSource.Secondary)
+                },
+                {
+                    // Scorching Ray
+                    "burning debuff can have a maximum of # stages",
+                    TotalOverride, Value, Skills.ModifierSourceSkill.Buff.StackCount.Maximum.For(Enemy)
+                },
+                {
+                    "additional debuff stages add #% of damage",
+                    PercentMore,
+                    ValueBuilderUtils.PerStatAfterFirst(Skills.ModifierSourceSkill.Buff.StackCount.For(Enemy))(Value),
+                    Damage
                 },
                 {
                     // Static Strike
@@ -172,10 +189,26 @@ namespace PoESkillTree.Computation.Data
                     (Attribute.StrengthDamageBonus.Value / 5).Ceiling(),
                     Damage.WithSkills(DamageSource.Spell)
                 },
-                {   // Minion and Totem Elemental Resistance Support
+                {
+                    // Minion and Totem Elemental Resistance Support
                     @"totems and minions summoned by supported skills have \+#% ({DamageTypeMatchers}) resistance",
                     BaseAdd, Value, Reference.AsDamageType.Resistance.For(Entity.Minion),
                     Reference.AsDamageType.Resistance.For(Entity.Totem)
+                },
+                {
+                    // Unleash Support
+                    "supported spells gain a seal every # seconds, to a maximum of # seals " +
+                    "supported spells are unsealed when cast, and their effects reoccur for each seal lost",
+                    TotalOverride, Values[0].Invert, Stat.AdditionalCastRate
+                },
+                {
+                    "supported skills deal #% less damage when reoccurring",
+                    (PercentLess, Values[0] * Stat.AdditionalCastRate.Value
+                                  / (Stat.AdditionalCastRate.Value + Stat.CastRate.With(DamageSource.Spell).Value),
+                        Damage.With(DamageSource.Spell)),
+                    (PercentLess, Values[0] * Stat.AdditionalCastRate.Value
+                                  / (Stat.AdditionalCastRate.Value + Stat.CastRate.With(DamageSource.Secondary).Value),
+                        Damage.With(DamageSource.Secondary))
                 },
                 // Keystones
                 {
@@ -256,11 +289,6 @@ namespace PoESkillTree.Computation.Data
                 },
                 { "gain accuracy rating equal to your strength", BaseAdd, Attribute.Strength.Value, Stat.Accuracy },
                 { "#% increased attack speed per # accuracy rating", UndeniableAttackSpeed().ToArray() },
-                {
-                    "gain an endurance charge every second if you've been hit recently",
-                    TotalOverride, 100, Charge.Endurance.ChanceToGain,
-                    Action.Unique("Every second if you've been Hit recently").On
-                },
                 // - Berserker
                 {
                     "recover #% of life and mana when you use a warcry",
@@ -459,7 +487,7 @@ namespace PoESkillTree.Computation.Data
                 // - Trickster
                 { "movement skills cost no mana", TotalOverride, 0, Mana.Cost, With(Keyword.Movement) },
                 {
-                    "your hits have #% chance to gain #% of non-chaos damage as extra chaos damage",
+                    "#% chance to gain #% of non-chaos damage with hits as extra chaos damage",
                     BaseAdd, Values[0] * Values[1] / 100, Chaos.Invert.Damage.WithHits.GainAs(Chaos.Damage.WithHits)
                 },
                 // - Saboteur
@@ -494,10 +522,10 @@ namespace PoESkillTree.Computation.Data
             }
         }
 
-        private (IFormBuilder form, double value, IStatBuilder stat, IConditionBuilder condition)[]
+        private (IFormBuilder form, double value, IStatBuilder stat)[]
             ShaperOfDesolation()
         {
-            var stats = new[]
+            return new[]
             {
                 Buff.Temporary(Buff.Conflux.Chilling, ShaperOfDesolationStep.Chilling),
                 Buff.Temporary(Buff.Conflux.Shocking, ShaperOfDesolationStep.Shocking),
@@ -505,15 +533,10 @@ namespace PoESkillTree.Computation.Data
                 Buff.Temporary(Buff.Conflux.Chilling, ShaperOfDesolationStep.All),
                 Buff.Temporary(Buff.Conflux.Shocking, ShaperOfDesolationStep.All),
                 Buff.Temporary(Buff.Conflux.Igniting, ShaperOfDesolationStep.All),
-            };
-
-            return (
-                from stat in stats
-                select (TotalOverride, 1.0, stat, Condition.True)
-            ).ToArray();
+            }.Select(s => (TotalOverride, 1.0, s)).ToArray();
         }
 
-        public enum ShaperOfDesolationStep
+        private enum ShaperOfDesolationStep
         {
             None,
             Chilling,
@@ -540,7 +563,7 @@ namespace PoESkillTree.Computation.Data
             }
         }
 
-        public enum PendulumOfDestructionStep
+        private enum PendulumOfDestructionStep
         {
             None,
             AreaOfEffect,

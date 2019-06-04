@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.Computation.Builders.Actions;
 using PoESkillTree.Computation.Builders.Effects;
 using PoESkillTree.Computation.Builders.Entities;
 using PoESkillTree.Computation.Builders.Stats;
 using PoESkillTree.Computation.Builders.Values;
 using PoESkillTree.Computation.Common;
 using PoESkillTree.Computation.Common.Builders;
-using PoESkillTree.Computation.Common.Builders.Actions;
 using PoESkillTree.Computation.Common.Builders.Buffs;
 using PoESkillTree.Computation.Common.Builders.Conditions;
 using PoESkillTree.Computation.Common.Builders.Effects;
@@ -43,9 +41,6 @@ namespace PoESkillTree.Computation.Builders.Buffs
                 => target.Build(parameters.ModifierSourceEntity)
                     .Select(t => BuildEffectStat(source, t, identity));
         }
-
-        public IActionBuilder Action =>
-            new ActionBuilder(StatFactory, Identity, new ModifierSourceEntityBuilder());
 
         public IStatBuilder StackCount
             => FromIdentity("StackCount", typeof(uint),

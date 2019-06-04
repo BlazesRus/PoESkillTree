@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace POESKillTree.Properties {
+namespace PoESkillTree.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace POESKillTree.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Version {
@@ -39,7 +39,7 @@ namespace POESKillTree.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("POESKillTree.Properties.Version", typeof(Version).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PoESkillTree.Properties.Version", typeof(Version).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -79,7 +79,7 @@ namespace POESKillTree.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright © 2012-2018 PoESkillTree Team.
+        ///   Looks up a localized string similar to Copyright © 2012-2019 PoESkillTree Team.
         /// </summary>
         public static string AssemblyCopyright {
             get {
@@ -106,7 +106,7 @@ namespace POESKillTree.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 3.5.0.
+        ///   Looks up a localized string similar to 3.7.0.
         /// </summary>
         public static string GGGPatchVersion {
             get {
@@ -133,7 +133,7 @@ namespace POESKillTree.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2.7.8.
+        ///   Looks up a localized string similar to 3.0.0-alpha.3.
         /// </summary>
         public static string ProductVersion {
             get {

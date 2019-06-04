@@ -63,6 +63,7 @@ namespace PoESkillTree.Computation.Data
                 { "take ({DamageTypeMatchers}) damage", Reference.AsDamageType.Damage.Taken },
                 { "damage taken from hits", Damage.Taken.WithHits },
                 { "({DamageTypeMatchers}) damage taken from hits", Reference.AsDamageType.Damage.Taken.WithHits },
+                { "take ({DamageTypeMatchers}) damage from hits", Reference.AsDamageType.Damage.Taken.WithHits },
                 { "damage taken from damage over time", Damage.Taken.With(DamageSource.OverTime) },
                 {
                     "({DamageTypeMatchers}) damage taken over time",
@@ -76,6 +77,13 @@ namespace PoESkillTree.Computation.Data
                 {
                     "damage taken from trap or mine hits",
                     Damage.Taken.With(Keyword.Trap).WithHits, Damage.Taken.With(Keyword.Mine).WithHits
+                },
+                {
+                    "take damage from hits of types matching the skill gem's tags",
+                    (Lightning.Damage.Taken.WithHits, With(Lightning)),
+                    (Cold.Damage.Taken.WithHits, With(Cold)),
+                    (Fire.Damage.Taken.WithHits, With(Fire)),
+                    (Chaos.Damage.Taken.WithHits, With(Chaos))
                 },
                 // - damage taken as
                 {
@@ -95,6 +103,7 @@ namespace PoESkillTree.Computation.Data
                     Reference.AsDamageType.HitDamageTakenAs(DamageType.Chaos)
                 },
                 // - penetration
+                // - exposure
                 // - crit
                 { "(global )?critical strike multiplier", CriticalStrike.Multiplier.WithSkills },
                 { "(global )?critical strike chance", CriticalStrike.Chance },
@@ -131,10 +140,6 @@ namespace PoESkillTree.Computation.Data
                 { "physical damage reduction", Physical.Resistance },
                 // - leech
                 {
-                    @"(?<pool>({PoolStatMatchers})) per second to \k<pool> Leech rate",
-                    Reference.AsPoolStat.Leech.RateLimit
-                },
-                {
                     "damage leeched as ({PoolStatMatchers})",
                     Reference.AsPoolStat.Leech.Of(Damage)
                 },
@@ -168,6 +173,19 @@ namespace PoESkillTree.Computation.Data
                     Life.Leech.Of(Damage.For(Entity.Totem))
                 },
                 { "({PoolStatMatchers}) leeched per second", Reference.AsPoolStat.Leech.Rate },
+                { "total recovery per second from ({PoolStatMatchers}) leech", Reference.AsPoolStat.Leech.Rate },
+                {
+                    @"(?<pool>({PoolStatMatchers})) per second to \k<pool> Leech rate",
+                    Reference.AsPoolStat.Leech.RateLimit
+                },
+                {
+                    "maximum total recovery per second from ({PoolStatMatchers}) leech",
+                    Reference.AsPoolStat.Leech.RateLimit
+                },
+                {
+                    "maximum recovery per ({PoolStatMatchers}) leech",
+                    Reference.AsPoolStat.Leech.MaximumRecoveryPerInstance
+                },
                 // - block
                 { "chance to block", Block.AttackChance },
                 { "chance to block attack damage", Block.AttackChance },
@@ -205,17 +223,13 @@ namespace PoESkillTree.Computation.Data
                 { "cast speed", Stat.CastRate.With(DamageSource.Spell), Stat.CastRate.With(DamageSource.Secondary) },
                 { "cast speed for curses", Stat.CastRate.With(DamageSource.Attack).With(Keyword.Curse) },
                 { "movement speed", Stat.MovementSpeed },
-                {
-                    // not the most elegant solution but by far the easiest
-                    @"movement speed \(hidden\)",
-                    Stat.MovementSpeed, Not(Flag.IgnoreMovementSpeedPenalties.IsSet)
-                },
                 { "attack and cast speed", Stat.CastRate },
                 { "attack, cast( speed)? and movement speed", Stat.CastRate, Stat.MovementSpeed },
+                { "action speed", Stat.ActionSpeed },
                 { "hit rate", Stat.HitRate },
                 { "brand activation frequency", Stat.HitRate, With(Keyword.Brand) },
                 // regen and recharge
-                { "({PoolStatMatchers}) regeneration rate", Reference.AsPoolStat.Regen },
+                { "({PoolStatMatchers}) regeneration( rate)?", Reference.AsPoolStat.Regen },
                 { "energy shield recharge rate", EnergyShield.Recharge },
                 {
                     "recovery rate of life, mana and energy shield",
@@ -375,6 +389,7 @@ namespace PoESkillTree.Computation.Data
                 { "aura area of effect", Stat.AreaOfEffect, With(Keyword.Aura) },
                 { "radius", Stat.Radius },
                 { "explosion radius", Stat.Radius },
+                { "area of effect length", Stat.Radius },
                 { "melee weapon and unarmed( attack)? range", Stat.Range.With(Keyword.Melee) },
                 { "melee range", Stat.Range.With(Keyword.Melee) },
                 { "melee weapon range", Stat.Range.With(Keyword.Melee), MainHand.HasItem },

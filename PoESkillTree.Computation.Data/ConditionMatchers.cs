@@ -29,13 +29,18 @@ namespace PoESkillTree.Computation.Data
             {
                 // actions
                 // - generic
-                { "if you've ({ActionMatchers})( an enemy)? recently,?", Reference.AsAction.Recently },
+                { "if you('ve| have) ({ActionMatchers})( an enemy)? recently,?", Reference.AsAction.Recently },
                 { "if you haven't ({ActionMatchers}) recently", Not(Reference.AsAction.Recently) },
                 { "if you've ({ActionMatchers}) in the past # seconds,?", Reference.AsAction.InPastXSeconds(Value) },
                 { "for # seconds on ({ActionMatchers})", Reference.AsAction.InPastXSeconds(Value) },
+                { "on ({ActionMatchers}) for # seconds", Reference.AsAction.InPastXSeconds(Value) },
                 {
                     "for # seconds when you ({ActionMatchers}) a rare or unique enemy",
                     And(Enemy.IsRareOrUnique, Reference.AsAction.InPastXSeconds(Value))
+                },
+                {
+                    "for # seconds when you ({ActionMatchers}) a unique enemy",
+                    And(Enemy.IsUnique, Reference.AsAction.InPastXSeconds(Value))
                 },
                 { "when you ({ActionMatchers}) an enemy, for # seconds", Reference.AsAction.InPastXSeconds(Value) },
                 // - kill
@@ -153,17 +158,18 @@ namespace PoESkillTree.Computation.Data
                 { "with # corrupted items equipped", Equipment.Count(e => e.Corrupted.IsSet) >= Value },
                 // stats
                 // - pool
-                { "(when|while) on low life", Life.IsLow },
-                { "when not on low life", Not(Life.IsLow) },
-                { "while on full life", Life.IsFull },
-                { "while no mana is reserved", Mana.Reservation.Value <= 0 },
-                { "while energy shield is full", EnergyShield.IsFull },
-                { "while on full energy shield", EnergyShield.IsFull },
-                { "while not on full energy shield", Not(EnergyShield.IsFull) },
+                { "(when|while) on low ({PoolStatMatchers})", Reference.AsPoolStat.IsLow },
+                { "when not on low ({PoolStatMatchers})", Not(Reference.AsPoolStat.IsLow) },
+                { "while on full ({PoolStatMatchers})", Reference.AsPoolStat.IsFull },
+                { "while ({PoolStatMatchers}) is full", Reference.AsPoolStat.IsFull },
+                { "while not on full ({PoolStatMatchers})", Not(Reference.AsPoolStat.IsFull) },
+                { "if you have ({PoolStatMatchers})", Not(Reference.AsPoolStat.IsEmpty) },
+                { "while no ({PoolStatMatchers}) is reserved", Reference.AsPoolStat.Reservation.Value <= 0 },
                 { "if energy shield recharge has started recently", EnergyShield.Recharge.StartedRecently },
+                { "while leeching ({PoolStatMatchers})", Reference.AsPoolStat.Leech.IsActive },
                 // - charges
                 { "(while|if) you have no ({ChargeTypeMatchers})", Reference.AsChargeType.Amount.Value <= 0 },
-                { "(while|if) you have an? ({ChargeTypeMatchers})", Reference.AsChargeType.Amount.Value > 0 },
+                { "(while|if) you have( an?)? ({ChargeTypeMatchers})", Reference.AsChargeType.Amount.Value > 0 },
                 {
                     "(while|if) you have at least # ({ChargeTypeMatchers})",
                     Reference.AsChargeType.Amount.Value >= Value
@@ -172,6 +178,7 @@ namespace PoESkillTree.Computation.Data
                     "while (at maximum|on full) ({ChargeTypeMatchers})",
                     Reference.AsChargeType.Amount.Value >= Reference.AsChargeType.Amount.Maximum.Value
                 },
+                { "lose a ({ChargeTypeMatchers}) and", Reference.AsChargeType.Amount.Value > 0 },
                 // - other
                 { "if you have # primordial jewels,", Stat.PrimordialJewelsSocketed.Value >= Value },
                 // - on enemy
@@ -179,6 +186,8 @@ namespace PoESkillTree.Computation.Data
                 { "against enemies on low life", Life.For(Enemy).IsLow },
                 { "(against enemies )?that are on full life", Life.For(Enemy).IsFull },
                 { "against rare and unique enemies", Enemy.IsRareOrUnique },
+                { "if rare or unique", Enemy.IsRareOrUnique },
+                { "if normal or magic", Not(Enemy.IsRareOrUnique) },
                 { "while there is only one nearby enemy", Enemy.CountNearby.Eq(1) },
                 { "at close range", Enemy.IsNearby },
                 // buffs
@@ -186,7 +195,7 @@ namespace PoESkillTree.Computation.Data
                 { "while affected by ({SkillMatchers})", Reference.AsSkill.Buff.IsOn(Self) },
                 { "during onslaught", Buff.Onslaught.IsOn(Self) },
                 { "while phasing", Buff.Phasing.IsOn(Self) },
-                { "if you've ({BuffMatchers}) an enemy recently,?", Reference.AsBuff.Action.Recently },
+                { "if you've ({BuffMatchers}) an enemy recently,?", Reference.AsBuff.InflictionAction.Recently },
                 { "enemies you taunt( deal)?", And(For(Enemy), Buff.Taunt.IsOn(Self, Enemy)) },
                 { "enemies ({BuffMatchers}) by you", And(For(Enemy), Reference.AsBuff.IsOn(Self, Enemy)) },
                 { "enemies you curse( have)?", And(For(Enemy), Buffs(Self, Enemy).With(Keyword.Curse).Any()) },
@@ -220,8 +229,9 @@ namespace PoESkillTree.Computation.Data
                 { "vaal( skill)?", With(Keyword.Vaal) },
                 { "with bow skills", And(MainHand.Has(Tags.Bow), With(Keyword.Bow)) },
                 { "chaos skills have", With(Chaos) },
+                { "spell skills have", With(Keyword.Spell) },
                 { "(with|of|for) ({KeywordMatchers}) skills", With(Reference.AsKeyword) },
-                { "({KeywordMatchers}) skills have", With(Reference.AsKeyword) },
+                { "({KeywordMatchers}) skills (have|deal)", With(Reference.AsKeyword) },
                 { "caused by melee hits", Condition.WithPart(Keyword.Melee) },
                 // - by damage type
                 { "with ({DamageTypeMatchers}) skills", With(Reference.AsDamageType) },
@@ -247,12 +257,9 @@ namespace PoESkillTree.Computation.Data
                 },
                 { "if you summoned a golem in the past # seconds", Golems.Cast.InPastXSeconds(Value) },
                 // - by skill part
-                { "(beams|final wave) deals?", Stat.MainSkillPart.Value.Eq(1) },
+                { "(beams?|final wave|shockwaves?) deals?", Stat.MainSkillPart.Value.Eq(1) },
                 // - other
-                {
-                    "brand skills deal to enemies they're attached to",
-                    And(With(Keyword.Brand), Flag.IsBrandAttachedToEnemy)
-                },
+                { "to enemies they're attached to", Flag.IsBrandAttachedToEnemy },
                 { "to branded enemy", Flag.IsBrandAttachedToEnemy },
                 // traps and mines
                 { "with traps", With(Keyword.Trap) },
@@ -291,7 +298,7 @@ namespace PoESkillTree.Computation.Data
                 {
                     "against burning enemies", Or(Ailment.Ignite.IsOn(Enemy), Condition.Unique("Is the Enemy Burning?"))
                 },
-                { "while leeching", Condition.Unique("Are you leeching?") },
+                { "while leeching", Condition.Unique("Leech.IsActive") },
                 {
                     "if you've killed an enemy affected by your damage over time recently",
                     Condition.Unique("Have you recently killed an Enemy affected by your Damage over Time?")
@@ -302,10 +309,11 @@ namespace PoESkillTree.Computation.Data
                     Condition.Unique("Have you recently taken Fire Damage from a Hit?")
                 },
                 { "while you have at least one nearby ally", Condition.Unique("Is any ally nearby?") },
-                { "while channelling supported skills", Condition.Unique("Are you currently channeling?") },
+                { "while channelling", Condition.Unique("Are you currently channeling?") },
                 // support gem mod clarifications. Irrelevant for parsing.
                 { "supported (skills|spells|attacks) (have|deal)", Condition.True },
                 { "(from |with )?supported skills'?", Condition.True },
+                { "a supported skill", Condition.True },
                 { "supported attacks", Condition.True },
                 { "supported attack skills", Condition.True },
                 { "supported attack skills deal", Condition.True },

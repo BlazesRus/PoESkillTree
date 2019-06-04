@@ -10,13 +10,13 @@ using MoreLinq;
 using PoESkillTree.GameModel.Items;
 using PoESkillTree.GameModel.Modifiers;
 using PoESkillTree.GameModel.StatTranslation;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Utils;
-using Item = POESKillTree.Model.Items.Item;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Model.Items.Mods;
+using Item = PoESkillTree.Model.Items.Item;
 
-namespace POESKillTree.ViewModels.Crafting
+namespace PoESkillTree.ViewModels.Crafting
 {
     /// <summary>
     /// Base view model for crafting items from a list of bases. Contains all functionality not specific to the type
@@ -328,7 +328,9 @@ namespace POESKillTree.ViewModels.Crafting
             var quality = SelectedBase.CanHaveQuality 
                 ? _qualitySlider.Value
                 : 0;
-            Item.Properties = new ObservableCollection<ItemMod>(Item.BaseType.GetRawProperties(quality));
+            var properties = Item.BaseType.GetRawProperties(quality)
+                .Concat(GetAdditionalProperties());
+            Item.Properties = new ObservableCollection<ItemMod>(properties);
             ApplyLocals();
 
             if (Item.IsWeapon)
@@ -351,6 +353,9 @@ namespace POESKillTree.ViewModels.Crafting
         /// <returns>All explicit and crafted stats of the item and their values.</returns>
         protected abstract (IEnumerable<StatIdValuePair> explicitStats, IEnumerable<StatIdValuePair> craftedStats)
             RecalculateItemSpecific(out int requiredLevel);
+
+        protected virtual IEnumerable<ItemMod> GetAdditionalProperties()
+            => new ItemMod[0];
 
         private IEnumerable<ItemMod> CreateItemMods(IEnumerable<StatIdValuePair> statValuePairs)
         {

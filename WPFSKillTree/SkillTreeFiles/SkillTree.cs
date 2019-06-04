@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -17,16 +17,16 @@ using PoESkillTree.GameModel;
 using PoESkillTree.GameModel.PassiveTree;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
-using POESKillTree.Common;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.Utils.UrlProcessing;
-using POESKillTree.Utils.Wpf;
-using HighlightState = POESKillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
-using static POESKillTree.SkillTreeFiles.Constants;
+using PoESkillTree.Common;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Utils.UrlProcessing;
+using PoESkillTree.Utils.Wpf;
+using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
+using static PoESkillTree.SkillTreeFiles.Constants;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     public partial class SkillTree : Notifier, ISkillTree
     {
@@ -186,19 +186,8 @@ namespace POESKillTree.SkillTreeFiles
         {
             if (!_initialized)
             {
-                var jss = new JsonSerializerSettings
-                {
-                    Error = (sender, args) =>
-                    {
-                        // There are many errors in "oo" elements and we can't fix them anyway
-                        if (args.ErrorContext.Path == null || !args.ErrorContext.Path.EndsWith(".oo"))
-                            Log.Error("Exception while deserializing Json tree", args.ErrorContext.Error);
-                        args.ErrorContext.Handled = true;
-                    }
-                };
-                treestring = treestring.Replace("\"nodes\":{", "\"nodesDict\":{");
-                var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treestring, jss);
-                var inOpts = JsonConvert.DeserializeObject<Opts>(opsstring, jss);
+                var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treestring, new PoESkillTreeConverter());
+                var inOpts = JsonConvert.DeserializeObject<Opts>(opsstring);
 
                 controller?.SetProgress(0.25);
                 await assetLoader.DownloadSkillNodeSpritesAsync(inTree, d => controller?.SetProgress(0.25 + d * 0.30));
@@ -212,8 +201,8 @@ namespace POESKillTree.SkillTreeFiles
                     string prefix;
                     foreach(var i in obj.Value)
                     {
-                        if (i.filename.Contains('?'))
-                            i.filename = i.filename.Remove(i.filename.IndexOf('?'));
+                        if (i.FileName.Contains('?'))
+                            i.FileName = i.FileName.Remove(i.FileName.IndexOf('?'));
                     }
                     if (obj.Key.EndsWith("Active"))
                     {
@@ -234,14 +223,14 @@ namespace POESKillTree.SkillTreeFiles
                         prefix = obj.Key;
                     }
                     var sprite = obj.Value[AssetZoomLevel];
-                    var path = _assetsFolderPath + sprite.filename;
+                    var path = _assetsFolderPath + sprite.FileName;
                     assetActions.Add(
-                        (Task.Run(() => BitmapImageFactory.Create(path)), i => icons.Images[sprite.filename] = i));
-                    foreach (var o in sprite.coords)
+                        (Task.Run(() => BitmapImageFactory.Create(path)), i => icons.Images[sprite.FileName] = i));
+                    foreach (var o in sprite.Coords)
                     {
                         var iconKey = prefix + "_" + o.Key;
                         icons.SkillPositions[iconKey] = new Rect(o.Value.x, o.Value.y, o.Value.w, o.Value.h);
-                        icons.SkillImages[iconKey] = sprite.filename;
+                        icons.SkillImages[iconKey] = sprite.FileName;
                     }
                 }
 
@@ -263,14 +252,7 @@ namespace POESKillTree.SkillTreeFiles
                 RootNodeList = new List<ushort>();
                 if (inTree.root != null)
                 {
-                    foreach (var i in inTree.root.ot)
-                    {
-                        RootNodeList.Add(i);
-                    }
-                }
-                else if (inTree.main != null)
-                {
-                    foreach (var i in inTree.main.ot)
+                    foreach (var i in inTree.root._out)
                     {
                         RootNodeList.Add(i);
                     }
@@ -305,13 +287,12 @@ namespace POESKillTree.SkillTreeFiles
 
                 if (inTree.nodes != null && inTree.nodes.Any())
                     BuildNodeList(inTree.nodes);
-                else if (inTree.nodesDict != null && inTree.nodesDict.Any())
-                    BuildNodeList(inTree.nodesDict.Values.ToArray());
 
-                void BuildNodeList(Node[] nodes)
+                void BuildNodeList(Dictionary<string, Node> nodes)
                 {
-                    foreach (var nd in nodes)
+                    foreach (var i in nodes)
                     {
+                        var nd = i.Value;
                         var skillNode = new SkillNode
                         {
                             Id = nd.id,
@@ -883,7 +864,7 @@ namespace POESKillTree.SkillTreeFiles
 
         public void AllocateSkillNodes(IReadOnlyCollection<SkillNode> toAdd)
         {
-            var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove);
+            var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
             SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
             if (SelectAscendancyFromNodes(toAdd) is int ascType)
                 AscType = ascType;

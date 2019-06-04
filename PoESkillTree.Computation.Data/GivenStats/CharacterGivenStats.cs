@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EnumsNET;
 using PoESkillTree.Computation.Common;
 using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Charges;
 using PoESkillTree.Computation.Common.Builders.Damage;
 using PoESkillTree.Computation.Common.Builders.Modifiers;
 using PoESkillTree.Computation.Common.Builders.Stats;
@@ -71,7 +73,7 @@ namespace PoESkillTree.Computation.Data.GivenStats
 
         public IReadOnlyList<IIntermediateModifier> GivenModifiers => _lazyGivenStats.Value;
 
-        private GivenStatCollection CreateCollection() => new GivenStatCollection(_modifierBuilder, ValueFactory)
+        private GivenStatCollection CreateCollection() => Expand(new GivenStatCollection(_modifierBuilder, ValueFactory)
         {
             // passive points
             { BaseSet, Stat.PassivePoints.Maximum, Stat.Level.Value - 1 },
@@ -88,6 +90,7 @@ namespace PoESkillTree.Computation.Data.GivenStats
             { BaseSet, Evasion, 53 },
             { BaseSet, Stat.Accuracy, -2 }, // 0 at level 1 with no dexterity
             { BaseSet, CriticalStrike.Multiplier, 150 },
+            { BaseAdd, Ground.Consecrated.AddStat(Life.Regen), 6 },
             // resistances
             { BaseSet, Physical.Resistance.Maximum, 90 },
             // traps, mines and totems
@@ -126,29 +129,29 @@ namespace PoESkillTree.Computation.Data.GivenStats
                 Not(MainHand.HasItem)
             },
             { BaseSet, MainHand.ItemClass, (double) ItemClass.Unarmed, Not(MainHand.HasItem) },
-            // configuration
-            {
-                TotalOverride, Charge.Endurance.Amount, Charge.Endurance.Amount.Maximum.Value,
-                Condition.Unique("Endurance.Charge.Amount.SetToMaximum")
-            },
-            {
-                TotalOverride, Charge.Power.Amount, Charge.Power.Amount.Maximum.Value,
-                Condition.Unique("Power.Charge.Amount.SetToMaximum")
-            },
-            {
-                TotalOverride, Charge.Frenzy.Amount, Charge.Frenzy.Amount.Maximum.Value,
-                Condition.Unique("Frenzy.Charge.Amount.SetToMaximum")
-            },
-            // configuration
+            // buff configuration
             { TotalOverride, Buff.Onslaught.On(Self), 1, Condition.Unique("Onslaught.ExplicitlyActive") },
             { TotalOverride, Buff.UnholyMight.On(Self), 1, Condition.Unique("UnholyMight.ExplicitlyActive") },
             { TotalOverride, Buff.Fortify.On(Self), 1, Condition.Unique("Fortify.ExplicitlyActive") },
             { TotalOverride, Buff.Tailwind.On(Self), 1, Condition.Unique("Tailwind.ExplicitlyActive") },
+            { TotalOverride, Buff.Infusion.On(Self), 1, Condition.Unique("Infusion.ExplicitlyActive") },
             { TotalOverride, Buff.Maim.On(Enemy), 1, Condition.Unique("Maim.ExplicitlyActiveOnEnemy") },
             { TotalOverride, Buff.Blind.On(Enemy), 1, Condition.Unique("Blind.ExplicitlyActiveOnEnemy") },
             { TotalOverride, Buff.Intimidate.On(Enemy), 1, Condition.Unique("Intimidate.ExplicitlyActiveOnEnemy") },
             { TotalOverride, Buff.CoveredInAsh.On(Enemy), 1, Condition.Unique("CoveredInAsh.ExplicitlyActiveOnEnemy") },
-        };
+        });
+
+        private GivenStatCollection Expand(GivenStatCollection coll)
+        {
+            // charge configuration
+            foreach (var chargeType in Enums.GetValues<ChargeType>())
+            {
+                var chargeStat = Charge.From(chargeType);
+                coll.Add(TotalOverride, chargeStat.Amount, chargeStat.Amount.Maximum.Value,
+                    Condition.Unique($"{chargeType}.Charge.Amount.SetToMaximum"));
+            }
+            return coll;
+        }
 
         private ValueBuilder CharacterClassBased(Func<CharacterClass, int> selector, string identity)
             => Stat.CharacterClass.Value.Select(v => selector((CharacterClass) (int) v), v => $"{v}.{identity}");

@@ -50,7 +50,7 @@ namespace PoESkillTree.Computation.Builders.Tests.Buffs
             var temporaryStage = BuffRotationStage.Stage1;
             var expectedCondition = temporaryStage == activeStage;
             var modifierSource = new ModifierSource.Local.Skill("skill node", "");
-            var stageStat = new Stat($"Current {modifierSource.SourceName} stage");
+            var stageStat = new Stat(nameof(BuffRotationStage));
             var context = Mock.Of<IValueCalculationContext>(c =>
                 c.GetValue(stageStat, NodeType.Total, PathDefinition.MainPath) == new NodeValue((int) activeStage));
             var sut = CreateSut();
@@ -117,7 +117,7 @@ namespace PoESkillTree.Computation.Builders.Tests.Buffs
         public void BuffsWithoutParametersCountBuildsToCorrectValue()
         {
             // Buff properties + conflux + dummy buff and aura + passed buff skills
-            var expected = 13 + 4 + 2 + 3;
+            var expected = 14 + 4 + 2 + 3;
             // For every source entity
             expected *= Enums.GetMemberCount<Entity>();
             var context = Mock.Of<IValueCalculationContext>(c =>
@@ -133,7 +133,7 @@ namespace PoESkillTree.Computation.Builders.Tests.Buffs
         public void BuffsWithParamtersCountBuildsToCorrectValue()
         {
             // Buff properties + conflux + dummy buff and aura + passed buff skills
-            var expected = 13 + 4 + 2 + 3;
+            var expected = 14 + 4 + 2 + 3;
             var source = new ModifierSourceEntityBuilder();
             var target = new ModifierSourceEntityBuilder();
             var context = Mock.Of<IValueCalculationContext>(c =>

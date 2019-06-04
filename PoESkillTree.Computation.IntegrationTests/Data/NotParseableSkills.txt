@@ -5,7 +5,7 @@ AssassinsMark
 BloodRage
 CorpseWarp
 DarkPact
-FireBeam
+DarkRitual
 RighteousFire
 SupportBlockReduction
 SupportChanceToIgnite

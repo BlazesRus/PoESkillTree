@@ -31,6 +31,7 @@ ConversionTrap
 Convocation
 CorpseEruption
 Cyclone
+DamageOverTimeAura
 DecoyTotem
 Desecrate
 Despair
@@ -38,6 +39,7 @@ Determination
 DetonateDead
 Discharge
 Discipline
+DivineTempest
 DoubleSlash
 DoubleStrike
 DualStrike
@@ -52,6 +54,7 @@ EssenceDrain
 EtherealKnives
 ExpandingFireCone
 ExplosiveArrow
+FireBeam
 FireImpurity
 FireNovaMine
 FireResistAura
@@ -120,6 +123,7 @@ ProjectileWeakness
 Puncture
 Punishment
 PuresteelBanner
+Purge
 Purity
 RainOfArrows
 RainOfSpores
@@ -128,6 +132,7 @@ Reave
 Reckoning
 RejuvenationTotem
 Riposte
+Sanctify
 ScourgeArrow
 SearingBond
 ShatteringSteel
@@ -138,10 +143,12 @@ ShrapnelTrap
 SiegeBallista
 Smite
 SmokeMine
+Soulrend
 Spark
+SpellDamageAura
 SplitArrow
 StaticStrike
-StormBurst
+StormBurstNew
 StormCall
 SummonChaosGolem
 SummonFireGolem
@@ -183,6 +190,7 @@ SupportDebilitate
 SupportEfficacy
 SupportElementalFocus
 SupportElementalProliferation
+SupportEnergyShieldLeech
 SupportFasterAttack
 SupportFasterCast
 SupportFasterProjectiles
@@ -193,6 +201,8 @@ SupportFrenzyChargeOnSlayingFrozenEnemy
 SupportGemFrenzyPowerOnTrapTrigger
 SupportGenerosity
 SupportGreaterMultipleProjectiles
+SupportHandcastAnticipation
+SupportHandcastSpellBoost
 SupportIgniteProliferation
 SupportImmolation
 SupportIncreasedAreaOfEffect

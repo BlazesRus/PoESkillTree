@@ -5,8 +5,8 @@ using MoreLinq;
 using NUnit.Framework;
 using PoESkillTree.GameModel;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.Model.Items.Mods;
+using PoESkillTree.Model.Items.Enums;
+using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Tests.Model.Items.Mods
 {
@@ -16,14 +16,9 @@ namespace PoESkillTree.Tests.Model.Items.Mods
         private static readonly ISet<string> UnknownTags = new HashSet<string>
         {
             // only added by other mods, which is not supported anyway
-            // - master mods "Cannot roll Attack Mods" and "Cannot roll Caster Mods"
-            "no_attack_mods", "no_caster_mods",
-            // - jewel mods
+            "no_attack_mods", "no_caster_mods", "has_physical_conversion_mod", "has_damage_taken_as_mod",
             "specific_weapon", "two_handed_mod", "shield_mod", "dual_wielding_mod", "one_handed_mod", "melee_mod",
-            // - crit/spell crit shaper mod
-            "grants_crit_chance_support",
-            // Resonators/Fossils (Delve league) crafting is not supported and Abyss Jewels aren't either
-            "abyss_jewel",
+            "grants_crit_chance_support", "local_item_quality",
             // map crafting is not supported
             "map",
             // no idea where these come from
