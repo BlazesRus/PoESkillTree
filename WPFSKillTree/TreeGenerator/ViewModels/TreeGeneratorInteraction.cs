@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Views;
-using POESKillTree.Utils;
-using POESKillTree.ViewModels.Equipment;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Views;
 
-namespace POESKillTree.TreeGenerator.ViewModels
+namespace PoESkillTree.TreeGenerator.ViewModels
 {
     /// <summary>
     /// Class that encapsulates the interaction between MainWindow and the TreeGenerator namespace.
@@ -54,12 +53,6 @@ namespace POESKillTree.TreeGenerator.ViewModels
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TreeGeneratorInteraction"/> class.
-        /// </summary>
-        /// <param name="dialogCoordinator">The dialog coordinator.</param>
-        /// <param name="persistentData">The persistent data.</param>
-        /// <param name="skillTree">The skill tree.</param>
         public TreeGeneratorInteraction(ISettingsDialogCoordinator dialogCoordinator, IPersistentData persistentData,
             SkillTree skillTree)
         {
