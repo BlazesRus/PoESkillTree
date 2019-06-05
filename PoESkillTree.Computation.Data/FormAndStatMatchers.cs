@@ -274,8 +274,12 @@ namespace PoESkillTree.Computation.Data
                     BaseAdd, Value, Reference.AsPoolStat.Regen.Percent
                 },
                 {
-                    "# ({PoolStatMatchers}) regenerated per second",
-                    BaseAdd, Value, Reference.AsPoolStat.Regen
+                    "lose #%( of)?( their| your)? ({PoolStatMatchers}) per second",
+                    BaseSubtract, Value, Reference.AsPoolStat.Regen.Percent
+                },
+                {
+                    "# ({PoolStatMatchers}) regenerated per second", BaseAdd, Value,
+                    Reference.AsPoolStat.Regen
                 },
                 {
                     "#% of ({StatMatchers}) is regenerated as ({PoolStatMatchers}) per second",
@@ -326,7 +330,7 @@ namespace PoESkillTree.Computation.Data
                     Charge.Power.ChanceToGain, Charge.Frenzy.ChanceToGain, Charge.Endurance.ChanceToGain
                 },
                 {
-                    "(?<!chance to |when you )gain an? ({ChargeTypeMatchers})",
+                    "(?<!chance to |when you )gain (an?|1) ({ChargeTypeMatchers})",
                     BaseAdd, 100, Reference.AsChargeType.ChanceToGain
                 },
                 {
@@ -442,12 +446,10 @@ namespace PoESkillTree.Computation.Data
                     "poison you inflict with critical strikes deals #% more damage",
                     PercentMore, Value, CriticalStrike.Multiplier.With(Ailment.Poison)
                 },
-                { "removes? ({AilmentMatchers})", TotalOverride, 100, Reference.AsAilment.ChanceToRemove },
                 {
-                    "removes? ({AilmentMatchers}) and ({AilmentMatchers})",
-                    TotalOverride, 100, References[0].AsAilment.ChanceToRemove, References[1].AsAilment.ChanceToRemove
+                    "({AilmentMatchers}) you inflict deals? damage #% faster",
+                    PercentIncrease, Value, Reference.AsAilment.TickRateModifier
                 },
-                { "removes? (ignite and )?burning", TotalOverride, 100, Ailment.Ignite.ChanceToRemove },
                 // stun
                 { "(you )?cannot be stunned", TotalOverride, 100, Effect.Stun.Avoidance },
                 { "additional #% chance to be stunned", BaseAdd, Value, Effect.Stun.Chance.For(Entity.OpponentOfSelf) },
