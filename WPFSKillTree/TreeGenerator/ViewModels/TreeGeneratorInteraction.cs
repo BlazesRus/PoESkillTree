@@ -53,12 +53,6 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TreeGeneratorInteraction"/> class.
-        /// </summary>
-        /// <param name="dialogCoordinator">The dialog coordinator.</param>
-        /// <param name="persistentData">The persistent data.</param>
-        /// <param name="skillTree">The skill tree.</param>
         public TreeGeneratorInteraction(ISettingsDialogCoordinator dialogCoordinator, IPersistentData persistentData,
             SkillTree skillTree)
         {
