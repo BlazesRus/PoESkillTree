@@ -20,7 +20,7 @@ namespace PoESkillTree.Computation.ViewModels
             => (ExplicitRegistrationType.GainOnAction) Node.Stat.ExplicitRegistrationType;
 
         public bool IsVisible
-            => Node.Value.HasValue && GainOnActionType.GainedStat.Entity == Entity.Character;
+            => Node.HasValue && GainOnActionType.GainedStat.Entity == Entity.Character;
 
         public string Action
             => GainOnActionType.ActionEntity == Entity.Character
@@ -35,7 +35,7 @@ namespace PoESkillTree.Computation.ViewModels
 
         private void NodeOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CalculationNodeViewModel.Value))
+            if (e.PropertyName == nameof(ResultNodeViewModel.HasValue))
                 OnPropertyChanged(nameof(IsVisible));
         }
     }

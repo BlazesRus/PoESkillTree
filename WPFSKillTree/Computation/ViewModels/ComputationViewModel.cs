@@ -28,14 +28,16 @@ namespace PoESkillTree.Computation.ViewModels
         public ConfigurationStatsViewModel ConfigurationStats { get; private set; }
         public GainOnActionStatsViewModel GainOnActionStats { get; private set; }
         public SharedConfigurationViewModel SharedConfiguration { get; private set; }
+        public IndependentResultStatsViewModel IndependentResultStats { get; private set; }
 
         private ComputationViewModel(ObservableCalculator observableCalculator, ComputationSchedulerProvider schedulers)
         {
             _observableCalculator = observableCalculator;
-            _nodeFactory = new CalculationNodeViewModelFactory(observableCalculator, schedulers.Dispatcher);
-            var modifierNodeFactory = new ModifierNodeViewModelFactory(observableCalculator, _nodeFactory);
-            OffensiveStats = new ResultStatsViewModel(_nodeFactory, modifierNodeFactory);
-            DefensiveStats = new ResultStatsViewModel(_nodeFactory, modifierNodeFactory);
+            var modifierNodeFactory = new ModifierNodeViewModelFactory(observableCalculator);
+            _nodeFactory =
+                new CalculationNodeViewModelFactory(modifierNodeFactory, observableCalculator, schedulers.Dispatcher);
+            OffensiveStats = new ResultStatsViewModel(_nodeFactory);
+            DefensiveStats = new ResultStatsViewModel(_nodeFactory);
         }
 
         private async Task InitializeAsync(
@@ -51,6 +53,8 @@ namespace PoESkillTree.Computation.ViewModels
 
             GainOnActionStats = await GainOnActionStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
             SharedConfiguration = SharedConfigurationViewModel.Create(_nodeFactory, f);
+            IndependentResultStats =
+                await IndependentResultStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
         }
 
         private void InitializeOffensiveStats(IBuilderFactories f)
@@ -181,7 +185,6 @@ namespace PoESkillTree.Computation.ViewModels
             AddAvailableStats(DefensiveStats, f.StatBuilders.MovementSpeed);
             AddAvailableStats(DefensiveStats, f.StatBuilders.ItemQuantity);
             AddAvailableStats(DefensiveStats, f.StatBuilders.ItemRarity);
-            AddAvailableStats(DefensiveStats, f.StatBuilders.LightRadius);
 
             AddAvailableStats(DefensiveStats, f.StatBuilders.PassivePoints);
             AddAvailableStats(DefensiveStats, f.StatBuilders.PassivePoints.Maximum);

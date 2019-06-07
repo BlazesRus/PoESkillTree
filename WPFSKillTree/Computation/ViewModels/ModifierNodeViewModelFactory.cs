@@ -9,13 +9,10 @@ namespace PoESkillTree.Computation.ViewModels
     public class ModifierNodeViewModelFactory
     {
         private readonly ObservableCalculator _calculator;
-        private readonly CalculationNodeViewModelFactory _nodeFactory;
 
-        public ModifierNodeViewModelFactory(ObservableCalculator calculator,
-            CalculationNodeViewModelFactory nodeFactory)
+        public ModifierNodeViewModelFactory(ObservableCalculator calculator)
         {
             _calculator = calculator;
-            _nodeFactory = nodeFactory;
         }
 
         public async Task<IReadOnlyList<ModifierNodeViewModel>> CreateAsync(IStat stat, NodeType nodeType)
@@ -69,9 +66,12 @@ namespace PoESkillTree.Computation.ViewModels
             var consideredPaths = new HashSet<PathDefinition>();
             foreach (var path in allPaths)
             {
-                var baseValue = await _calculator.GetNodeValueAsync(stat, NodeType.Base, path);
-                if (baseValue is null)
-                    continue;
+                if (nodeType != NodeType.Increase && nodeType != NodeType.More)
+                {
+                    var baseValue = await _calculator.GetNodeValueAsync(stat, NodeType.Base, path);
+                    if (baseValue is null)
+                        continue;
+                }
 
                 foreach (var influencingSource in path.ModifierSource.InfluencingSources)
                 {
@@ -109,7 +109,8 @@ namespace PoESkillTree.Computation.ViewModels
             var formNodes = await _calculator.GetFormNodeCollectionAsync(stat, form, path);
             foreach (var (node, modifier) in formNodes)
             {
-                var resultNode = await _nodeFactory.CreateConstantResultAsync(stat, node);
+                var resultNode = new CalculationNodeViewModel(stat)
+                    { Value = await _calculator.GetNodeValueAsync(node) };
                 if (resultNode.Value is null && stat.DataType != typeof(bool))
                     continue;
                 nodes.Add(new ModifierNodeViewModel(form, modifier.Source, resultNode));
@@ -118,7 +119,7 @@ namespace PoESkillTree.Computation.ViewModels
             if (form == Form.BaseAdd || form == Form.Increase)
             {
                 return nodes
-                    .GroupBy(n => (n.Form, n.ModifierSource, n.ModifierSource.SourceName))
+                    .GroupBy(n => (n.Form, n.IsLocal, n.ModifierSource.ToString(), n.ModifierSource.SourceName))
                     .Select(g => g.Aggregate(Accumulate))
                     .ToList();
             }

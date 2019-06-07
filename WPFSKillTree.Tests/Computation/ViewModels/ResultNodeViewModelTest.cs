@@ -4,9 +4,8 @@ using NUnit.Framework;
 using PoESkillTree.Computation.Builders.Stats;
 using PoESkillTree.Computation.Common;
 using PoESkillTree.GameModel;
-using PoESkillTree.Computation.ViewModels;
 
-namespace PoESkillTree.Tests.Computation.ViewModels
+namespace PoESkillTree.Computation.ViewModels
 {
     [TestFixture]
     public class ResultNodeViewModelTest
@@ -73,11 +72,11 @@ namespace PoESkillTree.Tests.Computation.ViewModels
         private static ResultNodeViewModel CreateSut<T>(NodeValue? value)
         {
             var stat = new Stat("", dataType: typeof(T));
-            return new ResultNodeViewModel(stat) { Value = value };
+            return new ResultNodeViewModel(null, stat) { Value = value };
         }
 
         private static ResultNodeViewModel CreateSut(IStat stat, NodeType nodeType)
-            => new ResultNodeViewModel(stat, nodeType);
+            => new ResultNodeViewModel(null, stat, nodeType);
 
         public enum TestEnum
         {

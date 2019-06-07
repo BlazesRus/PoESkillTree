@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using PoESkillTree.Computation.Common;
 using PoESkillTree.Computation.Common.Builders;
+using PoESkillTree.Computation.Common.Builders.Conditions;
+using PoESkillTree.Computation.Common.Builders.Stats;
+using PoESkillTree.Computation.Common.Builders.Values;
 using PoESkillTree.GameModel;
+using PoESkillTree.GameModel.Modifiers;
 using PoESkillTree.GameModel.PassiveTree;
 
 namespace PoESkillTree.Computation.Parsing.PassiveTreeParsers
@@ -27,20 +30,26 @@ namespace PoESkillTree.Computation.Parsing.PassiveTreeParsers
         public ParseResult Parse(ushort nodeId)
         {
             var nodeDefinition = _passiveTreeDefinition.GetNodeById(nodeId);
-            var localSource = new ModifierSource.Local.Tree(nodeDefinition.Name);
+            var localSource = new ModifierSource.Local.PassiveNode(nodeId, nodeDefinition.Name);
             var globalSource = new ModifierSource.Global(localSource);
-            var isSkilledStat = _builderFactories.StatBuilders.PassiveNodeSkilled(nodeId);
+            var isSkilledStat = _builderFactories.PassiveTreeBuilders.NodeSkilled(nodeId);
             var isSkilled = isSkilledStat.IsSet;
+            var effectivenessStat = _builderFactories.PassiveTreeBuilders.NodeEffectiveness(nodeId);
+            var effectiveness = effectivenessStat.Value;
 
             var results = new List<ParseResult>(nodeDefinition.Modifiers.Count + 1);
             foreach (var modifier in nodeDefinition.Modifiers)
             {
-                var result = Parse(modifier, globalSource).ApplyCondition(isSkilled.Build);
+                var result = ModifierLocalityTester.AffectsPassiveNodeProperty(modifier)
+                    ? Parse(modifier + " (AsPassiveNodeBaseProperty)", globalSource)
+                    : Parse(modifier, globalSource).ApplyMultiplier(effectiveness.Build);
                 results.Add(result);
             }
             
             var modifiers = new ModifierCollection(_builderFactories, localSource);
             modifiers.AddGlobal(isSkilledStat, Form.BaseSet, false);
+            modifiers.AddGlobal(effectivenessStat, Form.BaseSet, isSkilledStat.Value);
+
             if (nodeDefinition.CostsPassivePoint)
             {
                 var passivePointStat = nodeDefinition.IsAscendancyNode
@@ -53,9 +62,21 @@ namespace PoESkillTree.Computation.Parsing.PassiveTreeParsers
                 modifiers.AddGlobal(_builderFactories.StatBuilders.PassivePoints.Maximum,
                     Form.BaseAdd, nodeDefinition.PassivePointsGranted, isSkilled);
             }
+
+            var attributes = _builderFactories.StatBuilders.Attribute;
+            SetupProperty(modifiers, attributes.Strength, effectiveness);
+            SetupProperty(modifiers, attributes.Dexterity, effectiveness);
+            SetupProperty(modifiers, attributes.Intelligence, effectiveness);
+
             results.Add(ParseResult.Success(modifiers.Modifiers));
 
             return ParseResult.Aggregate(results);
+        }
+
+        private static void SetupProperty(ModifierCollection modifiers, IStatBuilder stat, ValueBuilder effectiveness)
+        {
+            modifiers.AddGlobal(stat, Form.BaseAdd, effectiveness * stat.AsPassiveNodeProperty.Value);
+            modifiers.AddGlobal(stat.AsPassiveNodeProperty, Form.BaseSet, stat.AsPassiveNodeBaseProperty.Value);
         }
 
         private ParseResult Parse(string modifierLine, ModifierSource modifierSource)
