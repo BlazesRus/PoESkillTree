@@ -12,6 +12,21 @@
         <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
 		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
     </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Average FullConversionFire AOE Spell+HalfFire Cyclone[SpellBlade OneHand-Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"  ConversionMultiplier="0.5"/>
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Staff-Combo]" Group="Damage">
         <Attribute Name="#% increased Global Physical Damage"/>
         <Attribute Name="#% increased Area Damage" />
