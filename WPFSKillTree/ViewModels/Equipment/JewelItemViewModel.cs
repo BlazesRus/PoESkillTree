@@ -1,16 +1,17 @@
-﻿using System.Windows;
-using GongSolutions.Wpf.DragDrop;
+﻿using System.Collections.Generic;
+using System.Linq;
 using PoESkillTree.GameModel.Items;
-using POESKillTree.Model.Items;
-using Item = POESKillTree.Model.Items.Item;
+using PoESkillTree.Utils;
+using PoESkillTree.Model.Items;
 
 namespace POESKillTree.ViewModels.Equipment
 {
     /// <summary>
-    /// View model for draggable items in the inventory. This is also a drop target.
+    /// View model for draggable items in the inventory. This is also a drop target.(Variant of InventoryItemViewModel)
     /// </summary>
     public class JewelItemViewModel : DraggableJewelItemViewModel, IDropTarget
     {
+        private readonly IExtendedDialogCoordinator _dialogCoordinator;
         private readonly JewelItemAttributes _itemAttributes;
         private readonly ushort _slot;
 
@@ -34,9 +35,10 @@ namespace POESKillTree.ViewModels.Equipment
         public override DragDropEffects DropOnInventoryEffect => DragDropEffects.Link;
         public override DragDropEffects DropOnStashEffect => DragDropEffects.Copy;
 
-        public JewelItemViewModel(IExtendedDialogCoordinator dialogCoordinator,JewelItemAttributes itemAttributes, ushort slot)
-            : base(dialogCoordinator)
+        public JewelItemViewModel(
+            IExtendedDialogCoordinator dialogCoordinator, JewelItemAttributes itemAttributes, ushort slot)
         {
+            _dialogCoordinator = dialogCoordinator;
             _itemAttributes = itemAttributes;
             _slot = slot;
 
@@ -65,7 +67,7 @@ namespace POESKillTree.ViewModels.Equipment
 
         public void Drop(IDropInfo dropInfo)
         {
-            var draggedItem = (DraggableJewelItemViewModel)dropInfo.Data;
+            var draggedItem = (DraggableJewelItemViewModel) dropInfo.Data;
 
             if (dropInfo.Effects == DragDropEffects.Move)
             {
@@ -83,7 +85,7 @@ namespace POESKillTree.ViewModels.Equipment
                 var oldItem = Item;
                 Item = null;
                 draggedItem.Item = oldItem;
-               Item = newItem;
+                Item = newItem;
             }
         }
     }
