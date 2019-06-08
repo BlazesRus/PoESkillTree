@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -10,13 +9,14 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.GameModel.Items;
 using PoESkillTree.GameModel.Skills;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Utils;
-using POESKillTree.ViewModels;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.ViewModels;
 
-namespace POESKillTree.Model.Items
+namespace PoESkillTree.Model.Items
 {
-    public class JewelItemAttributes : Notifier
+    public class JewelItemAttributes : Notifier, IDisposable
     {
         #region slotted items
 
@@ -27,19 +27,25 @@ namespace POESKillTree.Model.Items
         {
             if (!CanEquip(value, slot))
                 return;
-
+            
             var old = Equip.FirstOrDefault(i => i.Slot == slot);
-            if (old != null)
+            if (value is null)
             {
                 Equip.Remove(old);
+            }
+            else
+            {
+                value.Slot = slot;
+                Equip.RemoveAndAdd(old, value);
+            }
+
+            if (old != null)
+            {
                 old.Slot = 0;
                 old.PropertyChanged -= SlottedItemOnPropertyChanged;
             }
-
             if (value != null)
             {
-                value.Slot = slot;
-                Equip.Add(value);
                 value.PropertyChanged += SlottedItemOnPropertyChanged;
             }
             OnPropertyChanged(slot.ToString());
@@ -50,11 +56,12 @@ namespace POESKillTree.Model.Items
         {
             if (item == null) return true;
             if (slot == 0) return false;
-            return (item.Slot & slot) != 0;
+            //return (item.Slot & slot) != 0;
+            return ((int) item.ItemClass.ItemSlots() & (int) slot) != 0;
         }
         #endregion
 
-        public ObservableCollection<JewelItem> Equip { get; }
+        public ObservableSet<JewelItem> Equip { get; } = new ObservableSet<JewelItem>();
 
         private ListCollectionView _attributes;
         public ListCollectionView Attributes
@@ -66,51 +73,64 @@ namespace POESKillTree.Model.Items
         public IReadOnlyList<ItemMod> NonLocalMods { get; private set; }
 
         private readonly EquipmentData _equipmentData;
+
         public event EventHandler ItemDataChanged;
 
-        private void SlottedItemOnPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            if (args.PropertyName == nameof(Item.JsonBase))
-            {
-                ItemDataChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
+        //public JewelItemAttributes(EquipmentData equipmentData, SkillDefinitions skillDefinitions, string itemData = null)
+        //{
+        //    _equipmentData = equipmentData;
+        //    Equip.CollectionChanged += OnCollectionChanged;
+
+        //    if (!string.IsNullOrEmpty(itemData))
+        //    {
+        //        var jObject = JObject.Parse(itemData);
+        //        DeserializeItems(jObject);
+        //    }
+
+        //    RefreshItemAttributes();
+        //}
+
+        //public JewelItemAttributes(EquipmentData equipmentData, string itemData = null)
+        //{
+        //    _equipmentData = equipmentData;
+        //    Equip.CollectionChanged += OnCollectionChanged;
+
+        //    if (!string.IsNullOrEmpty(itemData))
+        //    {
+        //        var jObject = JObject.Parse(itemData);
+        //        DeserializeItems(jObject);
+        //    }
+
+        //    RefreshItemAttributes();
+        //}
 
         public JewelItemAttributes()
         {
-            Equip = new ObservableCollection<JewelItem>();
+            Equip = new ObservableSet<JewelItem>();
             RefreshItemAttributes();
         }
 
-        public JewelItemAttributes(EquipmentData equipmentData, string itemData)
+        private void DeserializeItems(JObject itemData)
         {
-            _equipmentData = equipmentData;
-            Equip = new ObservableCollection<JewelItem>();
+            if (!itemData.TryGetValue("items", out var itemJson))
+                return;
 
-            var jObject = JObject.Parse(itemData);
-            //foreach (JObject jobj in (JArray)jObject["items"])
-            //{
-            //    var inventoryId = jobj.Value<string>("inventoryId");
-            //    switch (inventoryId)
-            //    {
-            //        case "Weapon":
-            //            inventoryId = "MainHand";
-            //            break;
-            //        case "Offhand":
-            //            inventoryId = "OffHand";
-            //            break;
-            //        case "Flask":
-            //            inventoryId = $"Flask{jobj.Value<int>("x") + 1}";
-            //            break;
-            //    }
+            foreach (JObject jobj in (JArray) itemJson)
+            {
+                var inventoryId = jobj.Value<string>("inventoryId");
 
-            //    if (EnumsNET.Enums.TryParse(inventoryId, out ushort slot))
-            //    {
-            //        AddItem(jobj, slot);
-            //    }
-            //}
+                //if (EnumsNET.Enums.TryParse(inventoryId, out JewelSlot slot))
+                //{
+                //    var item = AddItem(jobj, slot);
+                //    item.SetJsonBase();
+                //}
+                var item = AddItem(jobj, 0);
+                item.SetJsonBase();
+            }
+        }
 
-            RefreshItemAttributes();
+        private void DeserializeSkills(JObject itemData)
+        {
         }
 
         public string ToJsonString()
@@ -122,9 +142,36 @@ namespace POESKillTree.Model.Items
                 jItem["inventoryId"] = item.Slot.ToString();
                 items.Add(jItem);
             }
-            var jObj = new JObject { ["items"] = items };
+
+            var jObj = new JObject
+            {
+                {"items", items}
+            };
             return jObj.ToString(Formatting.None);
         }
+
+        public void Dispose()
+        {
+            foreach (var item in Equip)
+            {
+                item.PropertyChanged -= SlottedItemOnPropertyChanged;
+            }
+            Equip.CollectionChanged -= OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object sender, EventArgs args)
+            => OnItemDataChanged();
+
+        private void SlottedItemOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(Item.JsonBase))
+            {
+                OnItemDataChanged();
+            }
+        }
+
+        private void OnItemDataChanged()
+            => ItemDataChanged?.Invoke(this, EventArgs.Empty);
 
         private void RefreshItemAttributes()
         {
@@ -190,6 +237,15 @@ namespace POESKillTree.Model.Items
             }
         }
 
+        private static IEnumerable<ItemMod> SelectNonLocalMods(Item item)
+        {
+            var mods = item.Mods.Where(m => !m.IsLocal);
+            // Weapons are treated differently, their properties do not count towards global mods.
+            if (!item.Tags.HasFlag(Tags.Weapon))
+                return mods.Union(item.Properties.Where(p => p.Attribute != "Quality: +#%"));
+            return mods;
+        }
+
         private static IEnumerable<ItemMod> SelectNonLocalMods(JewelItem item)
         {
             var mods = item.Mods.Where(m => !m.IsLocal);
@@ -199,11 +255,12 @@ namespace POESKillTree.Model.Items
             return mods;
         }
 
-        private void AddItem(JObject val, ushort islot)
+        private JewelItem AddItem(JObject val, ushort islot)
         {
-            JewelItem item = new JewelItem(_equipmentData, val, islot);
+            var item = new JewelItem(_equipmentData, val, islot);
             Equip.Add(item);
             item.PropertyChanged += SlottedItemOnPropertyChanged;
+            return item;
         }
 
 
