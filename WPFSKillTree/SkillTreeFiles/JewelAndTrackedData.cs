@@ -12,17 +12,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
-using POESKillTree.Model.Items;
-using POESKillTree.ViewModels.Equipment;
 using PoESkillTree.SkillTreeFiles;
 
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
-using POESKillTree.ViewModels;
+using PoESkillTree.ViewModels;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using PoESkillTree.Utils;
 using PoESkillTree.ViewModels.Equipment;
 using PoESkillTree.ViewModels;
+using PoESkillTree.Model.Items;
 
 namespace POESKillTree
 {
