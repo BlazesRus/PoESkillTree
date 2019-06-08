@@ -4,7 +4,7 @@ using PoESkillTree.GameModel.Items;
 using PoESkillTree.Utils;
 using PoESkillTree.Model.Items;
 
-namespace POESKillTree.ViewModels.Equipment
+namespace PoESkillTree.ViewModels.Equipment
 {
     /// <summary>
     /// View model for draggable items in the inventory. This is also a drop target.(Variant of InventoryItemViewModel)
