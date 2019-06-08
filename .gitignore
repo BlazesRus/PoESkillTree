@@ -291,7 +291,7 @@ paket-files/
 *.sln.iml
 
 #
-POESKillTree.exe.config
+PoESkillTree.exe.config
 
 # contains ReSharper specific settings
 *.csproj.DotSettings

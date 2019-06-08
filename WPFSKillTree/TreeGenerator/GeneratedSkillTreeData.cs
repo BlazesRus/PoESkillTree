@@ -1,4 +1,4 @@
-namespace POESKillTree.TreeGenerator
+namespace PoESkillTree.TreeGenerator
 {
 
 }

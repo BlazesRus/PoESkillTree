@@ -1,6 +1,6 @@
 ﻿//using Xamarin.Forms;
 //using Xamarin.Forms.Xaml;
-using POESKillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Linq;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
 using System.Windows.Controls;
 
-namespace POESKillTree.TrackedStatViews
+namespace PoESkillTree.TrackedStatViews
 {
     /// <summary>
     /// Converter class for use of fallback value in ComboBox etc when value is null or empty
