@@ -392,7 +392,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
-        public POESKillTree.ViewModels.Equipment.InventoryViewModel ItemInfo
+        public PoESkillTree.ViewModels.Equipment.InventoryViewModel ItemInfo
         {
             get { return GlobalSettings.ItemInfoVal; }
             set

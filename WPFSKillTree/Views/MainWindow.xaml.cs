@@ -1516,7 +1516,7 @@ namespace PoESkillTree.Views
             _lastMouseButton = e.ChangedButton;
         }
 
-        static private void AddLeapTagToNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
         {
             List<float> BlankList = new List<float>();
             string[] ExtendedAttribute;
@@ -1534,7 +1534,7 @@ namespace PoESkillTree.Views
             }
         }
 
-        static private void RemoveLeapTagFromNode(POESKillTree.SkillTreeFiles.SkillNode CurrentNode)
+        static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
         {
             string[] ExtendedAttribute;
             int attributeSize;
@@ -1562,14 +1562,14 @@ namespace PoESkillTree.Views
             }
         }
 
-        private void NormalRefund(POESKillTree.SkillTreeFiles.SkillNode node)
+        private void NormalRefund(PoESkillTree.SkillTreeFiles.SkillNode node)
         {
             Tree.ForceRefundNode(node);
             _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
             Tree.DrawPath(_prePath);
         }
 
-        private void NormalNodeClick(POESKillTree.SkillTreeFiles.SkillNode node)
+        private void NormalNodeClick(PoESkillTree.SkillTreeFiles.SkillNode node)
         {
             if (_prePath != null)
             {

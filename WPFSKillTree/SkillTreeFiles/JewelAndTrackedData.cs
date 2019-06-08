@@ -2,7 +2,7 @@
 // Code Created by James Michael Armstrong (https://github.com/BlazesRus)
 // Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
 // ***********************************************************************
-//using POESKillTree.TrackedStatViews;
+//using PoESkillTree.TrackedStatViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,9 +27,9 @@ namespace POESKillTree
 {
     /// <summary>
     /// Class named JewelNodeData.
-    /// Implements the <see cref="POESKillTree.Utils.Notifier" />
+    /// Implements the <see cref="PoESkillTree.Utils.Notifier" />
     /// </summary>
-    /// <seealso cref="POESKillTree.Utils.Notifier" />
+    /// <seealso cref="PoESkillTree.Utils.Notifier" />
     public class JewelNodeData : Notifier
     {
         /// <summary>
@@ -57,9 +57,9 @@ namespace POESKillTree
 
     /// <summary>
     /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.UInt16, PoESkillTree.JewelNodeData}" />
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, POESKillTree.JewelNodeData}" />
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, PoESkillTree.JewelNodeData}" />
     [Serializable]
     public class JewelData : Dictionary<ushort, JewelNodeData>
     {//Notifier combined directly into class since can't have 2 base classes
@@ -2091,7 +2091,7 @@ namespace POESKillTree
     //    private Dictionary<string, float> CalculateTotalSingleAttributes(InventoryViewModel InvModel)
     //    {
     //        Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-    //        POESKillTree.Model.Items.Item ItemData;
+    //        PoESkillTree.Model.Items.Item ItemData;
     //        bool ContinueCalc = true;
     //        for (int Index = 0; ContinueCalc; ++Index)
     //        {

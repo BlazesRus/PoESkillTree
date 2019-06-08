@@ -1,18 +1,18 @@
-﻿using POESKillTree.Common.ViewModels;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.Model.Serialization;
-using POESKillTree.TrackedStatViews;
-using POESKillTree.TreeGenerator.Model;
-using POESKillTree.TreeGenerator.Model.PseudoAttributes;
-using POESKillTree.ViewModels.Builds;
+﻿using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Serialization;
+using PoESkillTree.TrackedStatViews;
+using PoESkillTree.TreeGenerator.Model;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.ViewModels.Builds;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace POESKillTree.ViewModels
+namespace PoESkillTree.ViewModels
 {
     // Some aliases to make things clearer without the need of extra classes.
 

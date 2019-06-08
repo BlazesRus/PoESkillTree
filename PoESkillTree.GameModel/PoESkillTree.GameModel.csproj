@@ -105,6 +105,7 @@
     <Compile Include="Items\BaseItemDefinition.cs" />
     <Compile Include="Items\ItemSlot.cs" />
     <Compile Include="Items\JewelRadius.cs" />
+    <Compile Include="Items\JewelSlot.cs" />
     <Compile Include="Items\ReleaseState.cs" />
     <Compile Include="Items\Tags.cs" />
     <Compile Include="Items\ValueColoring.cs" />
