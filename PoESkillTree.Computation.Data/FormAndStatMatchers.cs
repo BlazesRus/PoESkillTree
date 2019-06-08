@@ -41,6 +41,11 @@ namespace PoESkillTree.Computation.Data
                     BaseAdd, ValueFactory.FromMinAndMax(Values[0], Values[1]), Reference.AsDamageType.Damage.WithHits
                 },
                 {
+                    @"# to # added attack ({DamageTypeMatchers}) damage",
+                    BaseAdd, ValueFactory.FromMinAndMax(Values[0], Values[1]),
+                    Reference.AsDamageType.Damage.WithSkills(DamageSource.Attack)
+                },
+                {
                     "# to # ({DamageTypeMatchers}) damage",
                     BaseAdd, ValueFactory.FromMinAndMax(Values[0], Values[1]), Reference.AsDamageType.Damage.WithHits
                 },
@@ -448,6 +453,10 @@ namespace PoESkillTree.Computation.Data
                 },
                 {
                     "({AilmentMatchers}) you inflict deals? damage #% faster",
+                    PercentIncrease, Value, Reference.AsAilment.TickRateModifier
+                },
+                {
+                    "({AilmentMatchers}) inflicted by this skill deals damage #% faster",
                     PercentIncrease, Value, Reference.AsAilment.TickRateModifier
                 },
                 // stun
