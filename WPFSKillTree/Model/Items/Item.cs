@@ -212,6 +212,40 @@ namespace PoESkillTree.Model.Items
             Height = source.Height;
         }
 
+        public Item(JewelItem source)
+        {
+            //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
+            _slot = ItemSlot.SkillTree;
+            ItemClass = source.ItemClass;
+            Tags = source.Tags;
+            _frame = source.Frame;
+            _isEnabled = source.IsEnabled;
+            //_properties, _requirements, _explicit-, _implicit-, _craftedMods
+            _properties = new ObservableCollection<ItemMod>(source.Properties);
+            _requirements = new ObservableCollection<ItemMod>(source.Requirements);
+            _explicitMods = source.ExplicitMods.ToList();
+            _implicitMods = source.ImplicitMods.ToList();
+            _craftedMods = source.CraftedMods.ToList();
+            //_flavourText, _nameLine, _typeLine, _socketGroup, _baseType, _iconUrl, _image
+            _flavourText = source.FlavourText;
+            _nameLine = source.NameLine;
+            _typeLine = source.TypeLine;
+            BaseType = source.BaseType;
+            _iconUrl = source.IconUrl;
+            Image = source.Image;
+            //JsonBase, _x, _y, Width, Height
+            JsonBase = new JObject(source.JsonBase);
+            _x = source.X;
+            _y = source.Y;
+            Width = source.Width;
+            Height = source.Height;
+        }
+
+        public static explicit operator Item(JewelItem source)
+        {
+            return new Item(source);
+        }
+
         public Item(EquipmentData equipmentData, JObject val, ItemSlot itemSlot = ItemSlot.Unequipable)
         {
             JsonBase = val;
@@ -601,11 +635,6 @@ namespace PoESkillTree.Model.Items
                 }
             }
             return dict;
-        }
-		
-		public static explicit operator Item(JewelItem self)
-        {
-            throw new NotImplementedException();
         }
     }
 }

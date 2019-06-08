@@ -17,6 +17,9 @@ using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
 {
+    /// <summary>Variant of Item for Storing Jewels
+    /// Implements the <see cref="PoESkillTree.Utils.Notifier"/>
+    /// Implements the <see cref="MB.Algodat.IRangeProvider{System.Int32}"/></summary>
     public class JewelItem : Notifier, IRangeProvider<int>
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Item));
@@ -30,7 +33,6 @@ namespace PoESkillTree.Model.Items
 
         public ItemClass ItemClass { get; }
         public Tags Tags { get; }
-        public bool IsJewel => ItemClass == ItemClass.Jewel || ItemClass == ItemClass.AbyssJewel;
 
         private bool _isEnabled = true;
         public bool IsEnabled
@@ -120,6 +122,7 @@ namespace PoESkillTree.Model.Items
         public IItemBase BaseType { get; }
 
         private readonly string _iconUrl;
+        public string IconUrl { get => _iconUrl; }
 
         public ItemImage Image { get; }
 
@@ -166,6 +169,8 @@ namespace PoESkillTree.Model.Items
         /// </summary>
         Range<int> IRangeProvider<int>.Range => new Range<int>(Y, Y + Height - 1);
 
+        /// <summary>Initializes a new instance of the <see cref="T:PoESkillTree.Model.Items.JewelItem"/> class.</summary>
+        /// <param name="itemBase">The item base.</param>
         public JewelItem(IItemBase itemBase)
         {
             BaseType = itemBase;
@@ -178,6 +183,47 @@ namespace PoESkillTree.Model.Items
             Properties = new ObservableCollection<ItemMod>(itemBase.GetRawProperties());
         }
 
+        /// <summary>Initializes a new instance of the <see cref="T:PoESkillTree.Model.Items.JewelItem"/> class.</summary>
+        /// <param name="source">The source.</param>
+        public JewelItem(Item source)
+        {
+            //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
+            _slot = 0;
+            ItemClass = source.ItemClass;
+            Tags = source.Tags;
+            _frame = source.Frame;
+            //_properties, _requirements, _explicit-, _implicit-, _craftedMods
+            _isEnabled = source.IsEnabled;
+            _properties = new ObservableCollection<ItemMod>(source.Properties);
+            _requirements = new ObservableCollection<ItemMod>(source.Requirements);
+            _explicitMods = source.ExplicitMods.ToList();
+            _implicitMods = source.ImplicitMods.ToList();
+            _craftedMods = source.CraftedMods.ToList();
+            //_flavourText, _nameLine, _typeLine, _socketGroup, _baseType, _iconUrl, _image
+            _flavourText = source.FlavourText;
+            _nameLine = source.NameLine;
+            _typeLine = source.TypeLine;
+            BaseType = source.BaseType;
+            _iconUrl = source.IconUrl;
+            Image = source.Image;
+            //JsonBase, _x, _y, Width, Height
+            JsonBase = new JObject(source.JsonBase);
+            _x = source.X;
+            _y = source.Y;
+            Width = source.Width;
+            Height = source.Height;
+        }
+
+        /// <summary>Performs an explicit conversion from <see cref="T:PoESkillTree.Model.Items.Item"/> to <see cref="T:PoESkillTree.Model.Items.JewelItem"/>.</summary>
+        /// <param name="source">The source.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static explicit operator JewelItem(Item source)
+        {
+           return new JewelItem(source);
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="T:PoESkillTree.Model.Items.JewelItem"/> class.</summary>
+        /// <param name="source">The source.</param>
         public JewelItem(JewelItem source)
         {
             //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
@@ -207,7 +253,7 @@ namespace PoESkillTree.Model.Items
             Height = source.Height;
         }
 
-        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool AbyssJewel=false)
+        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool IsAbyssJewel=false)
         {
             JsonBase = val;
             Slot = itemSlot;
@@ -252,7 +298,7 @@ namespace PoESkillTree.Model.Items
                                        && (BaseType == null || Frame == FrameType.Unique || Frame == FrameType.Foil);
             if (BaseType == null)
             {
-                BaseType = new ItemBase(equipmentData.ItemImageService, TypeLine, Frame, AbyssJewel);
+                BaseType = new ItemBase(equipmentData.ItemImageService, TypeLine, Frame, IsAbyssJewel);
             }
             ItemClass = BaseType.ItemClass;
             Tags = BaseType.Tags;
@@ -279,7 +325,7 @@ namespace PoESkillTree.Model.Items
                 var mods = val["requirements"].Select(t => ItemModFromJson(t, true)).ToList();
                 if (!mods.Any(m => m.Attribute.StartsWith("Requires ")))
                 {
-                    var modsToMerge = new[]
+                    var modsToMerge = new []
                     {
                         mods.FirstOrDefault(m => m.Attribute == "Level #"),
                         mods.FirstOrDefault(m => m.Attribute == "# Str"),
@@ -301,17 +347,22 @@ namespace PoESkillTree.Model.Items
             if (val["implicitMods"] != null)
                 foreach (var s in val["implicitMods"].Values<string>())
                 {
-                    _implicitMods.Add(ItemModFromString(FixOldRanges(s)));
+                    _implicitMods.Add(ItemModFromString(s));
+                }
+            if (val["fracturedMods"] != null)
+                foreach (var s in val["fracturedMods"].Values<string>())
+                {
+                    ExplicitMods.Add(ItemModFromString(s));
                 }
             if (val["explicitMods"] != null)
                 foreach (var s in val["explicitMods"].Values<string>())
                 {
-                    ExplicitMods.Add(ItemModFromString(FixOldRanges(s)));
+                    ExplicitMods.Add(ItemModFromString(s));
                 }
             if (val["craftedMods"] != null)
                 foreach (var s in val["craftedMods"].Values<string>())
                 {
-                    CraftedMods.Add(ItemModFromString(FixOldRanges(s)));
+                    CraftedMods.Add(ItemModFromString(s));
                 }
 
             if (val["flavourText"] != null && val["flavourText"].HasValues)
@@ -379,12 +430,6 @@ namespace PoESkillTree.Model.Items
             }
 
             return ItemModFromString(attribute, valueColors);
-        }
-
-        private static readonly Regex OldRangeRegex = new Regex(@"(\d+)-(\d+) ");
-        private static string FixOldRanges(string range)
-        {
-            return OldRangeRegex.Replace(range, "$1 to $2 ");
         }
 
         [SuppressMessage("ReSharper", "PossibleLossOfFraction", Justification = "Attribute requirements are rounded down")]
@@ -539,10 +584,6 @@ namespace PoESkillTree.Model.Items
                 }
             }
             return dict;
-        }
-        public static explicit operator JewelItem(Item self)
-        {
-            throw new NotImplementedException();
         }
     }
 }
