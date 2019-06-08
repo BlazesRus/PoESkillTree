@@ -480,17 +480,18 @@ namespace POESKillTree
             foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
-                attributeSize = CurrentNode.attributes.Length;
-                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute) && attributeSize != 0)
+                //attributeSize = CurrentNode.attributes.Length;
+                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute)&&CurrentNode.Attributes.Count!=0)
                 {
-                    ExtendedAttribute = new string[attributeSize + 1];
-                    for (int index = 0; index < attributeSize; ++index)
-                    {
-                        ExtendedAttribute[index] = CurrentNode.attributes[index];
-                    }
-                    ExtendedAttribute[attributeSize] = GlobalSettings.FakeIntuitiveLeapSupportAttribute;
-                    CurrentNode.attributes = ExtendedAttribute;
-                    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, BlankList);
+                    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, new List<float>(1));
+                    //    ExtendedAttribute = new string[attributeSize + 1];
+                    //    for (int index = 0; index < attributeSize; ++index)
+                    //    {
+                    //        ExtendedAttribute[index] = CurrentNode.attributes[index];
+                    //    }
+                    //    ExtendedAttribute[attributeSize] = GlobalSettings.FakeIntuitiveLeapSupportAttribute;
+                    //    CurrentNode.attributes = ExtendedAttribute;
+                    //    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, BlankList);
                 }
             }
         }
@@ -516,21 +517,21 @@ namespace POESKillTree
                 if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
                 {
                     CurrentNode.Attributes.Remove(GlobalSettings.FakeIntuitiveLeapSupportAttribute);
-                    attributeSize = CurrentNode.attributes.Length;
-                    NewAttributeSize = attributeSize - 1;
-                    ExtendedAttribute = new string[NewAttributeSize];
-                    NewIndex = 0;
-                    for (int index = 0; index < attributeSize; ++index)
-                    {
-                        CurrentAttri = CurrentNode.attributes[index];
-                        if (CurrentAttri != GlobalSettings.FakeIntuitiveLeapSupportAttribute)
-                        {
-                            ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
-                            ++NewIndex;
-                        }
-                    }
-                    Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
-                    CurrentNode.attributes = ExtendedAttribute;
+                    //attributeSize = CurrentNode.attributes.Length;
+                    //NewAttributeSize = attributeSize - 1;
+                    //ExtendedAttribute = new string[NewAttributeSize];
+                    //NewIndex = 0;
+                    //for (int index = 0; index < attributeSize; ++index)
+                    //{
+                    //    CurrentAttri = CurrentNode.attributes[index];
+                    //    if (CurrentAttri != GlobalSettings.FakeIntuitiveLeapSupportAttribute)
+                    //    {
+                    //        ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
+                    //        ++NewIndex;
+                    //    }
+                    //}
+                    //Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
+                    //CurrentNode.attributes = ExtendedAttribute;
                 }
             }
         }
@@ -1908,7 +1909,7 @@ namespace POESKillTree
             if (InvModel != null)
             {
                 Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-                POESKillTree.Model.Items.Item ItemData;
+                PoESkillTree.Model.Items.Item ItemData;
                 bool ContinueCalc = true;
                 for (int Index = 0; ContinueCalc; ++Index)
                 {
