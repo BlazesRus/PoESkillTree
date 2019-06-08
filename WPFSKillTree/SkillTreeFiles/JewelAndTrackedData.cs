@@ -2858,7 +2858,7 @@ namespace POESKillTree
         /// <summary>
         /// The dialog coordinator
         /// </summary>
-        public static IExtendedDialogCoordinator SharedDialogCoordinator
+        public static PoESkillTree.ViewModels.IExtendedDialogCoordinator SharedDialogCoordinator
         {
             get { return _dialogCoordinatorVal; }
             set

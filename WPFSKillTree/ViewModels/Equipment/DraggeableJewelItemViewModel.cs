@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GongSolutions.Wpf.DragDrop;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Model.Items;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
 
 namespace POESKillTree.ViewModels.Equipment
 {
     /// <summary>
-    /// View model for Items that can be dragged.
+    /// View model for Items that can be dragged.(Variant of DraggableItemViewModel with JewelItem)
     /// </summary>
     public abstract class DraggableJewelItemViewModel : Notifier, IDragSource
     {
-        private readonly IExtendedDialogCoordinator _dialogCoordinator;
-
         /// <summary>
         /// Gets or sets the item this view models shows.
         /// </summary>
@@ -54,18 +51,10 @@ namespace POESKillTree.ViewModels.Equipment
         private DragDropEffects AllowedEffects => DropOnInventoryEffect | DropOnStashEffect | DropOnBinEffect;
 
         public ICommand DeleteCommand { get; }
-        public ICommand EditSocketedGemsCommand { get; }
 
-        protected DraggableJewelItemViewModel(IExtendedDialogCoordinator dialogCoordinator)
+        protected DraggableJewelItemViewModel()
         {
-            _dialogCoordinator = dialogCoordinator;
-
             DeleteCommand = new RelayCommand(Delete, CanDelete);
-        }
-
-        public static explicit operator DraggableJewelItemViewModel(DraggableItemViewModel self)
-        {
-            throw new NotImplementedException();
         }
 
         private void Delete()
@@ -81,7 +70,7 @@ namespace POESKillTree.ViewModels.Equipment
             dragInfo.Data = this;
             var image = Item.Image.ImageSource.Result;
             DragMouseAnchorPoint = new Point(
-                dragInfo.PositionInDraggedItem.X / image.Width,
+                dragInfo.PositionInDraggedItem.X / image.Width, 
                 dragInfo.PositionInDraggedItem.Y / image.Height
             );
             dragInfo.Effects = AllowedEffects;

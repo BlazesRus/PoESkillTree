@@ -7,7 +7,7 @@ using PoESkillTree.Model.Items;
 namespace PoESkillTree.ViewModels.Equipment
 {
     /// <summary>
-    /// View model for the inventory. Only a collection of the the InventoryItemViewModels for the slots.
+    /// View model for the inventory. Only a collection of the InventoryItemViewModels for the slots.
     /// </summary>
     public class InventoryViewModel : Notifier
     {
