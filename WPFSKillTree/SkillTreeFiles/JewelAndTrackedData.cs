@@ -2,8 +2,7 @@
 // Code Created by James Michael Armstrong (https://github.com/BlazesRus)
 // Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
 // ***********************************************************************
-using POESKillTree.TrackedStatViews;
-using POESKillTree.Utils;
+//using POESKillTree.TrackedStatViews;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,15 +11,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using POESKillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using POESKillTree.Model.Items;
 using POESKillTree.ViewModels.Equipment;
-using POESKillTree.SkillTreeFiles;
+using PoESkillTree.SkillTreeFiles;
 
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
 using POESKillTree.ViewModels;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using PoESkillTree.Utils;
+using PoESkillTree.ViewModels.Equipment;
+using PoESkillTree.ViewModels;
 
 namespace POESKillTree
 {
@@ -220,7 +222,10 @@ namespace POESKillTree
 
             SkillNode CurrentNode = null;
             ushort NodeID;
-            string IDLabel;
+            string IDLabel = "Jewel Socket ID: #";
+            string StrThresholdLabel = "+1 Str JewelSlot";
+            string IntThresholdLabel = "+1 Int JewelSlot";
+            string DexThresholdLabel = "+1 Dex JewelSlot";
             string AttributeName = "";
             float AttributeTotal;
             Vector2D nodePosition;
@@ -228,7 +233,7 @@ namespace POESKillTree
             foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
                 NodeID = JewelElement.Key;
-                IDLabel = "Jewel Socket ID: " + NodeID;
+                //IDLabel = "Jewel Socket ID: " + NodeID;
                 IsStrThreshold = false;
                 IsIntThreshold = false;
                 IsDexThreshold = false;
@@ -274,72 +279,89 @@ namespace POESKillTree
                         }
                     }
                 }
-                if (IsStrThreshold)//No support for all 3 attribute types at once for now
+                if (IsDexThreshold && IsStrThreshold && IsIntThreshold)
                 {
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(StrThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(StrThresholdLabel, new List<float>(1));
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IntThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
+                }
+                else if (IsStrThreshold)
+                {
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(StrThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(StrThresholdLabel, new List<float>(1));
                     if (IsIntThreshold)
                     {
                         StrIntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot", IDLabel};
-                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
+                        if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IntThresholdLabel))
+                            SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
+                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot", IDLabel};
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot", IDLabel};
-                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
+                        //SkillTree.Skillnodes[NodeID].Attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot", IDLabel};
+                        if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
+                            SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", IDLabel};
+                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", IDLabel};
                     }
-                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Str Based Jewel", new List<float>(1));
                 }
                 else if (IsIntThreshold)
                 {
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IntThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
                     if (IsDexThreshold)
                     {
                         IntDexJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot", IDLabel };
-                        //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
+                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot", IDLabel };
+                        if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
+                            SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
-                        SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", IDLabel};
+                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", IDLabel};
                     }
                     //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                 }
                 else if (IsDexThreshold)
                 {
                     DexJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Dex JewelSlot", IDLabel};
-                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+1 Dex JewelSlot", new List<float>(1));
+                    //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Dex JewelSlot", IDLabel};
+                    if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
+                        SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
 
                 }
                 else//Neutral(often ineffective corner jewels)
                 {
                     NeutralJewelSlots.Add(NodeID);
-                    SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
+                    //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
                 }
-                //SkillTree.Skillnodes[NodeID].Attributes.Add("Jewel Socket ID: #", new List<float>(NodeID));
-                foreach (string s in SkillTree.Skillnodes[NodeID].attributes)
-                {
-                    if (s != "+1 to Jewel Socket")//Skip +1 to Jewel Socket
-                    {
-                        var values = new List<float>();
-
-                        foreach (Match m in regexAttrib.Matches(s))
-                        {
-                            if (m.Value == "")
-                                values.Add(float.NaN);
-                            else
-                                values.Add(float.Parse(m.Value, CultureInfo.InvariantCulture));
-                        }
-                        string cs = (regexAttrib.Replace(s, "#"));
-                        SkillTree.Skillnodes[NodeID].Attributes[cs] = values;
-                    }
-                }
+                if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IDLabel))
+                    SkillTree.Skillnodes[NodeID].Attributes.Add(IDLabel, new List<float>(NodeID));
+                ////foreach (string s in SkillTree.Skillnodes[NodeID].attributes)
+                ////{
+                ////    if (s != "+1 to Jewel Socket")//Skip +1 to Jewel Socket
+                ////    {
+                ////        var values = new List<float>();
+                ////
+                ////        foreach (Match m in regexAttrib.Matches(s))
+                ////        {
+                ////            if (m.Value == "")
+                ////                values.Add(float.NaN);
+                ////            else
+                ////                values.Add(float.Parse(m.Value, CultureInfo.InvariantCulture));
+                ////        }
+                ////        string cs = (regexAttrib.Replace(s, "#"));
+                ////        SkillTree.Skillnodes[NodeID].Attributes[cs] = values;
+                ////    }
+                ////}
             }
         }
 
@@ -368,7 +390,7 @@ namespace POESKillTree
         /// <param name="SkilledNodes">The skilled nodes.</param>
         /// <param name="JewelRadiusType">Jewel Radius Type(Large/Medium/Small)(Default:Large"")</param>
         /// <returns></returns>
-        static public float CalculateTotalOfAttributeInJewelArea(SkillNode TargetNode, string AttributeName, Utils.ObservableSet<SkillNode> SkilledNodes, string JewelRadiusType = "")
+        static public float CalculateTotalOfAttributeInJewelArea(SkillNode TargetNode, string AttributeName, ObservableSet<SkillNode> SkilledNodes, string JewelRadiusType = "")
         {
             int JewelRadius;
             switch (JewelRadiusType)
@@ -409,7 +431,7 @@ namespace POESKillTree
         /// <param name="SkilledNodes">The skilled nodes.</param>
         /// <param name="JewelRadiusType">Jewel Radius Type(Large/Medium/Small)(Default:Large"")</param>
         /// <returns></returns>
-        static public float CalculateTotalUnallocAttributeInJewelArea(SkillNode TargetNode, string AttributeName, Utils.ObservableSet<SkillNode> SkilledNodes, string JewelRadiusType = "")
+        static public float CalculateTotalUnallocAttributeInJewelArea(SkillNode TargetNode, string AttributeName, ObservableSet<SkillNode> SkilledNodes, string JewelRadiusType = "")
         {
             int JewelRadius;
             switch (JewelRadiusType)
@@ -446,7 +468,7 @@ namespace POESKillTree
         /// Applies the fake Intuitive Leap Support attribute to nodes in effected area
         /// </summary>
         /// <param name="TargetNode">The target node.</param>
-        static public void ApplyIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
+        static public void ApplyIntuitiveLeapSupport(SkillNode TargetNode)
         {
             List<float> BlankList = new List<float>(0);
             string[] ExtendedAttribute;
@@ -477,7 +499,7 @@ namespace POESKillTree
         /// Removes the fake Intuitive Leap Support attribute to nodes in effected area
         /// </summary>
         /// <param name="TargetNode">The target node.</param>
-        static public void RemoveIntuitiveLeapSupport(POESKillTree.SkillTreeFiles.SkillNode TargetNode)
+        static public void RemoveIntuitiveLeapSupport(SkillNode TargetNode)
         {
             string[] ExtendedAttribute;
             int attributeSize;
