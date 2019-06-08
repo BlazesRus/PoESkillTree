@@ -122,6 +122,8 @@ namespace PoESkillTree.Model.Items
 
         private readonly string _iconUrl;
 
+        public string IconUrl { get => _iconUrl; }
+
         public ItemImage Image { get; }
 
         private JObject _jsonBase;
