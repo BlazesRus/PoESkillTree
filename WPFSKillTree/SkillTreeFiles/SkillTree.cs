@@ -311,6 +311,8 @@ namespace PoESkillTree.SkillTreeFiles
                     if (n1.Name.Contains("Jewel Socket"))
                     {
                         n1.StatDefinitions = new[] { "+1 Jewel Socket" };
+                        //Sending Node Id into List to dynamically add threshold stat
+                        GlobalSettings.JewelInfo.AddJewelSlot(n1.Id);
                     }
 
                     //populate the Attributes fields with parsed attributes 

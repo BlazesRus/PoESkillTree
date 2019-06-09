@@ -76,37 +76,23 @@ namespace PoESkillTree.Model.Items
 
         public event EventHandler ItemDataChanged;
 
-        //public JewelItemAttributes(EquipmentData equipmentData, SkillDefinitions skillDefinitions, string itemData = null)
-        //{
-        //    _equipmentData = equipmentData;
-        //    Equip.CollectionChanged += OnCollectionChanged;
-
-        //    if (!string.IsNullOrEmpty(itemData))
-        //    {
-        //        var jObject = JObject.Parse(itemData);
-        //        DeserializeItems(jObject);
-        //    }
-
-        //    RefreshItemAttributes();
-        //}
-
-        //public JewelItemAttributes(EquipmentData equipmentData, string itemData = null)
-        //{
-        //    _equipmentData = equipmentData;
-        //    Equip.CollectionChanged += OnCollectionChanged;
-
-        //    if (!string.IsNullOrEmpty(itemData))
-        //    {
-        //        var jObject = JObject.Parse(itemData);
-        //        DeserializeItems(jObject);
-        //    }
-
-        //    RefreshItemAttributes();
-        //}
-
-        public JewelItemAttributes()
+        public JewelItemAttributes(EquipmentData equipmentData = null, string itemData = null)
         {
-            Equip = new ObservableSet<JewelItem>();
+            _equipmentData = equipmentData;
+            Equip.CollectionChanged += OnCollectionChanged;
+            if (equipmentData==null)
+            {
+                Equip = new ObservableSet<JewelItem>();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(itemData))
+                {
+                    var jObject = JObject.Parse(itemData);
+                    DeserializeItems(jObject);
+                }
+            }
+
             RefreshItemAttributes();
         }
 

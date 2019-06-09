@@ -1519,46 +1519,18 @@ namespace PoESkillTree.Views
         static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
         {
             List<float> BlankList = new List<float>();
-            string[] ExtendedAttribute;
-            int attributeSize = CurrentNode.attributes.Length;
+            int attributeSize = CurrentNode.Attributes.Count;
             if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode) && attributeSize != 0)
             {
-                ExtendedAttribute = new string[attributeSize + 1];
-                for (int index = 0; index < attributeSize; ++index)
-                {
-                    ExtendedAttribute[index] = CurrentNode.attributes[index];
-                }
-                ExtendedAttribute[attributeSize] = GlobalSettings.LeapedNode;
-                CurrentNode.attributes = ExtendedAttribute;
                 CurrentNode.Attributes.Add(GlobalSettings.LeapedNode, BlankList);
             }
         }
 
         static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
         {
-            string[] ExtendedAttribute;
-            int attributeSize;
-            int NewAttributeSize;
-            int NewIndex;
-            string CurrentAttri;
             if (CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
             {
                 CurrentNode.Attributes.Remove(GlobalSettings.LeapedNode);
-                attributeSize = CurrentNode.attributes.Length;
-                NewAttributeSize = attributeSize - 1;
-                ExtendedAttribute = new string[NewAttributeSize];
-                NewIndex = 0;
-                for (int index = 0; index < attributeSize; ++index)
-                {
-                    CurrentAttri = CurrentNode.attributes[index];
-                    if (CurrentAttri != GlobalSettings.LeapedNode)
-                    {
-                        ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
-                        ++NewIndex;
-                    }
-                }
-                Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
-                CurrentNode.attributes = ExtendedAttribute;
             }
         }
 
