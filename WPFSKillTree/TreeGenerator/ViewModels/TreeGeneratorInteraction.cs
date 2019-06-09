@@ -25,10 +25,10 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
 
-            /// <summary>
+        /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
-        public InventoryViewModel ItemInfo
+        public PoESkillTree.ViewModels.Equipment.InventoryViewModel ItemInfo
         {
             get { return GlobalSettings.ItemInfoVal; }
             set

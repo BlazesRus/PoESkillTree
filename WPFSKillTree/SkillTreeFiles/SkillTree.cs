@@ -314,7 +314,7 @@ namespace PoESkillTree.SkillTreeFiles
                     {
                         n1.StatDefinitions = new[] { "+1 Jewel Socket" };
                         //Sending Node Id into List to dynamically add threshold stat
-                        GlobalSettings.JewelInfo.AddJewelSlot(skillNode.Id);
+                        GlobalSettings.JewelInfo.AddJewelSlot(n1.Id);
                     }
 
                     //populate the Attributes fields with parsed attributes 

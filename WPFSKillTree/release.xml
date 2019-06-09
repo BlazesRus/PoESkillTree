@@ -178,7 +178,7 @@
     </Target>
 
     <Target Name="BuildLocale" DependsOnTargets="BuildLocaleCatalog">
-        <!-- Don't make any dependencies on this target, it's invoked explicitely as Post-Build event -->
+        <!-- Don't make any dependencies on this target, it's invoked explicitly as Post-Build event -->
     </Target>
 
     <Target Name="BuildAndCopyLocale" DependsOnTargets="BuildLocaleCatalog">

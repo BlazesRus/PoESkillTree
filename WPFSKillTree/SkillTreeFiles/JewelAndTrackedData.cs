@@ -15,7 +15,6 @@ using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.SkillTreeFiles;
 
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
-using PoESkillTree.ViewModels;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using PoESkillTree.Utils;
@@ -23,7 +22,7 @@ using PoESkillTree.ViewModels.Equipment;
 using PoESkillTree.ViewModels;
 using PoESkillTree.Model.Items;
 
-namespace POESKillTree
+namespace PoESkillTree
 {
     /// <summary>
     /// Class named JewelNodeData.
@@ -470,8 +469,6 @@ namespace POESKillTree
         static public void ApplyIntuitiveLeapSupport(SkillNode TargetNode)
         {
             List<float> BlankList = new List<float>(0);
-            string[] ExtendedAttribute;
-            int attributeSize;
             Vector2D nodePosition = TargetNode.Position;
             SkillNode CurrentNode;
             IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
@@ -479,18 +476,9 @@ namespace POESKillTree
             foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
-                //attributeSize = CurrentNode.attributes.Length;
                 if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute)&&CurrentNode.Attributes.Count!=0)
                 {
                     CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, new List<float>(1));
-                    //    ExtendedAttribute = new string[attributeSize + 1];
-                    //    for (int index = 0; index < attributeSize; ++index)
-                    //    {
-                    //        ExtendedAttribute[index] = CurrentNode.attributes[index];
-                    //    }
-                    //    ExtendedAttribute[attributeSize] = GlobalSettings.FakeIntuitiveLeapSupportAttribute;
-                    //    CurrentNode.attributes = ExtendedAttribute;
-                    //    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, BlankList);
                 }
             }
         }
@@ -501,11 +489,6 @@ namespace POESKillTree
         /// <param name="TargetNode">The target node.</param>
         static public void RemoveIntuitiveLeapSupport(SkillNode TargetNode)
         {
-            string[] ExtendedAttribute;
-            int attributeSize;
-            int NewAttributeSize;
-            int NewIndex;
-            string CurrentAttri;
             Vector2D nodePosition = TargetNode.Position;
             SkillNode CurrentNode;
             IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
@@ -516,21 +499,6 @@ namespace POESKillTree
                 if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
                 {
                     CurrentNode.Attributes.Remove(GlobalSettings.FakeIntuitiveLeapSupportAttribute);
-                    //attributeSize = CurrentNode.attributes.Length;
-                    //NewAttributeSize = attributeSize - 1;
-                    //ExtendedAttribute = new string[NewAttributeSize];
-                    //NewIndex = 0;
-                    //for (int index = 0; index < attributeSize; ++index)
-                    //{
-                    //    CurrentAttri = CurrentNode.attributes[index];
-                    //    if (CurrentAttri != GlobalSettings.FakeIntuitiveLeapSupportAttribute)
-                    //    {
-                    //        ExtendedAttribute[NewIndex] = CurrentNode.attributes[index];
-                    //        ++NewIndex;
-                    //    }
-                    //}
-                    //Array.Copy(CurrentNode.attributes, attributeSize, ExtendedAttribute, NewAttributeSize, 0);
-                    //CurrentNode.attributes = ExtendedAttribute;
                 }
             }
         }
