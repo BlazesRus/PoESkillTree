@@ -12,7 +12,7 @@ REM VSWhere from https://github.com/Microsoft/vswhere use to locate highest inst
 for /f "usebackq tokens=1* delims=: " %%i in (`vswhere.exe -latest -requires Microsoft.VisualStudio.Workload.NativeDesktop`) do (
 if /i "%%i"=="installationPath" set VSDir=%%j
 )
-ECHO "Visual Studio 2017 Detected as installed at "%VSDir%
+ECHO "Visual Studio 2019 Detected as installed at "%VSDir%
 IF "%VSDir%" == "" GOTO DEFAULTBUILDLOCALE
 
 IF [%1] == [] cmd /C "%VSDir%\Common7\Tools\vsdevcmd.bat && cd ""%~dp0"" && msbuild release.xml /target:BuildLocale"
