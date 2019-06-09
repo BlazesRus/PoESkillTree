@@ -107,7 +107,7 @@ namespace PoESkillTree.GameModel.Skills
         Bow,
 
         /// <summary>
-        /// Never set.
+        /// Equivalent to the ActiveSkillType.
         /// </summary>
         Physical,
 
@@ -140,6 +140,16 @@ namespace PoESkillTree.GameModel.Skills
         /// Equivalent to the ActiveSkillType.
         /// </summary>
         Channelling,
+
+        /// <summary>
+        /// Equivalent to the ActiveSkillType.
+        /// </summary>
+        Guard,
+
+        /// <summary>
+        /// Has no equivalent gem tag or ActiveSkillType.
+        /// </summary>
+        Banner,
     }
 
     public static class KeywordExtensions
@@ -172,13 +182,15 @@ namespace PoESkillTree.GameModel.Skills
                 { Keyword.Offering, (name, _, __) => name.EndsWith("Offering") },
                 { Keyword.CounterAttack, (_, types, __) => types.Contains(ActiveSkillType.TriggerAttack) },
                 { Keyword.Bow, (_, __, tags) => tags.Contains("bow") },
-                { Keyword.Physical, (_, ___, __) => false },
+                { Keyword.Physical, (_, types, __) => types.Contains(ActiveSkillType.Physical) },
                 { Keyword.Lightning, (_, types, __) => types.Contains(ActiveSkillType.Lightning) },
                 { Keyword.Cold, (_, types, __) => types.Contains(ActiveSkillType.Cold) },
                 { Keyword.Fire, (_, types, __) => types.Contains(ActiveSkillType.Fire) },
                 { Keyword.Chaos, (_, types, __) => types.Contains(ActiveSkillType.Chaos) },
                 { Keyword.Brand, (_, types, __) => types.Contains(ActiveSkillType.Brand) },
                 { Keyword.Channelling, (_, types, __) => types.Contains(ActiveSkillType.Channelling) },
+                { Keyword.Guard, (_, types, __) => types.Contains(ActiveSkillType.Guard) },
+                { Keyword.Banner, (name, _, __) => name.EndsWith("Banner") },
             };
 
         public static bool IsOnSkill(this Keyword @this,

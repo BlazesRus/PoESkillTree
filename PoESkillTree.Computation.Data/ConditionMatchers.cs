@@ -227,6 +227,7 @@ namespace PoESkillTree.Computation.Data
                 // buffs
                 { "while you have ({BuffMatchers})", Reference.AsBuff.IsOn(Self) },
                 { "while affected by ({SkillMatchers})", Reference.AsSkill.Buff.IsOn(Self) },
+                { "while affected by a ({KeywordMatchers}) skill buff", Buffs(Self).With(Reference.AsKeyword).Any() },
                 { "during onslaught", Buff.Onslaught.IsOn(Self) },
                 { "while phasing", Buff.Phasing.IsOn(Self) },
                 { "if you've ({BuffMatchers}) an enemy recently,?", Reference.AsBuff.InflictionAction.Recently },
@@ -270,7 +271,7 @@ namespace PoESkillTree.Computation.Data
                 { "chaos skills have", With(Chaos) },
                 { "spell skills have", With(Keyword.Spell) },
                 { "(with|of|for) ({KeywordMatchers}) skills", With(Reference.AsKeyword) },
-                { "({KeywordMatchers}) skills (have|deal)", With(Reference.AsKeyword) },
+                { "(supported )?({KeywordMatchers}) skills (have|deal)", With(Reference.AsKeyword) },
                 {
                     "({KeywordMatchers}) ({KeywordMatchers}) skills (have|deal)",
                     And(With(References[0].AsKeyword), With(References[1].AsKeyword))
@@ -302,7 +303,10 @@ namespace PoESkillTree.Computation.Data
                 },
                 { "if you summoned a golem in the past # seconds", Golems.Cast.InPastXSeconds(Value) },
                 // - by skill part
-                { "(beams?|final wave|shockwaves?|cone) (has a|deals?)", Stat.MainSkillPart.Value.Eq(1) },
+                {
+                    "(beams?|final wave|shockwaves?|cone|aftershock) (has a|deals?)",
+                    Stat.MainSkillPart.Value.Eq(1)
+                },
                 // - other
                 { "to enemies they're attached to", Flag.IsBrandAttachedToEnemy },
                 { "to branded enemy", Flag.IsBrandAttachedToEnemy },
@@ -355,6 +359,9 @@ namespace PoESkillTree.Computation.Data
                 { "witch:", PassiveTree.ConnectsToClass(CharacterClass.Witch).IsSet },
                 { "templar:", PassiveTree.ConnectsToClass(CharacterClass.Templar).IsSet },
                 { "scion:", PassiveTree.ConnectsToClass(CharacterClass.Scion).IsSet },
+                // stance
+                { "while in blood stance", Stat.Unique<Stance>("Stance").Eq((int) Stance.BloodStance) },
+                { "while in sand stance", Stat.Unique<Stance>("Stance").Eq((int) Stance.SandStance) },
                 // other
                 { "enemies have", For(Enemy) },
                 { "against targets they pierce", Projectile.PierceCount.Value >= 1 },
@@ -387,5 +394,12 @@ namespace PoESkillTree.Computation.Data
                 { "supported attack skills deal", Condition.True },
                 { "of supported curse skills", Condition.True },
             };
+
+        private enum Stance
+        {
+            None,
+            BloodStance,
+            SandStance,
+        }
     }
 }
