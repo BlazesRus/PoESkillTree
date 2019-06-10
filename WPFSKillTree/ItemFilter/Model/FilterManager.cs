@@ -568,7 +568,7 @@ namespace PoESkillTree.ItemFilter.Model
                             {
                                 Id = "Chisel",
                                 Name = "Cartographer's Chisel",
-                                Description = L10n.Message("1× Stone Hammer, Rock Breaker or Gavel with 20% quality\n1× Any Map"),
+                                Description = L10n.Message("1x Stone Hammer, Rock Breaker or Gavel with 20% quality\n1x Any Map"),
                                 Set = new List<Match>[]
                                 {
                                     // XXX: 4 or less whetstones to be spent to bring an item to quality of 20 for a recipe.
