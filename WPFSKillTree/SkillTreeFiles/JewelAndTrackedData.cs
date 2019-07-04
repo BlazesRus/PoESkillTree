@@ -221,9 +221,9 @@ namespace PoESkillTree
             SkillNode CurrentNode = null;
             ushort NodeID;
             string IDLabel = "Jewel Socket ID: #";
-            string StrThresholdLabel = "+1 Str JewelSlot";
-            string IntThresholdLabel = "+1 Int JewelSlot";
-            string DexThresholdLabel = "+1 Dex JewelSlot";
+            string StrThresholdLabel = "+# Str JewelSlot";
+            string IntThresholdLabel = "+# Int JewelSlot";
+            string DexThresholdLabel = "+# Dex JewelSlot";
             string AttributeName = "";
             float AttributeTotal;
             Vector2D nodePosition;
@@ -285,6 +285,7 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
                     if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
+                    SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 Jewel Socket",  "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot"};
                 }
                 else if (IsStrThreshold)
                 {
@@ -295,19 +296,19 @@ namespace PoESkillTree
                         StrIntJewelSlots.Add(NodeID);
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IntThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
-                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot", IDLabel};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot"};
                     }
                     else if (IsDexThreshold)
                     {
                         StrDexJewelSlots.Add(NodeID);
-                        //SkillTree.Skillnodes[NodeID].Attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot", IDLabel};
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot"};
                     }
                     else
                     {
                         StrJewelSlots.Add(NodeID);
-                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", IDLabel};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot" };
                     }
                 }
                 else if (IsIntThreshold)
@@ -317,23 +318,22 @@ namespace PoESkillTree
                     if (IsDexThreshold)
                     {
                         IntDexJewelSlots.Add(NodeID);
-                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot", IDLabel };
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot"};
                     }
                     else
                     {
                         IntJewelSlots.Add(NodeID);
-                        //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", IDLabel};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot" };
                     }
-                    //SkillTree.Skillnodes[NodeID].Attributes.Add("+# to Int Based Jewel", new List<float>(1));
                 }
                 else if (IsDexThreshold)
                 {
                     DexJewelSlots.Add(NodeID);
-                    //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", "+1 Dex JewelSlot", IDLabel};
                     if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
+                    SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot" };
 
                 }
                 else//Neutral(often ineffective corner jewels)
@@ -341,8 +341,8 @@ namespace PoESkillTree
                     NeutralJewelSlots.Add(NodeID);
                     //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
                 }
-                if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IDLabel))
-                    SkillTree.Skillnodes[NodeID].Attributes.Add(IDLabel, new List<float>(NodeID));
+                //if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IDLabel))
+                //    SkillTree.Skillnodes[NodeID].Attributes.Add(IDLabel, new List<float>(NodeID));
                 ////foreach (string s in SkillTree.Skillnodes[NodeID].attributes)
                 ////{
                 ////    if (s != "+1 to Jewel Socket")//Skip +1 to Jewel Socket
@@ -2836,6 +2836,15 @@ namespace PoESkillTree
                 _dialogCoordinatorVal = value;
                 NotifyStaticPropertyChanged("SharedDialogCoordinator");
             }
+        }
+
+        /// <summary>Updates the stat definitions from node attributes.</summary>
+        /// <param name="TargetAttributes">The target attributes.</param>
+        /// <returns>System.String[].</returns>
+        public static string[] UpdateStatDefinitions(Dictionary<string, IReadOnlyList<float>> TargetAttributes)
+        {
+            //new Dictionary<string, IReadOnlyList<float>>();
+            return null;
         }
     }
 }
