@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,19 +7,29 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
-using POESKillTree.Localization;
+using PoESkillTree.Localization;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using Version = PoESkillTree.Properties.Version;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     /* Update manager.
      * Provides API for semi-synchronous update process (downloading is asynchronous, while checking for updates and installation are synchronous tasks).
      */ 
     public class Updater
     {
+        // Use stronger cryptographic standards (https://githubengineering.com/crypto-removal-notice/)
+        static Updater()
+        {
+            ServicePointManager.SecurityProtocol =
+                                           SecurityProtocolType.Tls12
+                                         | SecurityProtocolType.Tls11
+                                         | SecurityProtocolType.Tls
+                                         | SecurityProtocolType.Ssl3;
+        }
         // Git API URL to fetch releases (the first one is latest one).
-        private static readonly string GitAPILatestReleaseURL = "https://api.github.com/repos/EmmittJ/PoESkillTree/releases";
+        private static readonly string GitAPILatestReleaseURL = "https://api.github.com/repos/PoESkillTree/PoESkillTree/releases";
         // The language value name of Uninstall registry key.
         private const string InnoSetupUninstallLanguageValue = "Inno Setup: Language";
         // The suffix added to AppId to form Uninstall registry key for an application.
@@ -34,7 +43,7 @@ namespace POESKillTree.SkillTreeFiles
         // Latest release.
         private static Release Latest;
         // Asset content type of package.
-        private const string PackageContentType = "application/octet-stream";
+        private const string PackageContentType = "application/x-msdownload";
         // Regular expression for a released package file name.
         private static readonly Regex RePackage = new Regex(@".*\.exe$", RegexOptions.IgnoreCase);
         // HTTP request timeout for release checks and downloads (in seconds).
@@ -260,7 +269,7 @@ namespace POESKillTree.SkillTreeFiles
                 if (releases.Count < 1)
                     throw new UpdaterException(L10n.Message("No release found"));
 
-                Version current = GetCurrentVersion(); // Current version (tag).
+                var current = GetCurrentVersion(); // Current version (tag).
 
                 // Iterate thru avialable releases.
                 foreach (JObject release in (JArray)releases)
@@ -275,7 +284,7 @@ namespace POESKillTree.SkillTreeFiles
 
                     // Compare release tag with our version (tag).
                     string tag = release["tag_name"].Value<string>();
-                    Version version = new Version(tag);
+                    var version = SemanticVersion.Parse(tag);
                     if (version.CompareTo(current) <= 0)
                     {
                         // Same or older version.
@@ -319,7 +328,7 @@ namespace POESKillTree.SkillTreeFiles
                         Description = release["body"].Value<string>(),
                         IsPrerelease = prerelease,
                         // A release is an update, if file name starts with our PackageName.
-                        IsUpdate = fileName.StartsWith(GetPackageName(Properties.Version.ProductName) + "-"),
+                        IsUpdate = fileName.StartsWith(GetPackageName(Version.ProductName) + "-"),
                         PackageFileName = fileName,
                         Version = tag,
                         URI = new Uri(pkgAsset["browser_download_url"].Value<string>())
@@ -373,9 +382,9 @@ namespace POESKillTree.SkillTreeFiles
         }
 
         // Returns current version.
-        public static Version GetCurrentVersion()
+        private static SemanticVersion GetCurrentVersion()
         {
-            return new Version(Properties.Version.ProductVersion);
+            return SemanticVersion.Parse(Version.ProductVersion);
         }
 
         // Return latest release, or null if there is none or it wasn't checked for yet.
@@ -403,7 +412,7 @@ namespace POESKillTree.SkillTreeFiles
                 return AppData.GetIniValue("Setup", "Language");
             }
             else
-                using (RegistryKey uninstallKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\" + Properties.Version.AppId + InnoSetupUninstallAppIdSuffix))
+                using (RegistryKey uninstallKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\" + Version.AppId + InnoSetupUninstallAppIdSuffix))
                 {
                     if (uninstallKey == null)
                         throw new Exception(L10n.Message("The application is not correctly installed"));
@@ -436,7 +445,7 @@ namespace POESKillTree.SkillTreeFiles
         // Returns true if newer product is installed.
         private static bool IsNewerProductInstalled()
         {
-            Version current = new Version(Properties.Version.ProductVersion);
+            var current = GetCurrentVersion();
 
             using (RegistryKey uninstallKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall"))
             {
@@ -447,11 +456,11 @@ namespace POESKillTree.SkillTreeFiles
                         string productName = key.GetValue("DisplayName") as string;
                         if (string.IsNullOrEmpty(productName)) continue; // Missing DisplayName value.
 
-                        if (!productName.ToLowerInvariant().Contains("poeskilltree")) continue; // Not our application.
+                        if (!productName.ToLowerInvariant().Contains("PoESkillTree")) continue; // Not our application.
 
-                        if (productName != Properties.Version.ProductName)
+                        if (productName != Version.ProductName)
                         {
-                            Version version = new Version(key.GetValue("DisplayVersion") as string);
+                            var version = SemanticVersion.Parse((string) key.GetValue("DisplayVersion"));
                             if (version.CompareTo(current) > 0)
                                 return true;
                         }
@@ -460,12 +469,6 @@ namespace POESKillTree.SkillTreeFiles
             }
 
             return false;
-        }
-
-        // Restarts application.
-        public static void RestartApplication()
-        {
-            Bootstrap.Restart();
         }
     }
 

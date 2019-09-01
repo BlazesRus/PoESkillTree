@@ -7,10 +7,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using log4net;
 using Newtonsoft.Json;
-using POESKillTree.Utils;
-using POESKillTree.Utils.Extensions;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     /// <summary>
     /// Contains methods to download all assets required for the skill tree
@@ -71,8 +71,8 @@ namespace POESKillTree.SkillTreeFiles
             var code = await _httpClient.GetStringAsync(Constants.TreeAddress);
             var regex = new Regex("var passiveSkillTreeData.*");
             var skillTreeObj = regex.Match(code).Value.Replace("\\/", "/");
-            skillTreeObj = skillTreeObj.Substring(27, skillTreeObj.Length - 27 - 1) + "";
-            await FileEx.WriteAllTextAsync(_tempSkillTreePath, skillTreeObj);
+            skillTreeObj = skillTreeObj.Substring(27, skillTreeObj.Length - 27 - 1);
+            await FileUtils.WriteAllTextAsync(_tempSkillTreePath, skillTreeObj);
             return skillTreeObj;
         }
 
@@ -86,7 +86,7 @@ namespace POESKillTree.SkillTreeFiles
             var regex = new Regex(@"ascClasses:.*");
             var optsObj = regex.Match(code).Value.Replace("ascClasses", "{ \"ascClasses\"");
             optsObj = optsObj.Substring(0, optsObj.Length - 1) + "}";
-            await FileEx.WriteAllTextAsync(_tempOptsPath, optsObj);
+            await FileUtils.WriteAllTextAsync(_tempOptsPath, optsObj);
             return optsObj;
         }
 
@@ -102,13 +102,13 @@ namespace POESKillTree.SkillTreeFiles
             Action<double> reportProgress = null)
         {
             Directory.CreateDirectory(_tempAssetsPath);
-            var perSpriteProgress = 1.0 / inTree.skillSprites.Count;
+            var perSpriteProgress = 1.0 / inTree.SkillSprites.Count;
             var progress = 0.0;
-            foreach (var obj in inTree.skillSprites)
+            foreach (var obj in inTree.SkillSprites)
             {
                 var sprite = obj.Value[Constants.AssetZoomLevel];
-                var path = _tempAssetsPath + sprite.filename;
-                var url = SpriteUrl + sprite.filename;
+                var path = _tempAssetsPath + sprite.FileName;
+                var url = SpriteUrl + sprite.FileName;
                 if (path.Contains('?'))
                     path = path.Remove(path.IndexOf('?'));
                 await DownloadAsync(url, path);
@@ -128,13 +128,13 @@ namespace POESKillTree.SkillTreeFiles
         internal async Task DownloadAssetsAsync(PoESkillTree inTree, Action<double> reportProgress = null)
         {
             Directory.CreateDirectory(_tempAssetsPath);
-            var zoomLevel = inTree.imageZoomLevels[Constants.AssetZoomLevel].ToString(CultureInfo.InvariantCulture);
-            var perAssetProgress = 1.0 / inTree.assets.Count;
+            var zoomLevel = inTree.ImageZoomLevels[Constants.AssetZoomLevel].ToString(CultureInfo.InvariantCulture);
+            var perAssetProgress = 1.0 / inTree.Assets.Count;
             var progress = 0.0;
-            foreach (var asset in inTree.assets)
+            foreach (var asset in inTree.Assets)
             {
                 var path = _tempAssetsPath + asset.Key + ".png";
-                var url = asset.Value.GetOrDefault(zoomLevel, () => asset.Value.Values.First());
+                var url = asset.Value.GetValueOrDefault(zoomLevel, () => asset.Value.Values.First());
                 await DownloadAsync(url, path);
                 progress += perAssetProgress;
                 reportProgress?.Invoke(progress);
@@ -161,15 +161,7 @@ namespace POESKillTree.SkillTreeFiles
             var optsTask = DownloadOptsToFileAsync();
 
             var treeString = await skillTreeTask;
-            var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treeString, new JsonSerializerSettings
-            {
-                Error = (sender, args) =>
-                {
-                    if (args.ErrorContext.Path != "groups.515.oo")
-                        Log.Error("Exception while deserializing Json tree", args.ErrorContext.Error);
-                    args.ErrorContext.Handled = true;
-                }
-            });
+            var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treeString, new PoESkillTreeConverter());
             var spritesTask = DownloadSkillNodeSpritesAsync(inTree);
             var assetsTask = DownloadAssetsAsync(inTree);
 
@@ -185,8 +177,8 @@ namespace POESKillTree.SkillTreeFiles
             DirectoryEx.DeleteIfExists(backupPath, true);
             Directory.CreateDirectory(backupPath);
             DirectoryEx.MoveIfExists(_assetsPath, backupPath + AssetsFolder, true);
-            FileEx.MoveIfExists(_skillTreePath, backupPath + SkillTreeFile, true);
-            FileEx.MoveIfExists(_optsPath, backupPath + OptsFile, true);
+            FileUtils.MoveIfExists(_skillTreePath, backupPath + SkillTreeFile, true);
+            FileUtils.MoveIfExists(_optsPath, backupPath + OptsFile, true);
         }
 
         /// <summary>
@@ -197,8 +189,8 @@ namespace POESKillTree.SkillTreeFiles
         {
             var backupPath = _path + BackupFolder;
             DirectoryEx.MoveIfExists(backupPath + AssetsFolder, _assetsPath, true);
-            FileEx.MoveIfExists(backupPath + SkillTreeFile, _skillTreePath, true);
-            FileEx.MoveIfExists(backupPath + OptsFile, _optsPath, true);
+            FileUtils.MoveIfExists(backupPath + SkillTreeFile, _skillTreePath, true);
+            FileUtils.MoveIfExists(backupPath + OptsFile, _optsPath, true);
             DirectoryEx.DeleteIfExists(backupPath);
         }
 
@@ -230,8 +222,8 @@ namespace POESKillTree.SkillTreeFiles
             if (!_useTempDir)
                 throw new InvalidOperationException("This instance doesn't use temp directories");
             DirectoryEx.MoveIfExists(_tempAssetsPath, _assetsPath, true);
-            FileEx.MoveIfExists(_tempSkillTreePath, _skillTreePath, true);
-            FileEx.MoveIfExists(_tempOptsPath, _optsPath, true);
+            FileUtils.MoveIfExists(_tempSkillTreePath, _skillTreePath, true);
+            FileUtils.MoveIfExists(_tempOptsPath, _optsPath, true);
             DirectoryEx.DeleteIfExists(_path + TempFolder);
         }
     }

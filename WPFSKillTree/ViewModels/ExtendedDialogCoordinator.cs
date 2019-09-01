@@ -1,25 +1,33 @@
 ﻿using System.Threading.Tasks;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Model.Builds;
-using POESKillTree.ViewModels.Builds;
-using POESKillTree.ViewModels.Equipment;
-using POESKillTree.Views.Builds;
-using POESKillTree.Views.Equipment;
+using PoESkillTree.GameModel;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
+using PoESkillTree.ViewModels.Builds;
+using PoESkillTree.ViewModels.Equipment;
+using PoESkillTree.Views.Builds;
+using PoESkillTree.Views.Equipment;
 
-namespace POESKillTree.ViewModels
+namespace PoESkillTree.ViewModels
 {
     public interface IExtendedDialogCoordinator : IDialogCoordinator
     {
         Task<bool> EditBuildAsync(object context, IBuildViewModel<PoEBuild> buildVm, BuildValidator buildValidator);
 
-        Task EditSocketedGemsAsync(object context, SocketedGemsEditingViewModel viewModel);
+        Task EditSocketedGemsAsync(object context, ItemAttributes itemAttributes, ItemSlot itemSlot);
 
         Task<TabPickerResult> EditStashTabAsync(object context, TabPickerViewModel tabPickerViewModel);
     }
 
     public class ExtendedDialogCoordinator : DialogCoordinator, IExtendedDialogCoordinator
     {
-        public new static readonly IExtendedDialogCoordinator Instance = new ExtendedDialogCoordinator();
+        private readonly GameData _gameData;
+        private readonly IPersistentData _persistentData;
+
+        public ExtendedDialogCoordinator(GameData gameData, IPersistentData persistentData)
+            => (_gameData, _persistentData) = (gameData, persistentData);
 
         public async Task<bool> EditBuildAsync(object context, IBuildViewModel<PoEBuild> buildVm,
             BuildValidator buildValidator)
@@ -37,9 +45,13 @@ namespace POESKillTree.ViewModels
             return true;
         }
 
-        public async Task EditSocketedGemsAsync(object context, SocketedGemsEditingViewModel viewModel)
+        public async Task EditSocketedGemsAsync(object context, ItemAttributes itemAttributes, ItemSlot itemSlot)
         {
-            await ShowDialogAsync(context, viewModel, new SocketedGemsEditingView());
+            var skills = await _gameData.Skills;
+            await ShowDialogAsync(context,
+                new SocketedGemsEditingViewModel(skills, _persistentData.EquipmentData.ItemImageService,
+                    itemAttributes, itemSlot),
+                new SocketedGemsEditingView());
         }
 
         public async Task<TabPickerResult> EditStashTabAsync(object context, TabPickerViewModel tabPickerViewModel)

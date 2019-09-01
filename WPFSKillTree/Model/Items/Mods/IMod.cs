@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using POESKillTree.Model.Items.Enums;
+using PoESkillTree.Model.Items.Enums;
 
-namespace POESKillTree.Model.Items.Mods
+namespace PoESkillTree.Model.Items.Mods
 {
     /// <summary>
     /// Interface for mods as used in <see cref="Affix"/> and crafting view models.
     /// </summary>
     public interface IMod
     {
-        IReadOnlyList<IStat> Stats { get; }
+        IReadOnlyList<Stat> Stats { get; }
 
         string Name { get; }
 

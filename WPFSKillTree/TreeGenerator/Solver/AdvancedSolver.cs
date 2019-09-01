@@ -2,19 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Algorithm.Model;
-using POESKillTree.TreeGenerator.Genetic;
-using POESKillTree.TreeGenerator.Model.PseudoAttributes;
-using POESKillTree.TreeGenerator.Settings;
+using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Algorithm.Model;
+using PoESkillTree.TreeGenerator.Genetic;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.TreeGenerator.Settings;
 
-namespace POESKillTree.TreeGenerator.Solver
+namespace PoESkillTree.TreeGenerator.Solver
 {
     /// <summary>
     /// Implementation of AbstractGeneticSolver that tries to find optimal trees based on constraints.
     /// </summary>
     public class AdvancedSolver : AbstractGeneticSolver<AdvancedSolverSettings>
     {
+        private class ConstraintValues
+        {
+            public float TargetValue;
+            public double Weight;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+            /// </summary>
+            /// <param name="targetValue">The target value.</param>
+            /// <param name="weight">The weight.</param>
+            public ConstraintValues(float targetValue, double weight)
+            {
+                TargetValue = targetValue;
+                Weight = weight;
+            }
+        }
+
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
         /// into the applicable attributes and their conversion multiplier.
@@ -65,7 +83,7 @@ namespace POESKillTree.TreeGenerator.Solver
         private const double UsedNodeCountWeight = 5;
 
         /// <summary>
-        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node coutn.
+        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node count.
         /// </summary>
         /// <remarks>
         /// A tree with less points spent should only better better if the csv satisfaction is not worse.
@@ -87,7 +105,7 @@ namespace POESKillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversions multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -132,6 +150,46 @@ namespace POESKillTree.TreeGenerator.Solver
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
+            //if (settings.AttributeConstraints.ContainsKey(DualWandAccKey) && settings.AttributeConstraints[DualWandAccKey].Item1 > 0)
+            //{
+            //    GlobalSettings.ScanDualWandAcc = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.ScanDualWandAcc = false;
+            //}
+            ////if (settings.AttributeConstraints.ContainsKey(PseudoAccKey) && settings.AttributeConstraints[PseudoAccKey].Item1 > 0)
+            ////{
+            ////    GlobalSettings.ScanPseudoAccuracy = true;
+            ////}
+            ////else
+            ////{
+            ////    GlobalSettings.ScanPseudoAccuracy = false;
+            ////}
+            //if (settings.AttributeConstraints.ContainsKey(HPTotalKey) && settings.AttributeConstraints[HPTotalKey].Item1 > 0)
+            //{
+            //    GlobalSettings.ScanHPTotal = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.ScanHPTotal = false;
+            //}
+            //if (settings.AttributeConstraints.ContainsKey(HybridHPKey) && settings.AttributeConstraints[HybridHPKey].Item1 > 0)
+            //{
+            //    GlobalSettings.ScanHybridHP = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.ScanHybridHP = false;
+            //}
+            //if (GlobalSettings.ScanDualWandAcc || GlobalSettings.ScanPseudoAccuracy || GlobalSettings.ScanHPTotal || GlobalSettings.ScanHybridHP)
+            //{
+            //    GlobalSettings.AdvancedTreeSearch = true;
+            //}
+            //else
+            //{
+            //    GlobalSettings.AdvancedTreeSearch = false;
+            //}
         }
 
         public override void Initialize()
@@ -196,7 +254,7 @@ namespace POESKillTree.TreeGenerator.Solver
         protected override bool IncludeNodeInSearchGraph(SkillNode node)
         {
             // Keystones can only be included if they are check-tagged.
-            return node.Type != NodeType.Keystone;
+            return node.Type != PassiveNodeType.Keystone;
         }
 
         /// <summary>
@@ -247,13 +305,13 @@ namespace POESKillTree.TreeGenerator.Solver
         private List<ConvertedPseudoAttributeConstraint> EvalPseudoAttrConstraints()
         {
             var keystones = from node in Settings.Checked
-                            where node.Type == NodeType.Keystone
+                            where node.Type == PassiveNodeType.Keystone
                             select node.Name;
             var conditionSettings = new ConditionSettings(Settings.Tags, Settings.OffHand, keystones.ToArray(), Settings.WeaponClass);
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-            
+
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
@@ -262,7 +320,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     var name = attr.Name;
                     if (ContainsWildcardRegex.IsMatch(name))
                     {
-                        // Wildcards are resolverd by searching the skill tree attributes for each attribute
+                        // Wildcards are resolved by searching the skill tree attributes for each attribute
                         // that matches the attribute name ('{number}' replaced by '(.*)' for matching) and
                         // evaluating the attribute for each of those replacements.
                         if (!resolvedWildcardNames.ContainsKey(name))
@@ -393,16 +451,88 @@ namespace POESKillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            for (var i = 0; i < _attrConstraints.Length; i++)
+            if (Settings.TreePlusItemsMode||GlobalSettings.AdvancedTreeSearch)
             {
-                var stat = _attrConstraints[i];
-                csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
+                string StatName;
+                Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
+                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+                int attrIndex;
+                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
+                {
+                    attrIndex = ConversionKey.Item2;
+                    StatName = ConversionKey.Item1;
+                    var stat = _attrConstraints[attrIndex];
+                    ConstraintDictionary.Add(StatName, new ConstraintValues(stat.Item1, stat.Item2));
+                    var currentValue = totalStats[attrIndex];
+                    StatTotals.Add(StatName, currentValue);
+                }
+                ConstraintValues StatConstraint;
+                if (Settings.TreePlusItemsMode)
+                {
+                    StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
+                    //Subtotals should have been dealt with during StatUpdater
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    {
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatTotals.ContainsKey(StatName))
+                        {
+                            csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
+                        else
+                        {
+                            csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
+                    }
+                }
+                else
+                {
+                    double ScoreMultiplier;
+                    Dictionary<string, float> SubTotals = GlobalSettings.CalculateSubtotalAttributes(Settings.TreeInfo);
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    {
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName == GlobalSettings.HybridHPKey || StatName == GlobalSettings.PseudoAccKey)
+                        {
+                            if (SubTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(SubTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        else
+                        {
+                            if (StatTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        csvs *= ScoreMultiplier;
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 0; i < _attrConstraints.Length; i++)
+                {
+                    var stat = _attrConstraints[i];
+                    var currentValue = totalStats[i];
+                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                }
             }
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.Model.Items.Mods;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.Model.Items.Mods;
 
-namespace POESKillTree.Model.Items
+namespace PoESkillTree.Model.Items
 {
     /// <summary>
     /// Represents the base of an unique item. I.e. their base item and ranges of explicit mods.
@@ -22,6 +22,7 @@ namespace POESKillTree.Model.Items
         public int InventoryWidth => _base.InventoryWidth;
 
         public string UniqueName { get; }
+        public string MetadataId => _base.MetadataId;
         public string Name => _base.Name;
         public ItemClass ItemClass => _base.ItemClass;
         public Tags Tags => _base.Tags;

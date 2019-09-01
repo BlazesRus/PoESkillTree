@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -8,81 +7,25 @@ using System.Text.RegularExpressions;
 using System.Windows.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Utils;
-using POESKillTree.ViewModels;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Skills;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.ViewModels;
 
-namespace POESKillTree.Model.Items
+namespace PoESkillTree.Model.Items
 {
-    public class ItemAttributes : Notifier
+    public class ItemAttributes : Notifier, IDisposable
     {
         #region slotted items
 
-        public Item Armor
-        {
-            get { return GetItemInSlot(ItemSlot.BodyArmour); }
-            set { SetItemInSlot(value, ItemSlot.BodyArmour); }
-        }
+        private Item MainHand => GetItemInSlot(ItemSlot.MainHand);
 
-        public Item MainHand
-        {
-            get { return GetItemInSlot(ItemSlot.MainHand); }
-            set { SetItemInSlot(value, ItemSlot.MainHand); }
-        }
-
-        public Item OffHand
-        {
-            get { return GetItemInSlot(ItemSlot.OffHand); }
-            set { SetItemInSlot(value, ItemSlot.OffHand); }
-        }
-
-        public Item Ring
-        {
-            get { return GetItemInSlot(ItemSlot.Ring); }
-            set { SetItemInSlot(value, ItemSlot.Ring); }
-        }
-
-        public Item Ring2
-        {
-            get { return GetItemInSlot(ItemSlot.Ring2); }
-            set { SetItemInSlot(value, ItemSlot.Ring2); }
-        }
-
-        public Item Amulet
-        {
-            get { return GetItemInSlot(ItemSlot.Amulet); }
-            set { SetItemInSlot(value, ItemSlot.Amulet); }
-        }
-
-        public Item Helm
-        {
-            get { return GetItemInSlot(ItemSlot.Helm); }
-            set { SetItemInSlot(value, ItemSlot.Helm); }
-        }
-
-        public Item Gloves
-        {
-            get { return GetItemInSlot(ItemSlot.Gloves); }
-            set { SetItemInSlot(value, ItemSlot.Gloves); }
-        }
-
-        public Item Boots
-        {
-            get { return GetItemInSlot(ItemSlot.Boots); }
-            set { SetItemInSlot(value, ItemSlot.Boots); }
-        }
-
-        public Item Belt
-        {
-            get { return GetItemInSlot(ItemSlot.Belt); }
-            set { SetItemInSlot(value, ItemSlot.Belt); }
-        }
+        private Item OffHand => GetItemInSlot(ItemSlot.OffHand);
 
         public Item GetItemInSlot(ItemSlot slot)
-        {
-            return Equip.FirstOrDefault(i => i.Slot == slot);
-        }
+            => Equip.FirstOrDefault(i => i.Slot == slot);
 
         public void SetItemInSlot(Item value, ItemSlot slot)
         {
@@ -90,17 +33,23 @@ namespace POESKillTree.Model.Items
                 return;
             
             var old = Equip.FirstOrDefault(i => i.Slot == slot);
-            if (old != null)
+            if (value is null)
             {
                 Equip.Remove(old);
+            }
+            else
+            {
+                value.Slot = slot;
+                Equip.RemoveAndAdd(old, value);
+            }
+
+            if (old != null)
+            {
                 old.Slot = ItemSlot.Unequipable;
                 old.PropertyChanged -= SlottedItemOnPropertyChanged;
             }
-
             if (value != null)
             {
-                value.Slot = slot;
-                Equip.Add(value);
                 value.PropertyChanged += SlottedItemOnPropertyChanged;
             }
             OnPropertyChanged(slot.ToString());
@@ -148,81 +97,97 @@ namespace POESKillTree.Model.Items
             }
             return ((int) item.ItemClass.ItemSlots() & (int) slot) != 0;
         }
+
+        public IReadOnlyList<Skill> GetSkillsInSlot(ItemSlot slot)
+            => Skills.Where(ss => ss.Any(s => s.ItemSlot == slot)).DefaultIfEmpty(new Skill[0]).First();
+
+        public void SetSkillsInSlot(IReadOnlyList<Skill> value, ItemSlot slot)
+        {
+            var oldValue = Skills.FirstOrDefault(ss => ss.Any(s => s.ItemSlot == slot));
+            Skills.RemoveAndAdd(oldValue, value);
+        }
+
+        private void AddSkillsToSlot(IEnumerable<Skill> skills, ItemSlot slot)
+            => SetSkillsInSlot(GetSkillsInSlot(slot).Concat(skills).ToList(), slot);
+
         #endregion
 
-        public ObservableCollection<Item> Equip { get; }
+        public ObservableSet<Item> Equip { get; } = new ObservableSet<Item>();
+
+        public ObservableSet<IReadOnlyList<Skill>> Skills { get; } = new ObservableSet<IReadOnlyList<Skill>>();
 
         private ListCollectionView _attributes;
         public ListCollectionView Attributes
         {
-            get { return _attributes; }
-            private set { SetProperty(ref _attributes, value); }
+            get => _attributes;
+            private set => SetProperty(ref _attributes, value);
         }
 
         public IReadOnlyList<ItemMod> NonLocalMods { get; private set; }
 
-        private readonly IPersistentData _persistentData;
+        private readonly EquipmentData _equipmentData;
+        private readonly SkillDefinitions _skillDefinitions;
 
         public event EventHandler ItemDataChanged;
 
-        private void SlottedItemOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        public ItemAttributes(EquipmentData equipmentData, SkillDefinitions skillDefinitions, string itemData = null)
         {
-            if (args.PropertyName == nameof(Item.JsonBase))
-            {
-                ItemDataChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
+            _equipmentData = equipmentData;
+            _skillDefinitions = skillDefinitions;
+            Equip.CollectionChanged += OnCollectionChanged;
+            SetSkillsInSlot(new[] { Skill.Default, }, ItemSlot.Unequipable);
+            Skills.CollectionChanged += OnCollectionChanged;
 
-        public ItemAttributes()
-        {
-            Equip = new ObservableCollection<Item>();
+            if (!string.IsNullOrEmpty(itemData))
+            {
+                var jObject = JObject.Parse(itemData);
+                DeserializeItems(jObject);
+                DeserializeSkills(jObject);
+            }
+
             RefreshItemAttributes();
         }
 
-        public ItemAttributes(IPersistentData persistentData, string itemData)
+        private void DeserializeItems(JObject itemData)
         {
-            _persistentData = persistentData;
-            Equip = new ObservableCollection<Item>();
+            if (!itemData.TryGetValue("items", out var itemJson))
+                return;
 
-            var jObject = JObject.Parse(itemData);
-            foreach (JObject jobj in (JArray)jObject["items"])
+            foreach (JObject jobj in (JArray) itemJson)
             {
-                switch (jobj["inventoryId"].Value<string>())
+                var inventoryId = jobj.Value<string>("inventoryId");
+                switch (inventoryId)
                 {
-                    case "BodyArmour":
-                        AddItem(jobj, ItemSlot.BodyArmour);
-                        break;
-                    case "Ring":
-                        AddItem(jobj, ItemSlot.Ring);
-                        break;
-                    case "Ring2":
-                        AddItem(jobj, ItemSlot.Ring2);
-                        break;
-                    case "Gloves":
-                        AddItem(jobj, ItemSlot.Gloves);
-                        break;
                     case "Weapon":
-                        AddItem(jobj, ItemSlot.MainHand);
+                        inventoryId = "MainHand";
                         break;
                     case "Offhand":
-                        AddItem(jobj, ItemSlot.OffHand);
+                        inventoryId = "OffHand";
                         break;
-                    case "Helm":
-                        AddItem(jobj, ItemSlot.Helm);
-                        break;
-                    case "Boots":
-                        AddItem(jobj, ItemSlot.Boots);
-                        break;
-                    case "Amulet":
-                        AddItem(jobj, ItemSlot.Amulet);
-                        break;
-                    case "Belt":
-                        AddItem(jobj, ItemSlot.Belt);
+                    case "Flask":
+                        inventoryId = $"Flask{jobj.Value<int>("x") + 1}";
                         break;
                 }
-            }
 
-            RefreshItemAttributes();
+                if (EnumsNET.Enums.TryParse(inventoryId, out ItemSlot slot))
+                {
+                    var item = AddItem(jobj, slot);
+                    AddSkillsToSlot(item.DeserializeSocketedSkills(_skillDefinitions), slot);
+                    item.SetJsonBase();
+                }
+            }
+        }
+
+        private void DeserializeSkills(JObject itemData)
+        {
+            if (!itemData.TryGetValue("skills", out var skillJson))
+                return;
+
+            var skillList = skillJson.ToObject<IReadOnlyList<Skill>>();
+            foreach (var (slot, group) in skillList.GroupBy(s => s.ItemSlot))
+            {
+                AddSkillsToSlot(group, slot);
+            }
         }
 
         public string ToJsonString()
@@ -231,45 +196,45 @@ namespace POESKillTree.Model.Items
             foreach (var item in Equip)
             {
                 var jItem = item.JsonBase;
-                switch (item.Slot)
-                {
-                    case ItemSlot.BodyArmour:
-                        jItem["inventoryId"] = "BodyArmour";
-                        break;
-                    case ItemSlot.MainHand:
-                        jItem["inventoryId"] = "Weapon";
-                        break;
-                    case ItemSlot.OffHand:
-                        jItem["inventoryId"] = "Offhand";
-                        break;
-                    case ItemSlot.Ring:
-                        jItem["inventoryId"] = "Ring";
-                        break;
-                    case ItemSlot.Ring2:
-                        jItem["inventoryId"] = "Ring2";
-                        break;
-                    case ItemSlot.Amulet:
-                        jItem["inventoryId"] = "Amulet";
-                        break;
-                    case ItemSlot.Helm:
-                        jItem["inventoryId"] = "Helm";
-                        break;
-                    case ItemSlot.Gloves:
-                        jItem["inventoryId"] = "Gloves";
-                        break;
-                    case ItemSlot.Boots:
-                        jItem["inventoryId"] = "Boots";
-                        break;
-                    case ItemSlot.Belt:
-                        jItem["inventoryId"] = "Belt";
-                        break;
-                }
+                jItem["inventoryId"] = item.Slot.ToString();
                 items.Add(jItem);
             }
-            var jObj = new JObject();
-            jObj["items"] = items;
+
+            var skillEnumerable = Skills.Flatten()
+                .Where(s => s.ItemSlot != ItemSlot.Unequipable);
+            var skills = JArray.FromObject(skillEnumerable);
+
+            var jObj = new JObject
+            {
+                {"items", items},
+                {"skills", skills},
+            };
             return jObj.ToString(Formatting.None);
         }
+
+        public void Dispose()
+        {
+            foreach (var item in Equip)
+            {
+                item.PropertyChanged -= SlottedItemOnPropertyChanged;
+            }
+            Equip.CollectionChanged -= OnCollectionChanged;
+            Skills.CollectionChanged -= OnCollectionChanged;
+        }
+
+        private void OnCollectionChanged(object sender, EventArgs args)
+            => OnItemDataChanged();
+
+        private void SlottedItemOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (args.PropertyName == nameof(Item.JsonBase))
+            {
+                OnItemDataChanged();
+            }
+        }
+
+        private void OnItemDataChanged()
+            => ItemDataChanged?.Invoke(this, EventArgs.Empty);
 
         private void RefreshItemAttributes()
         {
@@ -344,11 +309,12 @@ namespace POESKillTree.Model.Items
             return mods;
         }
 
-        private void AddItem(JObject val, ItemSlot islot)
+        private Item AddItem(JObject val, ItemSlot islot)
         {
-            var item = new Item(_persistentData, val, islot);
+            var item = new Item(_equipmentData, val, islot);
             Equip.Add(item);
             item.PropertyChanged += SlottedItemOnPropertyChanged;
+            return item;
         }
 
 
@@ -358,28 +324,20 @@ namespace POESKillTree.Model.Items
 
             private readonly List<float> _value;
 
-            private readonly string _group;
-            public string Group
-            {
-                get { return _group; }
-            }
+            public string Group { get; }
 
-            private readonly string _attribute;
-            public string TextAttribute
-            {
-                get { return _attribute; }
-            }
+            public string TextAttribute { get; }
 
             public string ValuedAttribute
             {
-                get { return _value.Aggregate(_attribute, (current, f) => Backreplace.Replace(current, f + "", 1)); }
+                get { return _value.Aggregate(TextAttribute, (current, f) => Backreplace.Replace(current, f + "", 1)); }
             }
 
             public Attribute(string s, IEnumerable<float> val, string grp)
             {
-                _attribute = s;
+                TextAttribute = s;
                 _value = new List<float>(val);
-                _group = grp;
+                Group = grp;
             }
 
             public void Add(IReadOnlyList<float> val)

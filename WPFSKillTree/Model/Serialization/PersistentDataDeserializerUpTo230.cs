@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using log4net;
 using MoreLinq;
-using POESKillTree.Controls;
-using POESKillTree.Model.Builds;
-using POESKillTree.Utils;
-using POESKillTree.Utils.Extensions;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Controls;
+using PoESkillTree.Model.Builds;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Deserializes PersistentData using the old build saving structure and created without the versioning refactoring.
@@ -49,7 +49,7 @@ namespace POESKillTree.Model.Serialization
 
         public override void DeserializePersistentDataFile(string xmlString)
         {
-            var obj = SerializationUtils.XmlDeserializeString<XmlPersistentData>(xmlString);
+            var obj = XmlSerializationUtils.DeserializeString<XmlPersistentData>(xmlString);
             PersistentData.Options = obj.Options;
             PersistentData.CurrentBuild = ConvertFromXmlBuild(obj.CurrentBuild) ?? CreateDefaultCurrentBuild();
             obj.StashBookmarks?.ForEach(PersistentData.StashBookmarks.Add);
@@ -125,7 +125,7 @@ namespace POESKillTree.Model.Serialization
                 return;
             try
             {
-                var text = await FileEx.ReadAllTextAsync("savedBuilds");
+                var text = await FileUtils.ReadAllTextAsync("savedBuilds");
                 foreach (var b in text.Split('\n'))
                 {
                     var build = new PoEBuild

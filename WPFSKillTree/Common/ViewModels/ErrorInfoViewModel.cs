@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using POESKillTree.Utils.Extensions;
+using PoESkillTree.Utils.Extensions;
 
-namespace POESKillTree.Common.ViewModels
+namespace PoESkillTree.Common.ViewModels
 {
     /// <summary>
     /// Base class for closeable view models that implements <see cref="INotifyDataErrorInfo"/>.

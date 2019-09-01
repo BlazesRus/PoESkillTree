@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using POESKillTree.Controls;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Model.Builds;
-using POESKillTree.Model.Items;
+using PoESkillTree.Controls;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
 
-namespace POESKillTree.Model
+namespace PoESkillTree.Model
 {
     /// <summary>
     /// Enables access to all data that persists between program executions.
@@ -14,6 +14,7 @@ namespace POESKillTree.Model
     public interface IPersistentData : INotifyPropertyChanged, INotifyPropertyChanging
     {
         Options Options { get; }
+        string StatTrackingSavePath { get; set; }
         PoEBuild CurrentBuild { get; set; }
         IBuild SelectedBuild { get; set; }
         BuildFolder RootBuild { get; }
@@ -26,7 +27,7 @@ namespace POESKillTree.Model
         IDictionary<string, IEnumerable<StashBookmark>> LeagueStashes { get; }
 
         /// <summary>
-        /// Initializes all fields that require asnychronous actions like dialogs.
+        /// Initializes all fields that require asynchronous actions like dialogs.
         /// </summary>
         Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 

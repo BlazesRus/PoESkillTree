@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using POESKillTree.Controls;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Model.Builds;
-using POESKillTree.Model.Items;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Controls;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Abstract implementation of <see cref="IPersistentData"/> implementing all properties and the notify interfaces.
@@ -50,6 +50,8 @@ namespace POESKillTree.Model.Serialization
             get { return _equipmentData; }
             set { SetProperty(ref _equipmentData, value); }
         }
+
+        public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 
         public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 

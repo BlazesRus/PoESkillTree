@@ -1,22 +1,20 @@
 using System;
+using System.Reactive.Disposables;
 
-namespace POESKillTree.Utils
+namespace PoESkillTree.Utils
 {
     /// <summary>
     /// A simple monitor that can be used to track method calls. Can be used to stop events from being handled
     /// while data is still being changed, for example.
     /// </summary>
-    public class SimpleMonitor : IDisposable
+    public class SimpleMonitor
     {
         private int _count;
 
         /// <summary>
         /// Returns true if at least one <see cref="Enter"/> call was not yet disposed.
         /// </summary>
-        public bool IsBusy
-        {
-            get { return _count > 0; }
-        }
+        public bool IsBusy => _count > 0;
 
         /// <summary>
         /// Enters the monitor. Dispose the returned IDisposable to leave it.
@@ -26,11 +24,10 @@ namespace POESKillTree.Utils
             if (_count == 0)
                 Entered?.Invoke(this, EventArgs.Empty);
             _count++;
-            return this;
+            return Disposable.Create(Leave);
         }
 
-        // Explicit override to force one dispose per enter.
-        void IDisposable.Dispose()
+        public void Leave()
         {
             _count--;
             if (_count == 0)

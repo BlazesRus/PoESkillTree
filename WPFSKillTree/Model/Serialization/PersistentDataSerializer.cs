@@ -5,13 +5,13 @@ using System.Linq;
 using log4net;
 using MoreLinq;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Controls;
-using POESKillTree.Model.Builds;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Controls;
+using PoESkillTree.Model.Builds;
 
-using static POESKillTree.Model.Serialization.SerializationConstants;
+using static PoESkillTree.Model.Serialization.SerializationConstants;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Serializes persistent data back to the file system.
@@ -76,7 +76,7 @@ namespace POESKillTree.Model.Serialization
                 StashBookmarks = _persistentData.StashBookmarks.ToList(),
                 LeagueStashes = stashes
             };
-            SerializationUtils.XmlSerializeToFile(xmlPersistentData, filePath);
+            XmlSerializationUtils.SerializeToFile(xmlPersistentData, filePath);
             SerializeStash();
         }
 
@@ -257,7 +257,7 @@ namespace POESKillTree.Model.Serialization
         public string ExportBuildToString(PoEBuild build)
         {
             var xmlBuild = ToXmlBuild(build);
-            return SerializationUtils.XmlSerializeToString(xmlBuild);
+            return XmlSerializationUtils.SerializeToString(xmlBuild);
         }
 
         private static void SerializeFolder(string path, BuildFolder folder)
@@ -269,7 +269,7 @@ namespace POESKillTree.Model.Serialization
                 Builds = folder.Builds.Select(b => b.Name).ToList()
             };
             Directory.CreateDirectory(path);
-            SerializationUtils.XmlSerializeToFile(xmlFolder, Path.Combine(path, BuildFolderFileName));
+            XmlSerializationUtils.SerializeToFile(xmlFolder, Path.Combine(path, BuildFolderFileName));
         }
 
         private static XmlBuild ToXmlBuild(PoEBuild build)
@@ -282,6 +282,7 @@ namespace POESKillTree.Model.Serialization
                 CharacterName = build.CharacterName,
                 CheckedNodeIds = build.CheckedNodeIds.ToList(),
                 CrossedNodeIds = build.CrossedNodeIds.ToList(),
+                ConfigurationStats = build.ConfigurationStats.Export().ToList(),
                 CustomGroups = build.CustomGroups.ToList(),
                 ItemData = build.ItemData,
                 LastUpdated = build.LastUpdated,
@@ -297,7 +298,7 @@ namespace POESKillTree.Model.Serialization
         private static void SerializeBuild(string path, PoEBuild build)
         {
             var xmlBuild = ToXmlBuild(build);
-            SerializationUtils.XmlSerializeToFile(xmlBuild, path + BuildFileExtension);
+            XmlSerializationUtils.SerializeToFile(xmlBuild, path + BuildFileExtension);
             build.KeepChanges();
         }
     }

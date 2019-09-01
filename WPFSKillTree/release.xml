@@ -76,9 +76,23 @@
         </Task>
     </UsingTask>
 
-    <PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'AnyCPU' "  >
         <InstallDir>PoESkillTree</InstallDir>
-        <Platform>x86</Platform>
+        <Platform>AnyCPU</Platform>
+        <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
+        <ZipTool>Tools\7z.exe a -tzip</ZipTool>
+        <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'x86' "  >
+        <InstallDir>PoESkillTree</InstallDir>
+        <Platform>AnyCPU</Platform>
+        <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
+        <ZipTool>Tools\7z.exe a -tzip</ZipTool>
+        <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Platform)' ==  'x64' "  >
+        <InstallDir>PoESkillTree</InstallDir>
+        <Platform>x64</Platform>
         <WorkDir>$(MSBuildProjectDirectory)\dist</WorkDir>
         <ZipTool>Tools\7z.exe a -tzip</ZipTool>
         <ISCCTool>Tools\isetup\ISCC.exe</ISCCTool>
@@ -164,7 +178,7 @@
     </Target>
 
     <Target Name="BuildLocale" DependsOnTargets="BuildLocaleCatalog">
-        <!-- Don't make any dependencies on this target, it's invoked explicitely as Post-Build event -->
+        <!-- Don't make any dependencies on this target, it's invoked explicitly as Post-Build event -->
     </Target>
 
     <Target Name="BuildAndCopyLocale" DependsOnTargets="BuildLocaleCatalog">
@@ -222,7 +236,16 @@
     </Target>
 
     <Target Name="Clean">
-        <MSBuild Projects="..\UnitTests\UnitTests.csproj" Targets="Clean" Properties="Configuration=Debug;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\WPFSKillTree.Tests\WPFSKillTree.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.IntegrationTests\PoESkillTree.Computation.IntegrationTests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Parsing.Tests\PoESkillTree.Computation.Parsing.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Data.Tests\PoESkillTree.Computation.Data.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Builders.Tests\PoESkillTree.Computation.Builders.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Core.Tests\PoESkillTree.Computation.Core.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Common.Tests\PoESkillTree.Computation.Common.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.GameModel.Tests\PoESkillTree.GameModel.Tests.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Utils\PoESkillTree.Utils.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+
         <MSBuild Projects="..\UpdateDB\UpdateDB.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0;OutputPath=$(DistDir)" />
         <MSBuild Projects="WPFSKillTree.csproj" Targets="Clean" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0;OutputPath=$(DistDir)" />
         <RemoveDir Directories="$(LocaleWorkDir)" />
@@ -273,8 +296,9 @@
         </ReadLinesFromFile>
         <Message Text="%09Revision count: $(BuildNumber)" />
         <PropertyGroup>
-            <!-- Keep only leading digits from Revision of ProductVersion and add format item for BuildNumber -->
-            <FormatFileVersion>$([System.Text.RegularExpressions.Regex]::Replace($(ProductVersion), "\.([0-9]+)([a-zA-Z][a-zA-Z0-9]+)?$", ".$1.{0}"))</FormatFileVersion>
+            <!-- Remove pre-release suffix from ProductVersion and add format item for BuildNumber as Revision.
+                 (Major, Minor and Patch are kept) -->
+            <FormatFileVersion>$([System.Text.RegularExpressions.Regex]::Replace($(ProductVersion), "\.([0-9]+)(-.+)?$", ".$1.{0}"))</FormatFileVersion>
             <!-- Set BuildNumber -->
             <FileVersion>$([System.String]::Format($(FormatFileVersion), $(BuildNumber)))</FileVersion>
         </PropertyGroup>
@@ -296,14 +320,14 @@
 
         <!-- Create empty PersistentData template file -->
         <AssemblyInvokeStatic AssemblyFile="$(DistDir)\$(AssemblyName).exe"
-                              ClassFullName="POESKillTree.Model.Serialization.PersistentDataSerializationService"
+                              ClassFullName="PoESkillTree.Model.Serialization.PersistentDataSerializationService"
                               Method="CreateSetupTemplate"
                               Input1="$(DistDir)"
                               Input2="%LANGUAGE%" />
 
         <!-- Create PackageName from ProductName -->
         <AssemblyInvokeStatic AssemblyFile="$(DistDir)\$(AssemblyName).exe"
-                              ClassFullName="POESKillTree.SkillTreeFiles.Updater"
+                              ClassFullName="PoESkillTree.SkillTreeFiles.Updater"
                               Method="GetPackageName"
                               Input1="$(ProductName)">
             <Output PropertyName="PackageName" TaskParameter="ReturnValue" />
@@ -322,11 +346,14 @@
     </Target>
 
     <Target Name="Test" DependsOnTargets="Build">
-        <!-- Build unit tests using project defined output path -->
-        <MSBuild Projects="..\UnitTests\UnitTests.csproj" Targets="Build" Properties="Configuration=Debug;Platform=$(Platform);WarningLevel=0" />
-
-        <!-- Run tests -->
-        <Exec Command='vstest.console ..\..\UnitTests\bin\Debug\UnitTests.dll /TestCaseFilter:"TestCategory!=RequireGUI"' WorkingDirectory="$(WorkDir)" />
+        <MSBuild Projects="..\PoESkillTree.GameModel.Tests\PoESkillTree.GameModel.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Common.Tests\PoESkillTree.Computation.Common.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Core.Tests\PoESkillTree.Computation.Core.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Builders.Tests\PoESkillTree.Computation.Builders.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Data.Tests\PoESkillTree.Computation.Data.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.Parsing.Tests\PoESkillTree.Computation.Parsing.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\PoESkillTree.Computation.IntegrationTests\PoESkillTree.Computation.IntegrationTests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
+        <MSBuild Projects="..\WPFSKillTree.Tests\WPFSKillTree.Tests.csproj" Targets="Build;Test" Properties="Configuration=Release;Platform=$(Platform);WarningLevel=0" />
     </Target>
 
     <Target Name="Update">

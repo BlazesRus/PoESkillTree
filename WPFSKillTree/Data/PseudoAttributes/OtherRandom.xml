@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PseudoAttributes>
+    <PseudoAttribute Name="#% increased Full Conversion Physical-to-Fire AOE Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Fire Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Conversion Physical-to-Fire AOE Spell+Minion Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Global Physical Damage"/>
+		<Attribute Name="#% increased Fire Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Combo]" Group="Damage">
         <Attribute Name="#% increased Global Physical Damage"/>
         <Attribute Name="#% increased Area Damage" />
@@ -25,9 +42,28 @@
         <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
 		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
 		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"  ConversionMultiplier="0.5"/>
 		<Attribute Name="Channelling Skills deal #% increased Damage" ConversionMultiplier="0.5"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Average FullConversionFire AOE Spell+HalfFire Cyclone[SpellBlade OneHand-Minion Combo]" Group="Damage">
+        <Attribute Name="#% increased Global Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Spell Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Melee Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Melee Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="+# to Strength" ConversionMultiplier=".1"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.75"/>
+		<Attribute Name="#% increased Elemental Damage with Attack Skills"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Fire Damage with Attack Skills"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"  ConversionMultiplier="0.5"/>
+		<Attribute Name="Channelling Skills deal #% increased Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="Minions deal #% increased Damage" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Average HalfElemental AOE Spell+Cyclone[SpellBlade Staff-Combo]" Group="Damage">
         <Attribute Name="#% increased Global Physical Damage"/>

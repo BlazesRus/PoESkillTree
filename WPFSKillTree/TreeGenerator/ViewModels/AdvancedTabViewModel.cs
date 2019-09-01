@@ -9,19 +9,20 @@ using System.Windows.Data;
 using System.Windows.Input;
 using MoreLinq;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.Model.JsonSettings;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Model;
-using POESKillTree.TreeGenerator.Model.PseudoAttributes;
-using POESKillTree.TreeGenerator.Settings;
-using POESKillTree.TreeGenerator.Solver;
-using POESKillTree.Utils.Converter;
-using POESKillTree.Utils.Extensions;
+using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.Model.JsonSettings;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Model;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.TreeGenerator.Settings;
+using PoESkillTree.TreeGenerator.Solver;
+using PoESkillTree.Utils.Converter;
 
-namespace POESKillTree.TreeGenerator.ViewModels
+namespace PoESkillTree.TreeGenerator.ViewModels
 {
     // Some aliases to make things clearer without the need of extra classes.
     using AttributeConstraint = TargetWeightConstraint<string>;
@@ -229,7 +230,10 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {L10n.Message("Trap"), 13},
             {L10n.Message("Totem"), 14},
             {L10n.Message("Flasks"), 15 },
-            {L10n.Message("Everything Else"), 16}
+            {L10n.Message("Jewel Types"), 16},
+            {L10n.Message("Tracked PseudoTotals"), 17},
+            {L10n.Message("Hidden"), 18},
+            {L10n.Message("Everything Else"), 19},
         };
 
         /// <summary>
@@ -241,7 +245,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket"
+            "+# to Jewel Socket", GlobalSettings.DualWandAccKey, GlobalSettings.HPTotalKey, GlobalSettings.HybridHPKey
         };
 
         /// <summary>
@@ -263,7 +267,15 @@ namespace POESKillTree.TreeGenerator.ViewModels
             "+# to maximum Mana",
             "+# to maximum Life",
             "+# Accuracy Rating",
-            "+# to maximum Energy Shield"
+            "+# to maximum Energy Shield",
+            "Jewel Socket ID: #",
+            "IntuitiveLeapSupported",
+            "Strength from Passives in Radius is Transformed to Intelligence",
+            "Strength from Passives in Radius is Transformed to Dexterity",
+            "Dexterity from Passives in Radius is Transformed to Intelligence",
+            "Dexterity from Passives in Radius is Transformed to Strength",
+            "Intelligence from Passives in Radius is Transformed to Strength",
+            "Intelligence from Passives in Radius is Transformed to Dexterity"
         };
 
         #endregion
@@ -362,10 +374,32 @@ namespace POESKillTree.TreeGenerator.ViewModels
         }
 
         /// <summary>
+        /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
+        /// </summary>
+        public SkillTree TreeInfo;
+
+
+        /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
-        /// (has no effect at the moment)
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
+
+        /// <summary>
+        /// The item information sent along to enable TreePlusItemsMode to be used
+        /// </summary>
+        private InventoryViewModel _ItemInfo;
+
+        /// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
+        /// </summary>
+        public PoESkillTree.ViewModels.Equipment.InventoryViewModel ItemInfo
+        {
+            get { return GlobalSettings.ItemInfoVal; }
+            set
+            {
+                SetProperty(ref GlobalSettings.ItemInfoVal, value);
+            }
+        }
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculations.
@@ -555,7 +589,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
             Action<GeneratorTabViewModel> runCallback)
             : base(tree, dialogCoordinator, dialogContext, 3, runCallback)
         {
-            AdditionalPoints = new LeafSetting<int>(nameof(AdditionalPoints), 21,
+            AdditionalPoints = new LeafSetting<int>(nameof(AdditionalPoints), 22,
                 () => TotalPoints = Tree.Level - 1 + AdditionalPoints.Value);
             TotalPoints = Tree.Level - 1 + AdditionalPoints.Value;
             TreePlusItemsMode = new LeafSetting<bool>(nameof(TreePlusItemsMode), false);
@@ -563,6 +597,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 () => WeaponClassIsTwoHanded = WeaponClass.Value.IsTwoHanded());
             OffHand = new LeafSetting<OffHand>(nameof(OffHand), Model.PseudoAttributes.OffHand.Shield);
             Tags = new LeafSetting<Tags>(nameof(Tags), Model.PseudoAttributes.Tags.None);
+            TreeInfo = tree;
 
             tree.PropertyChanged += (sender, args) =>
             {
@@ -573,6 +608,10 @@ namespace POESKillTree.TreeGenerator.ViewModels
             };
 
             _attributes = CreatePossibleAttributes().ToList();
+            if (!_attributes.Contains(GlobalSettings.DualWandAccKey)) { _attributes.Add(GlobalSettings.DualWandAccKey); }
+            //if (!_attributes.Contains(GlobalSettings.PseudoAccKey)) { _attributes.Add(GlobalSettings.PseudoAccKey); }
+            if (!_attributes.Contains(GlobalSettings.HPTotalKey)) { _attributes.Add(GlobalSettings.HPTotalKey); }
+            if (!_attributes.Contains(GlobalSettings.HybridHPKey)) { _attributes.Add(GlobalSettings.HybridHPKey); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),
@@ -593,9 +632,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {
                 Filter = item => !_addedPseudoAttributes.Contains((PseudoAttribute) item)
             };
-            PseudoAttributesView.SortDescriptions.Add(new SortDescription("Group", ListSortDirection.Ascending));
-            PseudoAttributesView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
-            PseudoAttributesView.GroupDescriptions.Add(new PropertyGroupDescription("Group"));
+            PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Group), ListSortDirection.Ascending));
+            PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Name), ListSortDirection.Ascending));
+            PseudoAttributesView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(PseudoAttribute.Group)));
             PseudoAttributeConstraints = new ObservableCollection<PseudoAttributeConstraint>();
 
             ReloadPseudoAttributes();
@@ -638,7 +677,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private static IEnumerable<string> CreatePossibleAttributes()
         {
             return from node in SkillTree.Skillnodes.Values
-                   where node.ascendancyName == null
+                   where !node.IsAscendancyNode
                    from attr in SkillTree.ExpandHybridAttributes(node.Attributes)
                    where !AttributeBlackList.Contains(attr.Key) && attr.Key.Contains("#")
                    group attr by attr.Key into attrGroup
@@ -731,7 +770,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private void ConverteAttributeToPseudoAttributeConstraints()
         {
             var keystones = from node in Tree.GetCheckedNodes()
-                            where node.Type == NodeType.Keystone
+                            where node.Type == PassiveNodeType.Keystone
                             select node.Name;
             var conditionSettings = new ConditionSettings(Tags.Value, OffHand.Value, keystones.ToArray(), WeaponClass.Value);
             var convertedConstraints = new List<AttributeConstraint>();
@@ -806,7 +845,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
+                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo, TreePlusItemsMode.Value));
+            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo);}
             return Task.FromResult<ISolver>(solver);
         }
 
@@ -817,11 +857,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
         private Dictionary<string, float> CreateInitialAttributes()
         {
             // base attributes: SkillTree.BaseAttributes, SkillTree.CharBaseAttributes
-            var stats = new Dictionary<string, float>(SkillTree.BaseAttributes);
-            foreach (var attr in SkillTree.CharBaseAttributes[Tree.Chartype])
-            {
-                stats[attr.Key] = attr.Value;
-            }
+            var stats = SkillTree.BaseAttributes
+                .Concat(SkillTree.CharBaseAttributes[Tree.CharClass])
+                .ToDictionary();
             // Level attributes (flat mana, life, evasion and accuracy) are blacklisted, because they are also dependent
             // on core attributes, which are dependent on the actual tree and are pretty pointless as basic attributes anyway.
             // For the calculation of pseudo attributes, they need to be included however.

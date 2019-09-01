@@ -1,26 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using PoESkillTree.GameModel.Items;
 
-namespace POESKillTree.Model.Items.Mods
+namespace PoESkillTree.Model.Items.Mods
 {
     /// <summary>
     /// Represents a single mod line on an item
     /// </summary>
     public class ItemMod
     {
-        public enum ValueColoring
-        {
-            White = 0,
-            LocallyAffected = 1,
-
-            Fire = 4,
-            Cold = 5,
-            Lightning = 6,
-            Chaos = 7
-        }
 
         public static readonly Regex Numberfilter = new Regex(@"[0-9]*\.?[0-9]+");
 
@@ -49,7 +41,7 @@ namespace POESKillTree.Model.Items.Mods
         /// <summary>
         /// Creates an ItemMod using the given values
         /// </summary>
-        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values, 
+        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values,
             IEnumerable<ValueColoring> valueColors)
         {
             IsLocal = isLocal;
@@ -73,6 +65,12 @@ namespace POESKillTree.Model.Items.Mods
             };
         }
 
+        public string ToModifierString()
+        {
+            var index = 0;
+            return InsertValues(Attribute, ref index);
+        }
+
         private string InsertValues(string into, ref int index)
         {
             var indexCopy = index;
@@ -91,8 +89,7 @@ namespace POESKillTree.Model.Items.Mods
         {
             if (asMod)
             {
-                var index = 0;
-                return new JValue(InsertValues(Attribute, ref index));
+                return new JValue(ToModifierString());
             }
 
             const string allowedTokens = @"(#|#%|\+#%|#-#|#/#)";
@@ -129,6 +126,22 @@ namespace POESKillTree.Model.Items.Mods
             {
                 {"name", name}, {"values", new JArray(ValueTokensToJArrays(tokens))}, {"displayMode", displayMode}
             };
+        }
+
+        /// <summary>
+        ///   Create string based on attribute information
+        /// </summary>
+        public string CreateModString()
+        {
+            if (Values.Count == 0)
+            {
+                return Attribute;
+            }
+            var regex = new Regex(Regex.Escape("#"));
+            string ModString = Attribute;
+            foreach (var val in Values)
+                ModString = regex.Replace(ModString, val.ToString(), 1);
+            return ModString;
         }
     }
 

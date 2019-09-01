@@ -2,12 +2,14 @@
 using System.ComponentModel;
 using System.Linq;
 using MoreLinq;
-using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Utils.Wpf;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Modifiers;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Model.Items.Enums;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.Utils.Wpf;
 
-namespace POESKillTree.ViewModels.Crafting
+namespace PoESkillTree.ViewModels.Crafting
 {
     public class CraftingViewModelProxy : BindingProxy<CraftingViewModel>
     {
@@ -120,7 +122,8 @@ namespace POESKillTree.ViewModels.Crafting
             return string.Join(", ", translations);
         }
 
-        protected override IEnumerable<IGrouping<ModLocation, StatIdValuePair>> RecalculateItemSpecific(out int requiredLevel)
+        protected override (IEnumerable<StatIdValuePair> explicitStats, IEnumerable<StatIdValuePair> craftedStats)
+            RecalculateItemSpecific(out int requiredLevel)
         {
             var selectedPrefixes = MsPrefix.Where(s => !s.IsEmptySelection).ToArray();
             var selectedSuffixes = MsSuffix.Where(s => !s.IsEmptySelection).ToArray();
@@ -161,12 +164,10 @@ namespace POESKillTree.ViewModels.Crafting
                 .DefaultIfEmpty()
                 .Max();
 
-            return
-                from ms in MsPrefix.Concat(MsSuffix)
-                where !ms.IsEmptySelection
-                let location = ms.Query().Domain == ModDomain.Master ? ModLocation.Crafted : ModLocation.Explicit
-                from tuple in ms.GetStatValues()
-                group tuple by location;
+            var (craftedMs, explicitMs) = MsPrefix.Concat(MsSuffix)
+                .Where(s => !s.IsEmptySelection)
+                .Partition(s => s.Query().Domain == ModDomain.Crafted);
+            return (explicitMs.SelectMany(s => s.GetStatValues()), craftedMs.SelectMany(s => s.GetStatValues()));
         }
 
         private void UpdateItemNameLine()

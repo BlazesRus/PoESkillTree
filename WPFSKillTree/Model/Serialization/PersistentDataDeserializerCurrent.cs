@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
-using POESKillTree.Localization;
-using POESKillTree.Model.Builds;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Localization;
+using PoESkillTree.Model.Builds;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Can deserialize PersistentData with the new build saving structure.
@@ -29,7 +29,7 @@ namespace POESKillTree.Model.Serialization
 
         public override void DeserializePersistentDataFile(string xmlString)
         {
-            var obj = SerializationUtils.XmlDeserializeString<XmlPersistentData>(xmlString);
+            var obj = XmlSerializationUtils.DeserializeString<XmlPersistentData>(xmlString);
             PersistentData.Options = obj.Options;
             obj.StashBookmarks?.ForEach(PersistentData.StashBookmarks.Add);
             obj.LeagueStashes?.ForEach(l => PersistentData.LeagueStashes[l.Name] = l.Bookmarks);
@@ -102,7 +102,7 @@ namespace POESKillTree.Model.Serialization
             {
                 // Else, proper import
                 var build = await ImportBuildAsync(
-                    async () => await SerializationUtils.XmlDeserializeFileAsync<XmlBuild>(buildPath));
+                    async () => await XmlSerializationUtils.DeserializeFileAsync<XmlBuild>(buildPath));
                 if (build != null)
                 {
                     build.Name = Util.FindDistinctName(build.Name, PersistentData.RootBuild.Builds.Select(b => b.Name));
@@ -121,7 +121,7 @@ namespace POESKillTree.Model.Serialization
         public Task<PoEBuild> ImportBuildFromStringAsync(string buildXml)
         {
             return ImportBuildAsync(
-                () => Task.FromResult(SerializationUtils.XmlDeserializeString<XmlBuild>(buildXml)));
+                () => Task.FromResult(XmlSerializationUtils.DeserializeString<XmlBuild>(buildXml)));
         }
 
         private async Task<PoEBuild> ImportBuildAsync(Func<Task<XmlBuild>> supplier)
@@ -171,20 +171,24 @@ namespace POESKillTree.Model.Serialization
 
         private static async Task DeserializeBuildsAsync(string buildFolderPath, BuildFolder folder, IEnumerable<string> buildNames)
         {
-            var builds = new Dictionary<string, IBuild>();
+            var buildTasks = new List<Task<IBuild>>();
             foreach (var directoryPath in Directory.EnumerateDirectories(buildFolderPath))
             {
                 var fileName = Path.GetFileName(directoryPath);
-                var build = new BuildFolder {Name = SerializationUtils.DecodeFileName(fileName)};
-                await DeserializeFolderAsync(directoryPath, build);
-                builds[build.Name] = build;
+                var build = new BuildFolder { Name = SerializationUtils.DecodeFileName(fileName) };
+                buildTasks.Add(DeserializeFolderAsync(directoryPath, build));
             }
             foreach (var filePath in Directory.EnumerateFiles(buildFolderPath))
             {
                 if (Path.GetExtension(filePath) != SerializationConstants.BuildFileExtension)
                     continue;
+                buildTasks.Add(DeserializeBuildAsync(filePath));
+            }
 
-                var build = await DeserializeBuildAsync(filePath);
+            var builds = new Dictionary<string, IBuild>();
+            foreach (var buildTask in buildTasks)
+            {
+                var build = await buildTask;
                 if (build != null)
                     builds[build.Name] = build;
             }
@@ -205,7 +209,7 @@ namespace POESKillTree.Model.Serialization
             }
         }
 
-        private static async Task DeserializeFolderAsync(string path, BuildFolder folder)
+        private static async Task<IBuild> DeserializeFolderAsync(string path, BuildFolder folder)
         {
             var fullPath = Path.Combine(path, SerializationConstants.BuildFolderFileName);
             XmlBuildFolder xmlFolder;
@@ -227,11 +231,12 @@ namespace POESKillTree.Model.Serialization
             {
                 await DeserializeBuildsAsync(path, folder, Enumerable.Empty<string>());
             }
+            return folder;
         }
 
-        private static async Task<PoEBuild> DeserializeBuildAsync(string path)
+        private static async Task<IBuild> DeserializeBuildAsync(string path)
         {
-            var xmlBuild = await DeserializeAsync<XmlBuild>(path);
+            var xmlBuild = await DeserializeAsync<XmlBuild>(path).ConfigureAwait(false);
             var build = ConvertFromXmlBuild(xmlBuild);
             if (build != null && CheckVersion(xmlBuild.Version))
             {
@@ -241,7 +246,7 @@ namespace POESKillTree.Model.Serialization
 
             var backupPath = path + ".bad";
             Log.Warn($"Moving build file {path} to {backupPath} as it could not be deserialized");
-            FileEx.DeleteIfExists(backupPath);
+            FileUtils.DeleteIfExists(backupPath);
             File.Move(path, backupPath);
             return null;
         }
@@ -268,7 +273,7 @@ namespace POESKillTree.Model.Serialization
         {
             try
             {
-                return await SerializationUtils.XmlDeserializeFileAsync<T>(path);
+                return await XmlSerializationUtils.DeserializeFileAsync<T>(path, true).ConfigureAwait(false);
             }
             catch (Exception e)
             {

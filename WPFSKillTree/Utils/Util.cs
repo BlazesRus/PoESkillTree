@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MoreLinq;
 
-namespace POESKillTree.Utils
+namespace PoESkillTree.Utils
 {
     public static class Util
     {
@@ -21,24 +20,6 @@ namespace POESKillTree.Utils
                 i++;
             }
             return name + $" ({i})";
-        }
-
-        /// <returns>the values of the enum of type <typeparamref name="T"/></returns>
-        public static T[] GetEnumValues<T>() where T: struct
-        {
-            return (T[]) Enum.GetValues(typeof(T));
-        }
-
-        /// <summary>
-        /// Necessary for unit tests. Accessing PackUriHelper triggers static initialization.
-        /// Without it, creating resource URIs from unit tests would throw UriFormatExceptions.
-        /// </summary>
-        public static void TriggerPackUriSchemeInitialization()
-        {
-            if (!UriParser.IsKnownScheme("pack"))
-            {
-                var _ = System.IO.Packaging.PackUriHelper.UriSchemePack;
-            }
         }
     }
 }

@@ -5,15 +5,18 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using EnumsNET;
 using MoreLinq;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Model.Items.StatTranslation;
-using POESKillTree.Utils;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Modifiers;
+using PoESkillTree.GameModel.StatTranslation;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Model.Items.Mods;
+using Item = PoESkillTree.Model.Items.Item;
 
-namespace POESKillTree.ViewModels.Crafting
+namespace PoESkillTree.ViewModels.Crafting
 {
     /// <summary>
     /// Base view model for crafting items from a list of bases. Contains all functionality not specific to the type
@@ -27,7 +30,7 @@ namespace POESKillTree.ViewModels.Crafting
         public bool ShowDropDisabledItems
         {
             get { return _showDropDisabledItems; }
-            set { SetProperty(ref _showDropDisabledItems, value, OnShowDropDisabledItemsChanged); }
+            set { SetProperty(ref _showDropDisabledItems, value, UpdateSecondLevel); }
         }
 
         // Bases are filtered in three levels:
@@ -58,7 +61,7 @@ namespace POESKillTree.ViewModels.Crafting
 
         // First level
 
-        public IReadOnlyList<BaseGroup> FirstLevelList { get; } = Util.GetEnumValues<BaseGroup>();
+        public IReadOnlyList<BaseGroup> FirstLevelList { get; } = Enums.GetValues<BaseGroup>().ToList();
 
         private BaseGroup _selectedFirstLevel;
         public BaseGroup SelectedFirstLevel
@@ -156,20 +159,6 @@ namespace POESKillTree.ViewModels.Crafting
             UpdateSecondLevel();
         }
 
-        private void OnShowDropDisabledItemsChanged()
-        {
-            using (Monitor.Enter())
-            {
-                // this is visibly slow, but the button shouldn't be spammed anyway
-                var previousSelectedFirstLevel = SelectedFirstLevel;
-                SelectedFirstLevel = FirstLevelList[0];
-                if (previousSelectedFirstLevel == SelectedFirstLevel)
-                {
-                    UpdateSecondLevel();
-                }
-            }
-        }
-
         private void UpdateSecondLevel()
         {
             using (Monitor.Enter())
@@ -178,8 +167,8 @@ namespace POESKillTree.ViewModels.Crafting
 
                 if (SelectedFirstLevel == BaseGroup.Any)
                 {
-                    SecondLevelList = ItemClass.Any
-                        .Concat(EligibleBases.Select(b => b.ItemClass))
+                    SecondLevelList = EligibleBases.Select(b => b.ItemClass)
+                        .Prepend(ItemClass.Any)
                         .Distinct()
                         .OrderBy(c => c).ToList();
                 }
@@ -198,11 +187,13 @@ namespace POESKillTree.ViewModels.Crafting
                             SecondLevelList = list;
                             break;
                         default:
-                            SecondLevelList = ItemClass.Any.Concat(list).ToList();
+                            SecondLevelList = list.Prepend(ItemClass.Any).ToList();
                             break;
                     }
                 }
-                SelectedSecondLevel = SecondLevelList[0];
+                SelectedSecondLevel = SecondLevelList.Contains(previousSecondLevel)
+                    ? previousSecondLevel
+                    : SecondLevelList[0];
 
                 if (previousSecondLevel == SelectedSecondLevel)
                 {
@@ -236,11 +227,13 @@ namespace POESKillTree.ViewModels.Crafting
                         ThirdLevelList = list;
                         break;
                     default:
-                        ThirdLevelList = Tags.Default.Concat(list).ToList();
+                        ThirdLevelList = list.Prepend(Tags.Default).ToList();
                         break;
                 }
             }
-            SelectedThirdLevel = ThirdLevelList[0];
+            SelectedThirdLevel = ThirdLevelList.Contains(previousThirdLevel)
+                ? previousThirdLevel
+                : ThirdLevelList[0];
 
             if (previousThirdLevel == SelectedThirdLevel)
             {
@@ -268,7 +261,9 @@ namespace POESKillTree.ViewModels.Crafting
                     bases = bases.Where(b => b.Tags.HasFlag(SelectedThirdLevel));
                 }
                 BaseList = bases.ToList();
-                SelectedBase = BaseList[0];
+                SelectedBase = BaseList.Contains(previousSelectedBase)
+                    ? previousSelectedBase
+                    : BaseList[0];
 
                 if (SelectedBase == previousSelectedBase)
                 {
@@ -323,22 +318,19 @@ namespace POESKillTree.ViewModels.Crafting
 
             Item.NameLine = "";
             Item.TypeLine = Item.BaseType.Name;
-            Item.FlavourText = "Created with PoESkillTree";
 
-            int requiredLevel;
-            var statLookup = RecalculateItemSpecific(out requiredLevel).ToList();
+            var (explicitStats, craftedStats) = RecalculateItemSpecific(out var requiredLevel);
 
-            Item.ExplicitMods = CreateItemMods(ModLocation.Explicit, 
-                statLookup.SingleOrDefault(g => g.Key == ModLocation.Explicit)).ToList();
-            Item.CraftedMods = CreateItemMods(ModLocation.Crafted, 
-                statLookup.SingleOrDefault(g => g.Key == ModLocation.Crafted)).ToList();
-            Item.ImplicitMods = CreateItemMods(ModLocation.Implicit, 
-                MsImplicits.SelectMany(ms => ms.GetStatValues())).ToList();
+            Item.ExplicitMods = CreateItemMods(explicitStats).ToList();
+            Item.CraftedMods = CreateItemMods(craftedStats).ToList();
+            Item.ImplicitMods = CreateItemMods(MsImplicits.SelectMany(ms => ms.GetStatValues())).ToList();
 
             var quality = SelectedBase.CanHaveQuality 
                 ? _qualitySlider.Value
                 : 0;
-            Item.Properties = new ObservableCollection<ItemMod>(Item.BaseType.GetRawProperties(quality));
+            var properties = Item.BaseType.GetRawProperties(quality)
+                .Concat(GetAdditionalProperties());
+            Item.Properties = new ObservableCollection<ItemMod>(properties);
             ApplyLocals();
 
             if (Item.IsWeapon)
@@ -358,11 +350,14 @@ namespace POESKillTree.ViewModels.Crafting
         /// (Re)calculate parts of the item in crafting specific to <see cref="TBase"/>.
         /// </summary>
         /// <param name="requiredLevel">the highest <see cref="IMod.RequiredLevel"/> of any selected mod</param>
-        /// <returns>All explicit and crafted stats of the item and their values (the lookup has entries for explicit
-        /// and crafted and the entries are the stat ids and their values.</returns>
-        protected abstract IEnumerable<IGrouping<ModLocation, StatIdValuePair>> RecalculateItemSpecific(out int requiredLevel);
+        /// <returns>All explicit and crafted stats of the item and their values.</returns>
+        protected abstract (IEnumerable<StatIdValuePair> explicitStats, IEnumerable<StatIdValuePair> craftedStats)
+            RecalculateItemSpecific(out int requiredLevel);
 
-        private IEnumerable<ItemMod> CreateItemMods(ModLocation location, IEnumerable<StatIdValuePair> statValuePairs)
+        protected virtual IEnumerable<ItemMod> GetAdditionalProperties()
+            => new ItemMod[0];
+
+        private IEnumerable<ItemMod> CreateItemMods(IEnumerable<StatIdValuePair> statValuePairs)
         {
             if (statValuePairs == null)
             {
@@ -391,7 +386,7 @@ namespace POESKillTree.ViewModels.Crafting
             foreach (var line in lines)
             {
                 var attr = ItemMod.Numberfilter.Replace(line, "#");
-                var isLocal = StatLocalityChecker.DetermineLocal(SelectedBase.ItemClass, location, attr);
+                var isLocal = ModifierLocalityTester.IsLocal(attr, SelectedBase.Tags);
                 yield return new ItemMod(line, isLocal);
             }
         }
@@ -420,15 +415,15 @@ namespace POESKillTree.ViewModels.Crafting
             {
                 var values = new List<float>();
                 var mods = new List<string>();
-                var cols = new List<ItemMod.ValueColoring>();
+                var cols = new List<ValueColoring>();
 
                 var fmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Fire"));
                 if (fmod != null)
                 {
                     values.AddRange(fmod.Values);
                     mods.Add("#-#");
-                    cols.Add(ItemMod.ValueColoring.Fire);
-                    cols.Add(ItemMod.ValueColoring.Fire);
+                    cols.Add(ValueColoring.Fire);
+                    cols.Add(ValueColoring.Fire);
                 }
 
                 var cmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Cold"));
@@ -436,8 +431,8 @@ namespace POESKillTree.ViewModels.Crafting
                 {
                     values.AddRange(cmod.Values);
                     mods.Add("#-#");
-                    cols.Add(ItemMod.ValueColoring.Cold);
-                    cols.Add(ItemMod.ValueColoring.Cold);
+                    cols.Add(ValueColoring.Cold);
+                    cols.Add(ValueColoring.Cold);
                 }
 
                 var lmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Lightning"));
@@ -445,8 +440,8 @@ namespace POESKillTree.ViewModels.Crafting
                 {
                     values.AddRange(lmod.Values);
                     mods.Add("#-#");
-                    cols.Add(ItemMod.ValueColoring.Lightning);
-                    cols.Add(ItemMod.ValueColoring.Lightning);
+                    cols.Add(ValueColoring.Lightning);
+                    cols.Add(ValueColoring.Lightning);
                 }
 
                 Item.Properties.Add(new ItemMod("Elemental Damage: " + string.Join(", ", mods), true, values, cols));
@@ -455,7 +450,7 @@ namespace POESKillTree.ViewModels.Crafting
             if (chaosMods.Any())
             {
                 Item.Properties.Add(new ItemMod("Chaos Damage: #-#", true, chaosMods[0].Values,
-                    new[] { ItemMod.ValueColoring.Chaos, ItemMod.ValueColoring.Chaos }));
+                    new[] { ValueColoring.Chaos, ValueColoring.Chaos }));
             }
         }
 
@@ -479,7 +474,7 @@ namespace POESKillTree.ViewModels.Crafting
                         .Zip(val, (f1, f2) => f1 + f2)
                         .ToList();
                     prop.ValueColors = prop.ValueColors
-                        .Select((c, i) => val[i] == nval[i] ? prop.ValueColors[i] : ItemMod.ValueColoring.LocallyAffected)
+                        .Select((c, i) => val[i] == nval[i] ? prop.ValueColors[i] : ValueColoring.LocallyAffected)
                         .ToList();
                     prop.Values = nval;
                 }
@@ -498,7 +493,7 @@ namespace POESKillTree.ViewModels.Crafting
                 if (percm.Count > 0)
                 {
                     var perc = 1f + percm.Select(m => m.Values[0]).Sum() / 100f;
-                    prop.ValueColors = prop.ValueColors.Select(c => ItemMod.ValueColoring.LocallyAffected).ToList();
+                    prop.ValueColors = prop.ValueColors.Select(c => ValueColoring.LocallyAffected).ToList();
                     prop.Values = prop.Values.Select(v => roundf(v * perc)).ToList();
                 }
             }

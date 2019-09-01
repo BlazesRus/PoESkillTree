@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
-using POESKillTree.Localization;
-using POESKillTree.ViewModels;
-using Attribute = POESKillTree.ViewModels.Attribute;
+using PoESkillTree.Localization;
+using PoESkillTree.ViewModels;
+using Attribute = PoESkillTree.ViewModels.Attribute;
 
-namespace POESKillTree.Utils.Converter
+namespace PoESkillTree.Utils.Converter
 {
     [ValueConversion(typeof (string), typeof (string))]
     //list view sorter here
@@ -33,11 +33,15 @@ namespace POESKillTree.Utils.Converter
         private static readonly string Flasks = L10n.Message("Flasks");
         private static readonly string CoreAttributes = L10n.Message("Core Attributes");
         private static readonly string MiscLabel = L10n.Message("Everything Else");
+        private static readonly string JewelTypes = L10n.Message("Jewel Types");
+        private static readonly string PseudoTotal = L10n.Message("Tracked PseudoTotals");
+        private static readonly string Hidden = L10n.Message("Hidden");
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
             new[] {"(Total)", PseudoTotal},
             new[] {"[Non-Tagged]", PseudoTotal},
+            new[] {"[SpellBlade", PseudoTotal},
             new[] {"Charged Dash Damage", PseudoTotal},
             new[] {"before tags", PseudoTotal},
             new[] {"SharedStrength", PseudoTotal},
@@ -98,6 +102,7 @@ namespace POESKillTree.Utils.Converter
             new[] {"Minions have", Minion},
             new[] {"Minions Leech", Minion},
             new[] {"Minions Regenerate", Minion},
+            new[] {"Skeletons", Minion},
             new[] {"Mine Damage", Trap},
             new[] {"Trap Damage", Trap},
             new[] {"Trap Duration", Trap},
@@ -239,6 +244,10 @@ namespace POESKillTree.Utils.Converter
             new[] {"Melee Physical Damage", Weapon},
             new[] {"with Swords", Weapon},
             new[] {"with Wands", Weapon},
+            new[] {"Cold Damage with Attack Skills", Weapon},
+            new[] {"Fire Damage with Attack Skills", Weapon},
+            new[] {"Lightning Damage with Attack Skills", Weapon},
+            new[] {"Elemental Damage with Attack Skills", Weapon},
             new[] {"Cold Damage with Weapons", Weapon},
             new[] {"Fire Damage with Weapons", Weapon},
             new[] {"Lightning Damage with Weapons", Weapon},
@@ -254,7 +263,8 @@ namespace POESKillTree.Utils.Converter
             new[] {"Leeched", General},
             new[] {"increased Physical Damage", General},
             new[] {"Elemental Damage", General},
-            new[] {"Jewel Socket", General},
+            new[] {"Jewel Socket", JewelTypes},
+            new[] {"Jewel", JewelTypes},
             new[] {"Cast Speed", Spell},
             new[] {"Cold Damage", General},
             new[] {"Fire Damage", General},
@@ -266,6 +276,13 @@ namespace POESKillTree.Utils.Converter
             new[] {"Strength", CoreAttributes},
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
+            new[] {"DualWand Accuracy Subtotal", Weapon},
+            new[] {"HP Subtotal", Defense},
+            new[] {"Jewel Socket ID:", Hidden},
+            new[] {"Radius:", Hidden },
+            new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
+            new[] {"Intuitive Leaped", Hidden },
+			new[] {" (TrackedAttr)", PseudoTotal},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
@@ -285,7 +302,7 @@ namespace POESKillTree.Utils.Converter
             {
                 if (!AttributeGroups.ContainsKey(group[1]))
                 {
-                    AttributeGroups.Add(group[1], new AttributeGroup("Custom: "+group[1]));
+                    AttributeGroups.Add(group[1], new AttributeGroup("Custom: " + group[1]));
                 }
             }
             AttributeGroups.Add(MiscLabel, new AttributeGroup(MiscLabel));

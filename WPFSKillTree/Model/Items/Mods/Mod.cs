@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using POESKillTree.Model.Items.Enums;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.Model.Items.Enums;
 
-namespace POESKillTree.Model.Items.Mods
+namespace PoESkillTree.Model.Items.Mods
 {
     /// <summary>
     /// Encapsulates a <see cref="JsonMod"/> into the <see cref="IMod"/> interface
@@ -19,7 +20,7 @@ namespace POESKillTree.Model.Items.Mods
         /// </summary>
         private static readonly ISet<string> IgnoredMasterCraftedGroups = new HashSet<string>
         {
-            "DefencesPercent"
+            "DefencesPercent", "BaseLocalDefences"
         };
 
         public string Id { get; }
@@ -29,7 +30,7 @@ namespace POESKillTree.Model.Items.Mods
 
         public JsonMod JsonMod { get; }
 
-        public IReadOnlyList<IStat> Stats { get; }
+        public IReadOnlyList<Stat> Stats { get; }
         public string Name => JsonMod.Name;
         public ModDomain Domain => JsonMod.Domain;
         public int RequiredLevel => JsonMod.RequiredLevel;
@@ -37,10 +38,7 @@ namespace POESKillTree.Model.Items.Mods
         /// <param name="id">the id of this mod</param>
         /// <param name="jsonMod">the <see cref="JsonMod"/> to encapsulate</param>
         /// <param name="jsonBenchOptions">the master crafting options with which this mod can be crafted</param>
-        /// <param name="spawnWeightsReplacement">replacement spawn weights if this mod can only be spawned by different 
-        /// means, e.g. as a master signature mod</param>
-        public Mod(string id, JsonMod jsonMod, IEnumerable<JsonCraftingBenchOption> jsonBenchOptions,
-            IEnumerable<JsonSpawnWeight> spawnWeightsReplacement)
+        public Mod(string id, JsonMod jsonMod, IEnumerable<JsonCraftingBenchOption> jsonBenchOptions)
         {
             Id = id;
             foreach (var jsonMasterMod in jsonBenchOptions)
@@ -53,10 +51,9 @@ namespace POESKillTree.Model.Items.Mods
                     }
                 }
             }
-            var spawnWeights = spawnWeightsReplacement ?? jsonMod.SpawnWeights;
-            foreach (var spawnWeight in spawnWeights)
+            foreach (var spawnWeight in jsonMod.SpawnWeights)
             {
-                if (TagsEx.TryParse(spawnWeight.Tag, out Tags tag))
+                if (TagsExtensions.TryParse(spawnWeight.Tag, out Tags tag))
                 {
                     _spawnTags.Add(Tuple.Create(tag, spawnWeight.CanSpawn));
                 }
@@ -68,42 +65,29 @@ namespace POESKillTree.Model.Items.Mods
         /// <returns>true if this mod can be crafted onto an item with the given tags and class</returns>
         public bool Matches(Tags tags, ItemClass itemClass)
         {
-            // the ModDomains Item and Master match everything but Flask, Jewel and Gem
-            if (tags.HasFlag(Tags.Flask))
-            {
-                if (Domain != ModDomain.Flask)
-                {
-                    return false;
-                }
-            }
-            else if (tags.HasFlag(Tags.Jewel))
-            {
-                if (Domain != ModDomain.Jewel)
-                {
-                    return false;
-                }
-            }
-            else if (tags.HasFlag(Tags.Gem))
-            {
+            if (!TagsAreAllowedInDomain(tags))
                 return false;
-            }
-            else
-            {
-                if (Domain != ModDomain.Item && Domain != ModDomain.Master)
-                {
-                    return false;
-                }
-            }
 
             if (!IgnoredMasterCraftedGroups.Contains(JsonMod.Group) && _itemClasses.Contains(itemClass))
-            {
                 return true;
-            }
+
             return (
                 from spawnTag in _spawnTags
                 where tags.HasFlag(spawnTag.Item1)
                 select spawnTag.Item2
             ).FirstOrDefault();
+        }
+
+        private bool TagsAreAllowedInDomain(Tags tags)
+        {
+            // Flasks, jewels and gems have their own domains, everything else allows Item and Crafted.
+            if (tags.HasFlag(Tags.Flask))
+                return Domain == ModDomain.Flask;
+            if (tags.HasFlag(Tags.Jewel) || tags.HasFlag(Tags.AbyssJewel))
+                return Domain == ModDomain.Misc;
+            if (tags.HasFlag(Tags.Gem))
+                return false;
+            return Domain == ModDomain.Item || Domain == ModDomain.Crafted;
         }
     }
 }

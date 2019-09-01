@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace POESKillTree.Utils
+namespace PoESkillTree.Utils
 {
     // Application data folder API.
     public class AppData
@@ -26,7 +26,7 @@ namespace POESKillTree.Utils
             HasPortableData = File.Exists(Path.Combine(ProgramDirectory, PortableIniFileName));
         }
 
-        // Returns abolute path to appliation data folder (i.e. system folder + AppDataFolderName).
+        // Returns absolute path to appliation data folder (i.e. system folder + AppDataFolderName).
         // If folder doesn't exist, it will be created.
         // If trailingSlash is true, directory separator will be appended to path returned.
         public static string GetFolder(bool trailingSlash = false)

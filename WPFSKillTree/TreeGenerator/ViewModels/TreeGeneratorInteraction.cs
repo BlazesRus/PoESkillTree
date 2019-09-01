@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Views;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Views;
 
-namespace POESKillTree.TreeGenerator.ViewModels
+namespace PoESkillTree.TreeGenerator.ViewModels
 {
     /// <summary>
     /// Class that encapsulates the interaction between MainWindow and the TreeGenerator namespace.
@@ -24,6 +24,18 @@ namespace POESKillTree.TreeGenerator.ViewModels
         public ICommand OpenTreeGeneratorCommand { get; }
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
+
+        /// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
+        /// </summary>
+        public PoESkillTree.ViewModels.Equipment.InventoryViewModel ItemInfo
+        {
+            get { return GlobalSettings.ItemInfoVal; }
+            set
+            {
+                SetProperty(ref GlobalSettings.ItemInfoVal, value);
+            }
+        }
 
         public SkillTree SkillTree
         {

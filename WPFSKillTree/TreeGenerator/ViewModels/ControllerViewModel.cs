@@ -5,20 +5,23 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Algorithm;
-using POESKillTree.TreeGenerator.Solver;
+using log4net;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Algorithm;
+using PoESkillTree.TreeGenerator.Solver;
 
-namespace POESKillTree.TreeGenerator.ViewModels
+namespace PoESkillTree.TreeGenerator.ViewModels
 {
     /// <summary>
     /// ViewModel that runs a solver and reports its results.
     /// </summary>
     public sealed class ControllerViewModel : CloseableViewModel
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ControllerViewModel));
+
         private static readonly string IterationPrefix = L10n.Message("Current iteration:") + " ";
 
         /// <summary>
@@ -218,15 +221,12 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {
                 await Task.Run(() =>
                 {
-#if DEBUG
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
-#endif
+                    var stopwatch = Stopwatch.StartNew();
+
                     _solver.Initialize();
-#if DEBUG
+
                     stopwatch.Stop();
-                    Debug.WriteLine("Initialization took " + stopwatch.ElapsedMilliseconds + " ms\n-----------------");
-#endif
+                    Log.Info("Initialization took " + stopwatch.ElapsedMilliseconds + " ms");
                 });
 
             }
@@ -269,10 +269,8 @@ namespace POESKillTree.TreeGenerator.ViewModels
             {
                 result = await Task.Run(() =>
                 {
-#if DEBUG
-                    var stopwatch = new Stopwatch();
-                    stopwatch.Start();
-#endif
+                    var stopwatch = Stopwatch.StartNew();
+
                     while (!_solver.IsConsideredDone)
                     {
                         _solver.Step();
@@ -283,10 +281,9 @@ namespace POESKillTree.TreeGenerator.ViewModels
                         token.ThrowIfCancellationRequested();
                     }
                     _solver.FinalStep();
-#if DEBUG
+
                     stopwatch.Stop();
-                    Debug.WriteLine("Finished in " + stopwatch.ElapsedMilliseconds + " ms\n==================");
-#endif
+                    Log.Info("Finished in " + stopwatch.ElapsedMilliseconds + " ms");
                     return _solver.BestSolution;
                 }, token);
             }

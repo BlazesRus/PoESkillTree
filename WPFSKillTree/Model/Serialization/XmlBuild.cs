@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Represents the information of a <see cref="Builds.PoEBuild"/> instance as stored in
@@ -37,6 +37,8 @@ namespace POESKillTree.Model.Serialization
         public List<ushort> CheckedNodeIds { get; set; }
 
         public List<ushort> CrossedNodeIds { get; set; }
+
+        public List<(string, double?)> ConfigurationStats { get; set; }
 
         public string AdditionalData { get; set; }
 

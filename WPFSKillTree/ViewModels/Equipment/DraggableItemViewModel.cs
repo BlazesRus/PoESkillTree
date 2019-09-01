@@ -1,23 +1,18 @@
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GongSolutions.Wpf.DragDrop;
-using JetBrains.Annotations;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Model.Items;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
 
-namespace POESKillTree.ViewModels.Equipment
+namespace PoESkillTree.ViewModels.Equipment
 {
     /// <summary>
     /// View model for Items that can be dragged.
     /// </summary>
     public abstract class DraggableItemViewModel : Notifier, IDragSource
     {
-        private readonly IExtendedDialogCoordinator _dialogCoordinator;
-        private readonly EquipmentData _equipmentData;
-
         /// <summary>
         /// Gets or sets the item this view models shows.
         /// </summary>
@@ -27,12 +22,10 @@ namespace POESKillTree.ViewModels.Equipment
         /// <summary>
         /// Gets or sets whether the view model is currently being dragged.
         /// </summary>
-        // used in styles, Visual Studio/Resharper somehow doesn't recognize that
-        [UsedImplicitly(ImplicitUseKindFlags.Access)] 
         public bool IsDragged
         {
-            get { return _isDragged; }
-            private set { SetProperty(ref _isDragged, value); }
+            get => _isDragged;
+            private set => SetProperty(ref _isDragged, value);
         }
 
         private Point _dragMouseAnchorPoint = new Point(0, 0);
@@ -43,8 +36,8 @@ namespace POESKillTree.ViewModels.Equipment
         /// </summary>
         public Point DragMouseAnchorPoint
         {
-            get { return _dragMouseAnchorPoint; }
-            private set { SetProperty(ref _dragMouseAnchorPoint, value); }
+            get => _dragMouseAnchorPoint;
+            private set => SetProperty(ref _dragMouseAnchorPoint, value);
         }
 
         // effects for dropping in different locations
@@ -58,15 +51,10 @@ namespace POESKillTree.ViewModels.Equipment
         private DragDropEffects AllowedEffects => DropOnInventoryEffect | DropOnStashEffect | DropOnBinEffect;
 
         public ICommand DeleteCommand { get; }
-        public ICommand EditSocketedGemsCommand { get; }
 
-        protected DraggableItemViewModel(IExtendedDialogCoordinator dialogCoordinator, EquipmentData equipmentData)
+        protected DraggableItemViewModel()
         {
-            _dialogCoordinator = dialogCoordinator;
-            _equipmentData = equipmentData;
-
             DeleteCommand = new RelayCommand(Delete, CanDelete);
-            EditSocketedGemsCommand = new AsyncRelayCommand(EditSocketedGemsAsync, CanEditSocketedGems);
         }
 
         private void Delete()
@@ -76,15 +64,6 @@ namespace POESKillTree.ViewModels.Equipment
 
         private bool CanDelete()
             => Item != null;
-
-        private async Task EditSocketedGemsAsync()
-        {
-            await _dialogCoordinator.EditSocketedGemsAsync(this, 
-                new SocketedGemsEditingViewModel(_equipmentData.ItemImageService, Item));
-        }
-
-        private bool CanEditSocketedGems()
-            => Item != null && Item.BaseType.MaximumNumberOfSockets > 0;
 
         public void StartDrag(IDragInfo dragInfo)
         {

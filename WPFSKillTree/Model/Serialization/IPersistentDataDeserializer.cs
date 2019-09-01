@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using POESKillTree.Controls.Dialogs;
+using PoESkillTree.Controls.Dialogs;
 
-namespace POESKillTree.Model.Serialization
+namespace PoESkillTree.Model.Serialization
 {
     /// <summary>
     /// Interface for a class that can deserialize PersistentData for a specific version range.
@@ -18,7 +18,7 @@ namespace POESKillTree.Model.Serialization
         Version MinimumDeserializableVersion { get; }
 
         /// <summary>
-        /// The maxmimum version this instance can deserialize. <c>null</c> indicates that this instance can only
+        /// The maximum version this instance can deserialize. <c>null</c> indicates that this instance can only
         /// deserialize if there was no version specified.
         /// </summary>
         [CanBeNull]

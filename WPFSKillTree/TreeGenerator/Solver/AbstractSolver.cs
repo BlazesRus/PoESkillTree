@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.TreeGenerator.Algorithm;
-using POESKillTree.TreeGenerator.Algorithm.Model;
-using POESKillTree.TreeGenerator.Settings;
+using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Algorithm;
+using PoESkillTree.TreeGenerator.Algorithm.Model;
+using PoESkillTree.TreeGenerator.Settings;
 
-namespace POESKillTree.TreeGenerator.Solver
+namespace PoESkillTree.TreeGenerator.Solver
 {
     /// <summary>
     ///  Base solver class controlling the interaction between the skill tree data and the
@@ -140,7 +141,7 @@ namespace POESKillTree.TreeGenerator.Solver
             NodeExpansionDictionary = expansionDict;
             
             // The hidden root node and ascendancy nodes do not count for the total node count.
-            UncountedNodes = 1 + StartNode.Nodes.Count(n => SkillTree.Skillnodes[n].ascendancyName != null);
+            UncountedNodes = 1 + StartNode.Nodes.Count(n => SkillTree.Skillnodes[n].IsAscendancyNode);
 
             Debug.WriteLine("Search space dimension: " + SearchSpace.Count);
             Debug.WriteLine("Target node count: " + TargetNodes.Count);
@@ -222,8 +223,9 @@ namespace POESKillTree.TreeGenerator.Solver
         /// </summary>
         private void CreateSearchGraph(SearchGraph searchGraph)
         {
-            foreach (var ng in SkillTree.NodeGroups)
+            foreach (var i in SkillTree.PoESkillTree.Groups)
             {
+                var ng = i.Value;
                 var mustInclude = false;
 
                 SkillNode firstNeighbor = null;
@@ -244,7 +246,7 @@ namespace POESKillTree.TreeGenerator.Solver
                     // also be fully included (since it's not isolated and could
                     // be part of a path to other nodes).
                     var ng1 = ng;
-                    foreach (var neighbor in node.Neighbor.Where(neighbor => neighbor.SkillNodeGroup != ng1))
+                    foreach (var neighbor in node.Neighbor.Where(neighbor => neighbor.Group != ng1))
                     {
                         if (firstNeighbor == null)
                             firstNeighbor = neighbor;
@@ -265,16 +267,16 @@ namespace POESKillTree.TreeGenerator.Solver
                     foreach (var node in ng.Nodes)
                     {
                         // Can't path through class starts.
-                        if (SkillTree.RootNodeList.Contains(node.Id)
+                        if (node.IsRootNode
                             // Don't add nodes that are already in the graph (as
                             // target or start nodes).
                             || searchGraph.NodeDict.ContainsKey(node)
                             // Don't add nodes that should not be skilled.
                             || Settings.Crossed.Contains(node)
                             // Mastery nodes are obviously not useful.
-                            || node.Type == NodeType.Mastery
+                            || node.Type == PassiveNodeType.Mastery
                             // Ignore ascendancies for now
-                            || node.ascendancyName != null)
+                            || node.IsAscendancyNode)
                             continue;
 
                         if (IncludeNodeInSearchGraph(node))

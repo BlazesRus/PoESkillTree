@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Model.Items;
-using POESKillTree.Model.Items.Enums;
-using POESKillTree.SkillTreeFiles;
-using POESKillTree.Utils;
-using POESKillTree.Utils.Wpf;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.Skills;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Utils.Wpf;
 
-namespace POESKillTree.ViewModels.Equipment
+namespace PoESkillTree.ViewModels.Equipment
 {
     /// <summary>
     /// View model for a gem socketed in an item. An item will be created from this when the dialog is accepted.
@@ -21,16 +20,17 @@ namespace POESKillTree.ViewModels.Equipment
     {
         private int _level;
         private int _quality;
-        private int _group;
+        private int? _group;
         private GemBaseViewModel _gemBase;
+        private bool _isEnabled;
 
         /// <summary>
         /// Gets or sets the level of this gem.
         /// </summary>
         public int Level
         {
-            get { return _level; }
-            set { SetProperty(ref _level, value); }
+            get => _level;
+            set => SetProperty(ref _level, value);
         }
 
         /// <summary>
@@ -38,23 +38,29 @@ namespace POESKillTree.ViewModels.Equipment
         /// </summary>
         public int Quality
         {
-            get { return _quality; }
-            set { SetProperty(ref _quality, value); }
+            get => _quality;
+            set => SetProperty(ref _quality, value);
         }
 
         /// <summary>
         /// Gets or sets the socket group this gem is in. Gems of the same group are linked.
         /// </summary>
-        public int Group
+        public int? Group
         {
-            get { return _group; }
-            set { SetProperty(ref _group, value); }
+            get => _group;
+            set => SetProperty(ref _group, value);
         }
 
         public GemBaseViewModel GemBase
         {
-            get { return _gemBase; }
-            set { SetProperty(ref _gemBase, value); }
+            get => _gemBase;
+            set => SetProperty(ref _gemBase, value);
+        }
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value);
         }
 
         public SocketedGemViewModel Clone()
@@ -64,7 +70,8 @@ namespace POESKillTree.ViewModels.Equipment
                 GemBase = GemBase,
                 Group = Group,
                 Quality = Quality,
-                Level = Level
+                Level = Level,
+                IsEnabled = IsEnabled,
             };
         }
     }
@@ -74,16 +81,18 @@ namespace POESKillTree.ViewModels.Equipment
     /// </summary>
     public class GemBaseViewModel
     {
-        public string Name { get; }
+        private readonly SkillDefinition _skill;
+        public string Id => _skill.Id;
+        public string Name => _skill.BaseItem?.DisplayName ?? "";
+
+        public int MaxLevel
+            => _skill.BaseItem?.GemTags.FirstOrDefault(s => s == "low_max_level") is null ? 21 : 4;
 
         public ItemImage Icon { get; }
 
-        public ItemDB.Gem Gem { get; }
-
-        public GemBaseViewModel(ItemImageService itemImageService, ItemDB.Gem gem)
+        public GemBaseViewModel(ItemImageService itemImageService, SkillDefinition skill)
         {
-            Gem = gem;
-            Name = Gem.Name;
+            _skill = skill;
             Icon = new ItemImage(itemImageService, Name, ItemClass.ActiveSkillGem);
         }
     }
@@ -97,7 +106,8 @@ namespace POESKillTree.ViewModels.Equipment
     /// </summary>
     public class SocketedGemsEditingViewModel : CloseableViewModel<bool>
     {
-        private readonly Item _itemWithSockets;
+        private readonly ItemAttributes _itemAttributes;
+        private readonly ItemSlot _slot;
 
         /// <summary>
         /// Gets the gems that can be socketed in the item.
@@ -118,7 +128,8 @@ namespace POESKillTree.ViewModels.Equipment
         public ICommand AddGemCommand { get; }
         public ICommand RemoveGemCommand { get; }
 
-        public int NumberOfSockets { get; }
+        public int NumberOfSockets
+            => _itemAttributes.GetItemInSlot(_slot)?.BaseType.MaximumNumberOfSockets ?? 0;
 
         private SocketedGemViewModel _newSocketedGem;
         /// <summary>
@@ -126,24 +137,31 @@ namespace POESKillTree.ViewModels.Equipment
         /// </summary>
         public SocketedGemViewModel NewSocketedGem
         {
-            get { return _newSocketedGem; }
-            private set { SetProperty(ref _newSocketedGem, value); }
+            get => _newSocketedGem;
+            private set => SetProperty(ref _newSocketedGem, value);
         }
 
-        public SocketedGemsEditingViewModel(ItemImageService itemImageService, Item itemWithSockets)
+        public SocketedGemsEditingViewModel(
+            SkillDefinitions skillDefinitions, ItemImageService itemImageService, ItemAttributes itemAttributes,
+            ItemSlot slot)
         {
-            _itemWithSockets = itemWithSockets;
-            // convert ItemDB.Gems into GemBaseViewModels
-            AvailableGems = ItemDB.GetAllGems().Select(g => new GemBaseViewModel(itemImageService, g)).ToList();
-            NumberOfSockets = _itemWithSockets.BaseType.MaximumNumberOfSockets;
+            _itemAttributes = itemAttributes;
+            _slot = slot;
+            AvailableGems = skillDefinitions.Skills
+                .Where(d => d.BaseItem != null)
+                .Where(d => d.BaseItem.ReleaseState == ReleaseState.Released ||
+                            d.BaseItem.ReleaseState == ReleaseState.Legacy)
+                .OrderBy(d => d.BaseItem.DisplayName)
+                .Select(d => new GemBaseViewModel(itemImageService, d)).ToList();
             NewSocketedGem = new SocketedGemViewModel
             {
                 GemBase = AvailableGems[0],
-                Level = 1,
+                Level = 20,
                 Quality = 0,
-                Group = 1
+                Group = 1,
+                IsEnabled = true,
             };
-            AddGemCommand = new RelayCommand(AddGem, CanAddGem);
+            AddGemCommand = new RelayCommand(AddGem);
             RemoveGemCommand = new RelayCommand<SocketedGemViewModel>(RemoveGem);
 
             SocketedGemsViewSource = new CollectionViewSource
@@ -154,13 +172,13 @@ namespace POESKillTree.ViewModels.Equipment
                 nameof(SocketedGemViewModel.GemBase) + "." + nameof(GemBaseViewModel.Name),
                 ListSortDirection.Ascending));
             SocketedGemsViewSource.SortDescriptions.Add(new SortDescription(
-                nameof(SocketedGemViewModel.Group), 
+                nameof(SocketedGemViewModel.Group),
                 ListSortDirection.Ascending));
 
             // convert currently socketed gem Items into SocketedGemViewModels
-            foreach (var gem in _itemWithSockets.Gems)
+            foreach (var skill in _itemAttributes.GetSkillsInSlot(_slot))
             {
-                var gemBase = AvailableGems.FirstOrDefault(g => g.Name == gem.Name);
+                var gemBase = AvailableGems.FirstOrDefault(g => g.Id == skill.Id);
                 if (gemBase == null)
                 {
                     continue;
@@ -168,9 +186,10 @@ namespace POESKillTree.ViewModels.Equipment
                 var socketedGem = new SocketedGemViewModel
                 {
                     GemBase = gemBase,
-                    Level = ItemDB.LevelOf(gem),
-                    Quality = ItemDB.QualityOf(gem),
-                    Group = gem.SocketGroup + 1
+                    Level = skill.Level,
+                    Quality = skill.Quality,
+                    Group = skill.GemGroup + 1,
+                    IsEnabled = skill.IsEnabled,
                 };
                 socketedGem.PropertyChanged += SocketedGemsOnPropertyChanged;
                 _socketedGems.Add(socketedGem);
@@ -183,9 +202,6 @@ namespace POESKillTree.ViewModels.Equipment
             addedGem.PropertyChanged += SocketedGemsOnPropertyChanged;
             _socketedGems.Add(addedGem);
         }
-
-        private bool CanAddGem()
-            => _socketedGems.Count < NumberOfSockets;
 
         private void RemoveGem(SocketedGemViewModel gem)
         {
@@ -207,16 +223,15 @@ namespace POESKillTree.ViewModels.Equipment
             if (param)
             {
                 // replace gems in the edited item with SocketedGems if dialog is accepted
-                var gems = new List<Item>();
-                foreach (var gem in _socketedGems)
+                var skills = new List<Skill>();
+                for (var i = 0; i < _socketedGems.Count; i++)
                 {
-                    var tags = gem.GemBase.Gem.Tags.Split(new[] {", "}, StringSplitOptions.RemoveEmptyEntries);
-                    var gemItem = new Item(gem.GemBase.Name, tags, gem.Level, gem.Quality, gem.Group - 1);
-                    gemItem.SetJsonBase();
-                    gems.Add(gemItem);
+                    var gem = _socketedGems[i];
+                    var skill = new Skill(gem.GemBase.Id, gem.Level, gem.Quality, _slot, i, gem.Group - 1,
+                        gem.IsEnabled);
+                    skills.Add(skill);
                 }
-                _itemWithSockets.Gems = gems;
-                _itemWithSockets.SetJsonBase();
+                _itemAttributes.SetSkillsInSlot(skills, _slot);
             }
             base.OnClose(param);
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     public class NodeHighlighter
     {
@@ -26,7 +26,7 @@ namespace POESKillTree.SkillTreeFiles
         /// </summary>
         private static HighlightState CleanFlags(SkillNode node, HighlightState flags)
         {
-            if (node.ascendancyName == null) return flags;
+            if (!node.IsAscendancyNode) return flags;
             return flags & ~HighlightState.Tags;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net;
 using log4net.Core;
 
@@ -31,7 +32,7 @@ namespace UpdateDB
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
         // Main entry point.
-        public static int Main(string[] arguments)
+        public static async Task<int> Main(string[] arguments)
         {
             var args = new Arguments
             {
@@ -67,12 +68,12 @@ namespace UpdateDB
                         Console.WriteLine("Flags:\r\n");
                         Console.WriteLine("/VersionControlledOnly    Only download version controlled files (gem, base item and unique lists and RePoE data).");
                         Console.WriteLine("/NotVersionControlledOnly Only download not version controlled files (item images and skill tree assets).");
-                        Console.WriteLine("/SourceCodeDir            Save into the WPFSKillTree source code directory instead of the AppData directory.");
+                        Console.WriteLine("/SourceCodeDir            Save into the PoESkillTree.GameModel source code directory instead of the AppData directory.");
                         Console.WriteLine("/CurrentDir               Save into the current directory instead of the AppData directory.");
                         Console.WriteLine("/SpecifiedDir:dirPath     Save into the specified directory instead of the AppData directory.");
                         Console.WriteLine("/Quiet                    Do not display any output.");
                         Console.WriteLine("/Verbose                  Enable verbose output.");
-                        Console.WriteLine("/Items, /ItemImages, /TreeAssets, /Gems, /Uniques, /RePoE");
+                        Console.WriteLine("/Items, /ItemImages, /TreeAssets, /Uniques, /RePoE");
                         Console.WriteLine("If at least one is specified, only the specified files are downloaded.\r\n");
                         return 1;
 
@@ -135,7 +136,7 @@ namespace UpdateDB
                     exec.AddArgument(split[0], split[1], split[2]);
             }
 
-            exec.LoadAllAsync().Wait();
+            await exec.LoadAllAsync();
             return 0;
         }
 

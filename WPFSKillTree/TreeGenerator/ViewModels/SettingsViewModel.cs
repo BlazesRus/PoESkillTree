@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using POESKillTree.Model.JsonSettings;
-using POESKillTree.SkillTreeFiles;
+using PoESkillTree.Model.JsonSettings;
+using PoESkillTree.SkillTreeFiles;
 
-namespace POESKillTree.TreeGenerator.ViewModels
+namespace PoESkillTree.TreeGenerator.ViewModels
 {
     /// <summary>
     /// ViewModel that enables setting up and running <see cref="Solver.ISolver"/> through
@@ -74,8 +74,7 @@ namespace POESKillTree.TreeGenerator.ViewModels
                 .ShowControllerDialogAsync(_dialogContext, solver, generator.DisplayName, Tree);
             if (controllerResult != null)
             {
-                Tree.SkilledNodes.Clear();
-                Tree.AllocateSkillNodes(controllerResult.Select(n => SkillTree.Skillnodes[n]));
+                Tree.ResetSkilledNodesTo(controllerResult.Select(n => SkillTree.Skillnodes[n]).ToList());
             }
             Tree.HighlightedNodes.Clear();
             Tree.HighlightedNodes.UnionWith(savedHighlights);

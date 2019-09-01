@@ -1,6 +1,6 @@
-﻿using POESKillTree.Utils;
+﻿using PoESkillTree.Utils;
 
-namespace POESKillTree.Model
+namespace PoESkillTree.Model
 {
     public class Options : Notifier
     {
@@ -9,7 +9,6 @@ namespace POESKillTree.Model
         private string _theme = "Dark";
         private string _accent = "Steel";
         private bool _attributesBarOpened;
-        private bool _characterSheetBarOpened;
         private bool _buildsBarOpened;
         private bool _treeComparisonEnabled;
         private bool _changeSummaryEnabled;
@@ -17,7 +16,7 @@ namespace POESKillTree.Model
         private string _nodeSearchHighlightColor = "Red";
         private string _nodeAttrHighlightColor = "LawnGreen";
         private string _nodeHoverHighlightColor = "DodgerBlue";
-        private bool _downloadMissingItemImages;
+        private bool _downloadMissingItemImages = true;
         private ResetPreferences _resetPreferences = ResetPreferences.MainTree | ResetPreferences.AscendancyTree;
         private string _buildSavePath;
         private int _loadBuildButtonIndex;
@@ -44,12 +43,6 @@ namespace POESKillTree.Model
         {
             get { return _attributesBarOpened; }
             set { SetProperty(ref _attributesBarOpened, value); }
-        }
-
-        public bool CharacterSheetBarOpened
-        {
-            get { return _characterSheetBarOpened; }
-            set { SetProperty(ref _characterSheetBarOpened, value); }
         }
 
         public bool BuildsBarOpened

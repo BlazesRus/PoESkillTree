@@ -1,4 +1,4 @@
-﻿namespace POESKillTree.Model.Items.Enums
+﻿namespace PoESkillTree.Model.Items.Enums
 {
     /// <summary>
     /// The domain of a mod as it appears in the GGPK.
@@ -10,9 +10,11 @@
     {
         Item,
         Flask,
-        Master,
+        Crafted,
         Area,
-        Jewel,
+        Misc,
+        Abyss_Jewel,
         Atlas,
+        Delve,
     }
 }

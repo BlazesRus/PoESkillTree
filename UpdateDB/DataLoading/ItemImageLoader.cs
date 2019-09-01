@@ -3,9 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
-using POESKillTree.Utils.WikiApi;
-
-using static POESKillTree.Utils.WikiApi.ItemRdfPredicates;
+using PoESkillTree.Utils.WikiApi;
 
 namespace UpdateDB.DataLoading
 {
@@ -26,6 +24,7 @@ namespace UpdateDB.DataLoading
             "Amulets", "Belts", "Quivers", "Rings",
             "Body Armours", "Boots", "Helmets", "Gloves", "Shields", "Jewel",
             "Active Skill Gems", "Support Skill Gems",
+            "Life Flasks", "Mana Flasks", "Hybrid Flasks", "Utility Flasks", "Critical Utility Flasks",
         };
 
         public override bool SavePathIsFolder
@@ -47,12 +46,9 @@ namespace UpdateDB.DataLoading
         private async Task ReadJson(string wikiClass)
         {
             // for items that have the given class ...
-            var conditions = new ConditionBuilder
-            {
-                {RdfItemClass, wikiClass}
-            };
+            var where = $"{CargoConstants.ItemClass}='{wikiClass}'";
             // ... retrieve name and the icon url
-            var task = WikiApiAccessor.AskAndQueryImageInforUrls(conditions);
+            var task = WikiApiAccessor.GetItemImageInfosAsync(where);
             var results = (await task).ToList();
 
             // download the images from the urls and save them

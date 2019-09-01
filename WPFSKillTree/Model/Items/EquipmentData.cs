@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MoreLinq;
-using POESKillTree.Model.Items.Mods;
-using POESKillTree.Model.Items.StatTranslation;
-using POESKillTree.Utils;
+using PoESkillTree.GameModel;
+using PoESkillTree.GameModel.Items;
+using PoESkillTree.GameModel.StatTranslation;
+using PoESkillTree.Model.Items.Mods;
 
-namespace POESKillTree.Model.Items
+namespace PoESkillTree.Model.Items
 {
     public class EquipmentData
     {
-        private const string ResourcePath =
-            "pack://application:,,,/PoESkillTree;component/Data/Equipment/";
-
         public ModDatabase ModDatabase { get; private set; }
         public StatTranslator StatTranslator { get; private set; }
 
@@ -35,21 +33,19 @@ namespace POESKillTree.Model.Items
 
         private EquipmentData(Options options)
         {
-            Util.TriggerPackUriSchemeInitialization();
             _itemImageService = new ItemImageService(options);
         }
 
         private async Task InitializeAsync()
         {
-            var modsTask = RePoEUtils.LoadAsync<Dictionary<string, JsonMod>>("mods");
-            var benchOptionsTask = RePoEUtils.LoadAsync<JsonCraftingBenchOption[]>("crafting_bench_options");
-            var npcMastersTask = RePoEUtils.LoadAsync<Dictionary<string, JsonNpcMaster>>("npc_master");
-            var statTranslationsTask = RePoEUtils.LoadAsync<List<JsonStatTranslation>>("stat_translations");
-            ModDatabase = new ModDatabase(await modsTask, await benchOptionsTask, await npcMastersTask);
-            StatTranslator = new StatTranslator(await statTranslationsTask);
+            var modsTask = DataUtils.LoadRePoEAsync<Dictionary<string, JsonMod>>("mods", true);
+            var benchOptionsTask = DataUtils.LoadRePoEAsync<JsonCraftingBenchOption[]>("crafting_bench_options", true);
+            var statTranslatorTask = StatTranslators.CreateFromMainFileAsync(true);
+            ModDatabase = new ModDatabase(await modsTask, await benchOptionsTask);
 
-            ItemBases = (await LoadBases()).ToList();
-            UniqueBases = (await LoadUniques()).ToList();
+            ItemBases = await LoadBases();
+            UniqueBases = await LoadUniques();
+            StatTranslator = await statTranslatorTask;
 
             ItemBaseDictionary = ItemBases.DistinctBy(b => b.Name).ToDictionary(b => b.Name);
             UniqueBaseDictionary = UniqueBases.DistinctBy(b => b.UniqueName).ToDictionary(b => b.UniqueName);
@@ -64,24 +60,18 @@ namespace POESKillTree.Model.Items
             return o;
         }
 
-        private async Task<IEnumerable<ItemBase>> LoadBases()
+        private async Task<IReadOnlyList<ItemBase>> LoadBases()
         {
-            var xmlList = await DeserializeXmlResourceAsync<XmlItemList>("Items.xml");
-            return xmlList.ItemBases.Select(x => new ItemBase(_itemImageService, ModDatabase, x));
+            var xmlList = await DataUtils.LoadXmlAsync<XmlItemList>("Equipment.Items.xml", true);
+            return xmlList.ItemBases.Select(x => new ItemBase(_itemImageService, ModDatabase, x)).ToList();
         }
 
-        private async Task<IEnumerable<UniqueBase>> LoadUniques()
+        private async Task<IReadOnlyList<UniqueBase>> LoadUniques()
         {
             var metadataToBase = ItemBases.ToDictionary(b => b.MetadataId);
-            var xmlList = await DeserializeXmlResourceAsync<XmlUniqueList>("Uniques.xml");
+            var xmlList = await DataUtils.LoadXmlAsync<XmlUniqueList>("Equipment.Uniques.xml", true);
             return xmlList.Uniques.Select(
-                x => new UniqueBase(_itemImageService, ModDatabase, metadataToBase[x.BaseMetadataId], x));
-        }
-
-        private static async Task<T> DeserializeXmlResourceAsync<T>(string file)
-        {
-            var text = await SerializationUtils.ReadResourceAsync(ResourcePath + file);
-            return SerializationUtils.XmlDeserializeString<T>(text);
+                x => new UniqueBase(_itemImageService, ModDatabase, metadataToBase[x.BaseMetadataId], x)).ToList();
         }
 
         public ItemBase ItemBaseFromTypeline(string typeline)

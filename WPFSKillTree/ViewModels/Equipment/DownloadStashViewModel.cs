@@ -10,20 +10,22 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Newtonsoft.Json.Linq;
-using POESKillTree.Common.ViewModels;
-using POESKillTree.Controls;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.Model.Builds;
-using POESKillTree.Model.Items;
-using POESKillTree.Utils;
+using PoESkillTree.GameModel;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
 
-namespace POESKillTree.ViewModels.Equipment
+namespace PoESkillTree.ViewModels.Equipment
 {
     public class DownloadStashViewModel : CloseableViewModel
     {
         private readonly StashViewModel _stash;
+        private readonly GameData _gameData;
         private readonly IPersistentData _persistenData;
         private readonly IDialogCoordinator _dialogCoordinator;
         private readonly TaskCompletionSource<object> _viewLoadedCompletionSource;
@@ -78,9 +80,12 @@ namespace POESKillTree.ViewModels.Equipment
             get { return _loadTabContentsCommand ?? (_loadTabContentsCommand = new AsyncRelayCommand(LoadTabContents)); }
         }
 
-        public DownloadStashViewModel(IDialogCoordinator dialogCoordinator, IPersistentData persistentData, StashViewModel stash)
+        public DownloadStashViewModel(
+            IDialogCoordinator dialogCoordinator, GameData gameData, IPersistentData persistentData,
+            StashViewModel stash)
         {
             _stash = stash;
+            _gameData = gameData;
             _persistenData = persistentData;
             _dialogCoordinator = dialogCoordinator;
             DisplayName = L10n.Message("Download & Import Stash");
@@ -208,7 +213,7 @@ namespace POESKillTree.ViewModels.Equipment
                         // icons of quad tabs are downsized and their url doesn't allow inferring the normal-sized url
                         jItem.Remove("icon");
                     }
-                    items.Add(new Item(_persistenData, jItem));
+                    items.Add(new Item(_persistenData.EquipmentData, jItem));
                 }
 
                 var yStart = _stash.LastOccupiedRow + 3;

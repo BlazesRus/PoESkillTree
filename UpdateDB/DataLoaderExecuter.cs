@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using log4net;
 using MoreLinq;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
 using UpdateDB.DataLoading;
 
 namespace UpdateDB
@@ -25,7 +25,6 @@ namespace UpdateDB
             {"base items", "Equipment/Items.xml", new ItemBaseLoader(), LoaderCategories.VersionControlled, "Items"},
             {"base item images", "Equipment/Assets", new ItemImageLoader(), LoaderCategories.NotVersionControlled, "ItemImages"},
             {"skill tree assets", "", new SkillTreeLoader(), LoaderCategories.NotVersionControlled, "TreeAssets"},
-            {"gems", "ItemDB/GemList.xml", new GemLoader(), LoaderCategories.VersionControlled, "Gems"},
             {"uniques", "Equipment/Uniques.xml", new UniqueLoader(), LoaderCategories.VersionControlled, "Uniques"},
             {"RePoE", "RePoE", new RePoELoader(), LoaderCategories.VersionControlled, "RePoE" }
         };
@@ -52,7 +51,7 @@ namespace UpdateDB
                     break;
                 case OutputDirectory.SourceCode:
                     _savePath = Regex.Replace(Directory.GetCurrentDirectory(),
-                        @"UpdateDB((/|\\).*?)?$", "WPFSKillTree");
+                        @"(UpdateDB|WPFSKillTree)((/|\\).*?)?$", "PoESkillTree.GameModel");
                     break;
                 case OutputDirectory.Current:
                     _savePath = Directory.GetCurrentDirectory();
@@ -70,6 +69,8 @@ namespace UpdateDB
 
             // The Affix file is big enough to be starved by other requests sometimes.
             _httpClient.Timeout = TimeSpan.FromSeconds(120);
+            _httpClient.DefaultRequestHeaders.Add("User-Agent",
+                "PoESkillTree UpdateDB (https://github.com/PoESkillTree/PoESkillTree/tree/master/UpdateDB)");
         }
 
         /// <summary>
@@ -148,7 +149,7 @@ namespace UpdateDB
                 if (isFolder)
                     DirectoryEx.MoveOverwriting(tmpPath, fullPath);
                 else
-                    FileEx.MoveOverwriting(tmpPath, fullPath);
+                    FileUtils.MoveOverwriting(tmpPath, fullPath);
             }
             else
             {

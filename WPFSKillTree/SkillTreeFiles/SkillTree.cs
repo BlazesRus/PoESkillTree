@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using POESKillTree.Utils;
+using PoESkillTree.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,15 +13,19 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 using log4net;
-using POESKillTree.Common;
-using POESKillTree.Controls.Dialogs;
-using POESKillTree.Localization;
-using POESKillTree.Model;
-using POESKillTree.Utils.UrlProcessing;
-using HighlightState = POESKillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
-using static POESKillTree.SkillTreeFiles.Constants;
+using PoESkillTree.GameModel;
+using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Common;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Utils.UrlProcessing;
+using PoESkillTree.Utils.Wpf;
+using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
+using static PoESkillTree.SkillTreeFiles.Constants;
 
-namespace POESKillTree.SkillTreeFiles
+namespace PoESkillTree.SkillTreeFiles
 {
     public partial class SkillTree : Notifier, ISkillTree
     {
@@ -37,23 +41,23 @@ namespace POESKillTree.SkillTreeFiles
         // The absolute path of Assets folder (contains trailing directory separator).
         private static string _assetsFolderPath;
 
-        public static readonly Dictionary<string, float> BaseAttributes = new Dictionary<string, float>
+        public static readonly IReadOnlyList<(string stat, float value)> BaseAttributes = new (string, float)[]
         {
-            {"+# to maximum Mana", 34},
-            {"+# to maximum Life", 38},
-            {"Evasion Rating: #", 53},
-            {"+# to Maximum Endurance Charges", 3},
-            {"+# to Maximum Frenzy Charges", 3},
-            {"+# to Maximum Power Charges", 3},
-            {"#% Additional Elemental Resistance per Endurance Charge", 4},
-            {"#% Physical Damage Reduction per Endurance Charge", 4},
-            {"#% Attack Speed Increase per Frenzy Charge", 4},
-            {"#% Cast Speed Increase per Frenzy Charge", 4},
-            {"#% More Damage per Frenzy Charge", 4},
-            {"#% Critical Strike Chance Increase per Power Charge", 40},
+            ("+# to maximum Mana", 34),
+            ("+# to maximum Life", 38),
+            ("Evasion Rating: #", 53),
+            ("+# to Maximum Endurance Charges", 3),
+            ("+# to Maximum Frenzy Charges", 3),
+            ("+# to Maximum Power Charges", 3),
+            ("#% Additional Elemental Resistance per Endurance Charge", 4),
+            ("#% Physical Damage Reduction per Endurance Charge", 4),
+            ("#% Attack Speed Increase per Frenzy Charge", 4),
+            ("#% Cast Speed Increase per Frenzy Charge", 4),
+            ("#% More Damage per Frenzy Charge", 4),
+            ("#% Critical Strike Chance Increase per Power Charge", 40),
         };
 
-        public static readonly Dictionary<string, List<string>> HybridAttributes = new Dictionary<string, List<string>>
+        private static readonly Dictionary<string, List<string>> HybridAttributes = new Dictionary<string, List<string>>
         {
             {
                "+# to Strength and Intelligence",
@@ -83,16 +87,17 @@ namespace POESKillTree.SkillTreeFiles
             }
         };
 
-        public static readonly List<string> CharName = new List<string>
-        {
-            CharacterNames.Scion,
-            CharacterNames.Marauder,
-            CharacterNames.Ranger,
-            CharacterNames.Witch,
-            CharacterNames.Duelist,
-            CharacterNames.Templar,
-            CharacterNames.Shadow
-        };
+        private static readonly IReadOnlyDictionary<string, CharacterClass> PassiveNodeNameToClass =
+            new Dictionary<string, CharacterClass>
+            {
+                { "SEVEN", CharacterClass.Scion },
+                { "MARAUDER", CharacterClass.Marauder },
+                { "RANGER", CharacterClass.Ranger },
+                { "WITCH", CharacterClass.Witch },
+                { "DUELIST", CharacterClass.Duelist },
+                { "TEMPLAR", CharacterClass.Templar },
+                { "SIX", CharacterClass.Shadow }
+            };
 
         private static readonly List<string> CharacterFaceNames = new List<string>
         {
@@ -127,7 +132,7 @@ namespace POESKillTree.SkillTreeFiles
 
         private static SkillIcons IconActiveSkills { get; set; }
         private static SkillIcons IconInActiveSkills { get; set; }
-        public static Dictionary<ushort, SkillNode> Skillnodes { get; private set; }
+        public static Dictionary<ushort, SkillNode> Skillnodes => PoESkillTree.Nodes;
 
         private static IEnumerable<string> _allAttributes;
         /// <summary>
@@ -138,39 +143,40 @@ namespace POESKillTree.SkillTreeFiles
             get { return _allAttributes ?? (_allAttributes = Skillnodes.Values.SelectMany(n => n.Attributes.Keys).Distinct().ToArray()); }
         }
 
-        public static Dictionary<string, float>[] CharBaseAttributes { get; private set; }
-        public static List<int> RootNodeList { get; private set; }
-        public static HashSet<SkillNode> AscRootNodeList { get; private set; }
-        public static List<SkillNodeGroup> NodeGroups { get; private set; }
-        public static Rect2D SkillTreeRect { get; private set; }
-        private static Dictionary<string, int> RootNodeClassDictionary { get; set; }
-        private static List<string> AttributeTypes { get; } = new List<string>();
-        private static Dictionary<int, int> StartNodeDictionary { get; set; }
+        public static Dictionary<CharacterClass, IReadOnlyList<(string stat, float value)>> CharBaseAttributes
+        {
+            get;
+            private set;
+        }
 
-        private static readonly Dictionary<string, BitmapImage> _assets = new Dictionary<string, BitmapImage>();
-        public static Dictionary<string, BitmapImage> Assets => _assets;
-        private static readonly List<ushort[]> Links = new List<ushort[]>();
+        public static List<ushort> RootNodeList { get; private set; }
+        private static HashSet<SkillNode> AscRootNodeList { get; set; }
+        public static Rect2D SkillTreeRect { get; private set; }
+        private static Dictionary<CharacterClass, ushort> RootNodeClassDictionary { get; set; }
+        private static Dictionary<ushort, ushort> StartNodeDictionary { get; set; }
+
+        private static Dictionary<string, BitmapImage> Assets { get; } = new Dictionary<string, BitmapImage>();
+
         public readonly ObservableSet<SkillNode> SkilledNodes = new ObservableSet<SkillNode>();
         public readonly ObservableSet<SkillNode> HighlightedNodes = new ObservableSet<SkillNode>();
-        public SkillTreeSerializer Serializer { get; private set; }
+        public SkillTreeSerializer Serializer { get; }
         public IAscendancyClasses AscendancyClasses { get; private set; }
         public IBuildConverter BuildConverter { get; private set; }
 
-
-        private int _chartype;
+        private CharacterClass _charClass;
         private int _asctype;
         public static int UndefinedLevel => 0;
         public static int MaximumLevel => 100;
         private int _level = UndefinedLevel;
 
-        private readonly IDialogCoordinator _dialogCoordinator;
+        public static PoESkillTree PoESkillTree { get; set; } = null;
+        public static PoESkillTreeOptions PoESkillTreeOptions { get; set; } = null;
 
         private static bool _initialized;
 
-        private SkillTree(IPersistentData persistentData, IDialogCoordinator dialogCoordinator)
+        private SkillTree(IPersistentData persistentData)
         {
             _persistentData = persistentData;
-            _dialogCoordinator = dialogCoordinator;
 
             Serializer = new SkillTreeSerializer(this);
         }
@@ -180,32 +186,23 @@ namespace POESKillTree.SkillTreeFiles
         {
             if (!_initialized)
             {
-                var jss = new JsonSerializerSettings
-                {
-                    Error = (sender, args) =>
-                    {
-                        // There are many errors in "oo" elements and we can't fix them anyway
-                        if (args.ErrorContext.Path == null || !args.ErrorContext.Path.EndsWith(".oo"))
-                            Log.Error("Exception while deserializing Json tree", args.ErrorContext.Error);
-                        args.ErrorContext.Handled = true;
-                    }
-                };
-
-                var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treestring, jss);
-                var inOpts = JsonConvert.DeserializeObject<Opts>(opsstring, jss);
+                PoESkillTree = JsonConvert.DeserializeObject<PoESkillTree>(treestring, new PoESkillTreeConverter());
+                PoESkillTreeOptions = JsonConvert.DeserializeObject<PoESkillTreeOptions>(opsstring);
 
                 controller?.SetProgress(0.25);
-                await assetLoader.DownloadSkillNodeSpritesAsync(inTree, d => controller?.SetProgress(0.25 + d * 0.30));
+                await assetLoader.DownloadSkillNodeSpritesAsync(PoESkillTree, d => controller?.SetProgress(0.25 + d * 0.30));
                 IconInActiveSkills = new SkillIcons();
                 IconActiveSkills = new SkillIcons();
-                foreach (var obj in inTree.skillSprites)
+                var assetActions =
+                    new List<(Task<BitmapImage>, Action<BitmapImage>)>(PoESkillTree.SkillSprites.Count + PoESkillTree.Assets.Count);
+                foreach (var obj in PoESkillTree.SkillSprites)
                 {
                     SkillIcons icons;
                     string prefix;
-                    foreach(var i in obj.Value)
+                    foreach (var i in obj.Value)
                     {
-                        if (i.filename.Contains('?'))
-                            i.filename = i.filename.Remove(i.filename.IndexOf('?'));
+                        if (i.FileName.Contains('?'))
+                            i.FileName = i.FileName.Remove(i.FileName.IndexOf('?'));
                     }
                     if (obj.Key.EndsWith("Active"))
                     {
@@ -226,42 +223,33 @@ namespace POESKillTree.SkillTreeFiles
                         prefix = obj.Key;
                     }
                     var sprite = obj.Value[AssetZoomLevel];
-                    var path = _assetsFolderPath + sprite.filename;
-                    icons.Images[sprite.filename] = ImageHelper.OnLoadBitmapImage(new Uri(path, UriKind.Absolute));
-                    foreach (var o in sprite.coords)
+                    var path = _assetsFolderPath + sprite.FileName;
+                    assetActions.Add(
+                        (Task.Run(() => BitmapImageFactory.Create(path)), i => icons.Images[sprite.FileName] = i));
+                    foreach (var o in sprite.Coords)
                     {
                         var iconKey = prefix + "_" + o.Key;
-                        icons.SkillPositions[iconKey] = new Rect(o.Value.x, o.Value.y, o.Value.w, o.Value.h);
-                        icons.SkillImages[iconKey] = sprite.filename;
+                        icons.SkillPositions[iconKey] = new Rect(o.Value.X, o.Value.Y, o.Value.Width, o.Value.Height);
+                        icons.SkillImages[iconKey] = sprite.FileName;
                     }
                 }
 
                 controller?.SetProgress(0.55);
                 // The last percent progress is reserved for rounding errors as progress must not get > 1.
-                await assetLoader.DownloadAssetsAsync(inTree, d => controller?.SetProgress(0.55 + d * 0.44));
-                foreach (var ass in inTree.assets)
+                await assetLoader.DownloadAssetsAsync(PoESkillTree, d => controller?.SetProgress(0.55 + d * 0.44));
+                foreach (var ass in PoESkillTree.Assets)
                 {
-                    var path = _assetsFolderPath + ass.Key + ".png";
-                    Assets[ass.Key] = ImageHelper.OnLoadBitmapImage(new Uri(path, UriKind.Absolute));
+                    var key = ass.Key;
+                    var path = _assetsFolderPath + key + ".png";
+                    assetActions.Add((Task.Run(() => BitmapImageFactory.Create(path)), i => Assets[key] = i));
                 }
 
-                RootNodeList = new List<int>();
-                if (inTree.root != null)
+                foreach (var (task, action) in assetActions)
                 {
-                    foreach (int i in inTree.root.ot)
-                    {
-                        RootNodeList.Add(i);
-                    }
-                }
-                else if (inTree.main != null)
-                {
-                    foreach (int i in inTree.main.ot)
-                    {
-                        RootNodeList.Add(i);
-                    }
+                    action(await task);
                 }
 
-                AscendancyClasses = new AscendancyClasses(inOpts.ascClasses);
+                AscendancyClasses = new AscendancyClasses(PoESkillTreeOptions.CharacterToAscendancy);
 
                 BuildConverter = new BuildConverter(AscendancyClasses);
                 BuildConverter.RegisterDefaultDeserializer(url => new NaivePoEUrlDeserializer(url, AscendancyClasses));
@@ -270,161 +258,71 @@ namespace POESKillTree.SkillTreeFiles
                     PathofexileUrlDeserializer.TryCreate
                 );
 
-                CharBaseAttributes = new Dictionary<string, float>[7];
-                foreach (var c in inTree.characterData)
+                CharBaseAttributes = new Dictionary<CharacterClass, IReadOnlyList<(string stat, float value)>>();
+                foreach (var (key, value) in PoESkillTree.CharacterData)
                 {
-                    CharBaseAttributes[c.Key] = new Dictionary<string, float>
+                    CharBaseAttributes[(CharacterClass)key] = new (string stat, float value)[]
                     {
-                        {"+# to Strength", c.Value.base_str},
-                        {"+# to Dexterity", c.Value.base_dex},
-                        {"+# to Intelligence", c.Value.base_int}
+                        ("+# to Strength", value.BaseStrength),
+                        ("+# to Dexterity", value.BaseDexterity),
+                        ("+# to Intelligence", value.BaseIntelligence)
                     };
                 }
 
-                Skillnodes = new Dictionary<ushort, SkillNode>();
-                RootNodeClassDictionary = new Dictionary<string, int>();
-                StartNodeDictionary = new Dictionary<int, int>();
+                SkillNode.OrbitRadii = PoESkillTree.Constants.OrbitRadii ?? SkillNode.OrbitRadii;
+                SkillNode.SkillsPerOrbit = PoESkillTree.Constants.SkillsPerOrbit ?? SkillNode.SkillsPerOrbit;
+                RootNodeClassDictionary = new Dictionary<CharacterClass, ushort>();
+                StartNodeDictionary = new Dictionary<ushort, ushort>();
                 AscRootNodeList = new HashSet<SkillNode>();
+                RootNodeList = new List<ushort>();
 
-                foreach (var nd in inTree.nodes)
+                if (PoESkillTree.Root != null)
                 {
-                    var skillNode = new SkillNode
+                    foreach (var i in PoESkillTree.Root.NodeIdsOut)
                     {
-                        Id = nd.id,
-                        Name = nd.dn,
-                        //this value should not be split on '\n' as it causes the attribute list to separate nodes
-                        attributes = nd.dn.Contains("Jewel Socket") ? new[] { "+1 Jewel Socket" } : nd.sd,
-                        Orbit = nd.o,
-                        OrbitIndex = nd.oidx,
-                        Icon = nd.icon,
-                        LinkId = nd.ot,
-                        G = nd.g,
-                        Da = nd.da,
-                        Ia = nd.ia,
-                        Sa = nd.sa,
-                        Spc = nd.spc.Length > 0 ? (int?)nd.spc[0] : null,
-                        IsMultipleChoice = nd.isMultipleChoice,
-                        IsMultipleChoiceOption = nd.isMultipleChoiceOption,
-                        passivePointsGranted = nd.passivePointsGranted,
-                        ascendancyName = nd.ascendancyName,
-                        IsAscendancyStart = nd.isAscendancyStart,
-                        reminderText = nd.reminderText
-                    };
-                    if (nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Keystone;
-                    }
-                    else if (!nd.ks && nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Notable;
-                    }
-                    else if (!nd.ks && !nd.not && nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.JewelSocket;
-                    }
-                    else if (!nd.ks && !nd.not && !nd.isJewelSocket && nd.m)
-                    {
-                        skillNode.Type = NodeType.Mastery;
-                    }
-                    else if (!nd.ks && !nd.not && !nd.isJewelSocket && !nd.m)
-                    {
-                        skillNode.Type = NodeType.Normal;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"Invalid node type for node {skillNode.Name}");
-                    }
-                    Skillnodes.Add(nd.id, skillNode);
-                    if(skillNode.IsAscendancyStart)
-                        if(!AscRootNodeList.Contains(skillNode))
-                            AscRootNodeList.Add(skillNode);
-                    if (RootNodeList.Contains(nd.id))
-                    {
-                        if (!RootNodeClassDictionary.ContainsKey(nd.dn.ToUpperInvariant()))
+                        RootNodeList.Add(i);
+                        if (Skillnodes.ContainsKey(i))
                         {
-                            RootNodeClassDictionary.Add(nd.dn.ToUpperInvariant(), nd.id);
-                        }
-                        foreach (var linkedNode in nd.ot)
-                        {
-                            if (!StartNodeDictionary.ContainsKey(nd.id) && !nd.isAscendancyStart)
+                            var node = Skillnodes[i];
+                            node.IsRootNode = true;
+
+                            var characterClass = PassiveNodeNameToClass[node.Name.ToUpperInvariant()];
+                            if (!RootNodeClassDictionary.ContainsKey(characterClass))
                             {
-                                StartNodeDictionary.Add(linkedNode, nd.id);
+                                RootNodeClassDictionary.Add(characterClass, node.Id);
+                            }
+
+                            foreach (var linkedNode in node.NodeIdsOut)
+                            {
+                                if (!StartNodeDictionary.ContainsKey(node.Id) && !node.IsAscendancyStart)
+                                {
+                                    StartNodeDictionary.Add(linkedNode, node.Id);
+                                }
                             }
                         }
-                    }
-                    foreach (var node in nd.ot)
-                    {
-                        if (!StartNodeDictionary.ContainsKey(nd.id) && RootNodeList.Contains(node))
-                        {
-                            StartNodeDictionary.Add(nd.id, node);
-                        }
-                    }
-
-                }
-
-                foreach (var skillNode in Skillnodes)
-                {
-                    foreach (var i in skillNode.Value.LinkId)
-                    {
-                        if (Links.Count(nd => (nd[0] == i && nd[1] == skillNode.Key) || nd[0] == skillNode.Key && nd[1] == i) != 1)
-                            Links.Add(new[] { skillNode.Key, i });
-                    }
-                }
-                foreach (var ints in Links)
-                {
-                    Regex regexString = new Regex(@"Can Allocate Passives from the .* starting point");
-                    bool isScionAscendancyNotable = false;
-                    foreach (var attibute in Skillnodes[ints[0]].attributes)
-                    {
-                        if (regexString.IsMatch(attibute))
-                            isScionAscendancyNotable = true;
-                    }
-                    foreach (var attibute in Skillnodes[ints[1]].attributes)
-                    {
-                        if (regexString.IsMatch(attibute))
-                            isScionAscendancyNotable = true;
-                    }
-
-                    if (isScionAscendancyNotable && StartNodeDictionary.Keys.Contains(ints[0]))
-                    {
-                        if (!Skillnodes[ints[1]].Neighbor.Contains(Skillnodes[ints[0]]))
-                            Skillnodes[ints[1]].Neighbor.Add(Skillnodes[ints[0]]);
-                    }
-                    else if (isScionAscendancyNotable && StartNodeDictionary.Keys.Contains(ints[1]))
-                    {
-                        if (!Skillnodes[ints[0]].Neighbor.Contains(Skillnodes[ints[1]]))
-                            Skillnodes[ints[0]].Neighbor.Add(Skillnodes[ints[1]]);
-                    }
-                    else
-                    {
-                        if (!Skillnodes[ints[0]].Neighbor.Contains(Skillnodes[ints[1]]))
-                            Skillnodes[ints[0]].Neighbor.Add(Skillnodes[ints[1]]);
-                        if (!Skillnodes[ints[1]].Neighbor.Contains(Skillnodes[ints[0]]))
-                            Skillnodes[ints[1]].Neighbor.Add(Skillnodes[ints[0]]);
                     }
                 }
 
                 var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
-                foreach (var skillnode in Skillnodes)
+                Regex regexString = new Regex(@"Can Allocate Passives from the .* starting point");
+                foreach (var skillNode in Skillnodes)
                 {
-                    //add each other as visible neighbors
-                    foreach (var snn in skillnode.Value.Neighbor)
+                    var n1 = skillNode.Value;
+                    if (n1.Name.Contains("Jewel Socket"))
                     {
-                        if (snn.IsAscendancyStart && skillnode.Value.LinkId.Contains(snn.Id))
-                            continue;
-                        skillnode.Value.VisibleNeighbors.Add(snn);
+                        n1.StatDefinitions = new[] { "+1 Jewel Socket" };
+                        //Sending Node Id into List to dynamically add threshold stat
+                        GlobalSettings.JewelInfo.AddJewelSlot(n1.Id);
                     }
 
                     //populate the Attributes fields with parsed attributes 
-                    skillnode.Value.Attributes = new Dictionary<string, IReadOnlyList<float>>();
-                    foreach (string s in skillnode.Value.attributes)
+                    n1.Attributes = new Dictionary<string, IReadOnlyList<float>>();
+                    foreach (string s in n1.StatDefinitions)
                     {
                         var values = new List<float>();
 
                         foreach (Match m in regexAttrib.Matches(s))
                         {
-                            if (!AttributeTypes.Contains(regexAttrib.Replace(s, "#")))
-                                AttributeTypes.Add(regexAttrib.Replace(s, "#"));
                             if (m.Value == "")
                                 values.Add(float.NaN);
                             else
@@ -432,34 +330,81 @@ namespace POESKillTree.SkillTreeFiles
                         }
                         string cs = (regexAttrib.Replace(s, "#"));
 
-                        skillnode.Value.Attributes[cs] = values;
+                        n1.Attributes[cs] = values;
+                    }
+
+                    if (n1.IsAscendancyStart && !AscRootNodeList.Contains(n1))
+                    {
+                        AscRootNodeList.Add(n1);
+                    }
+
+                    foreach (var i in n1.NodeIdsOut)
+                    {
+                        var n2 = Skillnodes[i];
+                        if (!StartNodeDictionary.ContainsKey(n1.Id) && RootNodeList.Contains(n2.Id))
+                        {
+                            StartNodeDictionary.Add(n1.Id, n2.Id);
+                        }
+
+                        bool isScionAscendancyNotable = false;
+                        foreach (var attibute in n1.StatDefinitions)
+                        {
+                            if (regexString.IsMatch(attibute))
+                                isScionAscendancyNotable = true;
+                        }
+
+                        foreach (var attibute in n2.StatDefinitions)
+                        {
+                            if (regexString.IsMatch(attibute))
+                                isScionAscendancyNotable = true;
+                        }
+
+                        if (isScionAscendancyNotable && StartNodeDictionary.Keys.Contains(n1.Id))
+                        {
+                            if (!n2.Neighbor.Contains(n1))
+                            {
+                                n2.Neighbor.Add(n1);
+                            }
+                        }
+                        else if (isScionAscendancyNotable && StartNodeDictionary.Keys.Contains(n2.Id))
+                        {
+                            if (!n1.Neighbor.Contains(n2))
+                            {
+                                n1.Neighbor.Add(n2);
+                            }
+                        }
+                        else
+                        {
+                            if (!n2.Neighbor.Contains(n1))
+                            {
+                                n2.Neighbor.Add(n1);
+                            }
+                            if (!n1.Neighbor.Contains(n2))
+                            {
+                                n1.Neighbor.Add(n2);
+                            }
+                        }
+
+                        if (n1.IsAscendancyNode == n2.IsAscendancyNode)
+                        {
+                            n1.VisibleNeighbors.Add(n2);
+                            n2.VisibleNeighbors.Add(n1);
+                        }
                     }
                 }
 
-                NodeGroups = new List<SkillNodeGroup>();
-                foreach (var gp in inTree.groups)
+                foreach (var gp in PoESkillTree.Groups)
                 {
-                    var ng = new SkillNodeGroup();
-
-                    ng.OcpOrb = gp.Value.oo;
-                    ng.Position = new Vector2D(gp.Value.x, gp.Value.y);
-                    foreach (var node in gp.Value.n)
+                    foreach (var node in gp.Value.NodeIds)
                     {
-                        ng.Nodes.Add(Skillnodes[node]);
-                    }
-                    NodeGroups.Add(ng);
-                }
-                foreach (SkillNodeGroup group in NodeGroups)
-                {
-                    foreach (SkillNode node in group.Nodes)
-                    {
-                        node.SkillNodeGroup = group;
+                        gp.Value.Nodes.Add(Skillnodes[node]);
+                        Skillnodes[node].Group = gp.Value;
                     }
                 }
 
                 const int padding = 500; //This is to account for jewel range circles. Might need to find a better way to do it.
-                SkillTreeRect = new Rect2D(new Vector2D(inTree.min_x * 1.1 - padding, inTree.min_y * 1.1 - padding),
-                    new Vector2D(inTree.max_x * 1.1 + padding, inTree.max_y * 1.1 + padding));
+                SkillTreeRect = new Rect2D(new Vector2D(PoESkillTree.min_x * 1.1 - padding, PoESkillTree.min_y * 1.1 - padding),
+                    new Vector2D(PoESkillTree.max_x * 1.1 + padding, PoESkillTree.max_y * 1.1 + padding));
             }
 
             if (_persistentData.Options.ShowAllAscendancyClasses)
@@ -473,8 +418,8 @@ namespace POESKillTree.SkillTreeFiles
 
         public int Level
         {
-            get { return _level; }
-            set { SetProperty(ref _level, value); }
+            get => _level;
+            set => SetProperty(ref _level, value);
         }
 
         /// <summary>
@@ -486,10 +431,9 @@ namespace POESKillTree.SkillTreeFiles
             Dictionary<string, int> points = new Dictionary<string, int>()
             {
                 {"NormalUsed", 0},
-                {"NormalTotal", 21},
+                {"NormalTotal", 22},
                 {"AscendancyUsed", 0},
                 {"AscendancyTotal", 8},
-                {"ScionAscendancyChoices", 0}
             };
 
             var bandits = _persistentData.CurrentBuild.Bandits;
@@ -499,35 +443,28 @@ namespace POESKillTree.SkillTreeFiles
 
             foreach (var node in SkilledNodes)
             {
-                if (node.ascendancyName == null && !RootNodeList.Contains(node.Id))
+                if (!node.IsAscendancyNode && !node.IsRootNode)
                     points["NormalUsed"] += 1;
-                else if (node.ascendancyName != null && !node.IsAscendancyStart && !node.IsMultipleChoiceOption)
+                else if (node.IsAscendancyNode && !node.IsAscendancyStart && !node.IsMultipleChoiceOption)
                 {
                     points["AscendancyUsed"] += 1;
-                    points["NormalTotal"] += node.passivePointsGranted;
-                }
-                else if (node.IsMultipleChoiceOption)
-                {
-                    points["ScionAscendancyChoices"] += 1;
+                    points["NormalTotal"] += node.PassivePointsGranted;
                 }
             }
             return points;
         }
 
         public bool UpdateAscendancyClasses = true;
-        public int Chartype
+
+        public CharacterClass CharClass
         {
-            get { return _chartype; }
-            set
-            {
-                if (value < 0 || value > 6) return;
-                SetProperty(ref _chartype, value);
-            }
+            get => _charClass;
+            private set => SetProperty(ref _charClass, value);
         }
 
         public int AscType
         {
-            get { return _asctype; }
+            get => _asctype;
             set
             {
                 if (value < 0 || value > 3) return;
@@ -535,67 +472,64 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument", 
+        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
             Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
         private void ChangeAscClass(int toType)
         {
-            var remove = new List<SkillNode>();
-            var add = new HashSet<SkillNode>();
             var changedType = _asctype != toType;
             if (toType == 0)
             {
-                remove = SkilledNodes.Where(n => n.ascendancyName != null).ToList();
+                var remove = SkilledNodes.Where(n => n.IsAscendancyNode).ToList();
                 if (!_persistentData.Options.ShowAllAscendancyClasses)
                     DrawAscendancy = false;
                 SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
+                SkilledNodes.ExceptWith(remove);
             }
             else
             {
+                var remove = new List<SkillNode>();
                 SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
                 var sn = GetAscNode();
                 if (sn != null)
                 {
-                    add.Add(sn);
                     foreach (var n in SkilledNodes)
                     {
-                        if (sn.ascendancyName != n.ascendancyName && n.ascendancyName != null)
+                        if (sn.AscendancyName != n.AscendancyName && n.IsAscendancyNode)
                             remove.Add(n);
-                        add.Add(n);
                     }
                 }
+                SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
             }
 
-            add.ExceptWith(SkilledNodes);
-            add.ExceptWith(remove);
-
-            SkilledNodes.ExceptWith(remove);
-            SkilledNodes.UnionWith(add);
             if (changedType)
                 DrawAscendancyLayers();
         }
 
-        public void SwitchClass(int classType)
+        public void SwitchClass(CharacterClass charClass)
         {
-            if (classType < 0 || classType > 6) return;
-            if (classType == _chartype) return;
-            if(!CanSwitchClass(CharName[classType]))
-                SkilledNodes.Clear();
-            Chartype = classType;
-            var remove = SkilledNodes.Where(n => n.ascendancyName != null || RootNodeList.Contains(n.Id)).ToList();
-            var add = Skillnodes[(ushort)RootNodeClassDictionary[CharName[classType]]];
-            SkilledNodes.ExceptWith(remove);
-            SkilledNodes.Add(add);
+            if (charClass == CharClass)
+                return;
+            var canSwitch = CanSwitchClass(charClass);
+            CharClass = charClass;
+
+            var remove = canSwitch ? SkilledNodes.Where(n => n.IsAscendancyNode || n.IsRootNode) : SkilledNodes;
+            var add = Skillnodes[RootNodeClassDictionary[charClass]];
+            SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
             _asctype = 0;
         }
+
+        public string AscendancyClassName
+            => AscendancyClasses.GetAscendancyClassName(CharClass, AscType);
 
         public Dictionary<string, List<float>> HighlightedAttributes;
 
         public Dictionary<string, List<float>> SelectedAttributes
-            => GetAttributes(SkilledNodes, Chartype, Level, _persistentData.CurrentBuild.Bandits);
+            => GetAttributes(SkilledNodes, CharClass, Level, _persistentData.CurrentBuild.Bandits);
 
-        public static Dictionary<string, List<float>> GetAttributes(IEnumerable<SkillNode> skilledNodes, int chartype, int level, BanditSettings banditSettings)
+        public static Dictionary<string, List<float>> GetAttributes(
+            IEnumerable<SkillNode> skilledNodes, CharacterClass charClass, int level, BanditSettings banditSettings)
         {
-            var temp = GetAttributesWithoutImplicit(skilledNodes, chartype, banditSettings);
+            var temp = GetAttributesWithoutImplicit(skilledNodes, charClass, banditSettings);
 
             foreach (var a in ImplicitAttributes(temp, level))
             {
@@ -613,24 +547,118 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
+            float Subtotal = 0.0f;
+            float TotalIncrease = 0.0f;
+            if (temp.ContainsKey("+# Accuracy Rating"))
+            {
+                Subtotal += temp["+# Accuracy Rating"][0];
+            }
+            if (temp.ContainsKey("+# to Accuracy Rating"))
+            {
+                Subtotal += temp["+# to Accuracy Rating"][0];
+            }
+            if (temp.ContainsKey("#% increased Accuracy Rating with Wands"))
+            {
+                TotalIncrease += temp["#% increased Accuracy Rating with Wands"][0];
+            }
+            if (temp.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+            {
+                TotalIncrease += temp["#% increased Accuracy Rating while Dual Wielding"][0];
+            }
+            if (temp.ContainsKey("#% increased Global Accuracy Rating"))
+            {
+                TotalIncrease += temp["#% increased Global Accuracy Rating"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                Subtotal *= TotalIncrease;
+            }
+            if (temp.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
+            {
+                temp[GlobalSettings.DualWandAccKey][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add(GlobalSettings.DualWandAccKey, new List<float>(1) { Subtotal });
+            }
+            //MaxLife combined with increased life
+            Subtotal = 0.0f;
+            TotalIncrease = 0.0f;
+            if (temp.ContainsKey("+# to maximum Life"))
+            {
+                Subtotal = temp["+# to maximum Life"][0];
+            }
+            if (temp.ContainsKey("#% increased maximum Life"))
+            {
+                TotalIncrease = temp["#% increased maximum Life"][0];
+            }
+            if (TotalIncrease != 0.0f)
+            {
+                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                Subtotal *= TotalIncrease;
+            }
+            if (temp.ContainsKey(GlobalSettings.HPTotalKey))
+            {
+                temp[GlobalSettings.HPTotalKey][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add(GlobalSettings.HPTotalKey, new List<float>(1) { Subtotal });
+            }
+            float ESSubtotal = 0.0f;
+            float ESIncrease = 0.0f;
+            if (temp.ContainsKey("+# to maximum Energy Shield"))
+            {
+                ESSubtotal = temp["+# to maximum Energy Shield"][0];
+            }
+            if (temp.ContainsKey("#% increased maximum Energy Shield"))
+            {
+                ESIncrease = temp["#% increased maximum Energy Shield"][0];
+            }
+            if (temp.ContainsKey("+# to Intelligence"))
+            {
+                ESIncrease += temp["+# to Intelligence"][0] / 10.0f;
+            }
+            if (ESIncrease != 0.0f)
+            {
+                ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                ESSubtotal *= ESIncrease;
+            }
+            Subtotal += ESSubtotal;
+            if (temp.ContainsKey(GlobalSettings.HybridHPKey))
+            {
+                temp[GlobalSettings.HybridHPKey][0] = Subtotal;
+            }
+            else
+            {
+                temp.Add(GlobalSettings.HybridHPKey, new List<float>(1) { Subtotal });
+            }
+
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
+
             return temp;
         }
 
         public Dictionary<string, List<float>> SelectedAttributesWithoutImplicit
-            => GetAttributesWithoutImplicit(SkilledNodes, Chartype, _persistentData.CurrentBuild.Bandits);
+            => GetAttributesWithoutImplicit(SkilledNodes, CharClass, _persistentData.CurrentBuild.Bandits);
 
-        public static Dictionary<string, List<float>> GetAttributesWithoutImplicit(IEnumerable<SkillNode> skilledNodes, int chartype, BanditSettings banditSettings)
+        private static Dictionary<string, List<float>> GetAttributesWithoutImplicit(
+            IEnumerable<SkillNode> skilledNodes, CharacterClass charClass, BanditSettings banditSettings)
         {
             var temp = new Dictionary<string, List<float>>();
-            
+
             foreach (var attr in CharBaseAttributes[chartype].Union(BaseAttributes).Union(banditSettings.Rewards))
             {
-                if (!temp.ContainsKey(attr.Key))
-                    temp[attr.Key] = new List<float> { attr.Value };
-                else if (temp[attr.Key].Any())
-                    temp[attr.Key][0] += attr.Value;
+                if (!temp.ContainsKey(stat))
+                    temp[stat] = new List<float> { value };
+                else if (temp[stat].Any())
+                    temp[stat][0] += value;
             }
-            
+
             foreach (var node in skilledNodes)
             {
                 foreach (var attr in ExpandHybridAttributes(node.Attributes))
@@ -647,6 +675,11 @@ namespace POESKillTree.SkillTreeFiles
                         }
                     }
                 }
+            }
+
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
 
             return temp;
@@ -674,6 +707,10 @@ namespace POESKillTree.SkillTreeFiles
                     }
                 }
             }
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
 
             return temp;
         }
@@ -683,11 +720,10 @@ namespace POESKillTree.SkillTreeFiles
         /// Returns a task that finishes with a SkillTree object once it has been initialized.
         /// </summary>
         /// <param name="persistentData"></param>
-        /// <param name="dialogCoordinator">Can be null if the resulting tree is not used.</param>
         /// <param name="controller">Null if no initialization progress should be displayed.</param>
         /// <param name="assetLoader">Can optionally be provided if the caller wants to backup assets.</param>
         /// <returns></returns>
-        public static async Task<SkillTree> CreateAsync(IPersistentData persistentData, IDialogCoordinator dialogCoordinator = null,
+        public static async Task<SkillTree> CreateAsync(IPersistentData persistentData,
             ProgressDialogController controller = null, AssetLoader assetLoader = null)
         {
             controller?.SetProgress(0);
@@ -709,7 +745,7 @@ namespace POESKillTree.SkillTreeFiles
             var optsObj = await optsTask;
             controller?.SetProgress(0.25);
 
-            var tree = new SkillTree(persistentData, dialogCoordinator);
+            var tree = new SkillTree(persistentData);
             await tree.InitializeAsync(skillTreeObj, optsObj, controller, assetLoader);
             return tree;
         }
@@ -719,7 +755,7 @@ namespace POESKillTree.SkillTreeFiles
             var treeObj = "";
             if (File.Exists(path))
             {
-                treeObj = await FileEx.ReadAllTextAsync(path);
+                treeObj = await FileUtils.ReadAllTextAsync(path);
             }
             if (treeObj == "")
             {
@@ -728,14 +764,14 @@ namespace POESKillTree.SkillTreeFiles
             return treeObj;
         }
 
-        public IEnumerable<KeyValuePair<ushort, SkillNode>> FindNodesInRange(Vector2D mousePointer, int range = 50)
+        private IEnumerable<KeyValuePair<ushort, SkillNode>> FindNodesInRange(Vector2D mousePointer, int range = 50)
         {
             var nodes =
               Skillnodes.Where(n => ((n.Value.Position - mousePointer).Length < range)).ToList();
             if (!DrawAscendancy || AscType <= 0) return nodes;
             var asn = GetAscNode();
-            var bitmap = Assets["Classes" + asn.ascendancyName];
-            nodes = Skillnodes.Where(n => (n.Value.ascendancyName != null || (Math.Pow(n.Value.Position.X - asn.Position.X, 2) + Math.Pow(n.Value.Position.Y - asn.Position.Y, 2)) > Math.Pow((bitmap.Height * 1.25 + bitmap.Width * 1.25) / 2, 2)) && ((n.Value.Position - mousePointer).Length < range)).ToList();
+            var bitmap = Assets["Classes" + asn.AscendancyName];
+            nodes = Skillnodes.Where(n => (n.Value.IsAscendancyNode || (Math.Pow(n.Value.Position.X - asn.Position.X, 2) + Math.Pow(n.Value.Position.Y - asn.Position.Y, 2)) > Math.Pow((bitmap.Height * 1.25 + bitmap.Width * 1.25) / 2, 2)) && ((n.Value.Position - mousePointer).Length < range)).ToList();
             return nodes;
         }
 
@@ -748,42 +784,50 @@ namespace POESKillTree.SkillTreeFiles
             if (DrawAscendancy)
             {
                 var dnode = nodeList.First();
-                return
-                    nodeList.Where(x => x.Value.ascendancyName == AscendancyClasses.GetClassName(Chartype, AscType))
-                        .DefaultIfEmpty(dnode)
-                        .First()
-                        .Value;
+                return nodeList
+                    .Where(x => x.Value.AscendancyName == AscendancyClassName)
+                    .DefaultIfEmpty(dnode)
+                    .First()
+                    .Value;
             }
             return nodeList.First().Value;
         }
 
-        public void AllocateSkillNodes(IEnumerable<SkillNode> nodes)
+        public void ResetSkilledNodesTo(IReadOnlyCollection<SkillNode> nodes)
         {
-            if (nodes == null) return;
-            var skillNodes = nodes as IList<SkillNode> ?? nodes.ToList();
-            foreach (var i in skillNodes)
-            {
-                AllocateSkillNode(i, true);
-            }
-            SkilledNodes.UnionWith(skillNodes);
+            SkilledNodes.ResetTo(nodes);
+            AscType = SelectAscendancyFromNodes(nodes) ?? 0;
         }
 
-        public void AllocateSkillNode(SkillNode node, bool bulk = false)
+        public void AllocateSkillNodes(IReadOnlyCollection<SkillNode> toAdd)
         {
-            if (node == null) return;
+            var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
+            SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
+            if (SelectAscendancyFromNodes(toAdd) is int ascType)
+                AscType = ascType;
+        }
+
+        private int? SelectAscendancyFromNodes(IEnumerable<SkillNode> nodes)
+        {
+            int? ascendancy = null;
+            foreach (var node in nodes)
+            {
+                if (node.IsAscendancyStart)
+                    ascendancy = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName);
+            }
+            return ascendancy;
+        }
+
+        private IEnumerable<SkillNode> SelectAscendancyNodesToRemove(SkillNode node)
+        {
             if (node.IsAscendancyStart)
-            {
-                var remove = SkilledNodes.Where(x => x.ascendancyName != null && x.ascendancyName != node.ascendancyName).ToArray();
-                ChangeAscClass(AscendancyClasses.GetClassNumber(node.ascendancyName));
-                SkilledNodes.ExceptWith(remove);
-            }
-            else if (node.IsMultipleChoiceOption)
-            {
-                var remove = SkilledNodes.Where(x => x.IsMultipleChoiceOption && AscendancyClasses.GetStartingClass(node.Name) == AscendancyClasses.GetStartingClass(x.Name)).ToArray();
-                SkilledNodes.ExceptWith(remove);
-            }
-            if (!bulk)
-                SkilledNodes.Add(node);
+                return SkilledNodes.Where(x => x.IsAscendancyNode && x.AscendancyName != node.AscendancyName);
+            if (node.IsMultipleChoiceOption)
+                return SkilledNodes
+                    .Where(x => x.IsMultipleChoiceOption)
+                    .Where(x => AscendancyClasses.GetStartingClass(node.Name)
+                                == AscendancyClasses.GetStartingClass(x.Name));
+            return Enumerable.Empty<SkillNode>();
         }
 
         public void ForceRefundNode(SkillNode node)
@@ -847,6 +891,13 @@ namespace POESKillTree.SkillTreeFiles
         public List<SkillNode> GetShortestPathTo(SkillNode targetNode, IEnumerable<SkillNode> start)
         {
             var startNodes = start as IList<SkillNode> ?? start.ToList();
+            for (int index = 0; index < startNodes.Count; ++index)
+            {
+                if (startNodes[index].Attributes.ContainsKey("Intuitive Leaped"))//Remove Leaped Nodes from possible start locations
+                {
+                    startNodes.RemoveAt(index);
+                }
+            }
             if (startNodes.Contains(targetNode))
                 return new List<SkillNode>();
             var adjacent = GetAvailableNodes(startNodes);
@@ -885,9 +936,9 @@ namespace POESKillTree.SkillTreeFiles
                         continue;
                     if (distance.ContainsKey(connection))
                         continue;
-                    if (newNode.Spc.HasValue)
+                    if (newNode.Character.HasValue)
                         continue;
-                    if (newNode.Type == NodeType.Mastery)
+                    if (newNode.Type == PassiveNodeType.Mastery)
                         continue;
                     if (IsAscendantClassStartNode(newNode))
                         continue;
@@ -923,7 +974,7 @@ namespace POESKillTree.SkillTreeFiles
         /// </summary>
         public static bool IsAscendantClassStartNode(SkillNode node)
         {
-            return node.attributes.Any(s => AscendantClassStartRegex.IsMatch(s));
+            return node.StatDefinitions.Any(s => AscendantClassStartRegex.IsMatch(s));
         }
 
         /// <summary>
@@ -1036,9 +1087,9 @@ namespace POESKillTree.SkillTreeFiles
                     var regex = new Regex(search, RegexOptions.IgnoreCase);
                     var nodes =
                         Skillnodes.Values.Where(
-                            nd => (matchFct(nd.attributes, att => regex.IsMatch(att)) ||
-                                  regex.IsMatch(nd.Name) && nd.Type != NodeType.Mastery) &&
-                                  (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
+                            nd => (matchFct(nd.StatDefinitions, att => regex.IsMatch(att)) ||
+                                  regex.IsMatch(nd.Name) && nd.Type != PassiveNodeType.Mastery) &&
+                                  (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.AscendancyName == null || nd.AscendancyName == AscendancyClassName)) : nd.AscendancyName == null));
                     _nodeHighlighter.ResetHighlights(nodes, flag);
                     DrawHighlights();
                 }
@@ -1052,9 +1103,9 @@ namespace POESKillTree.SkillTreeFiles
                 search = search.ToLowerInvariant();
                 var nodes =
                     Skillnodes.Values.Where(
-                        nd => (matchFct(nd.attributes, att => att.ToLowerInvariant().Contains(search)) ||
-                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != NodeType.Mastery) &&
-                              (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.ascendancyName == GetAscendancyClass(SkilledNodes) || nd.ascendancyName == null)) : nd.ascendancyName == null));
+                        nd => (matchFct(nd.StatDefinitions, att => att.ToLowerInvariant().Contains(search)) ||
+                              nd.Name.ToLowerInvariant().Contains(search) && nd.Type != PassiveNodeType.Mastery) &&
+                              (DrawAscendancy ? (_persistentData.Options.ShowAllAscendancyClasses || (nd.AscendancyName == null || nd.AscendancyName == AscendancyClassName)) : nd.AscendancyName == null));
                 _nodeHighlighter.ResetHighlights(nodes, flag);
                 DrawHighlights();
             }
@@ -1110,7 +1161,7 @@ namespace POESKillTree.SkillTreeFiles
             };
             // +# to Strength", co["base_str"].Value<int>() }, { "+# to Dexterity", co["base_dex"].Value<int>() }, { "+# to Intelligence", co["base_int"].Value<int>() } };
 
-            // Every 10 strength grants 2% increased melee physical damage. 
+            // Every 10 strength grants 2% increased melee physical damage.
             var str = (int)attribs["+# to Strength"][0];
             if (str % (int)StrPerED > 0) str += (int)StrPerED - (str % (int)StrPerED);
             retval["#% increased Melee Physical Damage"] = new List<float> { str / StrPerED };
@@ -1171,53 +1222,40 @@ namespace POESKillTree.SkillTreeFiles
             return retval;
         }
 
-        public static void DecodeUrl(string url, out HashSet<SkillNode> skillednodes, out int chartype, out int ascType, ISkillTree skillTree)
-        {
-            DecodeUrlPrivate(url, out skillednodes, out chartype, out ascType, skillTree);
-        }
+        public static void DecodeUrl(
+            string url, out HashSet<SkillNode> skilledNodes, out CharacterClass charClass, ISkillTree skillTree)
+            => DecodeUrlPrivate(url, out skilledNodes, out charClass, skillTree);
 
-        public static BuildUrlData DecodeUrl(string url, out HashSet<SkillNode> skillednodes, ISkillTree skillTree)
-        {
-            int chartype;
-            int ascType;
-            return DecodeUrlPrivate(url, out skillednodes, out chartype, out ascType, skillTree);
-        }
+        private static BuildUrlData DecodeUrl(string url, out HashSet<SkillNode> skilledNodes, ISkillTree skillTree)
+            => DecodeUrlPrivate(url, out skilledNodes, out _, skillTree);
 
         public static BuildUrlData DecodeUrl(string url, ISkillTree skillTree)
-        {
-            HashSet<SkillNode> skillednodes;
-            int chartype;
-            int ascType;
-            return DecodeUrlPrivate(url, out skillednodes, out chartype, out ascType, skillTree);
-        }
+            => DecodeUrlPrivate(url, out _, out _, skillTree);
 
-        private static BuildUrlData DecodeUrlPrivate(string url, out HashSet<SkillNode> skillednodes, out int chartype,
-            out int ascType, ISkillTree skillTree)
+        private static BuildUrlData DecodeUrlPrivate(
+            string url, out HashSet<SkillNode> skilledNodes, out CharacterClass charClass, ISkillTree skillTree)
         {
             BuildUrlData buildData = skillTree.BuildConverter.GetUrlDeserializer(url).GetBuildData();
 
-            chartype = (byte)buildData.CharacterClassId;
-            ascType = (byte)buildData.AscendancyClassId;
+            charClass = buildData.CharacterClass;
+            var ascType = (byte)buildData.AscendancyClassId;
 
-            string charName = CharName[chartype];
-            SkillNode startnode = Skillnodes
-                .First(nd => nd.Value.Name.Equals(charName, StringComparison.InvariantCultureIgnoreCase)).Value;
-            skillednodes = new HashSet<SkillNode> { startnode };
+            SkillNode startnode = Skillnodes[RootNodeClassDictionary[charClass]];
+            skilledNodes = new HashSet<SkillNode> { startnode };
 
             if (ascType > 0)
             {
-                string ascendancyClass = skillTree.AscendancyClasses.GetClassName(chartype, ascType);
-                SkillNode ascNode = AscRootNodeList.First(nd => nd.ascendancyName == ascendancyClass);
-                skillednodes.Add(ascNode);
+                string ascendancyClass = skillTree.AscendancyClasses.GetAscendancyClassName(charClass, ascType);
+                SkillNode ascNode = AscRootNodeList.First(nd => nd.AscendancyName == ascendancyClass);
+                skilledNodes.Add(ascNode);
             }
 
             var unknownNodes = 0;
             foreach (var nodeId in buildData.SkilledNodesIds)
             {
-                SkillNode node;
-                if (Skillnodes.TryGetValue(nodeId, out node))
+                if (Skillnodes.TryGetValue(nodeId, out var node))
                 {
-                    skillednodes.Add(node);
+                    skilledNodes.Add(node);
                 }
                 else
                 {
@@ -1233,35 +1271,31 @@ namespace POESKillTree.SkillTreeFiles
             return buildData;
         }
 
-        public BuildUrlData LoadFromUrl(string url)
+        public void LoadFromUrl(string url)
         {
-            HashSet<SkillNode> snodes;
-            var data = DecodeUrl(url, out snodes, this);
-            Chartype = data.CharacterClassId;
-            AscType = data.AscendancyClassId;
-            SkilledNodes.Clear();
-            AllocateSkillNodes(snodes);
-
-            return data;
+            var data = DecodeUrl(url, out var skillNodes, this);
+            CharClass = data.CharacterClass;
+            ResetSkilledNodesTo(skillNodes);
         }
 
         public void Reset()
         {
             var prefs = _persistentData.Options.ResetPreferences;
-            var ascNodes = SkilledNodes.Where(n => n.ascendancyName != null).ToList();
             if (prefs.HasFlag(ResetPreferences.MainTree))
             {
-                SkilledNodes.Clear();
+                var rootNode = Skillnodes[RootNodeClassDictionary[CharClass]];
                 if (prefs.HasFlag(ResetPreferences.AscendancyTree))
-                    AscType = 0;
+                {
+                    SkilledNodes.ResetTo(new[] { rootNode });
+                }
                 else
-                    SkilledNodes.UnionWith(ascNodes);
-                var rootNode = Skillnodes.First(nd => nd.Value.Name.ToUpperInvariant() == CharName[_chartype]);
-                SkilledNodes.Add(rootNode.Value);
+                {
+                    var ascNodes = SkilledNodes.Where(n => n.IsAscendancyNode).ToList();
+                    SkilledNodes.ResetTo(ascNodes.Append(rootNode));
+                }
             }
-            else if (prefs.HasFlag(ResetPreferences.AscendancyTree))
+            if (prefs.HasFlag(ResetPreferences.AscendancyTree))
             {
-                SkilledNodes.ExceptWith(ascNodes);
                 AscType = 0;
             }
             if (prefs.HasFlag(ResetPreferences.Bandits))
@@ -1277,7 +1311,7 @@ namespace POESKillTree.SkillTreeFiles
             var nodes = new HashSet<SkillNode>();
             foreach (var entry in _nodeHighlighter.NodeHighlights)
             {
-                if (!RootNodeList.Contains(entry.Key.Id) && entry.Value.HasFlag(HighlightState.Checked))
+                if (!entry.Key.IsRootNode && entry.Value.HasFlag(HighlightState.Checked))
                 {
                     nodes.Add(entry.Key);
                 }
@@ -1293,7 +1327,7 @@ namespace POESKillTree.SkillTreeFiles
             var nodes = new HashSet<SkillNode>();
             foreach (var entry in _nodeHighlighter.NodeHighlights)
             {
-                if (!RootNodeList.Contains(entry.Key.Id) && entry.Value.HasFlag(HighlightState.Crossed))
+                if (!entry.Key.IsRootNode && entry.Value.HasFlag(HighlightState.Crossed))
                 {
                     nodes.Add(entry.Key);
                 }
@@ -1301,15 +1335,13 @@ namespace POESKillTree.SkillTreeFiles
             return nodes;
         }
 
-        public SkillNode GetCharNode()
-        {
-            return Skillnodes[GetCharNodeId()];
-        }
-        public ushort GetCharNodeId()
-        {
-            return (ushort)RootNodeClassDictionary[CharName[_chartype]];
-        }
-        public SkillNode GetAscNode()
+        private SkillNode GetCharNode()
+            => Skillnodes[GetCharNodeId()];
+
+        private ushort GetCharNodeId()
+            => RootNodeClassDictionary[CharClass];
+
+        private SkillNode GetAscNode()
         {
             var ascNodeId = GetAscNodeId();
             if (ascNodeId != 0)
@@ -1317,47 +1349,12 @@ namespace POESKillTree.SkillTreeFiles
             else
                 return null;
         }
-        public ushort GetAscNodeId()
+
+        private ushort GetAscNodeId()
         {
             if (_asctype <= 0 || _asctype > 3)
                 return 0;
-            var className = CharacterNames.GetClassNameFromChartype(_chartype);
-            var ascendancyClassName = AscendancyClasses.GetClassName(className, _asctype);
-            try
-            {
-                return Skillnodes.First(x => x.Value.ascendancyName == ascendancyClassName && x.Value.IsAscendancyStart).Key;
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
-        public string GetAscendancyClass(IEnumerable<SkillNode> skilledNodes)
-        {
-            foreach (var node in skilledNodes)
-            {
-                if (node.ascendancyName != null)
-                    return node.ascendancyName;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Splits multiline attribute strings (i.e. strings containing "\n" characters) into multiple attribute strings.
-        /// </summary>
-        /// <param name="attrs">An array of attribute strings to split.</param>
-        /// <returns>An array of attributes strings.</returns>
-        private static string[] SplitMultilineAttributes(string[] attrs)
-        {
-            if (attrs == null || attrs.Length == 0)
-                return attrs;
-
-            var split = new List<string>();
-            for (int i = 0; i < attrs.Length; ++i)
-                split.AddRange(attrs[i].Split('\n'));
-
-            return split.ToArray();
+            return AscRootNodeList.FirstOrDefault(x => x.AscendancyName == AscendancyClassName)?.Id ?? 0;
         }
 
         private HashSet<SkillNode> GetAvailableNodes(IEnumerable<SkillNode> skilledNodes)
@@ -1368,7 +1365,7 @@ namespace POESKillTree.SkillTreeFiles
             {
                 foreach (var skillNode in node.Neighbor)
                 {
-                    if (!CharName.Contains(skillNode.Name.ToUpperInvariant()) && !SkilledNodes.Contains(skillNode))
+                    if (!RootNodeList.Contains(skillNode.Id) && !SkilledNodes.Contains(skillNode))
                         availNodes.Add(skillNode);
                 }
             }
@@ -1382,8 +1379,7 @@ namespace POESKillTree.SkillTreeFiles
 
         public static IEnumerable<KeyValuePair<string, IReadOnlyList<float>>> ExpandHybridAttributes(KeyValuePair<string, IReadOnlyList<float>> attribute)
         {
-            List<string> expandedAttributes;
-            if (HybridAttributes.TryGetValue(attribute.Key, out expandedAttributes))
+            if (HybridAttributes.TryGetValue(attribute.Key, out List<string> expandedAttributes))
             {
                 foreach (var expandedAttribute in expandedAttributes)
                 {
@@ -1396,14 +1392,17 @@ namespace POESKillTree.SkillTreeFiles
             }
         }
 
-        public bool CanSwitchClass(string className)
+        private bool CanSwitchClass(CharacterClass charClass)
         {
-            int rootNodeValue;
-
-            RootNodeClassDictionary.TryGetValue(className.ToUpperInvariant(), out rootNodeValue);
+            RootNodeClassDictionary.TryGetValue(charClass, out var rootNodeValue);
             var classSpecificStartNodes = StartNodeDictionary.Where(kvp => kvp.Value == rootNodeValue).Select(kvp => kvp.Key).ToList();
 
-            return (from nodeId in classSpecificStartNodes let temp = GetShortestPathTo(Skillnodes[(ushort)nodeId], SkilledNodes) where !temp.Any() && Skillnodes[(ushort)nodeId].ascendancyName == null select nodeId).Any();
+            return (
+                from nodeId in classSpecificStartNodes
+                let temp = GetShortestPathTo(Skillnodes[nodeId], SkilledNodes)
+                where !temp.Any() && !Skillnodes[nodeId].IsAscendancyNode
+                select nodeId
+            ).Any();
         }
 
         #region ISkillTree members

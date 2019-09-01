@@ -75,7 +75,7 @@ namespace POESKillTree.Model.Items.Mods
 
         private static bool DetermineWeaponLocal(ModLocation location, string attr)
         {
-            if (attr == "#% increased Physical Damage")
+            if (attr == "#% increased Global Physical Damage")
             {
                 // Implicit increased physical damage is global
                 return location != ModLocation.Implicit;
