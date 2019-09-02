@@ -41,7 +41,6 @@ namespace PoESkillTree.Utils.Converter
         {
             new[] {"(Total)", PseudoTotal},
             new[] {"[Non-Tagged]", PseudoTotal},
-            new[] {"[SpellBlade", PseudoTotal},
             new[] {"Charged Dash Damage", PseudoTotal},
             new[] {"before tags", PseudoTotal},
             new[] {"SharedStrength", PseudoTotal},
