@@ -66,138 +66,27 @@
                                          DataContext="{Binding Belt}"/>
             </StackPanel>
 
-            <views:InventoryItemView Grid.Column="2"
-                                     Grid.Row="1"
-                                     Margin="71 0 0 108"
-                                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                     Width="98" Height="192"
-                                     DataContext="{Binding OffHand}" />
-            <views:InventoryItemView Grid.Column="2"
-                                     Grid.Row="1"
-                                     Margin="0 0 0 108"
-                                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                     Width="51" Height="51"
-                                     DataContext="{Binding Ring2}"/>
-            <views:InventoryItemView Grid.Column="2"
-                                     Grid.Row="1"
-                                     Margin="0 0 0 169"
-                                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                     Width="51" Height="51"
-                                     DataContext="{Binding Amulet}"/>
-            <views:InventoryItemView Grid.Column="2"
-                                     Grid.Row="1"
-                                     Margin="0 0 0 0"
-                                     HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                                     Width="98" Height="98"
-                                     DataContext="{Binding Boots}" />
+        <StackPanel Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Grid.Row="2"
+                    Orientation="Horizontal"
+                    Margin="0 10 0 0"
+                    HorizontalAlignment="Center" VerticalAlignment="Top">
+            <views:InventoryFlaskView Margin="0 0 -2 0"
+                                      DataContext="{Binding Flasks[0]}" />
+            <views:InventoryFlaskView Margin="0 0 -2 0"
+                                      DataContext="{Binding Flasks[1]}" />
+            <views:InventoryFlaskView Margin="0 0 -2 0"
+                                      DataContext="{Binding Flasks[2]}" />
+            <views:InventoryFlaskView Margin="0 0 -2 0"
+                                      DataContext="{Binding Flasks[3]}" />
+            <views:InventoryFlaskView Margin="0"
+                                      DataContext="{Binding Flasks[4]}" />
+        </StackPanel>
 
-            <views:BinView Grid.Column="0" Grid.ColumnSpan="3"
-                           Grid.Row="2"
-                           Margin="0 20 0 0"
-                           HorizontalAlignment="Right" />
-        </Grid>
-    </Border>
-    <Border BorderBrush="Black" BorderThickness="0">
-            <Grid  Margin="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="41"/>
-                        <ColumnDefinition Width="41"/>
-                        <ColumnDefinition Width="41"/>
-                        <ColumnDefinition Width="41"/>
-                        <ColumnDefinition Width="41"/>
-                        <ColumnDefinition Width="41"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <!-- 					<TextBlock  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">Hybrid Threshold Jewels</TextBlock>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="1"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_StrDex_Scion}" ToolTip="Scion Jewel Slot south of starting area(Str+Dex)"/>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="2"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_StrDex_Duelist}" ToolTip="Jewel slot south of Duelist starting area(Str+Dex)"/>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="3"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_DexInt_Shadow}" ToolTip="Jewel slot east of Shadow starting area(Int+Dex)"/>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="4"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_DexInt_Scion}" ToolTip="Scion jewel slot east of starting area(Int+Dex)"/>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="5"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_StrInt_Templar}" ToolTip="Jewel slot west of Templar starting area(Str+Int)"/>
-                    <views:InventoryItemView Grid.Row="0" Grid.Column="6"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_StrInt_Scion}" ToolTip="Scion Jewel Slot west of starting area(Str+Int"/>
-
-                    <TextBlock  Grid.Row="1" Grid.Column="0">Pure Str Threshold Jewels</TextBlock>
-                    <views:InventoryItemView Grid.Row="1" Grid.Column="1"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Str_WarriorDuelist}" ToolTip="Jewel slot south-west of Scion area; At road between Marauder and Duelist areas"/>
-                    <views:InventoryItemView Grid.Row="1" Grid.Column="2"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Str_WarriorTemplarScion}" ToolTip="Jewel slot west of Scion area; At road between Marauder and Templar areas"/>
-                    <views:InventoryItemView Grid.Row="1" Grid.Column="3"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Str_FarWarTempScion}" ToolTip="Jewel slot far west of Scion area; At road between Marauder and Templar areas; Nearest jewel slot to Resolute Technique"/>
-                    <views:InventoryItemView Grid.Row="1" Grid.Column="4"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Str_Warrior}" ToolTip="Jewel slot west of Marauder area"/>
-
-                    <TextBlock  Grid.Row="2" Grid.Column="0">Pure Int Threshold Jewels</TextBlock>
-                    <views:InventoryItemView Grid.Row="2" Grid.Column="1"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Int_Witch}" ToolTip="Jewel Slot directly north of Witch starting area"/>
-                    <views:InventoryItemView Grid.Row="2" Grid.Column="2"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Int_Scion}" ToolTip="Jewel slot far NE of Scion Starting Area; Nearest Jewel to CI area"/>
-                    <views:InventoryItemView Grid.Row="2" Grid.Column="3"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Int_WitchShadow}" ToolTip="NE from center jewel slot between Witch and shadow areas"/>
-                    <views:InventoryItemView Grid.Row="2" Grid.Column="4"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Int_TemplarWitch}" ToolTip="Jewel slot north-west of Scion area; At road between Templar and Witch areas"/>
-
-                    <TextBlock  Grid.Row="3" Grid.Column="0">Pure Dex Threshold Jewels</TextBlock>
-                    <views:InventoryItemView Grid.Row="3" Grid.Column="1"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Dex_ShadowRanger}" ToolTip="Jewel Slot east of Scion starting area between Shadow and Ranger areas(above Ranger area); Nearest jewel slot to Charisma passive node"/>
-                    <views:InventoryItemView Grid.Row="3" Grid.Column="2"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Dex_Ranger}" ToolTip="Jewel slot east of Ranger area"/>
-                    <views:InventoryItemView Grid.Row="3" Grid.Column="3"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Dex_RangerDuelist}" ToolTip="Jewel slot south-east of Scion area; At road between Ranger and Duelist areas"/>
-
-                    <TextBlock  Grid.Row="4" Grid.Column="0">Non-Threshold Jewels</TextBlock>
-                    <views:InventoryItemView Grid.Row="4" Grid.Column="1"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Neutral_IronGrip}" ToolTip="Jewel slot far south-west of center; Located between Marauder and Duelist areas next to Iron Grip"/>
-                    <views:InventoryItemView Grid.Row="4" Grid.Column="2"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Neutral_PointBlank}" ToolTip="Jewel slot far south-east of center; Located between Duelist and Ranger areas next to Point Blank"/>
-                    <views:InventoryItemView Grid.Row="4" Grid.Column="3"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Neutral_MinionInstability}" ToolTip="Jewel slot far north-west of center; Located between Templar and Witch areas next to Minion-Instability"/>
-                    <views:InventoryItemView Grid.Row="4" Grid.Column="4"
-                    Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                    Width="41" Height="38" DataContext="{Binding JSlot_Neutral_Acrobatics}" ToolTip="Jewel Slot far east of Scion starting area between Shadow and Ranger areas; Nearest jewel slot to Acrobatics Jewel"/> -->
-                </Grid>
-            </Grid>
-        </Border>
-</StackPanel>
+        <views:BinView Grid.Column="2"
+                       Grid.Row="2"
+                       Margin="0 10 0 0"
+                       HorizontalAlignment="Right" VerticalAlignment="Top" />
+    </Grid>
 </UserControl>

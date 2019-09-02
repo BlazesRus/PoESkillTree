@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using log4net;
 using MoreLinq;
 using Newtonsoft.Json.Linq;
-using PoESkillTree.Utils;
+using NLog;
 using PoESkillTree.Controls;
+using PoESkillTree.Engine.Utils;
 using PoESkillTree.Model.Builds;
-
+using PoESkillTree.Utils;
 using static PoESkillTree.Model.Serialization.SerializationConstants;
 
 namespace PoESkillTree.Model.Serialization
@@ -18,7 +18,7 @@ namespace PoESkillTree.Model.Serialization
     /// </summary>
     public class PersistentDataSerializer
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(PersistentDataSerializer));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         private readonly IPersistentData _persistentData;
 
@@ -114,7 +114,7 @@ namespace PoESkillTree.Model.Serialization
             }
             catch (Exception e)
             {
-                Log.Error("Could not serialize stash", e);
+                Log.Error(e, "Could not serialize stash");
             }
         }
 

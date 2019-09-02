@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using log4net;
-using PoESkillTree.GameModel.Items;
+using NLog;
+using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
@@ -11,7 +11,7 @@ namespace PoESkillTree.Model.Items
     /// </summary>
     public class UniqueBase : IItemBase
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(UniqueBase));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         public int Level { get; }
         public int RequiredStrength => _base.RequiredStrength;

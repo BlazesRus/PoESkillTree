@@ -8,18 +8,20 @@ using System.Text.RegularExpressions;
 using log4net;
 using MB.Algodat;
 using Newtonsoft.Json.Linq;
-using PoESkillTree.GameModel.Items;
-using PoESkillTree.GameModel.Modifiers;
-using PoESkillTree.GameModel.Skills;
+using NLog;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.Modifiers;
+using PoESkillTree.Engine.GameModel.Skills;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
-using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
 {
     public class Item : Notifier, IRangeProvider<int>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Item));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         private ItemSlot _slot;
         public ItemSlot Slot
@@ -210,40 +212,6 @@ namespace PoESkillTree.Model.Items
             _y = source._y;
             Width = source.Width;
             Height = source.Height;
-        }
-
-        public Item(JewelItem source)
-        {
-            //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
-            _slot = ItemSlot.SkillTree;
-            ItemClass = source.ItemClass;
-            Tags = source.Tags;
-            _frame = source.Frame;
-            _isEnabled = source.IsEnabled;
-            //_properties, _requirements, _explicit-, _implicit-, _craftedMods
-            _properties = new ObservableCollection<ItemMod>(source.Properties);
-            _requirements = new ObservableCollection<ItemMod>(source.Requirements);
-            _explicitMods = source.ExplicitMods.ToList();
-            _implicitMods = source.ImplicitMods.ToList();
-            _craftedMods = source.CraftedMods.ToList();
-            //_flavourText, _nameLine, _typeLine, _socketGroup, _baseType, _iconUrl, _image
-            _flavourText = source.FlavourText;
-            _nameLine = source.NameLine;
-            _typeLine = source.TypeLine;
-            BaseType = source.BaseType;
-            _iconUrl = source.IconUrl;
-            Image = source.Image;
-            //JsonBase, _x, _y, Width, Height
-            JsonBase = new JObject(source.JsonBase);
-            _x = source.X;
-            _y = source.Y;
-            Width = source.Width;
-            Height = source.Height;
-        }
-
-        public static explicit operator Item(JewelItem source)
-        {
-            return new Item(source);
         }
 
         public Item(EquipmentData equipmentData, JObject val, ItemSlot itemSlot = ItemSlot.Unequipable)

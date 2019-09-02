@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using PoESkillTree.GameModel.Items;
-using PoESkillTree.GameModel.PassiveTree;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.SkillTreeFiles;
 using OldItem = PoESkillTree.Model.Items.Item;
@@ -8,7 +8,7 @@ using OldItem = PoESkillTree.Model.Items.Item;
 namespace PoESkillTree.Model
 {
     /// <summary>
-    /// The PoESkillTree.GameModel project should at some point replace all game-related model classes.
+    /// The PoESkillTree.Engine.GameModel project should at some point replace all game-related model classes.
     /// Because the Computation projects already use the new model, this class has to exist to convert between
     /// the old and new model.
     /// </summary>
@@ -22,6 +22,7 @@ namespace PoESkillTree.Model
                 skillNode.IsAscendancyNode,
                 !skillNode.IsRootNode && !skillNode.IsAscendancyStart && !skillNode.IsMultipleChoiceOption,
                 skillNode.PassivePointsGranted,
+                new NodePosition(skillNode.Position.X, skillNode.Position.Y), 
                 skillNode.StatDefinitions);
 
         public static Item Convert(OldItem oldItem)

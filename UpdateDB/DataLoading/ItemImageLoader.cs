@@ -2,7 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using log4net;
+using NLog;
+using PoESkillTree.Engine.Utils.WikiApi;
 using PoESkillTree.Utils.WikiApi;
 
 namespace UpdateDB.DataLoading
@@ -12,8 +13,7 @@ namespace UpdateDB.DataLoading
     /// </summary>
     public class ItemImageLoader : DataLoader
     {
-
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ItemImageLoader));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         // the wiki's item classes for which images are retrieved
         private static readonly IReadOnlyList<string> RelevantWikiClasses = new[]

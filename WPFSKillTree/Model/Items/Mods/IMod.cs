@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PoESkillTree.Model.Items.Enums;
+using PoESkillTree.Engine.GameModel.Modifiers;
 
 namespace PoESkillTree.Model.Items.Mods
 {

@@ -18,18 +18,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using EnumsNET;
-using log4net;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
 using MoreLinq;
-using PoESkillTree.GameModel;
-using PoESkillTree.GameModel.PassiveTree;
+using NLog;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Computation;
 using PoESkillTree.Computation.ViewModels;
 using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.ItemFilter.Views;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
@@ -55,7 +55,7 @@ namespace PoESkillTree.Views
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(MainWindow));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The set of keys of which one needs to be pressed to highlight similar nodes on hover.
@@ -95,16 +95,6 @@ namespace PoESkillTree.Views
         {
             get => _inventoryViewModel;
             private set => SetProperty(ref _inventoryViewModel, value);
-        }
-*/
-
-            /// <summary>
-        /// The item information equipped in skilltree(Shared inside Static Instance)
-        /// </summary>
-        public InventoryViewModel InventoryViewModel
-        {
-            get => GlobalSettings.ItemInfoVal;
-            private set => SetProperty(ref GlobalSettings.ItemInfoVal, value);
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel();
@@ -267,7 +257,6 @@ namespace PoESkillTree.Views
                     PersistentData.CurrentBuild.Bandits.PropertyChanged -= CurrentBuildOnPropertyChanged;
                 }
             };
-
         }
 
         private async void CurrentBuildOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -580,7 +569,6 @@ namespace PoESkillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
-            GlobalSettings.SharedDialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             // Set theme & accent.
@@ -1010,7 +998,7 @@ namespace PoESkillTree.Views
                     catch (Exception ex)
                     {
                         assetLoader.RestoreBackup();
-                        Log.Error("Exception while downloading skill tree assets", ex);
+                        Log.Error(ex, "Exception while downloading skill tree assets");
                         await this.ShowErrorAsync(L10n.Message("An error occurred while downloading assets."), ex.Message);
                     }
                     await controller.CloseAsync();

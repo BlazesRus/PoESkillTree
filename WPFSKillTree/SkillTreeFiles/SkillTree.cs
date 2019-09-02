@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
-using log4net;
-using PoESkillTree.GameModel;
-using PoESkillTree.GameModel.PassiveTree;
-using PoESkillTree.Utils.Extensions;
 using PoESkillTree.Common;
 using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.Engine.Utils;
+using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Utils.UrlProcessing;
@@ -29,8 +29,6 @@ namespace PoESkillTree.SkillTreeFiles
 {
     public partial class SkillTree : Notifier, ISkillTree
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SkillTree));
-
         public Vector2D AscButtonPosition = new Vector2D();
         /// <summary>
         /// Nodes with an attribute matching this regex are one of the "Path of the ..." nodes connection Scion
@@ -651,7 +649,8 @@ namespace PoESkillTree.SkillTreeFiles
         {
             var temp = new Dictionary<string, List<float>>();
 
-            foreach (var attr in CharBaseAttributes[chartype].Union(BaseAttributes).Union(banditSettings.Rewards))
+            foreach (var (stat, value) in
+                CharBaseAttributes[charClass].Union(BaseAttributes).Union(banditSettings.Rewards))
             {
                 if (!temp.ContainsKey(stat))
                     temp[stat] = new List<float> { value };

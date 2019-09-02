@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -36,14 +34,11 @@ using System.Windows;
     // app, or any theme specific resource dictionaries)
 )]
 
-// Location of Log4Net configuration file
-[assembly: log4net.Config.XmlConfigurator(ConfigFile = "Log4Net.config", Watch = true)]
-
 // Updated by release.xml. DO NOT MODIFY!
 [assembly: AssemblyDescription("Passive skill tree planner for Path of Exile®")]
 [assembly: AssemblyCompany("PoESkillTree Team")]
 [assembly: AssemblyProduct("PoESkillTree - War for the Atlas")]
 [assembly: AssemblyCopyright("Copyright © 2012-2019 PoESkillTree Team")]
 [assembly: AssemblyVersion("2.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.2223")]
-[assembly: AssemblyInformationalVersion("3.0.0-alpha.3")]
+[assembly: AssemblyFileVersion("3.0.0.2293")]
+[assembly: AssemblyInformationalVersion("3.0.0-alpha.4")]

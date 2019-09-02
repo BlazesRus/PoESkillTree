@@ -296,6 +296,8 @@ PoESkillTree.exe.config
 # contains ReSharper specific settings
 *.csproj.DotSettings
 
+launchSettings.json
+
 #############
 ## Windows detritus
 #############

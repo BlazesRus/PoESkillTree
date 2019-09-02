@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using log4net;
-using PoESkillTree.Computation.Common.Builders;
-using PoESkillTree.Computation.Core;
-using PoESkillTree.Computation.Parsing;
-using PoESkillTree.GameModel;
-using PoESkillTree.GameModel.Items;
-using PoESkillTree.GameModel.Skills;
-using PoESkillTree.Utils;
-using PoESkillTree.Utils.Extensions;
+using NLog;
 using PoESkillTree.Computation.Model;
 using PoESkillTree.Computation.ViewModels;
+using PoESkillTree.Engine.Computation.Common.Builders;
+using PoESkillTree.Engine.Computation.Core;
+using PoESkillTree.Engine.Computation.Parsing;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.Model;
 using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.Computation
 {
     public class ComputationInitializer
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ComputationInitializer));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         private readonly GameDataWithOldTreeModel _gameData;
 
@@ -124,6 +124,6 @@ namespace PoESkillTree.Computation
 
         public void SetupPeriodicActions()
             => _calculator.PeriodicallyRemoveUnusedNodes(
-                ex => Log.Error("Exception while removing unused calculation nodes", ex));
+                ex => Log.Error(ex, "Exception while removing unused calculation nodes"));
     }
 }
