@@ -378,16 +378,10 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         /// </summary>
         public SkillTree TreeInfo;
 
-
         /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
-
-        /// <summary>
-        /// The item information sent along to enable TreePlusItemsMode to be used
-        /// </summary>
-        private InventoryViewModel _ItemInfo;
 
         /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
@@ -608,10 +602,10 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             };
 
             _attributes = CreatePossibleAttributes().ToList();
-            if (!_attributes.Contains(GlobalSettings.DualWandAccKey)) { _attributes.Add(GlobalSettings.DualWandAccKey); }
+            //if (!_attributes.Contains(GlobalSettings.DualWandAccKey)) { _attributes.Add(GlobalSettings.DualWandAccKey); }
             //if (!_attributes.Contains(GlobalSettings.PseudoAccKey)) { _attributes.Add(GlobalSettings.PseudoAccKey); }
-            if (!_attributes.Contains(GlobalSettings.HPTotalKey)) { _attributes.Add(GlobalSettings.HPTotalKey); }
-            if (!_attributes.Contains(GlobalSettings.HybridHPKey)) { _attributes.Add(GlobalSettings.HybridHPKey); }
+            //if (!_attributes.Contains(GlobalSettings.HPTotalKey)) { _attributes.Add(GlobalSettings.HPTotalKey); }
+            //if (!_attributes.Contains(GlobalSettings.HybridHPKey)) { _attributes.Add(GlobalSettings.HybridHPKey); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),

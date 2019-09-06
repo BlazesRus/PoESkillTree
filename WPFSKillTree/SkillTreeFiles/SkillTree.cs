@@ -274,6 +274,7 @@ namespace PoESkillTree.SkillTreeFiles
                 AscRootNodeList = new HashSet<SkillNode>();
                 RootNodeList = new List<ushort>();
 
+                GlobalSettings.JewelStorage = new JewelData();
                 if (PoESkillTree.Root != null)
                 {
                     foreach (var i in PoESkillTree.Root.NodeIdsOut)

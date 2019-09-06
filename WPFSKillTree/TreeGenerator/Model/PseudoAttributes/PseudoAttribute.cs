@@ -11,19 +11,19 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         /// <summary>
         /// Gets the name of the PseudoAttribute.
         /// </summary>
-        public string Name { get; }
+        public string Name { get; private set; }
 
         /// <summary>
         /// Gets the list of Attributes this PseudoAttribute contains.
         /// </summary>
-        public List<Attribute> Attributes { get; }
+        public List<Attribute> Attributes { get; private set;}
 
         /// <summary>
         /// Gets the name of the group this PseudoAttribute belongs to.
         /// </summary>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         // Used in group and sort descriptions.
-        public string Group { get; }
+        public string Group { get; private set;}
 
         /// <summary>
         /// Creates a new PseudoAttribute with the given name and group
@@ -39,5 +39,35 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         }
 
         public override string ToString() => Name;
+
+        /// <summary>
+        /// Calculates updated value
+        /// </summary>
+        /// <param name="attrlist">The attrlist.</param>
+        public float CalculateValue(Dictionary<string, List<float>> attrlist)
+        {
+            float TotalStat = 0.0f;
+            string AttributeName;
+            float Multiplier;
+            List<float> RetrievedVal;
+            foreach (var Attribute in Attributes)
+            {
+                AttributeName = Attribute.Name;
+                Multiplier = Attribute.ConversionMultiplier;
+                attrlist.TryGetValue(AttributeName, out RetrievedVal);
+                if (RetrievedVal != null && RetrievedVal.Count == 1)
+                {
+                    TotalStat += Multiplier * RetrievedVal[0];
+                }
+            }
+            return TotalStat;
+        }
+
+        public PseudoAttribute(PseudoAttribute Target, string name)
+        {
+            Name = name;
+            Group = Target.Group;
+            Attributes = Target.Attributes;
+        }
     }
 }

@@ -89,12 +89,13 @@ namespace PoESkillTree.Views
             private set => SetProperty(ref _itemAttributes, value);
         }
 
-/*
-        private InventoryViewModel _inventoryViewModel;
+        /// <summary>
+        /// The item information equipped in skilltree(Shared inside Static Instance)
+        /// </summary>
         public InventoryViewModel InventoryViewModel
         {
-            get => _inventoryViewModel;
-            private set => SetProperty(ref _inventoryViewModel, value);
+            get => GlobalSettings.ItemInfoVal;
+            private set => SetProperty(ref GlobalSettings.ItemInfoVal, value);
         }
 
         public StashViewModel StashViewModel { get; } = new StashViewModel();
@@ -569,6 +570,7 @@ namespace PoESkillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
+            GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             // Set theme & accent.
