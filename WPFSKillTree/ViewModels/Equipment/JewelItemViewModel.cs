@@ -1,11 +1,9 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop;
-using PoESkillTree.GameModel.Items;
-using PoESkillTree.Common.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items;
-using Item = PoESkillTree.Model.Items.Item;
+using System.Windows;
+using GongSolutions.Wpf.DragDrop;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

@@ -53,8 +53,6 @@ namespace PoESkillTree.Model.Serialization
 
         public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 
-        public abstract Task InitializeAsync(IDialogCoordinator dialogCoordinator);
-
         public abstract void Save();
 
         public abstract void SaveFolders();
@@ -68,5 +66,11 @@ namespace PoESkillTree.Model.Serialization
         public abstract Task<PoEBuild> ImportBuildAsync(string buildXml);
 
         public abstract string ExportBuild(PoEBuild build);
+
+        public string StatTrackingSavePath
+        {
+            get { return GlobalSettings.StatTrackingSavePathVal; }
+            set { SetProperty(ref GlobalSettings.StatTrackingSavePathVal, value); }
+        }
     }
 }

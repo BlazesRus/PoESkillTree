@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
 using MB.Algodat;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -123,8 +122,6 @@ namespace PoESkillTree.Model.Items
         public IItemBase BaseType { get; }
 
         private readonly string _iconUrl;
-
-        public string IconUrl { get => _iconUrl; }
 
         public ItemImage Image { get; }
 

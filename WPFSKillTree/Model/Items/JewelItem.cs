@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using log4net;
 using MB.Algodat;
 using Newtonsoft.Json.Linq;
-using PoESkillTree.GameModel.Items;
-using PoESkillTree.GameModel.Modifiers;
-using PoESkillTree.GameModel.Skills;
+using NLog;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.Modifiers;
+using PoESkillTree.Engine.GameModel.Skills;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
-using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
 {
@@ -22,9 +23,12 @@ namespace PoESkillTree.Model.Items
     /// Implements the <see cref="MB.Algodat.IRangeProvider{System.Int32}"/></summary>
     public class JewelItem : Notifier, IRangeProvider<int>
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Item));
+        private static readonly ILogger Log = LogManager.GetCurrentClassLogger();
 
         private ushort _slot;
+
+        /// <summary>Gets or sets the jewel slot index(-1 = not equipped to skill tree).</summary>
+        /// <value> Current index of jewel if slotted(-1 = not equipped to skill tree).</value>
         public ushort Slot
         {
             get => _slot;
@@ -188,7 +192,7 @@ namespace PoESkillTree.Model.Items
         public JewelItem(Item source)
         {
             //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
-            _slot = 0;
+            _slot = -1;
             ItemClass = source.ItemClass;
             Tags = source.Tags;
             _frame = source.Frame;
@@ -204,7 +208,6 @@ namespace PoESkillTree.Model.Items
             _nameLine = source.NameLine;
             _typeLine = source.TypeLine;
             BaseType = source.BaseType;
-            _iconUrl = source.IconUrl;
             Image = source.Image;
             //JsonBase, _x, _y, Width, Height
             JsonBase = new JObject(source.JsonBase);
@@ -253,7 +256,7 @@ namespace PoESkillTree.Model.Items
             Height = source.Height;
         }
 
-        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool IsAbyssJewel=false)
+        public JewelItem(EquipmentData equipmentData, JObject val, short itemSlot = 0, bool IsAbyssJewel=false)
         {
             JsonBase = val;
             Slot = itemSlot;

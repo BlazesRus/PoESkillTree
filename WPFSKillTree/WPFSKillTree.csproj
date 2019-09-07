@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <ProductVersion>8.0.30703</ProductVersion>
     <OutputType>WinExe</OutputType>
@@ -24,6 +24,12 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
     <Exec Command="$(ProjectDir)build-locale.bat $(TargetDir)" />
   </Target>
+  <ItemGroup>
+    <Compile Remove="TreeGenerator\Views\PseudoCalcGeneratorTab.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="TreeGenerator\Views\PseudoCalcGeneratorTab.xaml" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.6.6" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
