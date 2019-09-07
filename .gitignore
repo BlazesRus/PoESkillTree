@@ -445,3 +445,7 @@ WPFSKillTree/Data/Assets/PSGroupBackground1.png
 WPFSKillTree/Data/Assets/PSGroupBackground3.png
 WPFSKillTree/Data/Assets/PSLineDeco.png
 CodeMaid.config
+
+WPFSKillTree/TreeGenerator/Views/PseudoCalcGeneratorTab.xaml
+
+WPFSKillTree/TreeGenerator/Views/PseudoCalcGeneratorTab.xaml.cs

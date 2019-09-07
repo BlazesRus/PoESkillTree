@@ -21,6 +21,7 @@ using PoESkillTree.Utils;
 using PoESkillTree.ViewModels.Equipment;
 using PoESkillTree.ViewModels;
 using PoESkillTree.Model.Items;
+using PoESkillTree.Engine.GameModel.Items;
 
 namespace PoESkillTree
 {
@@ -2779,7 +2780,7 @@ namespace PoESkillTree
         /// <summary>
         /// Saved slot for item slot that are removing Intuitive leap support from node id on tree
         /// </summary>
-        public static PoESkillTree.GameModel.Items.ItemSlot RemovingIntLeapJewels = 0;
+        public static ItemSlot RemovingIntLeapJewels = 0;
         /// <summary>
         /// If true, automatically adds skilltree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
