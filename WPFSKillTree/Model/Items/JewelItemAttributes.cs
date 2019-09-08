@@ -241,7 +241,7 @@ namespace PoESkillTree.Model.Items
             return mods;
         }
 
-        private JewelItem AddItem(JObject val, short islot)
+        private JewelItem AddItem(JObject val, ushort islot)
         {
             var item = new JewelItem(_equipmentData, val, islot);
             Equip.Add(item);

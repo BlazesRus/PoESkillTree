@@ -192,7 +192,7 @@ namespace PoESkillTree.Model.Items
         public JewelItem(Item source)
         {
             //_slot, ItemClass, Tags, _gems, _frame, _isEnabled
-            _slot = -1;
+            _slot = 0;
             ItemClass = source.ItemClass;
             Tags = source.Tags;
             _frame = source.Frame;
@@ -256,7 +256,7 @@ namespace PoESkillTree.Model.Items
             Height = source.Height;
         }
 
-        public JewelItem(EquipmentData equipmentData, JObject val, short itemSlot = 0, bool IsAbyssJewel=false)
+        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool IsAbyssJewel=false)
         {
             JsonBase = val;
             Slot = itemSlot;

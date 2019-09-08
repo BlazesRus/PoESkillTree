@@ -63,8 +63,17 @@ namespace PoESkillTree.Views
         private static readonly Key[] HighlightByHoverKeys = { Key.LeftShift, Key.RightShift };
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private IExtendedDialogCoordinator _dialogCoordinator
+        {
+            get { return GlobalSettings.SharedDialogCoordinator; }
+            set
+            {
+                if (value == GlobalSettings.SharedDialogCoordinator)
+                    return;
+                GlobalSettings.SharedDialogCoordinator = value;
+            }
+        }
 
-        private IExtendedDialogCoordinator _dialogCoordinator;
         public IPersistentData PersistentData { get; } = App.PersistentData;
 
         private readonly List<Attribute> _attiblist = new List<Attribute>();
@@ -371,6 +380,8 @@ namespace PoESkillTree.Views
         private void RemoveFromGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
+            string SelectedAttrName;
+            int index;
             foreach (var o in lbAttr.SelectedItems)
             {
                 SelectedAttrName = o.ToString();
@@ -541,7 +552,6 @@ namespace PoESkillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
-            GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             // Set theme & accent.
@@ -1241,6 +1251,9 @@ namespace PoESkillTree.Views
                 }
             }
             AttributeTotals = GlobalSettings.UpdateSubtotals(Tree.SelectedAttributes);
+            if (GlobalSettings.JewelInfo.NotSetup) {
+                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false; }
+
             foreach (var Element in AttributeTotals.Keys)
             {
                 if (Tree.SelectedAttributes.ContainsKey(Element))
@@ -1255,6 +1268,12 @@ namespace PoESkillTree.Views
                     TargetValue.Add(AttributeTotals[Element]);
                     Tree.SelectedAttributes.Add(Element, TargetValue);
                 }
+            }
+
+            attritemp = JewelData.StatUpdater(attritemp, Tree);
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                attritemp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(attritemp);
             }
 
             foreach (var item in Tree.SelectedAttributes)

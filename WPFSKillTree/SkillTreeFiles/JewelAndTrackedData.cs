@@ -32,26 +32,42 @@ namespace PoESkillTree
     /// <seealso cref="PoESkillTree.Utils.Notifier" />
     public class JewelNodeData : Notifier
     {
-        /// <summary>
-        /// The item model
-        /// </summary>
-        public JewelItemViewModel ItemModel;
-        /// <summary>
-        /// Gets the jewel data.
-        /// </summary>
-        /// <value>The jewel data.</value>
-        public JewelItem JewelData { get { return ItemModel.Item; } }
+        /// <summary>Threshold jewel radius has 40 or more of stat(s)</summary>
+        public enum ThresholdTypes : ushort
+        {
+            Neutral,
+            Strength,
+            Intelligence,
+            Dexterity,
+            StrIntHybrid,
+            StrDexHybrid,
+            IntDexHybrid
+        }
+
+        ThresholdTypes ThresholdType;
+
+        ///// <summary>
+        ///// The item model
+        ///// </summary>
+        //public JewelItemViewModel ItemModel;
+        ///// <summary>
+        ///// Gets the jewel data.
+        ///// </summary>
+        ///// <value>The jewel data.</value>
+        //public JewelItem JewelData { get { return ItemModel.Item; } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JewelNodeData"/> class.
         /// </summary>
         public JewelNodeData()
         {
-            ItemModel = null;
+            //ItemModel = null;
+            ThresholdType = 0;
         }
         public JewelNodeData(JewelData TargetJewelData, ushort slot)
         {
-            ItemModel = TargetJewelData.CreateSlotVm(slot);
+            //ItemModel = TargetJewelData.CreateSlotVm(slot);
+            ThresholdType = 0;
         }
     }
 
@@ -340,27 +356,7 @@ namespace PoESkillTree
                 else//Neutral(often ineffective corner jewels)
                 {
                     NeutralJewelSlots.Add(NodeID);
-                    //SkillTree.Skillnodes[NodeID].attributes = new[] { "+1 to Jewel Socket", IDLabel};
                 }
-                //if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IDLabel))
-                //    SkillTree.Skillnodes[NodeID].Attributes.Add(IDLabel, new List<float>(NodeID));
-                ////foreach (string s in SkillTree.Skillnodes[NodeID].attributes)
-                ////{
-                ////    if (s != "+1 to Jewel Socket")//Skip +1 to Jewel Socket
-                ////    {
-                ////        var values = new List<float>();
-                ////
-                ////        foreach (Match m in regexAttrib.Matches(s))
-                ////        {
-                ////            if (m.Value == "")
-                ////                values.Add(float.NaN);
-                ////            else
-                ////                values.Add(float.Parse(m.Value, CultureInfo.InvariantCulture));
-                ////        }
-                ////        string cs = (regexAttrib.Replace(s, "#"));
-                ////        SkillTree.Skillnodes[NodeID].Attributes[cs] = values;
-                ////    }
-                ////}
             }
         }
 
@@ -512,15 +508,16 @@ namespace PoESkillTree
         /// <returns></returns>
         static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, SkillTree Tree)
         {
-            float AreaStats;
-            ushort NodeID;
-            SkillNode CurrentNode;
-            JewelItem CurrentJewelData;
-            int GrandSpectrumTotal = 0;
-            int ElemGrandSpectrums = 0;
-            int ArmourGrandSpectrums = 0;
-            int ManaGrandSpectrums = 0;
+            //float AreaStats;
+            //ushort NodeID;
+            //SkillNode CurrentNode;
+            //JewelItem CurrentJewelData;
+            //int GrandSpectrumTotal = 0;
+            //int ElemGrandSpectrums = 0;
+            //int ArmourGrandSpectrums = 0;
+            //int ManaGrandSpectrums = 0;
 
+/* Disabling Jewel unique slot calculation for now
             foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
                 NodeID = JewelElement.Key;
@@ -1156,6 +1153,8 @@ namespace PoESkillTree
                     }
                 }
             }
+*/
+
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             if (attrlist.ContainsKey("+# Accuracy Rating"))
@@ -1255,15 +1254,15 @@ namespace PoESkillTree
         /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
         public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, SkillTree Tree, InventoryViewModel InvModel = null)
         {
-            float AreaStats;
-            ushort NodeID;
-            SkillNode CurrentNode;
-            JewelItem CurrentJewelData;
-            int GrandSpectrumTotal = 0;
-            int ElemGrandSpectrums = 0;
-            int ArmourGrandSpectrums = 0;
-            int ManaGrandSpectrums = 0;
-
+            //float AreaStats;
+            //ushort NodeID;
+            //SkillNode CurrentNode;
+            //JewelItem CurrentJewelData;
+            //int GrandSpectrumTotal = 0;
+            //int ElemGrandSpectrums = 0;
+            //int ArmourGrandSpectrums = 0;
+            //int ManaGrandSpectrums = 0;
+/* Disabling Jewel unique slot calculation for now
             foreach (KeyValuePair<ushort, JewelNodeData> JewelElement in GlobalSettings.JewelInfo)
             {
                 NodeID = JewelElement.Key;
@@ -1873,6 +1872,8 @@ namespace PoESkillTree
                 }
             }
 
+*/
+
             //Calculate Equipment Stats+Jewels on SkilledNodes
             if (InvModel != null)
             {
@@ -1905,6 +1906,7 @@ namespace PoESkillTree
                             ItemData = InvModel.Belt.Item; break;
                         default:
                             JewelItem JewelItemData;
+/* Disabling Jewel unique slot calculation for now
                             foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
                             {
                                 NodeID = JewelSlotData.Key;
@@ -1928,6 +1930,7 @@ namespace PoESkillTree
                                     }
                                 }
                             }
+*/
                             ItemData = null; ContinueCalc = false; break;
                     }
                     if (ItemData != null)
@@ -2052,85 +2055,6 @@ namespace PoESkillTree
             }
             return attrlist;
         }
-
-    //    /// <summary>
-    //    /// Calculates the total single attributes on Equipment.
-    //    /// </summary>
-    //    /// <returns></returns>
-    //    private Dictionary<string, float> CalculateTotalSingleAttributes(InventoryViewModel InvModel)
-    //    {
-    //        Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-    //        PoESkillTree.Model.Items.Item ItemData;
-    //        bool ContinueCalc = true;
-    //        for (int Index = 0; ContinueCalc; ++Index)
-    //        {
-    //            switch (Index)
-    //            {
-    //                case 0:
-    //                    ItemData = InvModel.Armor.Item; break;
-    //                case 1:
-    //                    ItemData = InvModel.MainHand.Item; break;
-    //                case 2:
-    //                    ItemData = InvModel.OffHand.Item; break;
-    //                case 3:
-    //                    ItemData = InvModel.Ring.Item; break;
-    //                case 4:
-    //                    ItemData = InvModel.Ring2.Item; break;
-    //                case 5:
-    //                    ItemData = InvModel.Amulet.Item; break;
-    //                case 6:
-    //                    ItemData = InvModel.Helm.Item; break;
-    //                case 7:
-    //                    ItemData = InvModel.Gloves.Item; break;
-    //                case 8:
-    //                    ItemData = InvModel.Boots.Item; break;
-    //                case 9:
-    //                    ItemData = InvModel.Belt.Item; break;
-    //                default:
-    //                    JewelItem JewelItemData;
-    //                    foreach (KeyValuePair<ushort, JewelNodeData> JewelSlotData in this)
-    //                    {
-    //                        JewelItemData = JewelSlotData.Value.JewelData;
-    //                        if (JewelItemData != null)
-    //                        {
-    //                            foreach (var TargetMod in JewelItemData.Mods)
-    //                            {
-    //                                if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-    //                                {
-    //                                    if (ItemDictionary.ContainsKey(TargetMod.Attribute))
-    //                                    {
-    //                                        ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-    //                                    }
-    //                                    else
-    //                                    {
-    //                                        ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-    //                                    }
-    //                                }
-    //                            }
-    //                        }
-    //                    }
-    //                    ItemData = null; ContinueCalc = false; break;
-    //            }
-    //            if (ItemData != null && ContinueCalc)
-    //            {
-    //                foreach (var TargetMod in ItemData.Mods)
-    //                {
-    //                    if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-    //                    {
-    //                        if (ItemDictionary.ContainsKey(TargetMod.Attribute))
-    //                        {
-    //                            ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-    //                        }
-    //                        else
-    //                        {
-    //                            ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return ItemDictionary;
-    //    }
     }
 
     public class TrackedAttributes : System.Collections.Generic.List<PseudoAttribute>
