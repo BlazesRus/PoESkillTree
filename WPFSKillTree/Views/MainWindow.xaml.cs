@@ -1230,50 +1230,9 @@ namespace PoESkillTree.Views
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
 
-            Dictionary<string, float> AttributeTotals;
-            if (GlobalSettings.TrackedStats.Count != 0)
+            if (GlobalSettings.JewelInfo.NotSetup)
             {
-                AttributeTotals = GlobalSettings.TrackedStats.CreateAttributeDictionary(Tree.SelectedAttributes);
-                foreach (var Element in AttributeTotals.Keys)
-                {
-                    if (Tree.SelectedAttributes.ContainsKey(Element))
-                    {
-                        List<float> TargetValue = new List<float>(1);
-                        TargetValue.Add(AttributeTotals[Element]);
-                        Tree.SelectedAttributes[Element] = TargetValue;
-                    }
-                    else
-                    {
-                        List<float> TargetValue = new List<float>(1);
-                        TargetValue.Add(AttributeTotals[Element]);
-                        Tree.SelectedAttributes.Add(Element, TargetValue);
-                    }
-                }
-            }
-            AttributeTotals = GlobalSettings.UpdateSubtotals(Tree.SelectedAttributes);
-            if (GlobalSettings.JewelInfo.NotSetup) {
-                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false; }
-
-            foreach (var Element in AttributeTotals.Keys)
-            {
-                if (Tree.SelectedAttributes.ContainsKey(Element))
-                {
-                    List<float> TargetValue = new List<float>(1);
-                    TargetValue.Add(AttributeTotals[Element]);
-                    Tree.SelectedAttributes[Element] = TargetValue;
-                }
-                else
-                {
-                    List<float> TargetValue = new List<float>(1);
-                    TargetValue.Add(AttributeTotals[Element]);
-                    Tree.SelectedAttributes.Add(Element, TargetValue);
-                }
-            }
-
-            attritemp = JewelData.StatUpdater(attritemp, Tree);
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                attritemp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(attritemp);
+                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false;
             }
 
             foreach (var item in Tree.SelectedAttributes)
@@ -1291,6 +1250,25 @@ namespace PoESkillTree.Views
                     a.Deltas = copy != null ? item.Value.ToArray() : item.Value.Select(v => 0f).ToArray();
                 }
                 _attiblist.Add(a);
+            }
+
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                TreeGenerator.Model.PseudoAttributes.PseudoAttribute Element;
+                string AttrName;
+                for (int Index = 0; Index < GlobalSettings.TrackedStats.Count; ++Index)
+                {
+                    Element = GlobalSettings.TrackedStats[Index];
+                    AttrName = Element.Name;
+                    if (Tree.SelectedAttributes.ContainsKey(AttrName))
+                    {
+                        Tree.SelectedAttributes[AttrName] = new List<float> { Element.CalculateValue(Tree.SelectedAttributes)};
+                    }
+                    else
+                    {
+                        Tree.SelectedAttributes.Add(AttrName, new List<float> { Element.CalculateValue(Tree.SelectedAttributes)});
+                    }
+                }
             }
 
             if (copy != null)

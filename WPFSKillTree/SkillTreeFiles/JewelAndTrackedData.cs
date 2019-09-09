@@ -1248,7 +1248,7 @@ namespace PoESkillTree
         /// <summary>
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
-        /// <param name="attrlist">The attrlist.</param>
+        /// <param name="attrlist">The attribute list.</param>
         /// <param name="Tree">The tree.</param>
         /// <param name="InvModel">The item information sent from SkillTreeGenerator.</param>
         /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
@@ -2115,7 +2115,7 @@ namespace PoESkillTree
         /// <summary>
         /// Creates the attribute dictionary.
         /// </summary>
-        /// <param name="AttributeDic">The attribute dic.</param>
+        /// <param name="AttributeDic">The attribute dictionary.</param>
         /// <returns></returns>
         public Dictionary<string, float> CreateAttributeDictionary(Dictionary<string, List<float>> AttributeDic)
         {
@@ -2130,7 +2130,7 @@ namespace PoESkillTree
         /// <summary>
         /// Places the Tracked Attributes into attribute dictionary
         /// </summary>
-        /// <param name="AttributeDic">The attribute dic.</param>
+        /// <param name="AttributeDic">The attribute dictionary.</param>
         /// <returns></returns>
         public Dictionary<string, List<float>> PlaceIntoAttributeDic(Dictionary<string, List<float>> AttributeDic)
         {
@@ -2155,7 +2155,7 @@ namespace PoESkillTree
         }
 
         /// <summary>
-        /// Starts the tracking.
+        /// Starts the tracking of Pseudo-attributes(to display in stat calculations).
         /// </summary>
         /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints.</param>
         public void StartTracking(Dictionary<string, Tuple<float, double>> attributeConstraints, Dictionary<PseudoAttribute, System.Tuple<float, double>> pseudoAttributeConstraints, WeaponClass value, OffHand value1, SkillTree treeInfo)
