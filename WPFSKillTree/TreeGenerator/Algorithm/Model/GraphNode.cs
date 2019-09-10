@@ -19,7 +19,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public ushort Id { get { return _id; } }
 
 #if DEBUG
-        private string Name { get { return SkillTree.Skillnodes[_id].Name; } }
+        private string Name { get { return SkillTreeFiles.SkillTree.Skillnodes[_id].Name; } }
 #endif
 
         /// <summary>
