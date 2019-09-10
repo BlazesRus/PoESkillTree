@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PoESkillTree.Utils.Extensions;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.Utils.WikiApi
 {
@@ -28,8 +28,8 @@ namespace PoESkillTree.Utils.WikiApi
                 var resized = image;
                 if (resize)
                 {
-                    var newWidth = (int) Math.Ceiling(image.Width * ItemImageResizeFactor);
-                    var newHeight = (int) Math.Ceiling(image.Height * ItemImageResizeFactor);
+                    var newWidth = (int)Math.Ceiling(image.Width * ItemImageResizeFactor);
+                    var newHeight = (int)Math.Ceiling(image.Height * ItemImageResizeFactor);
                     resized = image.Resize(newWidth, newHeight);
                 }
                 resized.Save(outputStream, ImageFormat.Png);

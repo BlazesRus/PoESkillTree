@@ -1,6 +1,6 @@
+using PoESkillTree.SkillTreeFiles;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {

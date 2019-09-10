@@ -1,12 +1,12 @@
-﻿using System;
+﻿using NLog;
+using PoESkillTree.Engine.Computation.Common;
+using PoESkillTree.Engine.Computation.Core;
+using PoESkillTree.Engine.Utils;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using NLog;
-using PoESkillTree.Engine.Computation.Common;
-using PoESkillTree.Engine.Computation.Core;
-using PoESkillTree.Engine.Utils;
 
 namespace PoESkillTree.Computation.Model
 {

@@ -1,10 +1,10 @@
+using MoreLinq;
+using PoESkillTree.Model.Builds;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using MoreLinq;
-using PoESkillTree.Model.Builds;
 
 namespace PoESkillTree.ViewModels.Builds
 {
@@ -139,7 +139,7 @@ namespace PoESkillTree.ViewModels.Builds
             _isInCollectionChanged = false;
             _collectionChangedCallback(this);
         }
-        
+
         private void BuildsOnCollectionChanged(object sender,
             NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
@@ -175,15 +175,15 @@ namespace PoESkillTree.ViewModels.Builds
         {
             Func<TSource, TTarget, IBuildViewModel> toVmFunc;
             if (typeof(TSource) == typeof(IBuildViewModel))
-                toVmFunc = (s, t) => (IBuildViewModel) s;
+                toVmFunc = (s, t) => (IBuildViewModel)s;
             else if (typeof(TTarget) == typeof(IBuildViewModel))
-                toVmFunc = (s, t) => (IBuildViewModel) t;
+                toVmFunc = (s, t) => (IBuildViewModel)t;
             else
                 throw new ArgumentException("One type parameter must be IBuildViewModel");
             var news = (notifyCollectionChangedEventArgs.NewItems?.Cast<TSource>() ?? new TSource[0]).Select(b =>
             {
                 var target = toTargetFunc(b);
-                return new { Target = target, ViewModel = toVmFunc(b, target)};
+                return new { Target = target, ViewModel = toVmFunc(b, target) };
             });
             var olds = (notifyCollectionChangedEventArgs.OldItems?.Cast<TSource>() ?? new TSource[0]).Select(b =>
             {

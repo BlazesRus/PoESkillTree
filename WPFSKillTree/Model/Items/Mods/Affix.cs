@@ -1,8 +1,8 @@
+using MB.Algodat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using MB.Algodat;
 
 namespace PoESkillTree.Model.Items.Mods
 {

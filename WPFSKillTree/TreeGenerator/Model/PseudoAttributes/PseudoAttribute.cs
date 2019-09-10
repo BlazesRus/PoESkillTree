@@ -16,14 +16,14 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         /// <summary>
         /// Gets the list of Attributes this PseudoAttribute contains.
         /// </summary>
-        public List<Attribute> Attributes { get; private set;}
+        public List<Attribute> Attributes { get; private set; }
 
         /// <summary>
         /// Gets the name of the group this PseudoAttribute belongs to.
         /// </summary>
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         // Used in group and sort descriptions.
-        public string Group { get; private set;}
+        public string Group { get; private set; }
 
         /// <summary>
         /// Creates a new PseudoAttribute with the given name and group

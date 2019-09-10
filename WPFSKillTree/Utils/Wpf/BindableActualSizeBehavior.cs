@@ -13,7 +13,7 @@ namespace PoESkillTree.Utils.Wpf
 
         public double ActualHeight
         {
-            get { return (double) GetValue(ActualHeightProperty); }
+            get { return (double)GetValue(ActualHeightProperty); }
             set { SetValue(ActualHeightProperty, value); }
         }
 

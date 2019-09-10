@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using PoESkillTree.Engine.Computation.Common.Builders;
+﻿using PoESkillTree.Engine.Computation.Common.Builders;
 using PoESkillTree.Engine.Computation.Common.Builders.Stats;
 using PoESkillTree.Engine.GameModel;
+using System.Linq;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -20,10 +20,10 @@ namespace PoESkillTree.Computation.ViewModels
             => LevelStat.Node.NumericValue = level;
 
         public void SetCharacterClass(CharacterClass characterClass)
-            => CharacterClassStat.Node.NumericValue = (int) characterClass;
+            => CharacterClassStat.Node.NumericValue = (int)characterClass;
 
         public void SetBandit(Bandit bandit)
-            => BanditStat.Node.NumericValue = (int) bandit;
+            => BanditStat.Node.NumericValue = (int)bandit;
 
         public static SharedConfigurationViewModel Create(
             CalculationNodeViewModelFactory nodeFactory, IBuilderFactories builderFactories)

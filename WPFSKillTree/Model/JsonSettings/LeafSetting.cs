@@ -1,6 +1,6 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PoESkillTree.Utils;
+using System;
 
 namespace PoESkillTree.Model.JsonSettings
 {

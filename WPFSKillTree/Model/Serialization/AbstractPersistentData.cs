@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using PoESkillTree.Utils;
-using PoESkillTree.Controls;
+﻿using PoESkillTree.Controls;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Model.Builds;
 using PoESkillTree.Model.Items;
+using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {
@@ -38,7 +38,7 @@ namespace PoESkillTree.Model.Serialization
 
         public List<StashBookmark> StashBookmarks { get; } = new List<StashBookmark>();
 
-        public BuildFolder RootBuild { get; } = new BuildFolder {Name = "Root"};
+        public BuildFolder RootBuild { get; } = new BuildFolder { Name = "Root" };
 
         public List<Item> StashItems { get; } = new List<Item>();
 

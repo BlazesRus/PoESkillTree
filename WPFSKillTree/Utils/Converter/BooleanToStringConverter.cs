@@ -13,13 +13,13 @@ namespace PoESkillTree.Utils.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var b = (bool) value;
+            var b = (bool)value;
             return b ? TrueString : FalseString;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var s = (string) value;
+            var s = (string)value;
             if (s == TrueString)
                 return true;
             else if (s == FalseString)

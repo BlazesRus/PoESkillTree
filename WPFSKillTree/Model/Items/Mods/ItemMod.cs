@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using PoESkillTree.Engine.GameModel.Items;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
-using PoESkillTree.Engine.GameModel.Items;
 
 namespace PoESkillTree.Model.Items.Mods
 {

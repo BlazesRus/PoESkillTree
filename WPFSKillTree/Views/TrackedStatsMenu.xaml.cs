@@ -1,18 +1,18 @@
 ﻿//using Xamarin.Forms;
 //using Xamarin.Forms.Xaml;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Linq;
-using PoESkillTree.Utils;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace PoESkillTree.TrackedStatViews
 {
@@ -36,7 +36,7 @@ namespace PoESkillTree.TrackedStatViews
             //{
             //    return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
             //}
-            StringData ReturnVal = (str ?? (GlobalSettings.StatTrackingSavePath != null? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt"): Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt")));
+            StringData ReturnVal = (str ?? (GlobalSettings.StatTrackingSavePath != null ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt")));
             return ReturnVal;
         }
 
@@ -431,21 +431,21 @@ namespace PoESkillTree.TrackedStatViews
                         PotentialLineComment = false;
                         foreach (var Elem in Line)
                         {
-                            if(PotentialLineComment==false&&Elem=='/')
+                            if (PotentialLineComment == false && Elem == '/')
                             {
                                 PotentialLineComment = true;
                             }
-                            else if(PotentialLineComment&&Elem=='/')
+                            else if (PotentialLineComment && Elem == '/')
                             {
                                 PotentialLineComment = false;
                                 return;
                             }
-                            if(Elem!='"')
+                            if (Elem != '"')
                             {
                                 TempString += Elem;
                             }
                         }
-                        if(PotentialLineComment)
+                        if (PotentialLineComment)
                         {
                             TempString += "/";
                         }
@@ -468,8 +468,8 @@ namespace PoESkillTree.TrackedStatViews
                 }
                 else
                 {//Create Blank file if doesn't exist yet
-                    if (!Directory.Exists(StatTrackingSavePath)){Directory.CreateDirectory(StatTrackingSavePath);}
-                    using (var myFile = File.Create(TargetFile)){}//Creating new file and auto-disposing of FileStream
+                    if (!Directory.Exists(StatTrackingSavePath)) { Directory.CreateDirectory(StatTrackingSavePath); }
+                    using (var myFile = File.Create(TargetFile)) { }//Creating new file and auto-disposing of FileStream
                 }
             }
         }

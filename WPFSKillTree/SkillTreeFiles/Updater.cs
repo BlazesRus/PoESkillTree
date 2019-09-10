@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
+using PoESkillTree.Localization;
+using PoESkillTree.Utils;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -6,17 +10,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
-using PoESkillTree.Localization;
-using Newtonsoft.Json.Linq;
-using PoESkillTree.Utils;
 using Version = PoESkillTree.Properties.Version;
 
 namespace PoESkillTree.SkillTreeFiles
 {
     /* Update manager.
      * Provides API for semi-synchronous update process (downloading is asynchronous, while checking for updates and installation are synchronous tasks).
-     */ 
+     */
     public class Updater
     {
         // Use stronger cryptographic standards (https://githubengineering.com/crypto-removal-notice/)
@@ -83,7 +83,7 @@ namespace PoESkillTree.SkillTreeFiles
                 {
                     Dispose();
                 }
-                catch {}
+                catch { }
             }
 
             // Cancels download.
@@ -460,7 +460,7 @@ namespace PoESkillTree.SkillTreeFiles
 
                         if (productName != Version.ProductName)
                         {
-                            var version = SemanticVersion.Parse((string) key.GetValue("DisplayVersion"));
+                            var version = SemanticVersion.Parse((string)key.GetValue("DisplayVersion"));
                             if (version.CompareTo(current) > 0)
                                 return true;
                         }

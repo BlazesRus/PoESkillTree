@@ -1,15 +1,15 @@
-﻿using System;
+﻿using MoreLinq;
+using PoESkillTree.Computation.Model;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using MoreLinq;
-using PoESkillTree.Utils;
-using PoESkillTree.Computation.Model;
-using PoESkillTree.Model;
-using PoESkillTree.Model.Builds;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -82,7 +82,7 @@ namespace PoESkillTree.Computation.ViewModels
             if (e.PropertyName != nameof(CalculationNodeViewModel.Value) || _setNodeValueMonitor.IsBusy)
                 return;
 
-            var node = (CalculationNodeViewModel) sender;
+            var node = (CalculationNodeViewModel)sender;
             ConfigurationStats.SetValue(node.Stat, node.Value);
         }
 

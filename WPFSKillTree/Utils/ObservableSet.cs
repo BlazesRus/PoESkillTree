@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PoESkillTree.Engine.Utils;
+using PoESkillTree.Engine.Utils.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using PoESkillTree.Engine.Utils;
-using PoESkillTree.Engine.Utils.Extensions;
 
 namespace PoESkillTree.Utils
 {

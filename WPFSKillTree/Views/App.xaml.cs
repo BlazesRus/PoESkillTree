@@ -1,14 +1,14 @@
-﻿using System;
+﻿using NLog;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Serialization;
+using PoESkillTree.Utils;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using NLog;
-using PoESkillTree.Utils;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
-using PoESkillTree.Model.Serialization;
 
 namespace PoESkillTree.Views
 {
@@ -66,7 +66,7 @@ namespace PoESkillTree.Views
             base.OnStartup(e);
 
             AppDomain.CurrentDomain.UnhandledException +=
-                (_, args) => OnUnhandledException((Exception) args.ExceptionObject);
+                (_, args) => OnUnhandledException((Exception)args.ExceptionObject);
 
             // Create Mutex if this is first instance.
             try

@@ -1,8 +1,8 @@
-﻿using System;
-using PoESkillTree.Engine.Computation.Common;
+﻿using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Localization;
 using PoESkillTree.Utils;
+using System;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -50,13 +50,13 @@ namespace PoESkillTree.Computation.ViewModels
         public double? NumericValue
         {
             get => Value?.Single;
-            set => Value = (NodeValue?) value;
+            set => Value = (NodeValue?)value;
         }
 
         public bool BoolValue
         {
             get => Value.IsTrue();
-            set => Value = (NodeValue?) value;
+            set => Value = (NodeValue?)value;
         }
 
         public bool HasValue => Value.HasValue;
@@ -74,7 +74,7 @@ namespace PoESkillTree.Computation.ViewModels
             if (Value is null)
                 return L10n.Message("None");
             if (DataType.IsEnum)
-                return EnumValues.GetValue((int) Value.Single()).ToString();
+                return EnumValues.GetValue((int)Value.Single()).ToString();
             return Value.Select(d => Math.Round(d, 2, MidpointRounding.AwayFromZero))
                 .ToString().Replace(" to ", " \nto ");
         }

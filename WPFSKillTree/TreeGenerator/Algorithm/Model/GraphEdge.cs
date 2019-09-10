@@ -15,7 +15,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// The two nodes of the edge. The first is always the smaller one.
         /// </summary>
         public readonly int N1, N2;
-        
+
         public readonly uint Weight;
 
         /// <summary>

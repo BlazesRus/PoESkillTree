@@ -64,7 +64,7 @@ namespace PoESkillTree.Utils
         /// </summary>
         protected virtual Notifier SafeMemberwiseClone()
         {
-            var t = (Notifier) MemberwiseClone();
+            var t = (Notifier)MemberwiseClone();
             t.PropertyChanged = null;
             t.PropertyChanging = null;
             return t;

@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using JetBrains.Annotations;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Common.Builders;
@@ -12,6 +8,10 @@ using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.Engine.Utils;
 using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -72,7 +72,7 @@ namespace PoESkillTree.Computation.ViewModels
             {
                 if (value == null)
                     return;
-                _selectedSkillItemSlot.NumericValue = (double?) value.Skill.ItemSlot;
+                _selectedSkillItemSlot.NumericValue = (double?)value.Skill.ItemSlot;
                 _selectedSkillSocketIndex.NumericValue = value.Skill.SocketIndex;
                 SetProperty(ref _selectedSkill, value);
             }
@@ -81,8 +81,8 @@ namespace PoESkillTree.Computation.ViewModels
         [CanBeNull]
         private MainSkillViewModel GetSelectedAndAvailableSkill()
             => AvailableSkills.FirstOrDefault(
-                s => s.Skill.ItemSlot == (ItemSlot?) _selectedSkillItemSlot.NumericValue &&
-                     s.Skill.SocketIndex == (int?) _selectedSkillSocketIndex.NumericValue);
+                s => s.Skill.ItemSlot == (ItemSlot?)_selectedSkillItemSlot.NumericValue &&
+                     s.Skill.SocketIndex == (int?)_selectedSkillSocketIndex.NumericValue);
 
         private void OnSelectedSkillStatChanged(object sender, PropertyChangedEventArgs args)
         {

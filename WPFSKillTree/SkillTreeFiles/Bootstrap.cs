@@ -1,7 +1,7 @@
-﻿using System;
-using NLog.LayoutRenderers;
+﻿using NLog.LayoutRenderers;
 using PoESkillTree.Utils;
 using PoESkillTree.Views;
+using System;
 
 namespace PoESkillTree.SkillTreeFiles
 {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using PoESkillTree.SkillTreeFiles;
+﻿using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.ViewModels.Equipment;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.TreeGenerator.Settings
 {

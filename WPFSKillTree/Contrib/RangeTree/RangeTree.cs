@@ -86,11 +86,11 @@ namespace MB.Algodat
         public RangeTree(IComparer<T> rangeComparer)
         {
             _rangeComparer = rangeComparer;
-            _root = new RangeTreeNode<TKey, T>(rangeComparer);            
+            _root = new RangeTreeNode<TKey, T>(rangeComparer);
             _items = new List<T>();
             _isInSync = true;
             _autoRebuild = true;
-            
+
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace MB.Algodat
         public RangeTree(IEnumerable<T> items, IComparer<T> rangeComparer)
         {
             _rangeComparer = rangeComparer;
-            _root = new RangeTreeNode<TKey, T>(items, rangeComparer);            
+            _root = new RangeTreeNode<TKey, T>(items, rangeComparer);
             _items = items.ToList();
             _isInSync = true;
             _autoRebuild = true;
@@ -136,7 +136,7 @@ namespace MB.Algodat
         {
             if (_isInSync)
                 return;
-            if(_items.Count > 0)
+            if (_items.Count > 0)
                 _root = new RangeTreeNode<TKey, T>(_items, _rangeComparer);
             else
                 _root = new RangeTreeNode<TKey, T>(_rangeComparer);
@@ -186,7 +186,7 @@ namespace MB.Algodat
         /// </summary>
         public void Clear()
         {
-            _root = new RangeTreeNode<TKey, T>(_rangeComparer);            
+            _root = new RangeTreeNode<TKey, T>(_rangeComparer);
             _items = new List<T>();
             _isInSync = true;
         }
@@ -208,5 +208,5 @@ namespace MB.Algodat
         }
     }
 
-    
+
 }

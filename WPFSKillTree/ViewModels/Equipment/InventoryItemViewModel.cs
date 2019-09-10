@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop;
+﻿using GongSolutions.Wpf.DragDrop;
 using JetBrains.Annotations;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using Item = PoESkillTree.Model.Items.Item;
 
 namespace PoESkillTree.ViewModels.Equipment
@@ -113,7 +113,7 @@ namespace PoESkillTree.ViewModels.Equipment
 
         public void Drop(IDropInfo dropInfo)
         {
-            var draggedItem = (DraggableItemViewModel) dropInfo.Data;
+            var draggedItem = (DraggableItemViewModel)dropInfo.Data;
             var dropEffects = dropInfo.Effects;
 
             var oldItem = Item;

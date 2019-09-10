@@ -1,12 +1,12 @@
-﻿using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using PoESkillTree.Common.ViewModels;
+﻿using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Model.Serialization;
 using PoESkillTree.ViewModels.Builds;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PoESkillTree.ViewModels
 {

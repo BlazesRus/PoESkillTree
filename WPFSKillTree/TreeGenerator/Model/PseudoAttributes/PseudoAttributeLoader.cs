@@ -1,11 +1,11 @@
-﻿using System;
+﻿using PoESkillTree.Localization;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using PoESkillTree.Utils;
-using PoESkillTree.Localization;
 
 namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
 {
@@ -44,7 +44,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         /// Maps names of PseudoAttributes to the names of all PseudoAttributes nested inside.
         /// </summary>
         private readonly Dictionary<string, List<string>> _nestedPseudosDict = new Dictionary<string, List<string>>();
-        
+
         /// <summary>
         /// Loads XmlPseudoAttributes from the filesystem (if the parameter is null) and converts
         /// them into a list of PseudoAttributes.
@@ -60,9 +60,9 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
                 // Deserialize all files in DataPath that end with .xml
                 // and select the XmlPseudoAttribute objects.
                 xmlPseudos = (from file in Directory.GetFiles(DataPath)
-                    where file.EndsWith(".xml")
-                    from pseudo in DeserializeFile(file).PseudoAttributes
-                    select pseudo).ToArray();
+                              where file.EndsWith(".xml")
+                              from pseudo in DeserializeFile(file).PseudoAttributes
+                              select pseudo).ToArray();
             }
             else
             {
@@ -129,11 +129,11 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
                     var attr = new Attribute(xmlAttr.Name);
                     if (xmlAttr.ConversionMultiplierSpecified)
                     {
-                        attr.ConversionMultiplier = (float) xmlAttr.ConversionMultiplier;
+                        attr.ConversionMultiplier = (float)xmlAttr.ConversionMultiplier;
                     }
                     pseudo.Attributes.Add(attr);
 
-                    var xmlConditions = xmlAttr.Conditions ?? new XmlAttributeConditions() {Items = new object[0]};
+                    var xmlConditions = xmlAttr.Conditions ?? new XmlAttributeConditions() { Items = new object[0] };
                     for (var i = 0; i < xmlConditions.Items.Length; i++)
                     {
                         ICondition condition;
@@ -169,7 +169,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
                                 break;
 
                             case XmlItemsChoiceType.Not:
-                                condition = ConvertXmlNotCondition((XmlNotCondition) xmlCondition, pseudo, attr);
+                                condition = ConvertXmlNotCondition((XmlNotCondition)xmlCondition, pseudo, attr);
                                 break;
 
                             case XmlItemsChoiceType.OffHand:

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NLog;
+﻿using NLog;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items.Mods;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.Model.Items
 {
@@ -36,7 +36,7 @@ namespace PoESkillTree.Model.Items
 
         public ItemImage Image { get; }
 
-        public UniqueBase(ItemImageService itemImageService, ModDatabase modDatabase, ItemBase itemBase, 
+        public UniqueBase(ItemImageService itemImageService, ModDatabase modDatabase, ItemBase itemBase,
             XmlUnique xmlUnique)
         {
             UniqueName = xmlUnique.Name;

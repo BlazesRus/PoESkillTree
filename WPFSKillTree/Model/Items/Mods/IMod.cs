@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using PoESkillTree.Engine.GameModel.Modifiers;
+﻿using PoESkillTree.Engine.GameModel.Modifiers;
+using System.Collections.Generic;
 
 namespace PoESkillTree.Model.Items.Mods
 {

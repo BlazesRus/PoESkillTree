@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using PoESkillTree.Engine.GameModel.StatTranslation;
 using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.ViewModels.Crafting
 {

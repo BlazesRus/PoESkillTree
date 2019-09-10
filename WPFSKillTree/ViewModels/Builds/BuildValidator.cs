@@ -1,9 +1,9 @@
-﻿using System.IO;
-using System.Linq;
-using PoESkillTree.Utils;
-using PoESkillTree.Localization;
+﻿using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Model.Serialization;
+using PoESkillTree.Utils;
+using System.IO;
+using System.Linq;
 
 namespace PoESkillTree.ViewModels.Builds
 {

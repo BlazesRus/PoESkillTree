@@ -15,7 +15,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             foreach (int t in queueTestOrder)
             {
                 if (t > 0)
-                    queue.Enqueue(new TestNode(t), (uint) t);
+                    queue.Enqueue(new TestNode(t), (uint)t);
                 if (t < 0)
                     Assert.IsTrue(queue.Dequeue().Priority == -t);
             }

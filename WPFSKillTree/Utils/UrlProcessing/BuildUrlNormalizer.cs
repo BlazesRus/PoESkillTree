@@ -1,10 +1,10 @@
+using PoESkillTree.Localization;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using PoESkillTree.Localization;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {

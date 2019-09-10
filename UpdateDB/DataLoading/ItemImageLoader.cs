@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using NLog;
+using PoESkillTree.Engine.Utils.WikiApi;
+using PoESkillTree.Utils.WikiApi;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using NLog;
-using PoESkillTree.Engine.Utils.WikiApi;
-using PoESkillTree.Utils.WikiApi;
 
 namespace UpdateDB.DataLoading
 {

@@ -1,8 +1,8 @@
+using JetBrains.Annotations;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using JetBrains.Annotations;
 
 namespace PoESkillTree.Common.ViewModels
 {
@@ -15,7 +15,7 @@ namespace PoESkillTree.Common.ViewModels
         /// <param name="canExecute">A function returning whether this command can currently be executed.
         /// Null if all parameters can be executed.</param>
         public RelayCommand(Action execute, Func<bool> canExecute = null)
-            : base(_ => execute(), canExecute == null ? null : (Predicate<object>) (_ => canExecute()))
+            : base(_ => execute(), canExecute == null ? null : (Predicate<object>)(_ => canExecute()))
         {
         }
     }
@@ -32,7 +32,7 @@ namespace PoESkillTree.Common.ViewModels
         /// <param name="canExecute">A function returning whether this command can currently be executed.
         /// Null if all parameters can be executed.</param>
         public AsyncRelayCommand(Func<Task> execute, Func<bool> canExecute = null)
-            : base(_ => execute(), canExecute == null ? null : (Predicate<object>) (_ => canExecute()))
+            : base(_ => execute(), canExecute == null ? null : (Predicate<object>)(_ => canExecute()))
         {
         }
 
@@ -76,7 +76,7 @@ namespace PoESkillTree.Common.ViewModels
 
         public void Execute(object parameter)
         {
-            Execute((T) parameter);
+            Execute((T)parameter);
         }
 
         /// <summary>

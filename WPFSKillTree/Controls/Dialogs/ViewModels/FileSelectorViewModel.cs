@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Input;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
 
 namespace PoESkillTree.Controls.Dialogs.ViewModels
 {
@@ -93,7 +93,7 @@ namespace PoESkillTree.Controls.Dialogs.ViewModels
                 }
                 SanitizedFilePath = _useRelativePaths ? AppData.ToRelativePath(trimmed) : trimmed;
             }
-            return new[] {message};
+            return new[] { message };
         }
     }
 }

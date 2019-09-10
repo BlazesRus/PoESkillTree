@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.ItemFilter.Model;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace PoESkillTree.ItemFilter.Views
 {

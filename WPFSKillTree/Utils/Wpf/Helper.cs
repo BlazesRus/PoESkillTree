@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿using PoESkillTree.Utils.Converter;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
-using PoESkillTree.Utils.Converter;
 
 namespace PoESkillTree.Utils.Wpf
 {
@@ -28,7 +28,7 @@ namespace PoESkillTree.Utils.Wpf
         [AttachedPropertyBrowsableForType(typeof(Hyperlink))]
         public static bool GetNavigateExternally(Hyperlink element)
         {
-            return (bool) element.GetValue(NavigateExternallyProperty);
+            return (bool)element.GetValue(NavigateExternallyProperty);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace PoESkillTree.Utils.Wpf
         [AttachedPropertyBrowsableForType(typeof(FrameworkElement))]
         public static double GetMainWindowRelativeMaxHeight(FrameworkElement element)
         {
-            return (double) element.GetValue(MainWindowRelativeMaxHeightProperty);
+            return (double)element.GetValue(MainWindowRelativeMaxHeightProperty);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace PoESkillTree.Utils.Wpf
             if (element == null)
                 return;
 
-            var value = (double) e.NewValue;
+            var value = (double)e.NewValue;
             if (value <= 0)
             {
                 BindingOperations.ClearBinding(element, FrameworkElement.MaxHeightProperty);
@@ -88,7 +88,7 @@ namespace PoESkillTree.Utils.Wpf
             var binding = new Binding("ActualHeight")
             {
                 Source = Application.Current.MainWindow,
-                Converter = new SumConverter {Minimum = 0},
+                Converter = new SumConverter { Minimum = 0 },
                 ConverterParameter = -value
             };
             element.SetBinding(FrameworkElement.MaxHeightProperty, binding);

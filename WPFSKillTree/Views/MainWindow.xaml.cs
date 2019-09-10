@@ -1,4 +1,32 @@
-﻿using System;
+﻿using EnumsNET;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
+using MoreLinq;
+using NLog;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Computation;
+using PoESkillTree.Computation.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.ItemFilter.Views;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.ViewModels;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Converter;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Utils.UrlProcessing;
+using PoESkillTree.ViewModels;
+using PoESkillTree.ViewModels.Builds;
+using PoESkillTree.ViewModels.Crafting;
+using PoESkillTree.ViewModels.Equipment;
+using PoESkillTree.Views.Crafting;
+using PoESkillTree.Views.Equipment;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -17,34 +45,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using EnumsNET;
-using MahApps.Metro;
-using MahApps.Metro.Controls;
-using MoreLinq;
-using NLog;
-using PoESkillTree.Utils;
-using PoESkillTree.Utils.Extensions;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Computation;
-using PoESkillTree.Computation.ViewModels;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.ItemFilter.Views;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
-using PoESkillTree.Model.Builds;
-using PoESkillTree.Model.Items;
-using PoESkillTree.SkillTreeFiles;
-using PoESkillTree.TreeGenerator.ViewModels;
-using PoESkillTree.Utils.Converter;
-using PoESkillTree.Utils.UrlProcessing;
-using PoESkillTree.ViewModels;
-using PoESkillTree.ViewModels.Builds;
-using PoESkillTree.ViewModels.Crafting;
-using PoESkillTree.ViewModels.Equipment;
-using PoESkillTree.Views.Crafting;
-using PoESkillTree.Views.Equipment;
 using Attribute = PoESkillTree.ViewModels.Attribute;
 using Version = PoESkillTree.Properties.Version;
 
@@ -327,11 +327,11 @@ namespace PoESkillTree.Views
 
             foreach (var name in groupnames)
             {
-                var newSubMenu = new MenuItem {Header = name};
+                var newSubMenu = new MenuItem { Header = name };
                 newSubMenu.Click += AddToGroup;
                 cmAddToGroup.Items.Add(newSubMenu);
                 cmAddToGroup.IsEnabled = true;
-                newSubMenu = new MenuItem {Header = name};
+                newSubMenu = new MenuItem { Header = name };
                 newSubMenu.Click += DeleteGroup;
                 cmDeleteGroup.Items.Add(newSubMenu);
                 cmDeleteGroup.IsEnabled = true;
@@ -361,11 +361,11 @@ namespace PoESkillTree.Views
                 }
 
                 //Add submenus that add to and delete the new group
-                var newSubMenu = new MenuItem {Header = name};
+                var newSubMenu = new MenuItem { Header = name };
                 newSubMenu.Click += AddToGroup;
                 cmAddToGroup.Items.Add(newSubMenu);
                 cmAddToGroup.IsEnabled = true;
-                newSubMenu = new MenuItem {Header = name};
+                newSubMenu = new MenuItem { Header = name };
                 newSubMenu.Click += DeleteGroup;
                 cmDeleteGroup.Items.Add(newSubMenu);
                 cmDeleteGroup.IsEnabled = true;
@@ -386,7 +386,7 @@ namespace PoESkillTree.Views
             {
                 SelectedAttrName = o.ToString();
                 index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
-                if (index>-1)//Functionality of removing individual tracked stat
+                if (index > -1)//Functionality of removing individual tracked stat
                 {
                     GlobalSettings.TrackedStats.RemoveAt(index);
                 }
@@ -487,7 +487,7 @@ namespace PoESkillTree.Views
             _justLoaded = false;
             InitializeBuildDependentUI();
             Log.Info($"Build UI initialized after {stopwatch.ElapsedMilliseconds} ms");
-            
+
             await initialComputationTask;
             await computationInitializer.InitializeAfterBuildLoadAsync(
                 Tree.SkilledNodes, _equipmentConverter.Items, _equipmentConverter.Skills);
@@ -875,7 +875,7 @@ namespace PoESkillTree.Views
                 var dialog = new Microsoft.Win32.SaveFileDialog();
 
                 // Default file name -- current build name ("buildname - xxx points used")
-                var skilledNodes = (uint) Tree.GetPointCount()["NormalUsed"];
+                var skilledNodes = (uint)Tree.GetPointCount()["NormalUsed"];
                 dialog.FileName = PersistentData.CurrentBuild.Name + " - " + string.Format(L10n.Plural("{0} point", "{0} points", skilledNodes), skilledNodes);
 
                 dialog.DefaultExt = ".jpg"; // Default file extension
@@ -1137,9 +1137,9 @@ namespace PoESkillTree.Views
             }
         }
 
-#endregion
+        #endregion
 
-#region  Character Selection
+        #region  Character Selection
         private void userInteraction_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             _userInteraction = true;
@@ -1152,7 +1152,7 @@ namespace PoESkillTree.Views
             if (!_userInteraction)
                 return;
 
-            var charClass = (CharacterClass) cbCharType.SelectedItem;
+            var charClass = (CharacterClass)cbCharType.SelectedItem;
             if (Tree.CharClass == charClass) return;
 
             Tree.SwitchClass(charClass);
@@ -1200,9 +1200,9 @@ namespace PoESkillTree.Views
             SetCurrentBuildUrlFromTree();
         }
 
-#endregion
+        #endregion
 
-#region Update Attribute lists
+        #region Update Attribute lists
 
         public void UpdateUI()
         {
@@ -1262,11 +1262,11 @@ namespace PoESkillTree.Views
                     AttrName = Element.Name;
                     if (Tree.SelectedAttributes.ContainsKey(AttrName))
                     {
-                        Tree.SelectedAttributes[AttrName] = new List<float> { Element.CalculateValue(Tree.SelectedAttributes)};
+                        Tree.SelectedAttributes[AttrName] = new List<float> { Element.CalculateValue(Tree.SelectedAttributes) };
                     }
                     else
                     {
-                        Tree.SelectedAttributes.Add(AttrName, new List<float> { Element.CalculateValue(Tree.SelectedAttributes)});
+                        Tree.SelectedAttributes.Add(AttrName, new List<float> { Element.CalculateValue(Tree.SelectedAttributes) });
                     }
                 }
             }
@@ -1333,9 +1333,9 @@ namespace PoESkillTree.Views
             return true;
         }
 
-#endregion
+        #endregion
 
-#region Attribute lists - Event Handlers
+        #region Attribute lists - Event Handlers
 
         private void ToggleAttributes()
         {
@@ -1400,52 +1400,52 @@ namespace PoESkillTree.Views
                 gAttributesFilter.Visibility = Visibility.Collapsed;
         }
 
-#endregion
+        #endregion
 
-#region zbSkillTreeBackground
+        #region zbSkillTreeBackground
 
         private void zbSkillTreeBackground_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             _lastMouseButton = e.ChangedButton;
         }
 
-/*      Turning off tagged Leap code for now
-        static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-        {
-            List<float> BlankList = new List<float>();
-            int attributeSize = CurrentNode.Attributes.Count;
-            if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode) && attributeSize != 0)
-            {
-                CurrentNode.Attributes.Add(GlobalSettings.LeapedNode, BlankList);
-            }
-        }
+        /*      Turning off tagged Leap code for now
+                static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
+                {
+                    List<float> BlankList = new List<float>();
+                    int attributeSize = CurrentNode.Attributes.Count;
+                    if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode) && attributeSize != 0)
+                    {
+                        CurrentNode.Attributes.Add(GlobalSettings.LeapedNode, BlankList);
+                    }
+                }
 
-        static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-        {
-            if (CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-            {
-                CurrentNode.Attributes.Remove(GlobalSettings.LeapedNode);
-            }
-        }
+                static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
+                {
+                    if (CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
+                    {
+                        CurrentNode.Attributes.Remove(GlobalSettings.LeapedNode);
+                    }
+                }
 
-        private void NormalRefund(PoESkillTree.SkillTreeFiles.SkillNode node)
-        {
-            Tree.ForceRefundNode(node);
-            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-            Tree.DrawPath(_prePath);
-        }
+                private void NormalRefund(PoESkillTree.SkillTreeFiles.SkillNode node)
+                {
+                    Tree.ForceRefundNode(node);
+                    _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+                    Tree.DrawPath(_prePath);
+                }
 
-        private void NormalNodeClick(PoESkillTree.SkillTreeFiles.SkillNode node)
-        {
-            if (_prePath != null)
-            {
-                Tree.AllocateSkillNodes(_prePath);
-                _toRemove = Tree.ForceRefundNodePreview(node);
-                if (_toRemove != null)
-                    Tree.DrawRefundPreview(_toRemove);
-            }
-        }
-*/
+                private void NormalNodeClick(PoESkillTree.SkillTreeFiles.SkillNode node)
+                {
+                    if (_prePath != null)
+                    {
+                        Tree.AllocateSkillNodes(_prePath);
+                        _toRemove = Tree.ForceRefundNodePreview(node);
+                        if (_toRemove != null)
+                            Tree.DrawRefundPreview(_toRemove);
+                    }
+                }
+        */
 
         private void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {
@@ -1480,67 +1480,67 @@ namespace PoESkillTree.Views
                     }
                     else
                     {
-/*  Turning off tagged Leap code for now
-                        bool NonLeapedNeighborIsConnected = false;
-                        foreach (var skillNode in node.Neighbor)//Checking for tree connection
-                        {
-                            if (Tree.SkilledNodes.Contains(skillNode) && !skillNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                            {
-                                NonLeapedNeighborIsConnected = true;
-                                break;
-                            }
-                        }
-                        // Toggle whether the node is included in the tree
-                        if (Tree.SkilledNodes.Contains(node))
-                        {
-                            if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                            {
-                                if (NonLeapedNeighborIsConnected)
-                                {
-                                    NormalRefund(node);
-                                }
-                                else
-                                {
-                                    Tree.SkilledNodes.Remove(node);
-                                }
-                                RemoveLeapTagFromNode(node);
-                            }
-                            else
-                            {
-                                NormalRefund(node);
-                            }
-                        }
-                        else
-                        {
-                            if (NonLeapedNeighborIsConnected)
-                            {
-                                NormalNodeClick(node);
-                                //Remove Leaping Tag from node if now connected in to tree
-                                if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                                {
-                                    foreach (var skillNode in node.Neighbor)//Checking for tree connection
-                                    {
-                                        if (Tree.SkilledNodes.Contains(skillNode) && skillNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                                        {
-                                            RemoveLeapTagFromNode(skillNode);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (node.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
-                                {
-                                    Tree.SkilledNodes.Add(node);
-                                    AddLeapTagToNode(node);
-                                }
-                                else
-                                {
-                                    NormalNodeClick(node);
-                                }
-                            }
-                        }
-*/
+                        /*  Turning off tagged Leap code for now
+                                                bool NonLeapedNeighborIsConnected = false;
+                                                foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                                                {
+                                                    if (Tree.SkilledNodes.Contains(skillNode) && !skillNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
+                                                    {
+                                                        NonLeapedNeighborIsConnected = true;
+                                                        break;
+                                                    }
+                                                }
+                                                // Toggle whether the node is included in the tree
+                                                if (Tree.SkilledNodes.Contains(node))
+                                                {
+                                                    if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
+                                                    {
+                                                        if (NonLeapedNeighborIsConnected)
+                                                        {
+                                                            NormalRefund(node);
+                                                        }
+                                                        else
+                                                        {
+                                                            Tree.SkilledNodes.Remove(node);
+                                                        }
+                                                        RemoveLeapTagFromNode(node);
+                                                    }
+                                                    else
+                                                    {
+                                                        NormalRefund(node);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (NonLeapedNeighborIsConnected)
+                                                    {
+                                                        NormalNodeClick(node);
+                                                        //Remove Leaping Tag from node if now connected in to tree
+                                                        if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
+                                                        {
+                                                            foreach (var skillNode in node.Neighbor)//Checking for tree connection
+                                                            {
+                                                                if (Tree.SkilledNodes.Contains(skillNode) && skillNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
+                                                                {
+                                                                    RemoveLeapTagFromNode(skillNode);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (node.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
+                                                        {
+                                                            Tree.SkilledNodes.Add(node);
+                                                            AddLeapTagToNode(node);
+                                                        }
+                                                        else
+                                                        {
+                                                            NormalNodeClick(node);
+                                                        }
+                                                    }
+                                                }
+                        */
                         // Toggle whether the node is included in the tree
                         if (Tree.SkilledNodes.Contains(node))
                         {
@@ -1672,31 +1672,6 @@ namespace PoESkillTree.Views
                 {
                     ushort ID = node.Id;
                     sp.Children.Add(new Separator());
-/*      Disabling JewelNodeData based code for now
-                    JewelNodeData JewelValue;
-                    if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
-                    {
-                        JewelItem EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
-                        if (EquippedJewel != null)
-                        {
-                            sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
-                            bool HasMods = false;
-                            foreach (var attriStat in EquippedJewel.Mods)
-                            {
-                                if (HasMods == false)
-                                {
-                                    sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
-                                    HasMods = true;
-                                }
-                                sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
-                            }
-                            if (!PersistentData.Options.ChangeSummaryEnabled)
-                            {
-                                sp.Children.Add(new Separator());
-                            }
-                        }
-                    }
-*/
                 }
 
                 //Change summary, activated with ctrl
@@ -1793,9 +1768,9 @@ namespace PoESkillTree.Views
             }
         }
 
-#endregion
+        #endregion
 
-#region Items
+        #region Items
 
         private bool _pauseLoadItemData;
 
@@ -1852,9 +1827,9 @@ namespace PoESkillTree.Views
                 .Select(d => d.Id);
         }
 
-#endregion
+        #endregion
 
-#region Builds - Services
+        #region Builds - Services
 
         private async Task CurrentBuildChanged()
         {
@@ -2097,9 +2072,9 @@ namespace PoESkillTree.Views
             }
         }
 
-#endregion
+        #endregion
 
-#region Theme
+        #region Theme
 
         private void mnuSetTheme_Click(object sender, RoutedEventArgs e)
         {
@@ -2134,7 +2109,7 @@ namespace PoESkillTree.Views
             ((MenuItem)NameScope.GetNameScope(this).FindName("mnuViewAccent" + sAccent)).IsChecked = true;
             PersistentData.Options.Accent = sAccent;
         }
-#endregion
+        #endregion
 
         private void UpdateTreeComparison()
         {
@@ -2169,7 +2144,7 @@ namespace PoESkillTree.Views
         }
 
         private async Task CraftItemAsync<TBase>(AbstractCraftingViewModel<TBase> viewModel, BaseDialog view)
-            where TBase: class, IItemBase
+            where TBase : class, IItemBase
         {
             if (!await this.ShowDialogAsync(viewModel, view))
             {
@@ -2186,7 +2161,7 @@ namespace PoESkillTree.Views
             StashViewModel.AddItem(item, true);
         }
 
-#region Async task helpers
+        #region Async task helpers
 
         private void AsyncTaskStarted(string infoText)
         {
@@ -2228,7 +2203,7 @@ namespace PoESkillTree.Views
             }
         }
 
-#endregion
+        #endregion
 
         public override IWindowPlacementSettings GetWindowPlacementSettings()
         {
@@ -2250,7 +2225,7 @@ namespace PoESkillTree.Views
             // Change the provider for each SettingsProperty.
             foreach (var property in appSettings.Properties)
             {
-                ((SettingsProperty) property).Provider = provider;
+                ((SettingsProperty)property).Provider = provider;
             }
             appSettings.Reload();
             return settings;

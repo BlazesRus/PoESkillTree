@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
@@ -71,11 +71,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
             var distanceLookup = new DistanceCalculator(graphNodes.Values.ToList());
 
-            Assert.AreEqual((uint) 0, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[0].DistancesIndex],
+            Assert.AreEqual((uint)0, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[0].DistancesIndex],
                 "Failed 0 distance test");
-            Assert.AreEqual((uint) 2, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[5].DistancesIndex],
+            Assert.AreEqual((uint)2, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[5].DistancesIndex],
                 "Wrong distance");
-            Assert.AreEqual((uint) 3, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[3].DistancesIndex],
+            Assert.AreEqual((uint)3, distanceLookup[graphNodes[0].DistancesIndex, graphNodes[3].DistancesIndex],
                 "Wrong distance");
         }
 

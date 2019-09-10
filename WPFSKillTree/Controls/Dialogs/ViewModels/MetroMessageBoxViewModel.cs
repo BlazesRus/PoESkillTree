@@ -1,6 +1,6 @@
-using System.Windows;
 using MahApps.Metro.IconPacks;
 using PoESkillTree.Common.ViewModels;
+using System.Windows;
 
 namespace PoESkillTree.Controls.Dialogs.ViewModels
 {

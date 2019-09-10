@@ -1,7 +1,7 @@
+using PoESkillTree.SkillTreeFiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {

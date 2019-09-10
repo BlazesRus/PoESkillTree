@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoESkillTree.Utils.Extensions;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
@@ -7,7 +8,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
-using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.Controls
 {
@@ -20,7 +20,7 @@ namespace PoESkillTree.Controls
 
         public string SearchFilter
         {
-            get { return (string) GetValue(SearchFilterProperty); }
+            get { return (string)GetValue(SearchFilterProperty); }
             set { SetValue(SearchFilterProperty, value); }
         }
 
@@ -34,14 +34,14 @@ namespace PoESkillTree.Controls
 
         public string SearchValuePath
         {
-            get { return (string) GetValue(SearchValuePathProperty); }
+            get { return (string)GetValue(SearchValuePathProperty); }
             set { SetValue(SearchValuePathProperty, value); }
         }
 
         private static void OnSearchValuePathChanged(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)
         {
-            var cb = (SearchableComboBox) dependencyObject;
+            var cb = (SearchableComboBox)dependencyObject;
             cb._valuePathEvaluator = new BindingEvaluator(cb.SearchValuePath);
         }
 

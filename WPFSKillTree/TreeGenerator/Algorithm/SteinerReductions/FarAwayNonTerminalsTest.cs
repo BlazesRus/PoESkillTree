@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using MoreLinq;
+﻿using MoreLinq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
+using System.Linq;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
 {
@@ -29,7 +29,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
             if (NodeStates.FixedTargetNodeCount <= 1 || NodeStates.VariableTargetNodeCount > 0) return 0;
 
             var removedNodes = 0;
-            
+
             uint maxEdgeDistance;
             using (var mst = new MinimalSpanningTree(NodeStates.FixedTargetNodeIndices.ToList(), DistanceLookup))
             {

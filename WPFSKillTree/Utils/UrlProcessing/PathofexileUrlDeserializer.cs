@@ -1,5 +1,5 @@
-using System.Text.RegularExpressions;
 using PoESkillTree.SkillTreeFiles;
+using System.Text.RegularExpressions;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {

@@ -1,8 +1,8 @@
-using System;
 using NLog;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
+using System;
 
 namespace PoESkillTree.ViewModels.Builds
 {
@@ -142,7 +142,7 @@ namespace PoESkillTree.ViewModels.Builds
             Exception e;
             if (deserializer.ValidateBuildUrl(out e))
             {
-                PointsUsed = (uint) deserializer.GetPointsCount();
+                PointsUsed = (uint)deserializer.GetPointsCount();
                 CharacterClass = deserializer.GetCharacterClass();
                 AscendancyClass = deserializer.GetAscendancyClass();
             }

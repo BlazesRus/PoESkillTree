@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace WpfRangeControls
@@ -283,7 +276,7 @@ namespace WpfRangeControls
             foreach (UIElement child in InternalChildren)
             {
                 child.Measure(constraint);
-                var s = GetItemPosition(constraint,child);
+                var s = GetItemPosition(constraint, child);
 
                 if (s.Right > w)
                     w = s.Right;

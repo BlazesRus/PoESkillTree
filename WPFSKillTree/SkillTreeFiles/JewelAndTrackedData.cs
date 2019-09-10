@@ -3,25 +3,20 @@
 // Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
 // ***********************************************************************
 //using PoESkillTree.TrackedStatViews;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Model.Items;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+using PoESkillTree.Utils;
+using PoESkillTree.ViewModels;
+using PoESkillTree.ViewModels.Equipment;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
-using PoESkillTree.SkillTreeFiles;
-
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
 using System.Text.RegularExpressions;
-using System.Globalization;
-using PoESkillTree.Utils;
-using PoESkillTree.ViewModels.Equipment;
-using PoESkillTree.ViewModels;
-using PoESkillTree.Model.Items;
-using PoESkillTree.Engine.GameModel.Items;
 
 namespace PoESkillTree
 {
@@ -121,7 +116,7 @@ namespace PoESkillTree
             }
         }
 
-        private JewelData(JewelItemAttributes itemAttributes):base()
+        private JewelData(JewelItemAttributes itemAttributes) : base()
         {
             _itemAttributes = itemAttributes;
             StrJewelSlots = new System.Collections.Generic.List<ushort>();
@@ -240,7 +235,7 @@ namespace PoESkillTree
                     foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
                     {
                         CurrentNode = NodePair.Value;
-                        if (CurrentNode.Attributes!=null&&CurrentNode.Attributes.ContainsKey(AttributeName))
+                        if (CurrentNode.Attributes != null && CurrentNode.Attributes.ContainsKey(AttributeName))
                         {
                             AttributeTotal += CurrentNode.Attributes[AttributeName][0];
                         }
@@ -269,7 +264,7 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
                     if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
-                    SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 Jewel Socket",  "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot"};
+                    SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                     GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.OmniType;
                 }
                 else if (IsStrThreshold)
@@ -281,7 +276,7 @@ namespace PoESkillTree
                         StrIntJewelSlots.Add(NodeID);
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(IntThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(IntThresholdLabel, new List<float>(1));
-                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot"};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Int JewelSlot" };
                         GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.StrIntHybrid;
                     }
                     else if (IsDexThreshold)
@@ -289,7 +284,7 @@ namespace PoESkillTree
                         StrDexJewelSlots.Add(NodeID);
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
-                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot"};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot" };
                         GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.StrDexHybrid;
                     }
                     else
@@ -308,7 +303,7 @@ namespace PoESkillTree
                         IntDexJewelSlots.Add(NodeID);
                         if (!SkillTree.Skillnodes[NodeID].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeID].Attributes.Add(DexThresholdLabel, new List<float>(1));
-                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot"};
+                        SkillTree.Skillnodes[NodeID].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                         GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.IntDexHybrid;
                     }
                     else
@@ -343,14 +338,14 @@ namespace PoESkillTree
         /// <summary>
         /// Property that converts JewelDictionary into List of node ids
         /// </summary>
-        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>) this; } }
+        public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>)this; } }
 
-      //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
-      //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
-      //var v = new Vector2D(p.X, p.Y);
-      //v = v * _multransform + _addtransform;
-      //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
-      //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
+        //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
+        //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
+        //var v = new Vector2D(p.X, p.Y);
+        //v = v * _multransform + _addtransform;
+        //IEnumerable<KeyValuePair<ushort, SkillNode>> nodes =
+        //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
 
         /// <summary>
         /// Calculates the total of target attribute inside jewel area.
@@ -448,7 +443,7 @@ namespace PoESkillTree
             foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
-                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute)&&CurrentNode.Attributes.Count!=0)
+                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute) && CurrentNode.Attributes.Count != 0)
                 {
                     CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, new List<float>(1));
                 }
@@ -505,7 +500,7 @@ namespace PoESkillTree
             {
                 TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
             }
-            if (TotalIncrease!=0.0f)
+            if (TotalIncrease != 0.0f)
             {
                 TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
                 Subtotal *= TotalIncrease;
@@ -588,7 +583,7 @@ namespace PoESkillTree
                 Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
                 PoESkillTree.Model.Items.Item ItemData = InvModel.Armor.Item;
                 //bool ContinueCalc = true;
-                for (int Index = 0; Index<10; ++Index)
+                for (int Index = 0; Index < 10; ++Index)
                 {
                     switch (Index)
                     {
@@ -671,7 +666,7 @@ namespace PoESkillTree
             }
             if (TotalIncrease != 0.0f)
             {
-                TotalIncrease = (100.0f + TotalIncrease)/100;
+                TotalIncrease = (100.0f + TotalIncrease) / 100;
                 Subtotal *= TotalIncrease;
             }
             if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
@@ -817,7 +812,7 @@ namespace PoESkillTree
         {
             if (Count == 0) { return AttributeDic; }
             Dictionary<string, float> AttributeTotals = CreateAttributeDictionary(AttributeDic);
-            foreach(var Element in AttributeTotals.Keys)
+            foreach (var Element in AttributeTotals.Keys)
             {
                 if (AttributeDic.ContainsKey(Element))
                 {
@@ -855,7 +850,7 @@ namespace PoESkillTree
                     if (attrlist.ContainsKey(StatName))
                     {
                         CustomName = StatName + " (TrackedAttr)";
-                        this.Add(new PseudoAttribute(Attribute,CustomName));
+                        this.Add(new PseudoAttribute(Attribute, CustomName));
                     }
                     else
                     {
@@ -910,7 +905,7 @@ namespace PoESkillTree
                 }
                 else
                 {
-                    if(data==null)
+                    if (data == null)
                     {
                         throw new System.ArgumentException("IndexKey has found no matches in indexes", "IndexKey");
                     }

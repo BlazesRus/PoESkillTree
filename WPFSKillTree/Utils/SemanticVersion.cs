@@ -1,5 +1,5 @@
-﻿using System;
-using PoESkillTree.Utils.Extensions;
+﻿using PoESkillTree.Utils.Extensions;
+using System;
 
 namespace PoESkillTree.Utils
 {
@@ -48,7 +48,7 @@ namespace PoESkillTree.Utils
         }
 
         public override bool Equals(object obj)
-            => Equals((SemanticVersion) obj);
+            => Equals((SemanticVersion)obj);
 
         public bool Equals(SemanticVersion other)
             => other != null && Major == other.Major && Minor == other.Minor && Patch == other.Patch &&

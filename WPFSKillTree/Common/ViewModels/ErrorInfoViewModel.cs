@@ -1,9 +1,9 @@
-﻿using System;
+﻿using PoESkillTree.Engine.Utils.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using PoESkillTree.Engine.Utils.Extensions;
 
 namespace PoESkillTree.Common.ViewModels
 {
@@ -72,7 +72,7 @@ namespace PoESkillTree.Common.ViewModels
             IList<string> oldList;
             if (_errorDict.TryGetValue(propertyName, out oldList) && oldList.Count == 1 && oldList[0] == error)
                 return;
-            _errorDict[propertyName] = new[] {error};
+            _errorDict[propertyName] = new[] { error };
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using PoESkillTree.Engine.GameModel.PassiveTree;
+﻿using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Genetic;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.TreeGenerator.Settings;
+using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PoESkillTree.TreeGenerator.Solver
 {
@@ -136,7 +136,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             get
             {
                 return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
+                    (int)(PopMultiplier * SearchSpace.Count),
                     SearchSpace.Count,
                     maxMutateClusterSize: MaxMutateClusterSize);
             }
@@ -222,7 +222,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             foreach (var kvPair in attrConstraints)
             {
                 _attrConstraints[i] = kvPair.Value;
-                _attrNameLookup[kvPair.Key] = new List<int> {i};
+                _attrNameLookup[kvPair.Key] = new List<int> { i };
                 _attrConversionMultipliers[Tuple.Create(kvPair.Key, i)] = 1;
                 i++;
             }
@@ -237,7 +237,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                     }
                     else
                     {
-                        _attrNameLookup[tuple.Item1] = new List<int> {i};
+                        _attrNameLookup[tuple.Item1] = new List<int> { i };
                     }
                     _attrConversionMultipliers[Tuple.Create(tuple.Item1, i)] = tuple.Item2;
                 }
@@ -458,13 +458,13 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            if (Settings.TreePlusItemsMode||GlobalSettings.AdvancedTreeSearch)
+            if (Settings.TreePlusItemsMode || GlobalSettings.AdvancedTreeSearch)
             {
                 string StatName;
                 Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
                 Dictionary<string, float> StatTotals = new Dictionary<string, float>();
                 int attrIndex;
-                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
+                foreach (var ConversionKey in _attrConversionMultipliers.Keys)
                 {
                     attrIndex = ConversionKey.Item2;
                     StatName = ConversionKey.Item1;
@@ -568,7 +568,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         {
             // Don't go higher than the target value.
             x = Math.Min(x, target);
-            return Math.Exp(weight * CsvWeightMultiplier * x/target) / Math.Exp(weight * CsvWeightMultiplier);
+            return Math.Exp(weight * CsvWeightMultiplier * x / target) / Math.Exp(weight * CsvWeightMultiplier);
         }
     }
 }

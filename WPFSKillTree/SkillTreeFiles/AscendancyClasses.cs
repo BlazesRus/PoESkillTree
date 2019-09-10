@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using EnumsNET;
+﻿using EnumsNET;
 using PoESkillTree.Engine.GameModel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.SkillTreeFiles
 {

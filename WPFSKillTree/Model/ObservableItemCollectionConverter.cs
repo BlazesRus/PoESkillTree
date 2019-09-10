@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using PoESkillTree.Engine.GameModel.Items;
+﻿using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.Engine.Utils;
-using PoESkillTree.Utils;
 using PoESkillTree.Model.Items;
+using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using Item = PoESkillTree.Engine.GameModel.Items.Item;
 using OldItem = PoESkillTree.Model.Items.Item;
 
@@ -80,7 +80,7 @@ namespace PoESkillTree.Model
         {
             if (e.PropertyName == nameof(OldItem.IsEnabled))
             {
-                OldItemOnIsEnabledChanged((OldItem) sender);
+                OldItemOnIsEnabledChanged((OldItem)sender);
             }
         }
 

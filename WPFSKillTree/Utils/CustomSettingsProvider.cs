@@ -1,11 +1,11 @@
-﻿using System;
-using System.Configuration;
+﻿using PoESkillTree.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using PoESkillTree.Properties;
 
 namespace PoESkillTree.Utils
 {

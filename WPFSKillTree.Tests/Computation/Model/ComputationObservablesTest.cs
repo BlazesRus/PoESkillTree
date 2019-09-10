@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using EnumsNET;
+﻿using EnumsNET;
 using Moq;
 using NUnit.Framework;
 using PoESkillTree.Engine.Computation.Builders.Stats;
@@ -16,6 +10,12 @@ using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation.Model
 {
@@ -212,7 +212,7 @@ namespace PoESkillTree.Computation.Model
 
         private static PassiveTreeDefinition CreatePassiveTree(int nodeCount)
         {
-            var nodes = Enumerable.Range(0, nodeCount).Select(id => CreatePassiveNode((ushort) id));
+            var nodes = Enumerable.Range(0, nodeCount).Select(id => CreatePassiveNode((ushort)id));
             return new PassiveTreeDefinition(nodes.ToList());
         }
 
@@ -221,7 +221,7 @@ namespace PoESkillTree.Computation.Model
                 0, default, new string[0]);
 
         private static IReadOnlyList<SkillNode> CreateSkillNodes(int nodeCount)
-            => Enumerable.Range(0, nodeCount).Select(id => new SkillNode { Id = (ushort) id }).ToList();
+            => Enumerable.Range(0, nodeCount).Select(id => new SkillNode { Id = (ushort)id }).ToList();
 
         private static IReadOnlyList<(Item, ItemSlot)> CreateItems(int count)
             => Enumerable.Range(0, count).Zip(Enums.GetValues<ItemSlot>(), (i, s) => (CreateItem(i), s)).ToList();

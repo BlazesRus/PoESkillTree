@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using MahApps.Metro.Controls;
+﻿using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Controls.Dialogs.Views;
 using PoESkillTree.Controls.Dialogs.ViewModels;
+using PoESkillTree.Controls.Dialogs.Views;
+using System;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace PoESkillTree.Controls.Dialogs
 {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using PoESkillTree.TreeGenerator.Algorithm.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.TreeGenerator.Algorithm.Model;
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
@@ -145,7 +145,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 var iIntoPath = GetShortestPath(i, into).Where(n => !path.Contains(n)).ToArray();
                 if (ixPath.Length < iIntoPath.Length)
                 {
-                    this[i, into] = (uint) ixPath.Length + 1;
+                    this[i, into] = (uint)ixPath.Length + 1;
                     SetShortestPath(i, into, ixPath);
                 }
                 else
@@ -267,7 +267,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                             continue;
 
                         predecessors[adjacentNode.Id] = node.Id;
-                        
+
                         if (adjacentNode.DistancesIndex >= 0)
                         {
                             AddEdge(start, adjacentNode, distFromStart, predecessors);
@@ -290,16 +290,16 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         private void AddEdge(GraphNode from, GraphNode to, int distFromStart, IDictionary<ushort, ushort> predecessors)
         {
             var length = distFromStart + 1;
-            
+
             var i1 = from.DistancesIndex;
             var i2 = to.DistancesIndex;
             if (_paths[i1][i2] != null) return;
 
             var path = length > 0 ? GenerateShortestPath(from.Id, to.Id, predecessors, length) : new ushort[0];
-            this[i1, i2] = (uint) length;
+            this[i1, i2] = (uint)length;
             SetShortestPath(i1, i2, path);
         }
-        
+
         /// <summary>
         /// Generates the shortest path from target to start by reading it out of the predecessors-dictionary.
         /// The dictionary must have a path from target to start stored.

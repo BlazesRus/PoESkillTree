@@ -1,8 +1,8 @@
+using PoESkillTree.Utils.Extensions;
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
-using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.Utils.Converter
 {
@@ -83,14 +83,14 @@ namespace PoESkillTree.Utils.Converter
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var mask = (int) parameter;
-            _target = (int) value;
+            var mask = (int)parameter;
+            _target = (int)value;
             return (mask & _target) != 0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            _target ^= (int) parameter;
+            _target ^= (int)parameter;
             return Enum.Parse(targetType, _target.ToString());
         }
     }

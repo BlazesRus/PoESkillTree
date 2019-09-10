@@ -1,7 +1,7 @@
-﻿using System;
+﻿using PoESkillTree.Engine.Computation.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.Engine.Computation.Common;
 
 namespace PoESkillTree.Computation.Model
 {
@@ -15,7 +15,7 @@ namespace PoESkillTree.Computation.Model
             var o = new ConfigurationStats();
             foreach (var (stat, value) in values)
             {
-                o._values[stat] = (NodeValue?) value;
+                o._values[stat] = (NodeValue?)value;
             }
             return o;
         }

@@ -1,4 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,16 +19,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Newtonsoft.Json.Linq;
-using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Controls;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
-using PoESkillTree.Model.Builds;
-using PoESkillTree.Model.Items;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -41,7 +41,7 @@ namespace PoESkillTree.ViewModels.Equipment
         public string TabsLink
         {
             get { return _tabsLink; }
-            private set { SetProperty(ref _tabsLink, value);}
+            private set { SetProperty(ref _tabsLink, value); }
         }
 
         private string _tabLink;
@@ -63,7 +63,7 @@ namespace PoESkillTree.ViewModels.Equipment
             get
             {
                 return _openInBrowserCommand ?? (_openInBrowserCommand = new RelayCommand<string>(
-                    param => Process.Start(param), 
+                    param => Process.Start(param),
                     param => !string.IsNullOrEmpty(param)));
             }
         }

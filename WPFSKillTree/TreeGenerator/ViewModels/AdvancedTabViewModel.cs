@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Input;
-using MoreLinq;
+﻿using MoreLinq;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Controls.Dialogs;
@@ -21,6 +12,15 @@ using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.TreeGenerator.Settings;
 using PoESkillTree.TreeGenerator.Solver;
 using PoESkillTree.Utils.Converter;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
@@ -506,7 +506,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 return _addPseudoConstraintCommand ?? (_addPseudoConstraintCommand = new RelayCommand(
                     () =>
                     {
-                        var newConstraint = (PseudoAttributeConstraint) NewPseudoAttributeConstraint.Clone();
+                        var newConstraint = (PseudoAttributeConstraint)NewPseudoAttributeConstraint.Clone();
                         _addedPseudoAttributes.Add(newConstraint.Data);
                         PseudoAttributesView.Refresh();
 
@@ -624,7 +624,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
 
             PseudoAttributesView = new ListCollectionView(_pseudoAttributes)
             {
-                Filter = item => !_addedPseudoAttributes.Contains((PseudoAttribute) item)
+                Filter = item => !_addedPseudoAttributes.Contains((PseudoAttribute)item)
             };
             PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Group), ListSortDirection.Ascending));
             PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Name), ListSortDirection.Ascending));
@@ -752,7 +752,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             AttributeConstraints.Clear();
             foreach (var attribute in attributes)
             {
-                AttributeConstraints.Add(new AttributeConstraint(attribute.Key) {TargetValue = attribute.Value});
+                AttributeConstraints.Add(new AttributeConstraint(attribute.Key) { TargetValue = attribute.Value });
             }
         }
 
@@ -840,7 +840,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
                 pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo, TreePlusItemsMode.Value));
-            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo);}
+            if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo); }
             return Task.FromResult<ISolver>(solver);
         }
 
@@ -861,11 +861,11 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             {
                 if (stats.ContainsKey(attr.Key))
                 {
-                    stats[attr.Key] += Tree.Level*attr.Value;
+                    stats[attr.Key] += Tree.Level * attr.Value;
                 }
                 else
                 {
-                    stats[attr.Key] = Tree.Level*attr.Value;
+                    stats[attr.Key] = Tree.Level * attr.Value;
                 }
             }
 

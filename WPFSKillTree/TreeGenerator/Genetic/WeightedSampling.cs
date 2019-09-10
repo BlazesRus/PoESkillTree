@@ -17,7 +17,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
         /// equals the sum of all weights).
         /// 
         /// Note that removing elements is not implemented!
-        
+
         private SortedDictionary<double, T> entries;
         private double totalWeight;
 

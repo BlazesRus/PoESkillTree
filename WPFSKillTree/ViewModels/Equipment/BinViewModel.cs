@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using GongSolutions.Wpf.DragDrop;
+using System.Windows;
 using System.Windows.Media;
-using GongSolutions.Wpf.DragDrop;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -25,7 +25,7 @@ namespace PoESkillTree.ViewModels.Equipment
             if (dropInfo.Effects == DragDropEffects.Move)
             {
                 // remove the item from its view model on move
-                var draggedItem = (DraggableItemViewModel) dropInfo.Data;
+                var draggedItem = (DraggableItemViewModel)dropInfo.Data;
                 draggedItem.Item = null;
             }
         }

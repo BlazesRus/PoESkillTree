@@ -18,15 +18,15 @@ namespace PoESkillTree.Utils.Wpf
 
         public double VerticalOffset
         {
-            get { return (double) GetValue(VerticalOffsetProperty); }
+            get { return (double)GetValue(VerticalOffsetProperty); }
             set { SetValue(VerticalOffsetProperty, value); }
         }
 
         private static void VerticalOffsetOnPropertyChanged(DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs args)
         {
-            var behavior = (ScrollViewerBindableOffsetBehavior) dependencyObject;
-            var offset = (double) args.NewValue;
+            var behavior = (ScrollViewerBindableOffsetBehavior)dependencyObject;
+            var offset = (double)args.NewValue;
             behavior.AssociatedObject.ScrollToVerticalOffset(offset);
         }
 

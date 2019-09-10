@@ -1,7 +1,7 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using PoESkillTree.Common;
 using PoESkillTree.Model.Builds;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace PoESkillTree.ViewModels.Builds
 {

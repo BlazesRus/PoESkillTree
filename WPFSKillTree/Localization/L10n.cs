@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using PoESkillTree.Utils;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using PoESkillTree.Utils;
 
 namespace PoESkillTree.Localization
 {

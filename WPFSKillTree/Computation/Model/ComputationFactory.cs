@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using PoESkillTree.Engine.Computation.Builders;
+﻿using PoESkillTree.Engine.Computation.Builders;
 using PoESkillTree.Engine.Computation.Common.Builders;
 using PoESkillTree.Engine.Computation.Core;
 using PoESkillTree.Engine.Computation.Data;
 using PoESkillTree.Engine.Computation.Data.Steps;
 using PoESkillTree.Engine.Computation.Parsing;
 using PoESkillTree.Engine.GameModel;
+using System;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation.Model
 {

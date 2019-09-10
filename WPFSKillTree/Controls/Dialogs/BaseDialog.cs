@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿using MahApps.Metro.Controls.Dialogs;
+using System.Windows;
 using System.Windows.Input;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace PoESkillTree.Controls.Dialogs
 {
@@ -27,7 +27,7 @@ namespace PoESkillTree.Controls.Dialogs
         /// </summary>
         public double MaxContentWidth
         {
-            get { return (double) GetValue(MaxContentWidthProperty); }
+            get { return (double)GetValue(MaxContentWidthProperty); }
             set { SetValue(MaxContentWidthProperty, value); }
         }
 
@@ -41,7 +41,7 @@ namespace PoESkillTree.Controls.Dialogs
         /// </summary>
         public Visibility CloseButtonVisibility
         {
-            get { return (Visibility) GetValue(CloseButtonVisibilityProperty); }
+            get { return (Visibility)GetValue(CloseButtonVisibilityProperty); }
             set { SetValue(CloseButtonVisibilityProperty, value); }
         }
 
@@ -53,7 +53,7 @@ namespace PoESkillTree.Controls.Dialogs
         /// </summary>
         public ICommand CloseCommand
         {
-            get { return (ICommand) GetValue(CloseCommandProperty); }
+            get { return (ICommand)GetValue(CloseCommandProperty); }
             set { SetValue(CloseCommandProperty, value); }
         }
 

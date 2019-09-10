@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PoESkillTree.Utils;
+using System;
 using System.Windows.Media;
-using PoESkillTree.Utils;
 
 namespace PoESkillTree.Controls
 {

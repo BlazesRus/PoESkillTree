@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using PoESkillTree.Computation.Model;
+﻿using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Core;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation.ViewModels
 {

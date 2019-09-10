@@ -159,10 +159,10 @@ namespace PoESkillTree.ItemFilter.Model
                 return Keyword + " " + Value;
             else
                 if (Ordinal == Min) // LessOrEqual
-                    return Keyword + " <= " + Value2;
+                return Keyword + " <= " + Value2;
             else
                 if (Ordinal2 == Max) // GreaterOrEqual
-                    return Keyword + " >= " + Value;
+                return Keyword + " >= " + Value;
             else // Between
                 return Keyword + " >= " + Value + MultilineMatchDelimiter + Keyword + " <= " + Value2;
         }

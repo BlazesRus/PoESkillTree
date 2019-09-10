@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using PoESkillTree.Engine.GameModel.Modifiers;
+using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.Engine.GameModel.Modifiers;
 
 namespace PoESkillTree.Model.Items.Mods
 {
@@ -23,7 +23,7 @@ namespace PoESkillTree.Model.Items.Mods
         {
             var benchLookup = benchOptions.ToLookup(m => m.ModId);
             Mods = mods.ToDictionary(
-                p => p.Key, 
+                p => p.Key,
                 p => new Mod(p.Key, p.Value, benchLookup[p.Key]));
             _groupsByType = Mods.Values
                 .GroupBy(m => m.JsonMod.GenerationType)

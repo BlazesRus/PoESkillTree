@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MoreLinq;
+﻿using MoreLinq;
 using NUnit.Framework;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.GameModel.Modifiers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Items.Mods
 {
@@ -131,8 +131,8 @@ namespace PoESkillTree.Model.Items.Mods
 
             var chaosDamage = affixes.Single(a => a.Group == "ChaosDamage");
             Assert.AreEqual(4, chaosDamage.Mods.Count);
-            Assert.AreEqual("ChaosDamageJewel", ((Mod) chaosDamage.Mods[0]).Id);
-            Assert.AreEqual("EinharMasterAddedChaosDamage1", ((Mod) chaosDamage.Mods[1]).Id);
+            Assert.AreEqual("ChaosDamageJewel", ((Mod)chaosDamage.Mods[0]).Id);
+            Assert.AreEqual("EinharMasterAddedChaosDamage1", ((Mod)chaosDamage.Mods[1]).Id);
 
             var bowChaosDamage = chaosDamage.GetMatchingMods(
                 Tags.Bow | Tags.TwoHandWeapon | Tags.Ranged, ItemClass.Bow).ToList();
@@ -140,10 +140,10 @@ namespace PoESkillTree.Model.Items.Mods
             var jewelChaosDamage = chaosDamage.GetMatchingMods(
                 Tags.Jewel | Tags.DexJewel | Tags.NotInt | Tags.NotStr, ItemClass.Jewel).ToList();
             Assert.AreEqual(1, jewelChaosDamage.Count);
-            Assert.AreEqual("ChaosDamageJewel", ((Mod) jewelChaosDamage[0]).Id);
+            Assert.AreEqual("ChaosDamageJewel", ((Mod)jewelChaosDamage[0]).Id);
             var amuletChaosDamage = chaosDamage.GetMatchingMods(Tags.Amulet, ItemClass.Amulet).ToList();
             Assert.AreEqual(2, amuletChaosDamage.Count);
-            Assert.AreEqual("EinharMasterAddedChaosDamage1", ((Mod) amuletChaosDamage[0]).Id);
+            Assert.AreEqual("EinharMasterAddedChaosDamage1", ((Mod)amuletChaosDamage[0]).Id);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace PoESkillTree.Model.Items.Mods
 
             var quiver = affix.GetMatchingMods(Tags.Quiver, ItemClass.Quiver).ToList();
             Assert.AreEqual(5, quiver.Count);
-            Assert.AreEqual("ProjectileSpeed1", ((Mod) quiver[0]).Id);
+            Assert.AreEqual("ProjectileSpeed1", ((Mod)quiver[0]).Id);
         }
 
         [Test]

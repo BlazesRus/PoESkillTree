@@ -1,10 +1,10 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.ItemFilter.Model;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using MahApps.Metro.Controls;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.ItemFilter.Model;
 
 namespace PoESkillTree.ItemFilter.Views
 {
@@ -135,7 +135,8 @@ namespace PoESkillTree.ItemFilter.Views
                     {
                         FilterManager.Save(filter);
                         FilterManager.Enable(filter);
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         await this.ShowErrorAsync("An error occurred while attempting to save item filter.", ex.Message);
                     }

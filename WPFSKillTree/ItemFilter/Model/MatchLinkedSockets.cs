@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PoESkillTree.ItemFilter.Model
+﻿namespace PoESkillTree.ItemFilter.Model
 {
     public class MatchLinkedSockets : MatchNumber
     {

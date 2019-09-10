@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using NLog;
 using PoESkillTree.Engine.Utils;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {

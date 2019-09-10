@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using PoESkillTree.Engine.GameModel.Items;
+using GongSolutions.Wpf.DragDrop;
 using PoESkillTree.Model.Items;
 using System.Windows;
-using GongSolutions.Wpf.DragDrop;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -68,7 +65,7 @@ namespace PoESkillTree.ViewModels.Equipment
 
         public void Drop(IDropInfo dropInfo)
         {
-            var draggedItem = (DraggableJewelItemViewModel) dropInfo.Data;
+            var draggedItem = (DraggableJewelItemViewModel)dropInfo.Data;
 
             if (dropInfo.Effects == DragDropEffects.Move)
             {

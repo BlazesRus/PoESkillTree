@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using MoreLinq;
+﻿using MoreLinq;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.Model.JsonSettings
 {
@@ -42,7 +42,7 @@ namespace PoESkillTree.Model.JsonSettings
             }
             if (!SubSettings.Any())
                 return false;
-            var obj = (JObject) token;
+            var obj = (JObject)token;
             var changed = false;
             foreach (var s in SubSettings)
             {

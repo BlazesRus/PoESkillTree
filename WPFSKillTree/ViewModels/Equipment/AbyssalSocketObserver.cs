@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using NLog;
+﻿using NLog;
 using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Common.Builders;
 using PoESkillTree.Engine.Computation.Common.Builders.Stats;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -66,7 +66,7 @@ namespace PoESkillTree.ViewModels.Equipment
             if (_jewels is null)
                 return;
 
-            var jewelsToEnable = (int) (value.SingleOrNull() ?? 0);
+            var jewelsToEnable = (int)(value.SingleOrNull() ?? 0);
             for (var i = 0; i < _jewels[slot].Count; i++)
             {
                 _jewels[slot][i].IsEnabled = i < jewelsToEnable;

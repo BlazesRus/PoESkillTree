@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using MoreLinq;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Model.Items.Mods;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace PoESkillTree.ViewModels.Crafting
 {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PoESkillTree.Common.ViewModels;
+using System;
 using System.Collections.Generic;
-using PoESkillTree.Common.ViewModels;
 
 namespace PoESkillTree.Controls.Dialogs.ViewModels
 {
@@ -27,10 +27,10 @@ namespace PoESkillTree.Controls.Dialogs.ViewModels
             Message = message;
             Input = defaultText;
         }
-        
+
         protected override IEnumerable<string> ValidateProperty(string propertyName)
         {
-            return propertyName != nameof(Input) ? null : new[] {_inputValidationFunc(Input)};
+            return propertyName != nameof(Input) ? null : new[] { _inputValidationFunc(Input) };
         }
     }
 }

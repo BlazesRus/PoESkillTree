@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using PoESkillTree.Engine.Computation.Common;
+﻿using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Utils;
+using System;
+using System.ComponentModel;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -17,7 +17,7 @@ namespace PoESkillTree.Computation.ViewModels
         public ResultNodeViewModel Node { get; }
 
         public ExplicitRegistrationType.GainOnAction GainOnActionType
-            => (ExplicitRegistrationType.GainOnAction) Node.Stat.ExplicitRegistrationType;
+            => (ExplicitRegistrationType.GainOnAction)Node.Stat.ExplicitRegistrationType;
 
         public bool IsVisible
             => Node.HasValue && GainOnActionType.GainedStat.Entity == Entity.Character;

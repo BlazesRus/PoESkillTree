@@ -1,17 +1,17 @@
-﻿using System;
+﻿using EnumsNET;
+using MoreLinq;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.Model;
+using PoESkillTree.Utils.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using EnumsNET;
 using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
-using PoESkillTree.Model;
-using MoreLinq;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.Utils.Wpf;
 
 namespace PoESkillTree.SkillTreeFiles
 {

@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using GongSolutions.Wpf.DragDrop;
+﻿using GongSolutions.Wpf.DragDrop;
 using MoreLinq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Controls;
@@ -17,6 +8,15 @@ using PoESkillTree.Model;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Wpf;
+using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -193,7 +193,7 @@ namespace PoESkillTree.ViewModels.Equipment
             if (args.PropertyName == nameof(StashItemViewModel.Item))
             {
                 // always remove the view model so the item is removed from PersistentData
-                var item = (StashItemViewModel) sender;
+                var item = (StashItemViewModel)sender;
                 Items.Remove(item);
             }
         }
@@ -203,7 +203,7 @@ namespace PoESkillTree.ViewModels.Equipment
             if (args.PropertyName == nameof(StashItemViewModel.Item))
             {
                 // add the view model back if the item was changed and not removed
-                var item = (StashItemViewModel) sender;
+                var item = (StashItemViewModel)sender;
                 if (item.Item != null)
                 {
                     Items.Add(item);
@@ -317,7 +317,7 @@ namespace PoESkillTree.ViewModels.Equipment
             var result = await _dialogCoordinator.EditStashTabAsync(this, vm);
             if (result == TabPickerResult.Affirmative)
             {
-                AddStashTab(new StashBookmark(vm.Name, (int) ScrollBarValue + 1, vm.Color));
+                AddStashTab(new StashBookmark(vm.Name, (int)ScrollBarValue + 1, vm.Color));
             }
         }
 
@@ -421,7 +421,7 @@ namespace PoESkillTree.ViewModels.Equipment
         /// </summary>
         private static int NearestCell(double pos)
         {
-            return (int) Math.Round(pos / CellSize);
+            return (int)Math.Round(pos / CellSize);
         }
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
@@ -551,7 +551,7 @@ namespace PoESkillTree.ViewModels.Equipment
             public void DragOver(IDropInfo dropInfo)
             {
                 // scroll to the targeted tab
-                var tab = ((FrameworkElement) dropInfo.VisualTarget).DataContext as StashBookmarkViewModel;
+                var tab = ((FrameworkElement)dropInfo.VisualTarget).DataContext as StashBookmarkViewModel;
                 if (tab != null)
                 {
                     _stashViewModel.ScrollToStashTab(tab);
@@ -587,7 +587,7 @@ namespace PoESkillTree.ViewModels.Equipment
                 pos.X -= dragStart.X;
                 pos.Y -= dragStart.Y;
 
-                var item = ((DraggableItemViewModel) DropInfo.Data).Item;
+                var item = ((DraggableItemViewModel)DropInfo.Data).Item;
                 var rect = new Rect
                 {
                     X = NearestCell(pos.X) * CellSize,

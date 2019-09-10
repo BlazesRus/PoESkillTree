@@ -110,7 +110,7 @@ namespace PoESkillTree.Utils
             {
                 // already relative
                 return path;
-            }    
+            }
             var referenceUri = new Uri(ProgramDirectory + Path.DirectorySeparatorChar);
             return referenceUri.MakeRelativeUri(new Uri(path)).ToString();
         }

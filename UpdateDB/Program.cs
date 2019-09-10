@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NLog;
 
 namespace UpdateDB
 {
@@ -86,7 +86,7 @@ namespace UpdateDB
 
             foreach (var loaderArgument in loaderArguments)
             {
-                var split = loaderArgument.Split(new[] {'.', ':'}, 3);
+                var split = loaderArgument.Split(new[] { '.', ':' }, 3);
                 if (split.Length < 2 || !exec.IsArgumentSupported(split[0], split[1]))
                 {
                     Log.Error("Invalid argument - \"" + loaderArgument + "\"");

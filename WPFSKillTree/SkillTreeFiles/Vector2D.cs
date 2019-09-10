@@ -19,7 +19,7 @@ namespace PoESkillTree.SkillTreeFiles
         public override string ToString()
             => "(" + X + ", " + Y + ")";
 
-        public double Length => Math.Sqrt(X*X + Y*Y);
+        public double Length => Math.Sqrt(X * X + Y * Y);
 
         public override int GetHashCode()
             => (X.GetHashCode() << 16) ^ Y.GetHashCode();
@@ -28,19 +28,19 @@ namespace PoESkillTree.SkillTreeFiles
             => new Vector2D(lhs.X + rhs.X, lhs.Y + rhs.Y);
 
         public static Vector2D operator /(Vector2D lhs, Vector2D rhs)
-            => new Vector2D(lhs.X/rhs.X, lhs.Y/rhs.Y);
+            => new Vector2D(lhs.X / rhs.X, lhs.Y / rhs.Y);
 
         public static Vector2D operator *(Vector2D lhs, Vector2D rhs)
-            => new Vector2D(lhs.X*rhs.X, lhs.Y*rhs.Y);
+            => new Vector2D(lhs.X * rhs.X, lhs.Y * rhs.Y);
 
         public static Vector2D operator -(Vector2D lhs, Vector2D rhs)
             => new Vector2D(lhs.X - rhs.X, lhs.Y - rhs.Y);
 
         public static Vector2D operator *(Vector2D lhs, double f)
-            => new Vector2D(lhs.X*f, lhs.Y*f);
+            => new Vector2D(lhs.X * f, lhs.Y * f);
 
         public static Vector2D operator /(Vector2D lhs, double f)
-            => new Vector2D(lhs.X/f, lhs.Y/f);
+            => new Vector2D(lhs.X / f, lhs.Y / f);
 
         public override bool Equals(object obj)
             => obj is Vector2D other && Equals(other);

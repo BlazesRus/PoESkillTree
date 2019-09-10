@@ -1,5 +1,5 @@
-﻿using System.Windows.Media;
-using PoESkillTree.Common.ViewModels;
+﻿using PoESkillTree.Common.ViewModels;
+using System.Windows.Media;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

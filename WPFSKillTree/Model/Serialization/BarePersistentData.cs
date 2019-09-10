@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
-using PoESkillTree.Controls.Dialogs;
+﻿using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Model.Builds;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {

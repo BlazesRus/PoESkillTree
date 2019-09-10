@@ -1,7 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
+using System;
+using System.Windows.Input;
 
 namespace PoESkillTree.Computation.ViewModels
 {

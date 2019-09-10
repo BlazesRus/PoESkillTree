@@ -1,11 +1,11 @@
-﻿using System;
+﻿using PoESkillTree.Computation.Model;
+using PoESkillTree.Engine.Computation.Common;
+using PoESkillTree.Engine.Computation.Core;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using PoESkillTree.Computation.Model;
-using PoESkillTree.Engine.Computation.Common;
-using PoESkillTree.Engine.Computation.Core;
 
 namespace PoESkillTree.Computation.ViewModels
 {

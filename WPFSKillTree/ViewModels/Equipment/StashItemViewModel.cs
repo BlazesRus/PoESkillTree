@@ -1,6 +1,6 @@
-﻿using System.Windows;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using PoESkillTree.Model.Items;
+using System.Windows;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

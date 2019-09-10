@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Builders.Stats;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -75,6 +75,6 @@ namespace PoESkillTree.Computation.ViewModels
         }
 
         private static ConfigurationNodeViewModel CreateSut(IStat stat, double? defaultValue = null)
-            => new ConfigurationNodeViewModel(stat, (NodeValue?) defaultValue);
+            => new ConfigurationNodeViewModel(stat, (NodeValue?)defaultValue);
     }
 }

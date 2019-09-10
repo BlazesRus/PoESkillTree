@@ -49,7 +49,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _spanningEdges?.Dispose();
             _spanningEdges = new PooledList<DirectedGraphEdge>(_mstNodes.Count);
 
-            using (var adjacentEdgeQueue = new LinkedListPriorityQueue<DirectedGraphEdge>(100, _mstNodes.Count*_mstNodes.Count))
+            using (var adjacentEdgeQueue = new LinkedListPriorityQueue<DirectedGraphEdge>(100, _mstNodes.Count * _mstNodes.Count))
             {
                 InitializeDataStructures(startIndex, notIncluded, ref notIncludedCount, adjacentEdgeQueue);
                 isIncluded[startIndex] = true;

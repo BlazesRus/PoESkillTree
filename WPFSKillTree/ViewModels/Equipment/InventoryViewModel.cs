@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MoreLinq;
+﻿using MoreLinq;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -65,7 +65,7 @@ namespace PoESkillTree.ViewModels.Equipment
 
         private IReadOnlyList<InventoryItemViewModel> CreateItemJewelVms(ItemSlot slot, int count)
             => Enumerable.Range(0, count)
-                .Select(i => CreateSlotVm(slot, (ushort) i))
+                .Select(i => CreateSlotVm(slot, (ushort)i))
                 .ToList();
 
         private InventoryItemViewModel CreateSlotVm(ItemSlot slot, ushort? socket = null)

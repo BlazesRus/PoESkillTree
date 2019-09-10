@@ -1,31 +1,31 @@
+using EnumsNET;
+using GongSolutions.Wpf.DragDrop;
+using MoreLinq;
+using Newtonsoft.Json;
+using NLog;
+using PoESkillTree.Common;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Model.Serialization;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Utils.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop;
-using MoreLinq;
-using PoESkillTree.Common;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
-using PoESkillTree.Model.Builds;
-using PoESkillTree.Model.Serialization;
-using PoESkillTree.SkillTreeFiles;
-using PoESkillTree.Utils.Wpf;
-using PoESkillTree.Controls.Dialogs;
-using Newtonsoft.Json;
-using System.Text;
-using EnumsNET;
-using NLog;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Utils;
-using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.ViewModels.Builds
 {
@@ -425,7 +425,7 @@ namespace PoESkillTree.ViewModels.Builds
                 s => _buildValidator.ValidateNewFolderName(s, folder));
             if (string.IsNullOrWhiteSpace(name))
                 return;
-            var newFolder = new BuildFolderViewModel(new BuildFolder {Name = name}, Filter, BuildOnCollectionChanged);
+            var newFolder = new BuildFolderViewModel(new BuildFolder { Name = name }, Filter, BuildOnCollectionChanged);
             folder.Children.Add(newFolder);
             await SaveBuildToFile(newFolder);
         }

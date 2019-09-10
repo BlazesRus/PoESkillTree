@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using PoESkillTree.Controls.Dialogs;
+using System;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {

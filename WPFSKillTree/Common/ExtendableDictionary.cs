@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Security;
 
@@ -64,7 +60,7 @@ namespace POESKillTree.Common
         ///  for the type of the key.
         /// </param>
         /// <exception cref="System.ArgumentOutOfRangeException">capacity is less than 0.</exception>
-        public ExtendableDictionary(int capacity, IEqualityComparer<TKey> comparer) { DicStorage = new Dictionary<TKey, TValue>(capacity,comparer); }
+        public ExtendableDictionary(int capacity, IEqualityComparer<TKey> comparer) { DicStorage = new Dictionary<TKey, TValue>(capacity, comparer); }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtendableDictionary{TKey, TValue}"/> class
@@ -100,7 +96,8 @@ namespace POESKillTree.Common
         /// </returns>
         /// <exception cref="System.ArgumentNullException">key is null.</exception>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">The property is retrieved and key does not exist in the collection.</exception>
-        public TValue this[TKey key] {
+        public TValue this[TKey key]
+        {
             get
             {
                 return DicStorage[key];
@@ -117,7 +114,7 @@ namespace POESKillTree.Common
         /// <returns>
         /// A Dictionary.ValueCollection containing the values in the Dictionary
         /// </returns>
-        public Dictionary<TKey,TValue>.ValueCollection Values { get {return DicStorage.Values;} }
+        public Dictionary<TKey, TValue>.ValueCollection Values { get { return DicStorage.Values; } }
 
         /// <summary>
         /// Gets a collection containing the keys in the Dictionary
@@ -128,7 +125,7 @@ namespace POESKillTree.Common
         /// <summary>
         /// Gets the number of key/value pairs contained in the Dictionary.
         /// </summary>
-        public int Count { get {return DicStorage.Count;} }
+        public int Count { get { return DicStorage.Count; } }
 
         /// <summary>
         ///     Gets the IEqualityComparer that is used to determine
@@ -248,5 +245,5 @@ namespace POESKillTree.Common
         /// <exception cref="System.ArgumentNullException">key is null.</exception>
         public bool TryGetValue(TKey key, out TValue value) { return DicStorage.TryGetValue(key, out value); }
 
-  }
+    }
 }

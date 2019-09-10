@@ -1,16 +1,16 @@
+using PoESkillTree.Localization;
+using PoESkillTree.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
-using PoESkillTree.Localization;
-using PoESkillTree.ViewModels;
 using Attribute = PoESkillTree.ViewModels.Attribute;
 
 namespace PoESkillTree.Utils.Converter
 {
-    [ValueConversion(typeof (string), typeof (string))]
+    [ValueConversion(typeof(string), typeof(string))]
     //list view sorter here
     public class GroupStringConverter : IValueConverter, IComparer
     {
@@ -282,7 +282,7 @@ namespace PoESkillTree.Utils.Converter
    //         new[] {"Radius:", Hidden },
    //         new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
    //         new[] {"Intuitive Leaped", Hidden },
-			//new[] {" (TrackedAttr)", PseudoTotal},
+            //new[] {" (TrackedAttr)", PseudoTotal},
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
@@ -334,7 +334,7 @@ namespace PoESkillTree.Utils.Converter
         {
             if (!AttributeGroups.ContainsKey(groupname))
             {
-                AttributeGroups.Add(groupname, new AttributeGroup("Custom: "+groupname));
+                AttributeGroups.Add(groupname, new AttributeGroup("Custom: " + groupname));
             }
             foreach (string attr in attributes)
             {
@@ -426,7 +426,7 @@ namespace PoESkillTree.Utils.Converter
                         deltaString = " +" + groupDeltas[key].ToString();
                     else
                         deltaString = " " + groupDeltas[key].ToString();
-                    AttributeGroups[key].GroupName = "Custom: "+key.Replace("#", groupTotals[key].ToString())+deltaString;
+                    AttributeGroups[key].GroupName = "Custom: " + key.Replace("#", groupTotals[key].ToString()) + deltaString;
                 }
             }
 

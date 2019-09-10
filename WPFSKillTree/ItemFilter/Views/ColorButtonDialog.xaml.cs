@@ -1,12 +1,11 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using PoESkillTree.Localization;
+using PoESkillTree.Utils.Converter;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
-using MahApps.Metro;
-using MahApps.Metro.Controls;
 using Xceed.Wpf.Toolkit;
-using PoESkillTree.Localization;
-using PoESkillTree.Utils.Converter;
 using NamedColor = PoESkillTree.Utils.Converter.ColorUtils.NamedColor;
 
 namespace PoESkillTree.ItemFilter.Views

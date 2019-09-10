@@ -1,3 +1,10 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.Utils;
+using PoESkillTree.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -5,14 +12,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Engine.GameModel.Skills;
-using PoESkillTree.Engine.Utils.Extensions;
-using PoESkillTree.Model.Items.Mods;
-using PoESkillTree.Utils;
-using PoESkillTree.ViewModels;
 
 namespace PoESkillTree.Model.Items
 {
@@ -27,7 +26,7 @@ namespace PoESkillTree.Model.Items
         {
             if (!CanEquip(value, slot))
                 return;
-            
+
             var old = Equip.FirstOrDefault(i => i.Slot == slot);
             if (value is null)
             {
@@ -57,7 +56,7 @@ namespace PoESkillTree.Model.Items
             if (item == null) return true;
             if (slot == -1) return false;
             //return (item.Slot & slot) != 0;
-            return ((int) item.ItemClass.ItemSlots() & (int) slot) != 0;
+            return ((int)item.ItemClass.ItemSlots() & (int)slot) != 0;
         }
         #endregion
 
@@ -80,7 +79,7 @@ namespace PoESkillTree.Model.Items
         {
             _equipmentData = equipmentData;
             Equip.CollectionChanged += OnCollectionChanged;
-            if (equipmentData==null)
+            if (equipmentData == null)
             {
                 Equip = new ObservableSet<JewelItem>();
             }
@@ -101,7 +100,7 @@ namespace PoESkillTree.Model.Items
             if (!itemData.TryGetValue("items", out var itemJson))
                 return;
 
-            foreach (JObject jobj in (JArray) itemJson)
+            foreach (JObject jobj in (JArray)itemJson)
             {
                 var inventoryId = jobj.Value<string>("inventoryId");
 

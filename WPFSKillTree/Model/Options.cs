@@ -92,7 +92,7 @@ namespace PoESkillTree.Model
             get { return _downloadMissingItemImages; }
             set { SetProperty(ref _downloadMissingItemImages, value); }
         }
-        
+
         public ResetPreferences ResetPreferences
         {
             get { return _resetPreferences; }

@@ -28,7 +28,7 @@ namespace PoESkillTree.Model.Builds
 
         public override BuildFolder DeepClone()
         {
-            var o = (BuildFolder) SafeMemberwiseClone();
+            var o = (BuildFolder)SafeMemberwiseClone();
             o.Builds.Clear();
             foreach (var build in Builds)
             {
@@ -51,7 +51,7 @@ namespace PoESkillTree.Model.Builds
                 }
                 else
                 {
-                    foreach (var child in ((BuildFolder) build).BuildsPreorder())
+                    foreach (var child in ((BuildFolder)build).BuildsPreorder())
                     {
                         yield return child;
                     }

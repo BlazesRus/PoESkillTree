@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using NLog;
+﻿using NLog;
 using PoESkillTree.Computation.Model;
 using PoESkillTree.Computation.ViewModels;
 using PoESkillTree.Engine.Computation.Common.Builders;
@@ -16,6 +12,10 @@ using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
 using PoESkillTree.ViewModels.Equipment;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation
 {

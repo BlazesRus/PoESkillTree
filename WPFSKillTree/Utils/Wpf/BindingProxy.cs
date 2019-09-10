@@ -24,7 +24,7 @@ namespace PoESkillTree.Utils.Wpf
 
         public T Data
         {
-            get { return (T) GetValue(DataProperty); }
+            get { return (T)GetValue(DataProperty); }
             set { SetValue(DataProperty, value); }
         }
 

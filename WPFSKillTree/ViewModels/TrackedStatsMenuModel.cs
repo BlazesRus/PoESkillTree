@@ -3,11 +3,7 @@ using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Model.Serialization;
-using PoESkillTree.TrackedStatViews;
-using PoESkillTree.TreeGenerator.Model;
-using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.ViewModels.Builds;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -90,7 +86,7 @@ namespace PoESkillTree.ViewModels
             _persistentData.Save();
         }
 
-        private void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args){}
+        private void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args) { }
 
         #region TrackingCommand Code
 

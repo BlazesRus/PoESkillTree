@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.Skills;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Wpf;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Engine.GameModel.Skills;
-using PoESkillTree.Model.Items;
-using PoESkillTree.Utils.Wpf;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

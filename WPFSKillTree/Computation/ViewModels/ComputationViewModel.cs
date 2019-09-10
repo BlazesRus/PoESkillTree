@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EnumsNET;
+﻿using EnumsNET;
 using MoreLinq;
 using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Common;
@@ -14,6 +10,10 @@ using PoESkillTree.Engine.Computation.Common.Builders.Stats;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -90,7 +90,7 @@ namespace PoESkillTree.Computation.ViewModels
             AddAvailableStats(OffensiveStats, f.StatBuilders.BaseCastTime.With(AttackDamageHand.MainHand));
             AddAvailableStats(OffensiveStats, f.StatBuilders.HitRate);
             AddAvailableStats(OffensiveStats, f.StatBuilders.ActionSpeed);
-            
+
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EffectiveCritChance);
             AddStats(OffensiveStats, f.ActionBuilders.CriticalStrike.Chance);
             AddAvailableStats(OffensiveStats, f.ActionBuilders.CriticalStrike.Multiplier);
@@ -108,7 +108,7 @@ namespace PoESkillTree.Computation.ViewModels
             ForEach<Ailment>(a => AddAvailableStats(OffensiveStats, f.EffectBuilders.Ailment.From(a).Duration));
             ForEachDamagingAilment(
                 a => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.AilmentEffectiveInstances(a)));
-            
+
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillHitDamageSource);
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillNumberOfHitsPerCast);
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillUsesHand(AttackDamageHand.MainHand));

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
-using EnumsNET;
+﻿using EnumsNET;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Utils;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace PoESkillTree.Model
 {
@@ -45,7 +45,7 @@ namespace PoESkillTree.Model
             };
 
         private Bandit _choice;
-        
+
         public Bandit Choice
         {
             get { return _choice; }
@@ -69,7 +69,7 @@ namespace PoESkillTree.Model
         /// </summary>
         public BanditSettings DeepClone()
         {
-            return (BanditSettings) SafeMemberwiseClone();
+            return (BanditSettings)SafeMemberwiseClone();
         }
     }
 }

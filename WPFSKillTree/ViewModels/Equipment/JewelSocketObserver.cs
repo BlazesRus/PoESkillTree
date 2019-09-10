@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using PoESkillTree.Engine.Utils;
+﻿using PoESkillTree.Engine.Utils;
 using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

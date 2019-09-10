@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using PoESkillTree.Controls.Dialogs;
+﻿using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model;
@@ -9,6 +8,7 @@ using PoESkillTree.ViewModels.Builds;
 using PoESkillTree.ViewModels.Equipment;
 using PoESkillTree.Views.Builds;
 using PoESkillTree.Views.Equipment;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.ViewModels
 {

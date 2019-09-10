@@ -170,11 +170,11 @@ namespace PoESkillTree.ItemFilter.Model
             }
             else // If we subset the match.
                 if (Subsets(number))
-                {
-                    Op = number.Op;
-                    Value = number.Value;
-                    Value2 = number.Value2;
-                } // Otherwise match subsets us, nothing to do.
+            {
+                Op = number.Op;
+                Value = number.Value;
+                Value2 = number.Value2;
+            } // Otherwise match subsets us, nothing to do.
         }
 
         public bool Subsets(Match match)
@@ -195,15 +195,15 @@ namespace PoESkillTree.ItemFilter.Model
                 return Keyword + " != " + Value;
             else
                 if (Value == Value2) // Equals
-                    return Keyword + " = " + Value;
-                else
+                return Keyword + " = " + Value;
+            else
                     if (Value == Min) // LessOrEqual
-                        return Keyword + " <= " + Value2;
-                    else
+                return Keyword + " <= " + Value2;
+            else
                         if (Value2 == Max) // GreaterOrEqual
-                            return Keyword + " >= " + Value;
-                        else // Between
-                            return Keyword + " >= " + Value + MultilineMatchDelimiter + Keyword + " <= " + Value2;
+                return Keyword + " >= " + Value;
+            else // Between
+                return Keyword + " >= " + Value + MultilineMatchDelimiter + Keyword + " <= " + Value2;
         }
     }
 }

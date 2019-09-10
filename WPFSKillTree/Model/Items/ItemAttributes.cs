@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.GameModel.Skills;
 using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace PoESkillTree.Model.Items
 {
@@ -30,7 +30,7 @@ namespace PoESkillTree.Model.Items
         {
             if (!CanEquip(value, slot, socket))
                 return;
-            
+
             var old = Equip.FirstOrDefault(i => i.Slot == slot && i.Socket == socket);
             if (value is null)
             {
@@ -112,7 +112,7 @@ namespace PoESkillTree.Model.Items
             {
                 return MainHand == null || MainHand.Tags.HasFlag(Tags.OneHand);
             }
-            return ((int) item.ItemClass.ItemSlots() & (int) slot) != 0;
+            return ((int)item.ItemClass.ItemSlots() & (int)slot) != 0;
         }
 
         public IReadOnlyList<Skill> GetSkillsInSlot(ItemSlot slot)
@@ -160,7 +160,7 @@ namespace PoESkillTree.Model.Items
             if (!itemData.TryGetValue("items", out var itemJson))
                 return;
 
-            foreach (JObject jobj in (JArray) itemJson)
+            foreach (JObject jobj in (JArray)itemJson)
             {
                 var inventoryId = jobj.Value<string>("inventoryId");
                 switch (inventoryId)

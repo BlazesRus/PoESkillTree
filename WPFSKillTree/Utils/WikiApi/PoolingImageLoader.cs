@@ -1,11 +1,11 @@
-﻿using System;
+﻿using NLog;
+using PoESkillTree.Engine.Utils.WikiApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using NLog;
-using PoESkillTree.Engine.Utils.WikiApi;
 
 namespace PoESkillTree.Utils.WikiApi
 {
@@ -34,7 +34,7 @@ namespace PoESkillTree.Utils.WikiApi
 
         // producer-consumer-queue with capped capacity
         private readonly BufferBlock<PoolItem> _queue =
-            new BufferBlock<PoolItem>(new DataflowBlockOptions {BoundedCapacity = MaxBatchSize});
+            new BufferBlock<PoolItem>(new DataflowBlockOptions { BoundedCapacity = MaxBatchSize });
 
         public PoolingImageLoader(HttpClient httpClient)
         {

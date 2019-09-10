@@ -1,7 +1,7 @@
-using System;
-using System.Linq;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.SkillTreeFiles;
+using System;
+using System.Linq;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {
@@ -60,7 +60,7 @@ namespace PoESkillTree.Utils.UrlProcessing
         /// Returns the character class of the given build url.
         /// </summary>
         public CharacterClass GetCharacterClass()
-            => (CharacterClass) GetCharacterClassId();
+            => (CharacterClass)GetCharacterClassId();
 
         /// <summary>
         /// Returns the ascendancy class of the given build url.

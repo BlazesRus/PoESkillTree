@@ -1,12 +1,12 @@
-﻿using System;
+﻿using MB.Algodat;
+using MoreLinq;
+using PoESkillTree.Engine.GameModel.StatTranslation;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using MB.Algodat;
-using MoreLinq;
-using PoESkillTree.Engine.GameModel.StatTranslation;
-using PoESkillTree.Utils;
-using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.ViewModels.Crafting
 {
@@ -178,7 +178,7 @@ namespace PoESkillTree.ViewModels.Crafting
             if (_updatingSliders)
                 return;
 
-            var slider = (SliderViewModel) sender;
+            var slider = (SliderViewModel)sender;
 
             IMod[] tiers = SelectedAffix.QueryModsSingleValue(slider.ValueIndex, e.NewValue)
                 .OrderBy(m => m.RequiredLevel).ToArray();

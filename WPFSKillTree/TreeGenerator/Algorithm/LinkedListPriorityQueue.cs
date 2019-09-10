@@ -18,7 +18,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             Outside = outside;
         }
     }
-    
+
     /// <summary>
     /// Priority Queue based on a linked list for each priority.
     /// </summary>
@@ -51,7 +51,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// The smallest priority for which elements are currently stored.
         /// </summary>
         private uint _top = uint.MaxValue;
-        
+
         /// <summary>
         /// The number of elements currently stored.
         /// </summary>

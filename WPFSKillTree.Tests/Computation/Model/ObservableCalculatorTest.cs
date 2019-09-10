@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Concurrency;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using PoESkillTree.Engine.Computation.Builders.Stats;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Core;
 using PoESkillTree.Engine.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Computation.Model
 {
@@ -19,7 +19,7 @@ namespace PoESkillTree.Computation.Model
         [Test]
         public void ObserveNodeGeneratesCorrectValues()
         {
-            var expected = new[] { (NodeValue?) 0, (NodeValue?) 0, null, (NodeValue?) 1 };
+            var expected = new[] { (NodeValue?)0, (NodeValue?)0, null, (NodeValue?)1 };
             var stat = new Stat("");
             var index = 0;
             var nodeMock = new Mock<ICalculationNode>();
@@ -43,7 +43,7 @@ namespace PoESkillTree.Computation.Model
         public void ObserveExplicitlyRegisteredStatsGeneratesCorrectValues()
         {
             var elements = Enumerable.Range(0, 3)
-                .Select(i => (node: Mock.Of<ICalculationNode>(), stat: (IStat) new Stat(i.ToString())))
+                .Select(i => (node: Mock.Of<ICalculationNode>(), stat: (IStat)new Stat(i.ToString())))
                 .ToList();
             var expected = new[]
             {

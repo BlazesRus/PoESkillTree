@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PoESkillTree.TreeGenerator.Algorithm.Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PoESkillTree.TreeGenerator.Algorithm.Model;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
 {
@@ -147,6 +147,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
 
             return xNeighbors;
         }
-        
+
     }
 }

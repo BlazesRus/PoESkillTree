@@ -1,3 +1,12 @@
+using MB.Algodat;
+using Newtonsoft.Json.Linq;
+using NLog;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Engine.GameModel.Modifiers;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Model.Items.Mods;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -5,16 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using MB.Algodat;
-using Newtonsoft.Json.Linq;
-using NLog;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Engine.GameModel.Modifiers;
-using PoESkillTree.Engine.GameModel.Skills;
-using PoESkillTree.Engine.Utils.Extensions;
-using PoESkillTree.Model.Items.Mods;
-using PoESkillTree.Utils;
-using PoESkillTree.Utils.Extensions;
 
 namespace PoESkillTree.Model.Items
 {
@@ -222,7 +221,7 @@ namespace PoESkillTree.Model.Items
         /// <returns>The result of the conversion.</returns>
         public static explicit operator JewelItem(Item source)
         {
-           return new JewelItem(source);
+            return new JewelItem(source);
         }
 
         /// <summary>Initializes a new instance of the <see cref="T:PoESkillTree.Model.Items.JewelItem"/> class.</summary>
@@ -256,7 +255,7 @@ namespace PoESkillTree.Model.Items
             Height = source.Height;
         }
 
-        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool IsAbyssJewel=false)
+        public JewelItem(EquipmentData equipmentData, JObject val, ushort itemSlot = 0, bool IsAbyssJewel = false)
         {
             JsonBase = val;
             Slot = itemSlot;
@@ -328,7 +327,7 @@ namespace PoESkillTree.Model.Items
                 var mods = val["requirements"].Select(t => ItemModFromJson(t, true)).ToList();
                 if (!mods.Any(m => m.Attribute.StartsWith("Requires ")))
                 {
-                    var modsToMerge = new []
+                    var modsToMerge = new[]
                     {
                         mods.FirstOrDefault(m => m.Attribute == "Level #"),
                         mods.FirstOrDefault(m => m.Attribute == "# Str"),

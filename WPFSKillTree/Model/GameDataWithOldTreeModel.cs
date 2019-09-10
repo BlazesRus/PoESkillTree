@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.SkillTreeFiles;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.Model
 {

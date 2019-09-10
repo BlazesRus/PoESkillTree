@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PoESkillTree.ItemFilter.Model
+﻿namespace PoESkillTree.ItemFilter.Model
 {
     public class MatchDropLevel : MatchNumber
     {
@@ -17,5 +15,5 @@ namespace PoESkillTree.ItemFilter.Model
             Keyword = "DropLevel";
             Priority = Type.DropLevel;
         }
-   }
+    }
 }

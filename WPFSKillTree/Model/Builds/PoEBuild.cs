@@ -1,12 +1,12 @@
+using Newtonsoft.Json.Linq;
+using PoESkillTree.Computation.Model;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using PoESkillTree.Utils;
-using PoESkillTree.Computation.Model;
-using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.Model.Builds
 {
@@ -291,7 +291,7 @@ namespace PoESkillTree.Model.Builds
 
         protected override Notifier SafeMemberwiseClone()
         {
-            var o = (PoEBuild) base.SafeMemberwiseClone();
+            var o = (PoEBuild)base.SafeMemberwiseClone();
             o.PropertyChanged += o.PropertyChangedHandler;
             o.PropertyChanging += o.PropertyChangingHandler;
             return o;
@@ -299,7 +299,7 @@ namespace PoESkillTree.Model.Builds
 
         public override PoEBuild DeepClone()
         {
-            var o = (PoEBuild) SafeMemberwiseClone();
+            var o = (PoEBuild)SafeMemberwiseClone();
             o.CustomGroups = new ObservableCollection<string[]>(CustomGroups.Select(a => (string[])a.Clone()));
             o.CheckedNodeIds = new ObservableSet<ushort>(CheckedNodeIds);
             o.CrossedNodeIds = new ObservableSet<ushort>(CrossedNodeIds);
@@ -331,7 +331,7 @@ namespace PoESkillTree.Model.Builds
                 target.ItemData = _build.ItemData;
                 target.LastUpdated = _build.LastUpdated;
                 target.CustomGroups =
-                    new ObservableCollection<string[]>(_build.CustomGroups.Select(a => (string[]) a.Clone()));
+                    new ObservableCollection<string[]>(_build.CustomGroups.Select(a => (string[])a.Clone()));
                 target.CheckedNodeIds = new ObservableSet<ushort>(_build.CheckedNodeIds);
                 target.CrossedNodeIds = new ObservableSet<ushort>(_build.CrossedNodeIds);
                 target.ConfigurationStats = ConfigurationStats.Create(_build.ConfigurationStats.Export());

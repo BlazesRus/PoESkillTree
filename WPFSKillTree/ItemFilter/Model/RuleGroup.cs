@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace PoESkillTree.ItemFilter.Model
@@ -63,7 +62,7 @@ namespace PoESkillTree.ItemFilter.Model
         /// Learns BaseTypes of each rule which subset group's Class match (if it has any).
         /// Teaches rules about group's implicit matches.
         /// </summary>
-        public void Learn ()
+        public void Learn()
         {
             if (HasMatches)
             {

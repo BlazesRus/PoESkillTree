@@ -1,7 +1,7 @@
-﻿using System.Reactive.Concurrency;
-using PoESkillTree.Computation.Model;
+﻿using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Core;
+using System.Reactive.Concurrency;
 
 namespace PoESkillTree.Computation.ViewModels
 {

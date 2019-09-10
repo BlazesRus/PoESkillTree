@@ -29,7 +29,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
     {
         // Dictionary to enable constant time access of the stored edges. Not possible with HashSets.
         private readonly Dictionary<GraphEdge, GraphEdge> _edgeDict = new Dictionary<GraphEdge, GraphEdge>();
-        
+
         private readonly HashSet<int>[] _adjacencyMatrix;
 
         public int Count { get { return _edgeDict.Count; } }

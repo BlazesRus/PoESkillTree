@@ -1,11 +1,12 @@
-﻿using System.Configuration;
-using PoESkillTree.Utils;
+﻿using PoESkillTree.Utils;
+using System.Configuration;
 
-namespace PoESkillTree.Properties {
+namespace PoESkillTree.Properties
+{
 
     // In case this gets used at some point, there are no changes needed for it to
     // use the correct config files ("user.config" in the "Settings" folder).
-    [SettingsProvider(typeof (CustomSettingsProvider))]
+    [SettingsProvider(typeof(CustomSettingsProvider))]
     internal sealed partial class Settings
     {
 

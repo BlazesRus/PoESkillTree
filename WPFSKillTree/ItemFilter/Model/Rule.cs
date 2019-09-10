@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace PoESkillTree.ItemFilter.Model
@@ -89,7 +88,7 @@ namespace PoESkillTree.ItemFilter.Model
 
         public List<Match>[] Set;
 
-        public string UniqueId { get { return Group.Id + "." + Id;  } }
+        public string UniqueId { get { return Group.Id + "." + Id; } }
 
         public Rule()
         {

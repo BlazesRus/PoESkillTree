@@ -1,5 +1,5 @@
-﻿using System;
-using PoESkillTree.Utils;
+﻿using PoESkillTree.Utils;
+using System;
 
 namespace PoESkillTree.Controls.Dialogs
 {

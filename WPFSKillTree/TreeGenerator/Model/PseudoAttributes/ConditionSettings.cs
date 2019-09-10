@@ -12,7 +12,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         public Tags Tags { get; private set; }
 
         public OffHand OffHand { get; private set; }
-        
+
         /// <summary>
         /// Array of all keystones set in the skill tree.
         /// </summary>

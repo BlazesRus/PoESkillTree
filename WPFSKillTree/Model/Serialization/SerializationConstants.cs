@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PoESkillTree.Localization;
 using PoESkillTree.Utils;
-using PoESkillTree.Localization;
+using System;
 
 namespace PoESkillTree.Model.Serialization
 {

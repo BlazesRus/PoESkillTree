@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using EnumsNET;
+﻿using EnumsNET;
 using MoreLinq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Engine.GameModel.Items;
@@ -14,6 +7,13 @@ using PoESkillTree.Engine.GameModel.StatTranslation;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Item = PoESkillTree.Model.Items.Item;
 
 namespace PoESkillTree.ViewModels.Crafting
@@ -90,8 +90,8 @@ namespace PoESkillTree.ViewModels.Crafting
 
         private readonly IEnumerable<Tags> _thirdLevelOptions = new[]
         {
-            Tags.StrArmour, Tags.DexArmour, Tags.IntArmour, 
-            Tags.StrDexArmour, Tags.StrIntArmour, Tags.DexIntArmour, 
+            Tags.StrArmour, Tags.DexArmour, Tags.IntArmour,
+            Tags.StrDexArmour, Tags.StrIntArmour, Tags.DexIntArmour,
             Tags.StrDexIntArmour,
             Tags.StrJewel, Tags.DexJewel, Tags.IntJewel
         };
@@ -325,7 +325,7 @@ namespace PoESkillTree.ViewModels.Crafting
             Item.CraftedMods = CreateItemMods(craftedStats).ToList();
             Item.ImplicitMods = CreateItemMods(MsImplicits.SelectMany(ms => ms.GetStatValues())).ToList();
 
-            var quality = SelectedBase.CanHaveQuality 
+            var quality = SelectedBase.CanHaveQuality
                 ? _qualitySlider.Value
                 : 0;
             var properties = Item.BaseType.GetRawProperties(quality)

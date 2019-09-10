@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using PoESkillTree.SkillTreeFiles;
+﻿using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Genetic;
 using PoESkillTree.TreeGenerator.Settings;
+using System.Collections.Generic;
 
 namespace PoESkillTree.TreeGenerator.Solver
 {

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using NLog;
+using PoESkillTree.Engine.Computation.Common;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using NLog;
-using PoESkillTree.Engine.Computation.Common;
-using PoESkillTree.Utils;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -52,7 +52,7 @@ namespace PoESkillTree.Computation.ViewModels
                 () => new NotifyingTask<IReadOnlyList<ModifierNodeViewModel>>(
                         _modifierNodeFactory.CreateAsync(Stat, NodeType),
                         ex => Log.Error(ex, $"Failed to create modifier nodes for {Stat} {NodeType}"))
-                    { Default = new ModifierNodeViewModel[0] });
+                { Default = new ModifierNodeViewModel[0] });
             OnPropertyChanged(nameof(ModifierNodes));
         }
     }

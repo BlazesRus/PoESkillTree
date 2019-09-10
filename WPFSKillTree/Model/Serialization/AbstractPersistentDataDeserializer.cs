@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using NLog;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.Utils;
@@ -11,6 +6,11 @@ using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Utils;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {
@@ -122,7 +122,7 @@ namespace PoESkillTree.Model.Serialization
                 {
                     var jArray = await JsonSerializationUtils.DeserializeJArrayFromFileAsync(file, true)
                         .ConfigureAwait(false);
-                    return jArray.Select(item => new Item(PersistentData.EquipmentData, (JObject) item));
+                    return jArray.Select(item => new Item(PersistentData.EquipmentData, (JObject)item));
                 }
             }
             catch (Exception e)

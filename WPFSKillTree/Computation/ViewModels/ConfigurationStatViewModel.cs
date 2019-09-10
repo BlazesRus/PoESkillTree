@@ -1,6 +1,6 @@
-﻿using System;
-using PoESkillTree.Engine.Computation.Common;
+﻿using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Utils;
+using System;
 
 namespace PoESkillTree.Computation.ViewModels
 {

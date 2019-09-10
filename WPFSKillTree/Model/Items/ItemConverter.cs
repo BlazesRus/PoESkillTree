@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Model.Items.Mods;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,8 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
 {

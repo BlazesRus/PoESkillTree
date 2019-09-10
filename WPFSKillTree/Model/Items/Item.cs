@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using MB.Algodat;
+﻿using MB.Algodat;
 using Newtonsoft.Json.Linq;
 using NLog;
 using PoESkillTree.Engine.GameModel.Items;
@@ -15,6 +8,13 @@ using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace PoESkillTree.Model.Items
 {
@@ -298,7 +298,7 @@ namespace PoESkillTree.Model.Items
                 var mods = val["requirements"].Select(t => ItemModFromJson(t, true)).ToList();
                 if (!mods.Any(m => m.Attribute.StartsWith("Requires ")))
                 {
-                    var modsToMerge = new []
+                    var modsToMerge = new[]
                     {
                         mods.FirstOrDefault(m => m.Attribute == "Level #"),
                         mods.FirstOrDefault(m => m.Attribute == "# Str"),
@@ -350,7 +350,7 @@ namespace PoESkillTree.Model.Items
             var sockets = new List<int>();
             if (JsonBase.TryGetValue("sockets", out var socketsJson))
             {
-                foreach (var obj in (JArray) socketsJson)
+                foreach (var obj in (JArray)socketsJson)
                 {
                     sockets.Add(obj["group"].Value<int>());
                 }
@@ -358,10 +358,10 @@ namespace PoESkillTree.Model.Items
 
             int socket = 0;
             var skills = new List<Skill>();
-            foreach (JObject obj in (JArray) skillJson)
+            foreach (JObject obj in (JArray)skillJson)
             {
                 var frameType = obj.Value<int>("frameType");
-                if ((FrameType) frameType == FrameType.Gem)
+                if ((FrameType)frameType == FrameType.Gem)
                 {
                     if (TryDeserializeSocketedSkill(skillDefinitions, obj, socket, sockets[socket], out var skill))
                     {
@@ -393,10 +393,10 @@ namespace PoESkillTree.Model.Items
             var properties = jObject["properties"].Select(j => ItemModFromJson(j, false)).ToList();
             if (!properties.TryGetValue("Level: #", 0, out var level))
             {
-                level = (int) properties.First("Level: # (Max)", 0, 1);
+                level = (int)properties.First("Level: # (Max)", 0, 1);
             }
-            var quality = (int) properties.First("Quality: +#%", 0, 0);
-            skill = new Skill(definition.Id, (int) level, quality, Slot, socketIndex, socketGroup);
+            var quality = (int)properties.First("Quality: +#%", 0, 0);
+            skill = new Skill(definition.Id, (int)level, quality, Slot, socketIndex, socketGroup);
             return true;
         }
 

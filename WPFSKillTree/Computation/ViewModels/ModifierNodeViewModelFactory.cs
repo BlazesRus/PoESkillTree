@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using PoESkillTree.Computation.Model;
+using PoESkillTree.Engine.Computation.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PoESkillTree.Computation.Model;
-using PoESkillTree.Engine.Computation.Common;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -62,7 +62,7 @@ namespace PoESkillTree.Computation.ViewModels
             if (nodeType == NodeType.Base || nodeType == NodeType.BaseSet || nodeType == NodeType.BaseAdd)
                 return new ModifierNodeViewModel[0];
 
-            var allPaths = (await _calculator.GetPathsAsync(stat)).ToList();            
+            var allPaths = (await _calculator.GetPathsAsync(stat)).ToList();
             var consideredPaths = new HashSet<PathDefinition>();
             foreach (var path in allPaths)
             {
@@ -110,7 +110,7 @@ namespace PoESkillTree.Computation.ViewModels
             foreach (var (node, modifier) in formNodes)
             {
                 var resultNode = new CalculationNodeViewModel(stat)
-                    { Value = await _calculator.GetNodeValueAsync(node) };
+                { Value = await _calculator.GetNodeValueAsync(node) };
                 if (resultNode.Value is null && stat.DataType != typeof(bool))
                     continue;
                 nodes.Add(new ModifierNodeViewModel(form, modifier.Source, resultNode));

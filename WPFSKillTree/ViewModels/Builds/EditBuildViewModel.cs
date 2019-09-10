@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using PoESkillTree.Common.ViewModels;
+﻿using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Model.Builds;
+using System;
+using System.Collections.Generic;
 
 namespace PoESkillTree.ViewModels.Builds
 {
@@ -57,7 +57,7 @@ namespace PoESkillTree.ViewModels.Builds
             switch (propertyName)
             {
                 case nameof(Name):
-                    return new[] {_buildValidator.ValidateExistingFileName(Name, _buildVm)};
+                    return new[] { _buildValidator.ValidateExistingFileName(Name, _buildVm) };
                 default:
                     return null;
             }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using NLog;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.Utils;
 using PoESkillTree.Model.Builds;
 using PoESkillTree.Utils;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.Model.Serialization
 {

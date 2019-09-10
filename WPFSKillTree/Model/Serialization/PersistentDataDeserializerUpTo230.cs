@@ -1,16 +1,16 @@
+using MoreLinq;
+using NLog;
+using PoESkillTree.Controls;
+using PoESkillTree.Engine.Utils;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Model.Builds;
+using PoESkillTree.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using MoreLinq;
-using NLog;
-using PoESkillTree.Utils;
-using PoESkillTree.Controls;
-using PoESkillTree.Model.Builds;
-using PoESkillTree.Engine.Utils;
-using PoESkillTree.Engine.Utils.Extensions;
 
 namespace PoESkillTree.Model.Serialization
 {

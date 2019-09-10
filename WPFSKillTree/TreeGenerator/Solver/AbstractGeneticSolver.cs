@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using PoESkillTree.SkillTreeFiles;
+﻿using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm;
 using PoESkillTree.TreeGenerator.Genetic;
 using PoESkillTree.TreeGenerator.Settings;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using BitArray = PoESkillTree.TreeGenerator.Genetic.BitArray;
 
 namespace PoESkillTree.TreeGenerator.Solver
@@ -19,7 +19,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         where TS : SolverSettings
     {
         private static readonly ConcurrentBag<HashSet<ushort>> UsedNodesPool = new ConcurrentBag<HashSet<ushort>>();
-        
+
         public override int Steps => IsInitialized ? Generations : 0;
 
         public override int CurrentStep => IsInitialized ? _ga.GenerationCount : 0;
@@ -34,7 +34,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// The best dna calculated by the GA up to this point.
         /// </summary>
         private BitArray _bestDna;
-        
+
         /// <summary>
         /// Gets the number of generations of the genetic algorithm that should be calculated
         /// per iteration. One generation is calculated per step.
@@ -77,13 +77,13 @@ namespace PoESkillTree.TreeGenerator.Solver
         public override void Initialize()
         {
             base.Initialize();
-            
+
             OnFinalSearchSpaceCreated();
 
             var totalCount = SearchSpace.Count + TargetNodes.Count;
 
             // Sort edges if PreFilledSpanThreshold is satisfied.
-            if (TargetNodes.Count/(double) totalCount >= PreFilledSpanThreshold)
+            if (TargetNodes.Count / (double)totalCount >= PreFilledSpanThreshold)
             {
                 using (var prioQueue = new LinkedListPriorityQueue<DirectedGraphEdge>(100, totalCount * totalCount))
                 {

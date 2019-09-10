@@ -1,5 +1,5 @@
-﻿using System;
-using PoESkillTree.Engine.Computation.Core;
+﻿using PoESkillTree.Engine.Computation.Core;
+using System;
 
 namespace PoESkillTree.Computation.Model
 {

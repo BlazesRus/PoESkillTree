@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PoESkillTree.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using PoESkillTree.Utils;
 
 namespace PoESkillTree.ViewModels.Crafting
 {
@@ -37,7 +37,7 @@ namespace PoESkillTree.ViewModels.Crafting
         {
             ValueIndex = valueIndex;
             var tickList = ticks.ToList();
-            Ticks = new DoubleCollection(tickList.Select(i => (double) i));
+            Ticks = new DoubleCollection(tickList.Select(i => (double)i));
             Minimum = Ticks.First();
             Maximum = Ticks.Last();
             _value = tickList.LastOrDefault();

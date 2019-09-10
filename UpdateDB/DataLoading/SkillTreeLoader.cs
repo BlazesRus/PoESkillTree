@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using PoESkillTree.SkillTreeFiles;
+using System.Threading.Tasks;
 
 namespace UpdateDB.DataLoading
 {

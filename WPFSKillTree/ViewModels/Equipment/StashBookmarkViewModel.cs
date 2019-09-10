@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows;
-using GongSolutions.Wpf.DragDrop;
-using PoESkillTree.Utils;
+﻿using GongSolutions.Wpf.DragDrop;
 using PoESkillTree.Controls;
+using PoESkillTree.Utils;
+using System;
+using System.Windows;
 
 namespace PoESkillTree.ViewModels.Equipment
 {

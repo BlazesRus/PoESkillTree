@@ -1,5 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
+using PoESkillTree.Common;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.Engine.Utils;
+using PoESkillTree.Engine.Utils.Extensions;
+using PoESkillTree.Localization;
+using PoESkillTree.Model;
 using PoESkillTree.Utils;
+using PoESkillTree.Utils.UrlProcessing;
+using PoESkillTree.Utils.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -11,19 +22,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using JetBrains.Annotations;
-using PoESkillTree.Common;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.Engine.Utils;
-using PoESkillTree.Engine.Utils.Extensions;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
-using PoESkillTree.Utils.UrlProcessing;
-using PoESkillTree.Utils.Wpf;
-using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
 using static PoESkillTree.SkillTreeFiles.Constants;
+using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
 
 namespace PoESkillTree.SkillTreeFiles
 {

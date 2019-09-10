@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Utils;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
 
 namespace PoESkillTree.ViewModels
 {

@@ -1,10 +1,10 @@
+using GongSolutions.Wpf.DragDrop;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Utils;
 using System;
 using System.Windows;
 using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop;
-using PoESkillTree.Utils;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Model.Items;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -70,7 +70,7 @@ namespace PoESkillTree.ViewModels.Equipment
             dragInfo.Data = this;
             var image = Item.Image.ImageSource.Result;
             DragMouseAnchorPoint = new Point(
-                dragInfo.PositionInDraggedItem.X / image.Width, 
+                dragInfo.PositionInDraggedItem.X / image.Width,
                 dragInfo.PositionInDraggedItem.Y / image.Height
             );
             dragInfo.Effects = AllowedEffects;

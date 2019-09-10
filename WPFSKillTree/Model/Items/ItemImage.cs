@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Media;
-using NLog;
+﻿using NLog;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Utils;
+using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace PoESkillTree.Model.Items
 {

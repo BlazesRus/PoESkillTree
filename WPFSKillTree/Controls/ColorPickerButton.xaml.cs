@@ -1,9 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using PoESkillTree.ItemFilter.Views;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using PoESkillTree.ItemFilter.Views;
 using ColorType = PoESkillTree.ItemFilter.Views.ColorButtonDialog.ColorType;
 
 namespace PoESkillTree.Controls

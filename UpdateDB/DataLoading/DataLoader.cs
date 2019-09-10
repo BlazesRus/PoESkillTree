@@ -1,9 +1,9 @@
-﻿using System;
+﻿using PoESkillTree.Engine.Utils.WikiApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using PoESkillTree.Engine.Utils.WikiApi;
 
 namespace UpdateDB.DataLoading
 {

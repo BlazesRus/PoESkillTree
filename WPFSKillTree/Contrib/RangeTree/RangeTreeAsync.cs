@@ -107,7 +107,7 @@ namespace MB.Algodat
                 // query the tree (may be out of date)
                 var results = _rangeTree.Query(range);
 
-                 // add additional results
+                // add additional results
                 results.AddRange(_addedItemsRebuilding.Where(item => item.Range.Intersects(range)));
                 results.AddRange(_addedItems.Where(item => item.Range.Intersects(range)));
 

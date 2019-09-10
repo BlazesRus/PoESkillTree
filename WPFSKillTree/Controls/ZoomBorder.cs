@@ -25,10 +25,10 @@ namespace PoESkillTree.Controls
         private ManipulationState _manipulationState = ManipulationState.NONE;
 
         const double ZOOM_STEP = 0.3;
-        
+
         const double MAX_ZOOM = 75;
         const double MIN_ZOOM = 0.5;
-        
+
         const double DRAG_THRESHOLD = 5; // (in ZoomBorder coordinates, not _child)
         const double DRAG_THRESHOLD_SQUARED = DRAG_THRESHOLD * DRAG_THRESHOLD;
 
@@ -59,14 +59,14 @@ namespace PoESkillTree.Controls
         public ScaleTransform GetScaleTransform(UIElement element)
         {
             return
-                (ScaleTransform) ((TransformGroup) element.RenderTransform).Children.First(tr => tr is ScaleTransform);
+                (ScaleTransform)((TransformGroup)element.RenderTransform).Children.First(tr => tr is ScaleTransform);
         }
 
         public TranslateTransform GetTranslateTransform(UIElement element)
         {
             return
                 (TranslateTransform)
-                    ((TransformGroup) element.RenderTransform).Children.First(tr => tr is TranslateTransform);
+                    ((TransformGroup)element.RenderTransform).Children.First(tr => tr is TranslateTransform);
         }
 
         public void Initialize(UIElement element)
@@ -123,13 +123,13 @@ namespace PoESkillTree.Controls
 
         static ZoomBorder()
         {
-            ClickEvent = ButtonBase.ClickEvent.AddOwner(typeof (ZoomBorder));
+            ClickEvent = ButtonBase.ClickEvent.AddOwner(typeof(ZoomBorder));
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             base.OnMouseUp(e);
-            
+
             if (IsMouseOver)
                 RaiseEvent(new RoutedEventArgs(ClickEvent, e));
         }
@@ -304,7 +304,7 @@ namespace PoESkillTree.Controls
             var translationDelta = e.DeltaManipulation.Translation;
             tt.X += translationDelta.X;
             tt.Y += translationDelta.Y;
-            
+
             // Apply any zoom (from pinch).
             var absoluteOrigin = e.ManipulationOrigin;
             // Using the above transforms alone is not enough because there are more (due to layout).

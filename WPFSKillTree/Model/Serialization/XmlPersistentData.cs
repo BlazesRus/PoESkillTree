@@ -1,6 +1,6 @@
+using PoESkillTree.Controls;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using PoESkillTree.Controls;
 
 namespace PoESkillTree.Model.Serialization
 {

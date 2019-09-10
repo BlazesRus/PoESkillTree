@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MahApps.Metro.SimpleChildWindow;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Solver;
 using PoESkillTree.TreeGenerator.Views;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {

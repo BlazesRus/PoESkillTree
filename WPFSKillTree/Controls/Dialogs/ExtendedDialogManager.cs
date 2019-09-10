@@ -1,4 +1,12 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
+using MahApps.Metro.IconPacks;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs.ViewModels;
+using PoESkillTree.Controls.Dialogs.Views;
+using PoESkillTree.Localization;
+using PoESkillTree.Utils.Extensions;
+using System;
 using System.Linq;
 using System.Media;
 using System.Threading.Tasks;
@@ -6,14 +14,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
-using MahApps.Metro.IconPacks;
-using PoESkillTree.Utils.Extensions;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Controls.Dialogs.ViewModels;
-using PoESkillTree.Controls.Dialogs.Views;
-using PoESkillTree.Localization;
 
 namespace PoESkillTree.Controls.Dialogs
 {
@@ -34,14 +34,14 @@ namespace PoESkillTree.Controls.Dialogs
             // Save old keyboard focus.
             var oldFocus = Keyboard.FocusedElement;
 
-            await window.ShowMetroDialogAsync(view, new MetroDialogSettings {AnimateShow = false});
+            await window.ShowMetroDialogAsync(view, new MetroDialogSettings { AnimateShow = false });
             // Focus the first focusable element in the view
             var element = view.FindVisualChildren<UIElement>().FirstOrDefault(e => e.Focusable);
             element?.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => Keyboard.Focus(element)));
             onShown?.Invoke();
 
             var result = await viewModel.WaitForCloseAsync();
-            await window.HideMetroDialogAsync(view, new MetroDialogSettings {AnimateHide = false});
+            await window.HideMetroDialogAsync(view, new MetroDialogSettings { AnimateHide = false });
 
             // Restore IsDefault and keyboard focus.
             oldDefaults.ForEach(b => b.IsDefault = true);

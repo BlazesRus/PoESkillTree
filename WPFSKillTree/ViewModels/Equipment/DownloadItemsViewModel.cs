@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Input;
-using PoESkillTree.Common.ViewModels;
+﻿using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
@@ -20,7 +20,7 @@ namespace PoESkillTree.ViewModels.Equipment
         public string ItemsLink
         {
             get { return _itemsLink; }
-            private set { SetProperty(ref _itemsLink, value);}
+            private set { SetProperty(ref _itemsLink, value); }
         }
 
         private RelayCommand _openInBrowserCommand;

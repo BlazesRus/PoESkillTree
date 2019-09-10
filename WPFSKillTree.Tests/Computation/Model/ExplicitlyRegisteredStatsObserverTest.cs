@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Concurrency;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using PoESkillTree.Engine.Computation.Builders.Stats;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Core;
 using PoESkillTree.Engine.Computation.Core.Events;
 using PoESkillTree.Engine.Computation.Core.NodeCollections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Concurrency;
 
 namespace PoESkillTree.Computation.Model
 {
@@ -41,7 +41,7 @@ namespace PoESkillTree.Computation.Model
             actualAdded.Clear();
 
             nodeCollection.Remove(null, expected);
-            
+
             Assert.IsEmpty(actualAdded);
             Assert.That(actualRemoved, Has.One.EqualTo(expected));
         }

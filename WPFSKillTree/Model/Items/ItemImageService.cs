@@ -1,4 +1,10 @@
-﻿using System;
+﻿using NLog;
+using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
+using PoESkillTree.Utils.WikiApi;
+using PoESkillTree.Utils.Wpf;
+using System;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.IO;
@@ -11,12 +17,6 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using NLog;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Utils;
-using PoESkillTree.Utils.Extensions;
-using PoESkillTree.Utils.WikiApi;
-using PoESkillTree.Utils.Wpf;
 
 namespace PoESkillTree.Model.Items
 {
@@ -39,7 +39,7 @@ namespace PoESkillTree.Model.Items
         /// </summary>
         private static readonly string AssetPath =
             Path.Combine(AppData.GetFolder(), "Data", "Equipment", "Assets");
-        private static readonly string AssetPathFormat = 
+        private static readonly string AssetPathFormat =
             Path.Combine(AssetPath, "{0}.png");
 
         /// <summary>
@@ -56,14 +56,14 @@ namespace PoESkillTree.Model.Items
         /// <summary>
         /// Stores images for ItemClasses.
         /// </summary>
-        private readonly ConcurrentDictionary<ItemClass, ImageSource> _defaultImageCache = 
+        private readonly ConcurrentDictionary<ItemClass, ImageSource> _defaultImageCache =
             new ConcurrentDictionary<ItemClass, ImageSource>();
 
         /// <summary>
         /// Stores tasks for images for base items. The key is the file name as inserted into
         /// <see cref="AssetPathFormat"/>.
         /// </summary>
-        private readonly ConcurrentDictionary<string, Task<ImageSource>> _assetImageCache = 
+        private readonly ConcurrentDictionary<string, Task<ImageSource>> _assetImageCache =
             new ConcurrentDictionary<string, Task<ImageSource>>();
 
         /// <summary>

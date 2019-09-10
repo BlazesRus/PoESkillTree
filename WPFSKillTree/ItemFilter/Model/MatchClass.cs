@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace PoESkillTree.ItemFilter.Model
@@ -52,7 +51,7 @@ namespace PoESkillTree.ItemFilter.Model
         /// <summary>
         /// Dictionary of BaseType strings which belong to specific Class identified by string.
         /// </summary>
-        private static Dictionary<string,List<string>> BaseTypesOfClass = new Dictionary<string,List<string>>();
+        private static Dictionary<string, List<string>> BaseTypesOfClass = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// The BaseType match narrowing this Class match within same rule.
@@ -113,7 +112,7 @@ namespace PoESkillTree.ItemFilter.Model
                     }
                 else // Otherwise create new entry with copy of all BaseType strings.
                     BaseTypesOfClass.Add(Values[0], new List<string>(match.Values));
-                    
+
             }
         }
 

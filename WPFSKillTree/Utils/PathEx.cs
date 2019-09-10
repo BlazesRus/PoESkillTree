@@ -1,6 +1,6 @@
-﻿using System;
+﻿using PoESkillTree.Localization;
+using System;
 using System.IO;
-using PoESkillTree.Localization;
 
 namespace PoESkillTree.Utils
 {

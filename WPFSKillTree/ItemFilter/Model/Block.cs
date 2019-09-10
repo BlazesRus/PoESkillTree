@@ -1,8 +1,8 @@
-﻿using System;
+﻿using PoESkillTree.Utils.Converter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using PoESkillTree.Utils.Converter;
 
 namespace PoESkillTree.ItemFilter.Model
 {
@@ -25,7 +25,7 @@ namespace PoESkillTree.ItemFilter.Model
 
                 if (Matches != null)
                     foreach (Match match in Matches)
-                        if (! match.IsImplicit())
+                        if (!match.IsImplicit())
                             pri |= (int)match.Priority;
 
                 return pri;
@@ -34,8 +34,8 @@ namespace PoESkillTree.ItemFilter.Model
 
         public bool HasColors { get { return BackgroundColor != null || BorderColor != null || TextColor != null; } }
 
-        public bool HasMatches { get { return Matches != null;  } }
-        
+        public bool HasMatches { get { return Matches != null; } }
+
         public List<Match> Matches;
 
         /// <summary>

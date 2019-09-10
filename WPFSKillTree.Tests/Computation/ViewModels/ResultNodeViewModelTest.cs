@@ -1,9 +1,9 @@
-﻿using System.Reactive.Concurrency;
-using System.Reactive.Subjects;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PoESkillTree.Engine.Computation.Builders.Stats;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.GameModel;
+using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
 
 namespace PoESkillTree.Computation.ViewModels
 {
@@ -26,7 +26,7 @@ namespace PoESkillTree.Computation.ViewModels
         [TestCase(true, ExpectedResult = "True")]
         public string StringValueOfBoolReturnsCorrectResult(bool value)
         {
-            var sut = CreateSut<bool>((NodeValue?) value);
+            var sut = CreateSut<bool>((NodeValue?)value);
 
             return sut.StringValue;
         }
@@ -36,7 +36,7 @@ namespace PoESkillTree.Computation.ViewModels
         [TestCase(TestEnum.B, ExpectedResult = "B")]
         public string StringValueReturnsCorrectResult(TestEnum? value)
         {
-            var sut = CreateSut<TestEnum>((NodeValue?) (int?) value);
+            var sut = CreateSut<TestEnum>((NodeValue?)(int?)value);
 
             return sut.StringValue;
         }
@@ -46,7 +46,7 @@ namespace PoESkillTree.Computation.ViewModels
         [TestCase(1.235, ExpectedResult = "1.24")]
         public string StringValueOfDoubleReturnsCorrectResult(double? value)
         {
-            var sut = CreateSut<double>((NodeValue?) value);
+            var sut = CreateSut<double>((NodeValue?)value);
 
             return sut.StringValue;
         }
@@ -63,9 +63,9 @@ namespace PoESkillTree.Computation.ViewModels
 
                 Assert.AreEqual(null, sut.Value);
                 subject.OnNext(new NodeValue(2));
-                Assert.AreEqual((NodeValue?) 2, sut.Value);
+                Assert.AreEqual((NodeValue?)2, sut.Value);
                 subject.OnNext(new NodeValue(1));
-                Assert.AreEqual((NodeValue?) true, sut.Value);
+                Assert.AreEqual((NodeValue?)true, sut.Value);
             }
         }
 

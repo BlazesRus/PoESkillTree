@@ -179,116 +179,147 @@ msgid "Delete"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:99
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:99
 msgid "Level:"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:109
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:109
 msgid "Additional points:"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:118
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:118
 msgid "Total points:"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:128
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:128
 msgid "include Check-tagged nodes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:137
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:137
 #: TreeGenerator\Views\SteinerTabView.xaml:14
 msgid "exclude Cross-tagged nodes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:145
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:145
 msgid "Iterations:"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:148
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:148
 msgid "Determines how often the generator is run. The best result from all runs is kept."
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:150
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:150
 msgid "Pause and then Close it at any point to keep the current solution."
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:163
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:163
 #: TreeGenerator\Views\SteinerTabView.xaml:24
 msgid "Run"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:170
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:170
 msgid "Reset settings"
 msgstr ""
 
-#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177 Views\MainWindow.xaml:768
+#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:177
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:177
+#: Views\MainWindow.xaml:777
 msgid "Attributes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:195
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:195
 msgid "Load from tree"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:198
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:198
 msgid "Convert to Pseudo Attributes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:200
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:200
 msgid "Converts the attributes to pseudo attributes where possible using the defined settings."
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:225
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:318
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:225
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:318
 msgid "Add"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:234
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:234
 msgid "Attribute"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:239
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:332
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:239
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:332
 msgid "Target"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:252
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:345
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:252
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:345
 msgid "Weight"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:283
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:283
 msgid "Pseudo Attributes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:327
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:327
 msgid "Pseudo attribute"
 msgstr ""
 
-#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:387 Views\MainWindow.xaml:205
-#: ViewModels\SettingsMenuViewModel.cs:30
+#: TreeGenerator\Views\AdvancedGeneratorTab.xaml:387
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:387
+#: Views\MainWindow.xaml:205 ViewModels\SettingsMenuViewModel.cs:30
 msgid "Settings"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:422
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:422
 msgid "Tree + Items"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:425
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:425
 msgid "Tree only"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:432
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:432
 msgid "Reload Pseudo Attributes from filesystem"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:439
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:439
 msgid "Weapon class"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:454
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:454
 msgid "Off hand"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:477
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:477
 msgid "Tags"
 msgstr ""
 
@@ -946,102 +977,94 @@ msgid "C_ross-tag highlighted Nodes"
 msgstr ""
 
 #: Views\MainWindow.xaml:547
+msgid "Load Tracked Stat"
+msgstr ""
+
+#: Views\MainWindow.xaml:556
 msgid "_Help"
 msgstr ""
 
-#: Views\MainWindow.xaml:551
+#: Views\MainWindow.xaml:560
 msgid "_Links"
 msgstr ""
 
-#: Views\MainWindow.xaml:558
+#: Views\MainWindow.xaml:567
 msgid "_Path of Exile Website"
 msgstr ""
 
-#: Views\MainWindow.xaml:563
+#: Views\MainWindow.xaml:572
 msgid "Path of Exile _Wiki"
 msgstr ""
 
-#: Views\MainWindow.xaml:569
+#: Views\MainWindow.xaml:578
 msgid "View _Help"
 msgstr ""
 
-#: Views\MainWindow.xaml:577
+#: Views\MainWindow.xaml:586
 msgid "Hot_keys"
 msgstr ""
 
-#: Views\MainWindow.xaml:585
+#: Views\MainWindow.xaml:594
 msgid "Check for _Updates"
 msgstr ""
 
-#: Views\MainWindow.xaml:593
+#: Views\MainWindow.xaml:602
 msgid "_About PoESkillTree"
 msgstr ""
 
-#: Views\MainWindow.xaml:606
+#: Views\MainWindow.xaml:615
 msgid "Skill Tree"
 msgstr ""
 
-#: Views\MainWindow.xaml:612
+#: Views\MainWindow.xaml:621
 msgid "Equipment"
 msgstr ""
 
-#: Views\MainWindow.xaml:618
+#: Views\MainWindow.xaml:627
 msgid "Computation"
 msgstr ""
 
-#: Views\MainWindow.xaml:634
+#: Views\MainWindow.xaml:643
 msgid "Bandit"
 msgstr ""
 
-#: Views\MainWindow.xaml:648
+#: Views\MainWindow.xaml:657
 msgid "Level"
 msgstr ""
 
-#: Views\MainWindow.xaml:655
+#: Views\MainWindow.xaml:664
 msgid "Used Passive Skill Points"
 msgstr ""
 
-#: Views\MainWindow.xaml:660
+#: Views\MainWindow.xaml:669
 msgid "Used Ascendancy Skill Points"
 msgstr ""
 
-#: Views\MainWindow.xaml:667
+#: Views\MainWindow.xaml:676
 msgid "Total Passive Skill Points"
 msgstr ""
 
-#: Views\MainWindow.xaml:672
+#: Views\MainWindow.xaml:681
 msgid "Total Ascendancy Skill Points"
 msgstr ""
 
-#: Views\MainWindow.xaml:727
+#: Views\MainWindow.xaml:736
 msgid "Craft new unique"
 msgstr ""
 
-#: Views\MainWindow.xaml:731
+#: Views\MainWindow.xaml:740
 msgid "Craft new item"
 msgstr ""
 
-#: Views\MainWindow.xaml:757
+#: Views\MainWindow.xaml:766
 msgid "Saved Builds"
 msgstr ""
 
-#: Views\MainWindow.xaml:791
+#: Views\MainWindow.xaml:800
 msgid "Passive Attributes"
 msgstr ""
 
-#: Views\MainWindow.xaml:808
-msgid "Item Attributes"
-msgstr ""
-
-#: Views\MainWindow.xaml:827
-msgid "Total Attributes"
-msgstr ""
-
-#: Views\MainWindow.xaml:844
-msgid "ItemList"
-msgstr ""
-
-#: Views\MainWindow.xaml:888 Views\MainWindow.xaml:891
+#: Views\MainWindow.xaml:844 Views\MainWindow.xaml:847
 msgid "Skill tree link"
 msgstr ""
 
@@ -1061,7 +1084,7 @@ msgstr ""
 msgid "Build save path"
 msgstr ""
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:50
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:48
 msgid "Change..."
 msgstr ""
 
@@ -1105,27 +1128,27 @@ msgstr ""
 msgid "Reset selected bandits"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:41
+#: Views\TrackedStatsMenu.xaml:39
 msgid "TrackedStats Path:"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:55
+#: Views\TrackedStatsMenu.xaml:53
 msgid "TargetFile:"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:74
+#: Views\TrackedStatsMenu.xaml:72
 msgid "Load File Names From TrackedStats Directory"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:84
+#: Views\TrackedStatsMenu.xaml:82
 msgid "Load Tracked Stats from Target File"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:89
+#: Views\TrackedStatsMenu.xaml:87
 msgid "Reset Tracking"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:94
+#: Views\TrackedStatsMenu.xaml:92
 msgid "Save Tracked Stats to Target File"
 msgstr ""
 
@@ -1151,7 +1174,6 @@ msgstr ""
 
 #: Model\Serialization\AbstractPersistentDataDeserializer.cs:98
 #: ViewModels\SettingsMenuViewModel.cs:66
-#: Model\Serialization\AbstractPersistentDataDeserializer.cs:97
 msgid "Select build directory"
 msgstr ""
 
@@ -1162,10 +1184,6 @@ msgid ""
 msgstr ""
 
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:75
-<<<<<<< HEAD
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:74
-=======
->>>>>>> master
 #, csharp-format
 msgid "Could not import build file, only existing files with the extension {0} can be imported."
 msgstr ""
@@ -1173,32 +1191,18 @@ msgstr ""
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:77
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:139
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:148
-<<<<<<< HEAD
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:76
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:138
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:147
-=======
->>>>>>> master
 msgid "Import failed"
 msgstr ""
 
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:138
-<<<<<<< HEAD
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:137
-=======
->>>>>>> master
 msgid "Build is of an old version and can't be imported"
 msgstr ""
 
 #: Model\Serialization\PersistentDataDeserializerCurrent.cs:147
-<<<<<<< HEAD
-#: Model\Serialization\PersistentDataDeserializerCurrent.cs:146
-=======
->>>>>>> master
 msgid "Could not import build"
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1156
+#: SkillTreeFiles\SkillTree.cs:1268
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1345,11 +1349,26 @@ msgid "Flasks"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
+#: Utils\Converter\GroupStringConverter.cs:36
+msgid "Jewel Types"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
+#: Utils\Converter\GroupStringConverter.cs:37
+msgid "Tracked PseudoTotals"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+#: Utils\Converter\GroupStringConverter.cs:38
+msgid "Hidden"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
 #: Utils\Converter\GroupStringConverter.cs:35
 msgid "Everything Else"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:604
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:636
 msgid "Advanced"
 msgstr ""
 
@@ -1405,19 +1424,11 @@ msgstr ""
 msgid "Please tag non-skilled nodes by right-clicking them."
 msgstr ""
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:85
-<<<<<<< refs/remotes/origin/master
-=======
 #: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:78
->>>>>>> fixed the multibyte error (using x instead of non-ansi2 symbol
 msgid "The Skill Tree Generator is already open"
 msgstr ""
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:100
-<<<<<<< refs/remotes/origin/master
-=======
 #: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:93
->>>>>>> fixed the multibyte error (using x instead of non-ansi2 symbol
 msgid "Could not open Skill Tree Generator"
 msgstr ""
 
@@ -1501,8 +1512,8 @@ msgstr ""
 
 #: ItemFilter\Model\FilterManager.cs:571
 msgid ""
-"1 Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
-"1 Any Map"
+"1x Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
+"1x Any Map"
 msgstr ""
 
 #: ItemFilter\Model\FilterManager.cs:644
@@ -1521,24 +1532,24 @@ msgstr ""
 msgid "Chancing"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:38
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:37
 msgid "Original color"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:40
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:39
 msgid "Standard colors"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:42
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:41
 msgid "Recent colors"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:44
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:43
 msgctxt "color"
 msgid "Custom"
 msgstr ""
 
-#: ItemFilter\Views\ColorButtonDialog.xaml.cs:45
+#: ItemFilter\Views\ColorButtonDialog.xaml.cs:44
 msgctxt "color"
 msgid "Standard"
 msgstr ""
@@ -1592,7 +1603,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr ""
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:456
-#: Views\MainWindow.xaml.cs:963
+#: Views\MainWindow.xaml.cs:958
 msgid "Do you want to continue?"
 msgstr ""
 
@@ -1691,13 +1702,13 @@ msgstr ""
 msgid "New tab with {0} items was added to stash."
 msgstr ""
 
-#: ViewModels\Equipment\StashViewModel.cs:338
+#: ViewModels\Equipment\StashViewModel.cs:357
 msgid ""
 "This will delete all items between this and the next bookmark and can not be undone.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ViewModels\Equipment\StashViewModel.cs:339
+#: ViewModels\Equipment\StashViewModel.cs:358
 msgid "Delete items"
 msgstr ""
 
@@ -1710,7 +1721,7 @@ msgid "Restart is needed"
 msgstr ""
 
 #: ViewModels\SettingsMenuViewModel.cs:67
-#: ViewModels\TrackedStatsMenuModel.cs:111
+#: ViewModels\TrackedStatsMenuModel.cs:107
 msgid ""
 "Select the directory where builds will be stored.\n"
 "It will be created if it does not yet exist."
@@ -1723,11 +1734,11 @@ msgid ""
 "If you cancel, the build directory will not be changed."
 msgstr ""
 
-#: ViewModels\TrackedStatsMenuModel.cs:79
+#: ViewModels\TrackedStatsMenuModel.cs:75
 msgid "Tracked Stat Settings"
 msgstr ""
 
-#: ViewModels\TrackedStatsMenuModel.cs:110
+#: ViewModels\TrackedStatsMenuModel.cs:106
 msgid "Select TrackedStat directory"
 msgstr ""
 
@@ -1744,85 +1755,85 @@ msgstr ""
 msgid "Help file not found"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:358
+#: Views\MainWindow.xaml.cs:354
 msgid "Create New Attribute Group"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:358
+#: Views\MainWindow.xaml.cs:354
 msgid "Group name"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:363
+#: Views\MainWindow.xaml.cs:359
 msgid "A group with that name already exists."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:456
+#: Views\MainWindow.xaml.cs:457
 msgid "Initialization"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:457 Views\MainWindow.xaml.cs:477
+#: Views\MainWindow.xaml.cs:458 Views\MainWindow.xaml.cs:478
 msgid "Initializing window ..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:472
+#: Views\MainWindow.xaml.cs:473
 msgid "Loading skill tree assets ..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:507
+#: Views\MainWindow.xaml.cs:509
 msgid "Highlight nodes by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:512
+#: Views\MainWindow.xaml.cs:514
 msgid "Remove highlights by attribute"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:592
+#: Views\MainWindow.xaml.cs:587
 msgid "Load Tree"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:598
+#: Views\MainWindow.xaml.cs:593
 msgid "Load as new build"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:780
+#: Views\MainWindow.xaml.cs:775
 msgid ""
 "There are unsaved builds. Do you want to save them before closing?\n"
 "\n"
 "Canceling stops the program from closing and does not save any builds."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:810
+#: Views\MainWindow.xaml.cs:805
 msgid "Are you sure?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:811
+#: Views\MainWindow.xaml.cs:806
 msgid "Untag All Skill Nodes"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:884
+#: Views\MainWindow.xaml.cs:879
 #, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Views\MainWindow.xaml.cs:918
+#: Views\MainWindow.xaml.cs:913
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:954 Views\MainWindow.xaml.cs:1977
+#: Views\MainWindow.xaml.cs:949 Views\MainWindow.xaml.cs:2071
 msgid "An error occurred while copying to Clipboard."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:960
+#: Views\MainWindow.xaml.cs:955
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:969
+#: Views\MainWindow.xaml.cs:964
 msgid "Downloading skill tree assets ..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:990
+#: Views\MainWindow.xaml.cs:985
 msgid "An error occurred while downloading assets."
 msgstr ""
 
@@ -1884,54 +1895,42 @@ msgstr ""
 msgid "An error occurred while attempting to start the installation."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1713
+#: Views\MainWindow.xaml.cs:1802
 msgid "An error occurred while attempting to load item data."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1802 Views\MainWindow.xaml.cs:1845
+#: Views\MainWindow.xaml.cs:1896 Views\MainWindow.xaml.cs:1939
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1824
+#: Views\MainWindow.xaml.cs:1918
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1825
+#: Views\MainWindow.xaml.cs:1919
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1826
+#: Views\MainWindow.xaml.cs:1920
 msgid "Replace Bandits settings"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1852
+#: Views\MainWindow.xaml.cs:1946
 msgid "Current: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1853
+#: Views\MainWindow.xaml.cs:1947
 msgid "Loaded: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1957
+#: Views\MainWindow.xaml.cs:2051
 msgid "Generating PoEUrl of Skill tree"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1963
+#: Views\MainWindow.xaml.cs:2057
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1973
+#: Views\MainWindow.xaml.cs:2067
 msgid "The PoEUrl link has been copied to Clipboard."
-msgstr ""
-
-#: ItemFilter\Model\FilterManager.cs:571
-msgid ""
-"1x Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
-"1 Any Map"
-msgstr ""
-
-#: ItemFilter\Model\FilterManager.cs:571
-msgid ""
-"1x Stone Hammer, Rock Breaker or Gavel with 20% quality\n"
-"1x Any Map"
 msgstr ""

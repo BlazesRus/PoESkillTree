@@ -99,12 +99,12 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         }
 
         private HashSet<int> _fixedTargetNodeIndexIndices;
-        
+
         public IEnumerable<int> FixedTargetNodeIndices
         {
             get { return _fixedTargetNodeIndexIndices; }
         }
-        
+
         public int FixedTargetNodeCount
         {
             get { return _fixedTargetNodes.Count; }

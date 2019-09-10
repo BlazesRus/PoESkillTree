@@ -1,7 +1,7 @@
-﻿using System;
+﻿using PoESkillTree.Localization;
+using System;
 using System.Globalization;
 using System.Windows.Data;
-using PoESkillTree.Localization;
 
 namespace PoESkillTree.Views.Builds
 {

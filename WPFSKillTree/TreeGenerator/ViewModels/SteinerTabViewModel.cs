@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using PoESkillTree.Controls.Dialogs;
+﻿using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.JsonSettings;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Settings;
 using PoESkillTree.TreeGenerator.Solver;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
@@ -33,7 +33,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             : base(tree, dialogCoordinator, dialogContext, 1, runCallback)
         {
             DisplayName = L10n.Message("Tagged Nodes");
-            SubSettings = new[] {ExcludeCrossed};
+            SubSettings = new[] { ExcludeCrossed };
         }
 
         protected override async Task<ISolver> CreateSolverAsync(SolverSettings settings)

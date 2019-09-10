@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using PoESkillTree.Engine.GameModel.Items;
+using PoESkillTree.Model.Items.Mods;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Model.Items.Mods;
 
 namespace PoESkillTree.Model.Items
 {
@@ -144,7 +144,7 @@ namespace PoESkillTree.Model.Items
         /// <see cref="ItemSlot.Unequipable"/> if is not equipped.</param>
         /// <param name="typeLine">The TypeLine property of the parent <see cref="JewelItem"/>.</param>
         /// <param name="frameType">The frame type of the item.</param>
-        public ItemBase(ItemImageService itemImageService, string typeLine, FrameType frameType, bool AbyssJewel=false)
+        public ItemBase(ItemImageService itemImageService, string typeLine, FrameType frameType, bool AbyssJewel = false)
         {
             // These don't matter as we won't create new items from this base.
             Level = 0;
@@ -160,7 +160,7 @@ namespace PoESkillTree.Model.Items
             CanHaveQuality = false;
 
             Name = typeLine;
-            ItemClass = AbyssJewel?ItemClass.AbyssJewel:ItemClass.Jewel;
+            ItemClass = AbyssJewel ? ItemClass.AbyssJewel : ItemClass.Jewel;
 
             // This might miss some tags, but those are only important for mod crafting,
             // which will not happen with this item.

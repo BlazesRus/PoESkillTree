@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {

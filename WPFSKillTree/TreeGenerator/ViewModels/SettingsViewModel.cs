@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PoESkillTree.Model.JsonSettings;
+using PoESkillTree.SkillTreeFiles;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using PoESkillTree.Model.JsonSettings;
-using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
@@ -59,7 +59,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 new AdvancedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback),
                 new AutomatedTabViewModel(Tree, _dialogCoordinator, _dialogContext, runCallback)
             };
-            SubSettings = new ISetting[] {SelectedTabIndex}.Union(Tabs).ToArray();
+            SubSettings = new ISetting[] { SelectedTabIndex }.Union(Tabs).ToArray();
         }
 
         public async Task RunAsync(GeneratorTabViewModel generator)

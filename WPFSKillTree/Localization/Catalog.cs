@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ExpressionEvaluator;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using ExpressionEvaluator;
 
 namespace PoESkillTree.Localization
 {
@@ -29,9 +29,9 @@ namespace PoESkillTree.Localization
             // Evaluates expression.
             public uint Eval(uint num)
             {
-                n = (int) num;
+                n = (int)num;
 
-                return (uint) fn(this);
+                return (uint)fn(this);
             }
         }
 
@@ -489,7 +489,7 @@ namespace PoESkillTree.Localization
 
             return false;
         }
-        
+
         // Translates message.
         // Returns null if no translation was found.
         public string Message(string message, string context = null)
@@ -499,7 +499,7 @@ namespace PoESkillTree.Localization
 
             return Messages.ContainsKey(message) ? Messages[message][0] : null;
         }
-        
+
         // Translates plural message.
         // Returns null if no translation was found.
         public string Plural(string message, uint n, string context = null)
