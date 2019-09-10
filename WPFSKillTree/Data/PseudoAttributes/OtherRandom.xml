@@ -1,5 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PseudoAttributes>
+    <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualWands+4PowerCharges]" Group="Critical Strike">
+        <Attribute Name="#% increased Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
+		<Attribute Name="#% increased Critical Strike Chance with Wands"/>
+		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Critical Strike Chance[Dagger+4PowerCharges]" Group="Critical Strike">
+        <Attribute Name="#% increased Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
+        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
+		<Attribute Name="#% increased Melee Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualDaggers+4PowerCharges]" Group="Critical Strike">
+        <Attribute Name="#% increased Critical Strike Chance" />
+		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
+        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
+		<Attribute Name="#% increased Melee Critical Strike Chance" />
+		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
+		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Attack Speed[DualDaggers]" Group="Damage">
+        <Attribute Name="#% increased Attack Speed"/>
+		<Attribute Name="#% increased Melee Attack Speed"/>
+        <Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"/>
+        <Attribute Name="#% increased Attack Speed with Daggers"/>
+        <Attribute Name="#% increased Attack Speed while Dual Wielding"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Attack Speed[DualWands]" Group="Damage">
+        <Attribute Name="#% increased Attack Speed"/>
+        <Attribute Name="#% increased Attack Speed with Wands"/>
+        <Attribute Name="#% increased Attack Speed while Dual Wielding"/>
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Full Conversion Physical-to-Fire AOE Spell Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage"/>
         <Attribute Name="#% increased Global Physical Damage"/>
