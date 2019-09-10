@@ -1672,7 +1672,7 @@ namespace PoESkillTree.Views
                 {
                     ushort ID = node.Id;
                     sp.Children.Add(new Separator());
-
+/*      Disabling JewelNodeData based code for now
                     JewelNodeData JewelValue;
                     if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
                     {
@@ -1696,6 +1696,7 @@ namespace PoESkillTree.Views
                             }
                         }
                     }
+*/
                 }
 
                 //Change summary, activated with ctrl
