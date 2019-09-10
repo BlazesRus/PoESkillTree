@@ -1210,7 +1210,7 @@ namespace PoESkillTree.Views
             RefreshAttributeLists();
             UpdateClass();
             UpdatePoints();
-            IntuitiveLeapCheckup();
+            //IntuitiveLeapCheckup();
         }
 
         public void UpdateClass()
@@ -1284,16 +1284,16 @@ namespace PoESkillTree.Views
             }
         }
 
-        /// <summary>
-        /// Apply removal of Intuitive Leap supported jewels
-        /// </summary>
-        public void IntuitiveLeapCheckup()
-        {
-            if(GlobalSettings.RemovingIntLeapJewels!=0)
-            {
-
-            }
-        }
+        ///// <summary>
+        ///// Apply removal of Intuitive Leap supported jewels
+        ///// </summary>
+        //public void IntuitiveLeapCheckup()
+        //{
+        //    if(GlobalSettings.RemovingIntLeapJewels!=0)
+        //    {
+        //        //RemoveLeapTagFromNode
+        //    }
+        //}
 
         public void UpdatePoints()
         {
@@ -1409,6 +1409,7 @@ namespace PoESkillTree.Views
             _lastMouseButton = e.ChangedButton;
         }
 
+/*      Turning off tagged Leap code for now
         static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
         {
             List<float> BlankList = new List<float>();
@@ -1444,6 +1445,7 @@ namespace PoESkillTree.Views
                     Tree.DrawRefundPreview(_toRemove);
             }
         }
+*/
 
         private void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {
@@ -1478,6 +1480,7 @@ namespace PoESkillTree.Views
                     }
                     else
                     {
+/*  Turning off tagged Leap code for now
                         bool NonLeapedNeighborIsConnected = false;
                         foreach (var skillNode in node.Neighbor)//Checking for tree connection
                         {
@@ -1536,6 +1539,21 @@ namespace PoESkillTree.Views
                                     NormalNodeClick(node);
                                 }
                             }
+                        }
+*/
+                        // Toggle whether the node is included in the tree
+                        if (Tree.SkilledNodes.Contains(node))
+                        {
+                            Tree.ForceRefundNode(node);
+                            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+                            Tree.DrawPath(_prePath);
+                        }
+                        else if (_prePath != null)
+                        {
+                            Tree.AllocateSkillNodes(_prePath);
+                            _toRemove = Tree.ForceRefundNodePreview(node);
+                            if (_toRemove != null)
+                                Tree.DrawRefundPreview(_toRemove);
                         }
                     }
                 }
