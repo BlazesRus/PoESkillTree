@@ -1437,7 +1437,7 @@ msgstr ""
 msgid "Everything Else"
 msgstr ""
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:636
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:624
 msgid "Advanced"
 msgstr ""
 
