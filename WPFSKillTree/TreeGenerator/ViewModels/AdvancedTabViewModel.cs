@@ -245,7 +245,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket", "+# Str JewelSlot", "+# Int JewelSlot", "+# Dex JewelSlot"
+            "+# Jewel Socket", "+# Str JewelSlot", "+# Int JewelSlot", "+# Dex JewelSlot"
         };
 
         /// <summary>
