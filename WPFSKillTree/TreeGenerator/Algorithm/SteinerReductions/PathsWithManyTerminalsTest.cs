@@ -1,5 +1,5 @@
-﻿using PoESkillTree.TreeGenerator.Algorithm.Model;
-using System.Linq;
+﻿using System.Linq;
+using PoESkillTree.TreeGenerator.Algorithm.Model;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
 {

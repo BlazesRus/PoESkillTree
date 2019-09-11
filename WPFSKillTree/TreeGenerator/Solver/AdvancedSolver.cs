@@ -1,14 +1,14 @@
-﻿using PoESkillTree.Engine.GameModel.PassiveTree;
+﻿using System;
+using System.Buffers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Genetic;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.TreeGenerator.Settings;
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace PoESkillTree.TreeGenerator.Solver
 {
@@ -33,7 +33,6 @@ namespace PoESkillTree.TreeGenerator.Solver
                 Weight = weight;
             }
         }
-
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
         /// into the applicable attributes and their conversion multiplier.
@@ -84,7 +83,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         private const double UsedNodeCountWeight = 5;
 
         /// <summary>
-        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node count.
+        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node coutn.
         /// </summary>
         /// <remarks>
         /// A tree with less points spent should only better better if the csv satisfaction is not worse.
@@ -106,7 +105,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversions multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -136,7 +135,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             get
             {
                 return new GeneticAlgorithmParameters(
-                    (int)(PopMultiplier * SearchSpace.Count),
+                    (int) (PopMultiplier * SearchSpace.Count),
                     SearchSpace.Count,
                     maxMutateClusterSize: MaxMutateClusterSize);
             }
@@ -151,46 +150,6 @@ namespace PoESkillTree.TreeGenerator.Solver
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
-            //if (settings.AttributeConstraints.ContainsKey(DualWandAccKey) && settings.AttributeConstraints[DualWandAccKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanDualWandAcc = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanDualWandAcc = false;
-            //}
-            ////if (settings.AttributeConstraints.ContainsKey(PseudoAccKey) && settings.AttributeConstraints[PseudoAccKey].Item1 > 0)
-            ////{
-            ////    GlobalSettings.ScanPseudoAccuracy = true;
-            ////}
-            ////else
-            ////{
-            ////    GlobalSettings.ScanPseudoAccuracy = false;
-            ////}
-            //if (settings.AttributeConstraints.ContainsKey(HPTotalKey) && settings.AttributeConstraints[HPTotalKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanHPTotal = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanHPTotal = false;
-            //}
-            //if (settings.AttributeConstraints.ContainsKey(HybridHPKey) && settings.AttributeConstraints[HybridHPKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanHybridHP = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanHybridHP = false;
-            //}
-            //if (GlobalSettings.ScanDualWandAcc || GlobalSettings.ScanPseudoAccuracy || GlobalSettings.ScanHPTotal || GlobalSettings.ScanHybridHP)
-            //{
-            //    GlobalSettings.AdvancedTreeSearch = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.AdvancedTreeSearch = false;
-            //}
         }
 
         public override void Initialize()
@@ -222,7 +181,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             foreach (var kvPair in attrConstraints)
             {
                 _attrConstraints[i] = kvPair.Value;
-                _attrNameLookup[kvPair.Key] = new List<int> { i };
+                _attrNameLookup[kvPair.Key] = new List<int> {i};
                 _attrConversionMultipliers[Tuple.Create(kvPair.Key, i)] = 1;
                 i++;
             }
@@ -237,7 +196,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                     }
                     else
                     {
-                        _attrNameLookup[tuple.Item1] = new List<int> { i };
+                        _attrNameLookup[tuple.Item1] = new List<int> {i};
                     }
                     _attrConversionMultipliers[Tuple.Create(tuple.Item1, i)] = tuple.Item2;
                 }
@@ -312,7 +271,7 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-
+            
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
@@ -531,15 +490,14 @@ namespace PoESkillTree.TreeGenerator.Solver
                 for (var i = 0; i < _attrConstraints.Length; i++)
                 {
                     var stat = _attrConstraints[i];
-                    var currentValue = totalStats[i];
-                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                    csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
                 }
             }
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }
@@ -568,7 +526,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         {
             // Don't go higher than the target value.
             x = Math.Min(x, target);
-            return Math.Exp(weight * CsvWeightMultiplier * x / target) / Math.Exp(weight * CsvWeightMultiplier);
+            return Math.Exp(weight * CsvWeightMultiplier * x/target) / Math.Exp(weight * CsvWeightMultiplier);
         }
     }
 }

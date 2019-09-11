@@ -1,6 +1,6 @@
-﻿using PoESkillTree.SkillTreeFiles;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.TreeGenerator.Settings
 {

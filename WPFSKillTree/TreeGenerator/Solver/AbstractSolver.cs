@@ -1,12 +1,12 @@
-﻿using PoESkillTree.Engine.GameModel.PassiveTree;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Settings;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace PoESkillTree.TreeGenerator.Solver
 {
@@ -22,7 +22,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// True once <see cref="Initialize"/> returned.
         /// </summary>
         protected bool IsInitialized { get; private set; }
-
+        
         public bool IsConsideredDone
         {
             get { return IsInitialized && CurrentIteration >= (Iterations - 1) && CurrentStep >= Steps; }
@@ -35,7 +35,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         public int Iterations { get { return Settings.Iterations; } }
 
         public abstract int CurrentIteration { get; }
-
+        
         public abstract IEnumerable<ushort> BestSolution { get; }
 
         /// <summary>
@@ -47,14 +47,14 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// The SolverSettings that customize this solver run.
         /// </summary>
         protected readonly TS Settings;
-
+        
         public int UncountedNodes { get; private set; }
 
         /// <summary>
         /// The fixed start node (can contain multiple) of this solver run.
         /// </summary>
         protected GraphNode StartNode { get; private set; }
-
+        
         /// <summary>
         /// Gets the target nodes this solver run must include.
         /// </summary>
@@ -64,7 +64,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Contains all nodes that can be skilled. Simplification of the skill tree.
         /// </summary>
         protected IReadOnlyList<GraphNode> AllNodes { get; private set; }
-
+        
         /// <summary>
         /// Gets the list of GraphNodes from which this solver tries to find the best subset.
         /// </summary>
@@ -135,11 +135,11 @@ namespace PoESkillTree.TreeGenerator.Solver
             {
                 if (!inExpansion.Contains(node.Id))
                 {
-                    expansionDict[node.Id] = new[] { node.Id };
+                    expansionDict[node.Id] = new[] {node.Id};
                 }
             }
             NodeExpansionDictionary = expansionDict;
-
+            
             // The hidden root node and ascendancy nodes do not count for the total node count.
             UncountedNodes = 1 + StartNode.Nodes.Count(n => SkillTree.Skillnodes[n].IsAscendancyNode);
 
@@ -214,7 +214,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             TargetNodes = (from node in Settings.Checked
                            where !searchGraph.NodeDict.ContainsKey(node)
                            select searchGraph.AddNodeId(node.Id))
-                          .Union(new[] { StartNode }).ToList();
+                          .Union(new[] {StartNode}).ToList();
         }
 
         /// <summary>

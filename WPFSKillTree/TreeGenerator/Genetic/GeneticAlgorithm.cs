@@ -1,10 +1,10 @@
 ﻿//#define VERBOSE
-using PoESkillTree.Utils;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using PoESkillTree.Utils;
 
 namespace PoESkillTree.TreeGenerator.Genetic
 {
@@ -49,7 +49,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
                 throw new ArgumentOutOfRangeException("dnaLength", dnaLength, "must be >= 0");
             if (maxMutateClusterSize < 1)
                 throw new ArgumentOutOfRangeException("maxMutateClusterSize", maxMutateClusterSize, "must be > 0");
-
+            
             PopulationSize = populationSize;
             DnaLength = dnaLength;
             Temperature = temperature;
@@ -120,7 +120,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
         /// New individuals are generated parallelized. Since the fitness function
         /// is often the bottleneck this greatly increases performance.
         /// However it means that the fitness function must be thread-safe.
-
+        
         /// <summary>
         ///  The fitness function to be used for evaluating individuals.
         /// </summary>
@@ -165,7 +165,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
         {
             return new BitArray(_bestSolution.DNA);
         }
-
+        
         private readonly Random _random = new ThreadSafeRandom();
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
         private class Individual
         {
             public readonly BitArray DNA;
-
+            
             public readonly double Fitness;
 
             public int Rank;
@@ -221,7 +221,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             _annealingFactor = parameters.AnnealingFactor;
             _maxMutateClusterSize = parameters.MaxMutateClusterSize;
             CurrentIteration = 0;
-
+            
             _initialSolution = initialSolution ?? new BitArray(_dnaLength);
             // Make sure there is a valid solution in case _populationSize is 0.
             _bestSolution = new Individual(_initialSolution, 0);
@@ -277,7 +277,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             int newPopIndex = 0;
 
             WeightedSampler<Individual> sampler = new WeightedSampler<Individual>(_random);
-
+            
 #if VERBOSE
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -437,7 +437,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             return new Individual(dna, fitness);
         }
 
-        #region DNA mutation
+#region DNA mutation
         /// <summary>
         ///  Flips a random sequence of bits in the passed DNA bitstring and returns the result.
         ///  The sequence length is up to _maxMutateClusterSize (inclusive).
@@ -471,7 +471,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
                             " differing DNA lengths is not supported by this GeneticAlgorithm!");
 
             int crossoverStart = _random.Next(length);
-            int crossoverEnd = _random.Next(length);
+            int crossoverEnd   = _random.Next(length);
 
             // This prevents the crossover being biased towards exchanging
             // the middle parts of the DNA and basically never affecting the
@@ -526,7 +526,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             return sum;
         }
 #endif
-        #endregion
+#endregion
 
         /// <summary>
         ///  Takes a non-mutated individual and a mutated form of it and and decides
@@ -544,7 +544,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             var curFitness = oldState.Fitness;
             var newFitness = newState.Fitness;
             if (newFitness >= curFitness) return true;
-
+            
             int i, imin = 0, imax = oldState.Rank - 1;
             for (i = (imin + imax) / 2; i < imax; i = (imin + imax) / 2)
             {
@@ -557,7 +557,7 @@ namespace PoESkillTree.TreeGenerator.Genetic
             // Above search either returns the correct index or is the correct index - 1.
             if (_population[i].Fitness < newFitness) i++;
             var df = i - oldState.Rank;
-
+            
             double acceptanceProbability = Math.Exp(df / _temperature);
             return _random.NextDouble() < acceptanceProbability;
         }

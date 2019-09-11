@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
@@ -19,7 +20,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public ushort Id { get { return _id; } }
 
 #if DEBUG
-        private string Name { get { return SkillTreeFiles.SkillTree.Skillnodes[_id].Name; } }
+        private string Name { get { return SkillTree.Skillnodes[_id].Name; } }
 #endif
 
         /// <summary>
@@ -27,12 +28,12 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// and other classes.
         /// </summary>
         public int DistancesIndex { get; set; }
-
+        
         private List<GraphNode> _adjacent = new List<GraphNode>();
         /// <summary>
         /// Gets the nodes adjacent to this node.
         /// </summary>
-        public IReadOnlyCollection<GraphNode> Adjacent { get { return _adjacent; } }
+        public IReadOnlyCollection<GraphNode> Adjacent { get { return _adjacent;} }
 
         private readonly List<ushort> _nodes;
         /// <summary>
@@ -46,7 +47,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public GraphNode(ushort id)
         {
             DistancesIndex = -1;
-            _nodes = new List<ushort> { id };
+            _nodes = new List<ushort> {id};
             _id = id;
         }
 

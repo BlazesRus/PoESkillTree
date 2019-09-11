@@ -1,4 +1,13 @@
-﻿using MoreLinq;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Input;
+using MoreLinq;
 using Newtonsoft.Json.Linq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Controls.Dialogs;
@@ -12,15 +21,6 @@ using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.TreeGenerator.Settings;
 using PoESkillTree.TreeGenerator.Solver;
 using PoESkillTree.Utils.Converter;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Input;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
@@ -245,7 +245,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket", GlobalSettings.DualWandAccKey, GlobalSettings.HPTotalKey, GlobalSettings.HybridHPKey
+            "+# to Jewel Socket", "+# Str JewelSlot", "+# Int JewelSlot", "+# Dex JewelSlot"
         };
 
         /// <summary>
@@ -267,15 +267,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             "+# to maximum Mana",
             "+# to maximum Life",
             "+# Accuracy Rating",
-            "+# to maximum Energy Shield",
-            "Jewel Socket ID: #",
-            "IntuitiveLeapSupported",
-            "Strength from Passives in Radius is Transformed to Intelligence",
-            "Strength from Passives in Radius is Transformed to Dexterity",
-            "Dexterity from Passives in Radius is Transformed to Intelligence",
-            "Dexterity from Passives in Radius is Transformed to Strength",
-            "Intelligence from Passives in Radius is Transformed to Strength",
-            "Intelligence from Passives in Radius is Transformed to Dexterity"
+            "+# to maximum Energy Shield"
         };
 
         #endregion
@@ -506,7 +498,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 return _addPseudoConstraintCommand ?? (_addPseudoConstraintCommand = new RelayCommand(
                     () =>
                     {
-                        var newConstraint = (PseudoAttributeConstraint)NewPseudoAttributeConstraint.Clone();
+                        var newConstraint = (PseudoAttributeConstraint) NewPseudoAttributeConstraint.Clone();
                         _addedPseudoAttributes.Add(newConstraint.Data);
                         PseudoAttributesView.Refresh();
 
@@ -602,10 +594,6 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             };
 
             _attributes = CreatePossibleAttributes().ToList();
-            //if (!_attributes.Contains(GlobalSettings.DualWandAccKey)) { _attributes.Add(GlobalSettings.DualWandAccKey); }
-            //if (!_attributes.Contains(GlobalSettings.PseudoAccKey)) { _attributes.Add(GlobalSettings.PseudoAccKey); }
-            //if (!_attributes.Contains(GlobalSettings.HPTotalKey)) { _attributes.Add(GlobalSettings.HPTotalKey); }
-            //if (!_attributes.Contains(GlobalSettings.HybridHPKey)) { _attributes.Add(GlobalSettings.HybridHPKey); }
             AttributesView = new ListCollectionView(_attributes)
             {
                 Filter = item => !_addedAttributes.Contains(item),
@@ -624,7 +612,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
 
             PseudoAttributesView = new ListCollectionView(_pseudoAttributes)
             {
-                Filter = item => !_addedPseudoAttributes.Contains((PseudoAttribute)item)
+                Filter = item => !_addedPseudoAttributes.Contains((PseudoAttribute) item)
             };
             PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Group), ListSortDirection.Ascending));
             PseudoAttributesView.SortDescriptions.Add(new SortDescription(nameof(PseudoAttribute.Name), ListSortDirection.Ascending));
@@ -752,7 +740,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             AttributeConstraints.Clear();
             foreach (var attribute in attributes)
             {
-                AttributeConstraints.Add(new AttributeConstraint(attribute.Key) { TargetValue = attribute.Value });
+                AttributeConstraints.Add(new AttributeConstraint(attribute.Key) {TargetValue = attribute.Value});
             }
         }
 
@@ -861,11 +849,11 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             {
                 if (stats.ContainsKey(attr.Key))
                 {
-                    stats[attr.Key] += Tree.Level * attr.Value;
+                    stats[attr.Key] += Tree.Level*attr.Value;
                 }
                 else
                 {
-                    stats[attr.Key] = Tree.Level * attr.Value;
+                    stats[attr.Key] = Tree.Level*attr.Value;
                 }
             }
 

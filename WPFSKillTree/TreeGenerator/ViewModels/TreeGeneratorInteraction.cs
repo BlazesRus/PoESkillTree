@@ -1,12 +1,12 @@
-﻿using PoESkillTree.Common.ViewModels;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using PoESkillTree.Utils;
+using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Views;
-using PoESkillTree.Utils;
-using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {

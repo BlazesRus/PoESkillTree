@@ -1,17 +1,17 @@
-﻿using NLog;
-using PoESkillTree.Common.ViewModels;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.Localization;
-using PoESkillTree.SkillTreeFiles;
-using PoESkillTree.TreeGenerator.Algorithm;
-using PoESkillTree.TreeGenerator.Solver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using NLog;
+using PoESkillTree.Common.ViewModels;
+using PoESkillTree.Controls.Dialogs;
+using PoESkillTree.Localization;
+using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.TreeGenerator.Algorithm;
+using PoESkillTree.TreeGenerator.Solver;
 
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
@@ -55,7 +55,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         /// </summary>
         private readonly IProgress<Tuple<int, int, IEnumerable<ushort>>> _progress;
 
-        #region Presentation
+#region Presentation
 
         private double _progressbarMax;
         /// <summary>
@@ -158,9 +158,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             private set { SetProperty(ref _bestResultText, value); }
         }
 
-        #endregion
+#endregion
 
-        #region Commands
+#region Commands
 
         private RelayCommand _pauseResumeCommand;
         /// <summary>
@@ -171,7 +171,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             get { return _pauseResumeCommand ?? (_pauseResumeCommand = new RelayCommand(PauseResume)); }
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Instantiates a new ControllerViewModel.
@@ -189,7 +189,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             DisplayName = L10n.Message("Skill tree generator") + " - " + generatorName;
             _tree = tree;
             _dialogCoordinator = dialogCoordinator;
-
+            
             if (_solver.Iterations > 1)
                 IterationText = IterationPrefix + "1/" + _solver.Iterations;
 
@@ -323,7 +323,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             if (_solver.Iterations > 1)
                 IterationText = IterationPrefix + (iteration + 1) + "/" + _solver.Iterations;
             UpdateBestSoFar(bestSoFar);
-
+            
             _reportStopwatch.Restart();
         }
 

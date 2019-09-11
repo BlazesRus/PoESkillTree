@@ -1,5 +1,5 @@
-﻿using PoESkillTree.Utils;
-using System;
+﻿using System;
+using PoESkillTree.Utils;
 
 namespace PoESkillTree.TreeGenerator.Model
 {
@@ -56,7 +56,7 @@ namespace PoESkillTree.TreeGenerator.Model
                 SetProperty(ref _weight, value);
             }
         }
-
+        
         public TargetWeightConstraint(T data = default(T))
         {
             Data = data;

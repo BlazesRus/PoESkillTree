@@ -1,9 +1,9 @@
-﻿using PoESkillTree.TreeGenerator.Algorithm.Model;
-using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using PoESkillTree.TreeGenerator.Algorithm.Model;
+using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
@@ -62,7 +62,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             if (startNode != null && !_nodeStates.IsFixedTarget(startNode))
                 throw new ArgumentException("Start node must be a fixed target node if specified.", "startNode");
         }
-
+        
         /// <summary>
         /// Reduces the search space by removing nodes, removing edges and merging nodes.
         /// </summary>
@@ -141,7 +141,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             {
                 var edgeElims = 0;
                 var nodeElims = 0;
-
+                
                 foreach (var test in tests.Where(t => t.IsEnabled))
                 {
                     if (!test.RunTest(ref edgeElims, ref nodeElims))

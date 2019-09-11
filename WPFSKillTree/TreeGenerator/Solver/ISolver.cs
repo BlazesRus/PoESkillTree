@@ -43,7 +43,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// If these are counted, <see cref="UncountedNodes"/> has to be subtracted from the result.
         /// </summary>
         IEnumerable<ushort> BestSolution { get; }
-
+        
         /// <summary>
         /// The number of nodes that are not counted as points in the result. Includes the
         /// hidden character start node and ascendancy nodes.
