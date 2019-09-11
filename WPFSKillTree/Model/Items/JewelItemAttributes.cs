@@ -54,7 +54,7 @@ namespace PoESkillTree.Model.Items
         public bool CanEquip(JewelItem item, ushort slot)
         {
             if (item == null) return true;
-            if (slot == -1) return false;
+            if (slot == 0) return false;
             //return (item.Slot & slot) != 0;
             return ((int)item.ItemClass.ItemSlots() & (int)slot) != 0;
         }
