@@ -1360,7 +1360,7 @@ namespace PoESkillTree
 
         public static ThresholdTypes GetThresholdType(ushort NodeId)
         {
-            return JewelStorage[NodeId];
+            return JewelStorage.GetThresholdType(NodeId);
         }
 
         /// <summary>
@@ -1406,7 +1406,7 @@ namespace PoESkillTree
         /// </summary>
         public static ItemSlot RemovingIntLeapJewels = 0;
         /// <summary>
-        /// If true, automatically adds skilltree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
+        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
         public static bool AutoTrackStats = true;
         /// <summary>
@@ -1422,7 +1422,7 @@ namespace PoESkillTree
         public static InventoryViewModel ItemInfoVal;
 
         /// <summary>
-        /// The item information equipped in skilltree
+        /// The item information equipped in skill-tree
         /// </summary>
         public static InventoryViewModel ItemInfo
         {

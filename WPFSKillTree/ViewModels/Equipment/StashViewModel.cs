@@ -287,25 +287,6 @@ namespace PoESkillTree.ViewModels.Equipment
             }
         }
 
-        public void AddItem(JewelItem item, bool scrollToItem)
-        {
-            var itemVm = new StashItemViewModel((Item)item);
-            Items.Add(itemVm);
-
-            if (!scrollToItem)
-            {
-                return;
-            }
-            if (!_inBatchUpdate)
-            {
-                ScrollBarValue = item.Y;
-            }
-            else if (item.Y < _smallestAddedItemY)
-            {
-                _smallestAddedItemY = item.Y;
-            }
-        }
-
         #region Stash Tabs
 
         private async Task AddStashTabAsync()
