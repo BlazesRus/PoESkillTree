@@ -3,6 +3,7 @@
 // Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
 // ***********************************************************************
 //using PoESkillTree.TrackedStatViews;
+using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items;
 using PoESkillTree.SkillTreeFiles;
@@ -34,13 +35,49 @@ namespace PoESkillTree
         OmniType
     }
 
+    public class JewelNodeData
+    {
+        public CharacterClass ClosestClassStartType;
+        public ThresholdTypes JewelStatType;
+        /// <summary>The slot description of Jewel Node on Tree</summary>
+        string SlotDesc;
+
+        /// <summary>Generates the slot description using SkillNodes information from Skill Tree.</summary>
+        /// <param name="SkilledNodes">The skill tree node collection</param>
+        public void GenerateSlotDesc(ObservableSet<SkillNode> SkilledNodes)
+        {
+            SlotDesc = "";//Placeholder
+        }
+
+        public void GenerateSlotDesc()
+        {
+            SlotDesc = "";//Placeholder
+        }
+
+        public JewelNodeData()
+        {
+            ClosestClassStartType = CharacterClass.Scion;
+            JewelStatType = ThresholdTypes.Neutral;
+            SlotDesc = "";
+        }
+
+        public JewelNodeData(CharacterClass closestClassStartType, ThresholdTypes jewelStatType)
+        {
+            ClosestClassStartType = closestClassStartType;
+            JewelStatType = jewelStatType;
+            SlotDesc = "";
+        }
+        ///// <summary>The blank jewel node</summary>
+        //public static readonly JewelNodeData BlankJewelNode = new JewelNodeData();
+    }
+
     /// <summary>
     /// Dictionary  holding NodeIDs for Jewel Slots  as keys and JewelItems as data
     /// Implements the <see cref="System.Collections.Generic.Dictionary{System.UInt16, PoESkillTree.JewelNodeData}" />
     /// </summary>
     /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, PoESkillTree.JewelNodeData}" />
     [Serializable]
-    public class JewelData : Dictionary<ushort, ThresholdTypes>
+    public class JewelData : Dictionary<ushort, JewelNodeData>
     {//Notifier combined directly into class since can't have 2 base classes
         #region NotifierCode
         /// <summary>
@@ -103,45 +140,17 @@ namespace PoESkillTree
         }
         #endregion
 
+        /// <summary>  Initialize JewelData with CategorizeJewelNodes method once(and then set to false) after skilltree nodes are finished generating onto tree</summary>
         public bool NotSetup;
-
-        private JewelItemAttributes _itemAttributes;
-        public JewelItemAttributes JewelAttributes
-        {
-            get { return _itemAttributes; }
-            set
-            {
-                if (value == _itemAttributes)
-                    return;
-                _itemAttributes = value;
-            }
-        }
-
         public void SetThresholdType(ushort Id,ThresholdTypes Value)
         {
-            this[Id] = Value;
+            this[Id].JewelStatType = Value;
         }
 
-        private JewelData(JewelItemAttributes itemAttributes) : base()
+        public ThresholdTypes GetThresholdType(ushort Id)
         {
-            _itemAttributes = itemAttributes;
-            StrJewelSlots = new System.Collections.Generic.List<ushort>();
-            IntJewelSlots = new System.Collections.Generic.List<ushort>();
-            DexJewelSlots = new System.Collections.Generic.List<ushort>();
-            StrIntJewelSlots = new System.Collections.Generic.List<ushort>();
-            StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
-            IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
-            NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
+            return this[Id].JewelStatType;
         }
-
-        //public JewelItemViewModel CreateSlotVm(ushort slot)
-        //{
-        //    var imageName = "Jewel";
-        //    return new JewelItemViewModel(GlobalSettings.SharedDialogCoordinator, JewelAttributes, slot)
-        //    {
-        //        EmptyBackgroundImagePath = $"/POESKillTree;component/Images/EquipmentUI/ItemDefaults/{imageName}.png"
-        //    };
-        //}
 
         /// <summary>
         /// Keys for Strength Threshold Jewel Slots
@@ -171,12 +180,10 @@ namespace PoESkillTree
         /// Keys for Non-Threshold Jewel Slots
         /// </summary>
         public System.Collections.Generic.List<ushort> NeutralJewelSlots;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JewelDictionary"/> class.
-        /// </summary>
+
+        /// <summary>Initializes a new instance of the <see cref="JewelDictionary"/> class.</summary>
         public JewelData() : base(21)
         {
-            JewelAttributes = new JewelItemAttributes();
             StrJewelSlots = new System.Collections.Generic.List<ushort>();
             IntJewelSlots = new System.Collections.Generic.List<ushort>();
             DexJewelSlots = new System.Collections.Generic.List<ushort>();
@@ -186,14 +193,16 @@ namespace PoESkillTree
             NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
             NotSetup = true;
         }
+
         /// <summary>
         /// Adds the jewel slot.
         /// </summary>
         /// <param name="nodeID">The node identifier.</param>
         public void AddJewelSlot(ushort nodeID)
         {
-            Add(nodeID, ThresholdTypes.Neutral);
+            Add(nodeID, new JewelNodeData());
         }
+
         /// <summary>
         /// Generate JewelDictionary Categories from  Data from SkillTree and add extra fake attributes to label threshold type and Node id for identifying node in inventory view
         /// </summary>

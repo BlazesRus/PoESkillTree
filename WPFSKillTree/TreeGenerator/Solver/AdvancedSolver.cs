@@ -417,7 +417,7 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            if (Settings.TreePlusItemsMode || GlobalSettings.AdvancedTreeSearch)
+            if (Settings.TreePlusItemsMode)
             {
                 string StatName;
                 Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
@@ -433,55 +433,19 @@ namespace PoESkillTree.TreeGenerator.Solver
                     StatTotals.Add(StatName, currentValue);
                 }
                 ConstraintValues StatConstraint;
-                if (Settings.TreePlusItemsMode)
+                StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
+                //Subtotals should have been dealt with during StatUpdater
+                foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
                 {
-                    StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
-                    //Subtotals should have been dealt with during StatUpdater
-                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    StatName = Element.Key;
+                    StatConstraint = Element.Value;
+                    if (StatTotals.ContainsKey(StatName))
                     {
-                        StatName = Element.Key;
-                        StatConstraint = Element.Value;
-                        if (StatTotals.ContainsKey(StatName))
-                        {
-                            csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
-                        }
-                        else
-                        {
-                            csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
-                        }
+                        csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
                     }
-                }
-                else
-                {
-                    double ScoreMultiplier;
-                    Dictionary<string, float> SubTotals = GlobalSettings.CalculateSubtotalAttributes(Settings.TreeInfo);
-                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    else
                     {
-                        StatName = Element.Key;
-                        StatConstraint = Element.Value;
-                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName == GlobalSettings.HybridHPKey || StatName == GlobalSettings.PseudoAccKey)
-                        {
-                            if (SubTotals.ContainsKey(StatName))
-                            {
-                                ScoreMultiplier = CalcCsv(SubTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
-                            }
-                            else
-                            {
-                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
-                            }
-                        }
-                        else
-                        {
-                            if (StatTotals.ContainsKey(StatName))
-                            {
-                                ScoreMultiplier = CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
-                            }
-                            else
-                            {
-                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
-                            }
-                        }
-                        csvs *= ScoreMultiplier;
+                        csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
                     }
                 }
             }
