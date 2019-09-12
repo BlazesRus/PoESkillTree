@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PseudoAttributes>
+    <PseudoAttribute Name="#% increased QuarterLightningAndFireConverted Physical Spell[Non-Tagged]" Group="Damage"><!--Wave of Conviction Type spell-->
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.25"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.25"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
     <PseudoAttribute Name="#% increased HalfChaosConverted Projectile Attack Damage [RangedDualDaggers]" Group="Damage">
         <Attribute Name="#% increased Physical Damage"/>
 		<Attribute Name="#% increased Physical Damage with One Handed Melee Weapons"/>
@@ -16,6 +25,25 @@
 		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Chaos Damage with Attack Skills" ConversionMultiplier="0.5"/>
 		<Attribute Name="#% increased Weapon Damage while Dual Wielding"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased HalfChaosConverted Projectile Attack Damage with Ash Herald[RangedDualDaggers]" Group="Damage">
+        <Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Physical Damage with One Handed Melee Weapons"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Attack Damage" />
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Damage with Daggers"/>
+		<Attribute Name="#% increased Damage with One Handed Weapons"/>
+		<Attribute Name="#% increased Damage with One Handed Melee Weapons"/>
+		<Attribute Name="#% increased Attack Damage with Main Hand"  ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Attack Physical Damage"/>
+		<Attribute Name="#% increased Projectile Damage" />
+        <Attribute Name="#% increased Projectile Attack Damage" />
+		<Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Chaos Damage with Attack Skills" ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Weapon Damage while Dual Wielding"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.15"/>
+		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.15"/>
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualWands+4PowerCharges]" Group="Critical Strike">
         <Attribute Name="#% increased Critical Strike Chance" />
