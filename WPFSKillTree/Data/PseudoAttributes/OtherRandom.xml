@@ -104,8 +104,8 @@
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased HalfFire Converted Glacial Cascade Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage"/>
-        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.5454545454545455"/>
-		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.4545454545454545"/>
+        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.4"/>
         <Attribute Name="#% increased Physical Damage"/>
         <Attribute Name="#% increased Area Damage" />
         <Attribute Name="#% increased Spell Damage" />
@@ -113,8 +113,8 @@
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased HalfFire Converted Glacial Cascade Damage+Minion Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Elemental Damage"/>
-        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.5454545454545455"/>
-		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.4545454545454545"/>
+        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.4"/>
         <Attribute Name="#% increased Physical Damage"/>
         <Attribute Name="#% increased Area Damage" />
         <Attribute Name="#% increased Spell Damage" />
