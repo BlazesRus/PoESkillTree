@@ -1284,17 +1284,6 @@ namespace PoESkillTree.Views
             }
         }
 
-        ///// <summary>
-        ///// Apply removal of Intuitive Leap supported jewels
-        ///// </summary>
-        //public void IntuitiveLeapCheckup()
-        //{
-        //    if(GlobalSettings.RemovingIntLeapJewels!=0)
-        //    {
-        //        //RemoveLeapTagFromNode
-        //    }
-        //}
-
         public void UpdatePoints()
         {
             var points = Tree.GetPointCount();
@@ -1408,44 +1397,6 @@ namespace PoESkillTree.Views
         {
             _lastMouseButton = e.ChangedButton;
         }
-
-        /*      Turning off tagged Leap code for now
-                static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-                {
-                    List<float> BlankList = new List<float>();
-                    int attributeSize = CurrentNode.Attributes.Count;
-                    if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode) && attributeSize != 0)
-                    {
-                        CurrentNode.Attributes.Add(GlobalSettings.LeapedNode, BlankList);
-                    }
-                }
-
-                static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-                {
-                    if (CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                    {
-                        CurrentNode.Attributes.Remove(GlobalSettings.LeapedNode);
-                    }
-                }
-
-                private void NormalRefund(PoESkillTree.SkillTreeFiles.SkillNode node)
-                {
-                    Tree.ForceRefundNode(node);
-                    _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-                    Tree.DrawPath(_prePath);
-                }
-
-                private void NormalNodeClick(PoESkillTree.SkillTreeFiles.SkillNode node)
-                {
-                    if (_prePath != null)
-                    {
-                        Tree.AllocateSkillNodes(_prePath);
-                        _toRemove = Tree.ForceRefundNodePreview(node);
-                        if (_toRemove != null)
-                            Tree.DrawRefundPreview(_toRemove);
-                    }
-                }
-        */
 
         private void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {

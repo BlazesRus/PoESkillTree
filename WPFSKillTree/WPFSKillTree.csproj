@@ -25,8 +25,14 @@
     <Exec Command="$(ProjectDir)build-locale.bat $(TargetDir)" />
   </Target>
   <ItemGroup>
+    <Compile Remove="Views\PseudoCalcSettings.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Images\EquipmentUI\ItemDefaults\RuneDagger.png" />
     <None Remove="Images\EquipmentUI\ItemDefaults\Warstaff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Views\PseudoCalcSettings.xaml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.6.7" />

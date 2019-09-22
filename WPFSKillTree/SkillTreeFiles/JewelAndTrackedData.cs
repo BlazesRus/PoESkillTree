@@ -43,15 +43,93 @@ namespace PoESkillTree
         string SlotDesc;
 
         /// <summary>Generates the slot description using SkillNodes information from Skill Tree.</summary>
-        /// <param name="SkilledNodes">The skill tree node collection</param>
-        public void GenerateSlotDesc(ObservableSet<SkillNode> SkilledNodes)
+        /// <param name="NodeId">NodeID for target node</param>
+        public void GenerateSlotDesc(ushort NodeId)
         {
-            SlotDesc = "";//Placeholder
-        }
+            SkillNode ClosestKeystone = null;
+            SkillNode ClosestNotable = null;
+            SkillNode CurrentNode = null;
+            Vector2D nodePosition;
+            IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes;
+            double MinRange = 0.0;
+            double MaxRange = 1200.0;
+            double ClosestKSRange = 99999.0;
+            double ClosestNotableRange = 99999.0;
+            double ClosestRootRange = 99999.0;
+            double range;
+            nodePosition = SkillTree.Skillnodes[NodeId].Position;
+            do
+            {
+                affectedNodes = SkillTree.Skillnodes.Where(n => (((n.Value.Position - nodePosition).Length < MaxRange)) && ((n.Value.Position - nodePosition).Length > MinRange)).ToList();
+                foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
+                {
+                    CurrentNode = NodePair.Value;
+                    if (CurrentNode.IsNotable)
+                    {
+                        range = (CurrentNode.Position - nodePosition).Length;
+                        if (range < ClosestNotableRange)
+                        {
+                            ClosestNotable = CurrentNode;
+                            ClosestNotableRange = range;
+                        }
+                    }
+                    else if (CurrentNode.IsKeystone)
+                    {
+                        range = (CurrentNode.Position - nodePosition).Length;
+                        if (range < ClosestKSRange)
+                        {
+                            ClosestKeystone = CurrentNode;
+                            ClosestKSRange = range;
+                        }
+                    }
+                    else if (CurrentNode.IsRootNode)
+                    {
+                        range = (CurrentNode.Position - nodePosition).Length;
+                        if (range < ClosestRootRange)
+                        {
+                            ClosestRootRange = range;
+                        }
+                    }
+                }
+                if (ClosestNotable == null||ClosestKeystone == null)
+                {
+                    MinRange = MaxRange;
+                    MaxRange += 600.0;
+                }
+            } while((ClosestNotable == null||ClosestKeystone == null)&&ClosestRootRange==99999.0);
+            SlotDesc = "Closest Keystone to jewel-slot is"+ClosestKeystone.Name;
+            SlotDesc += " Closest Notable to jewel-slot is"+ClosestNotable.Name;
+            //Detect which class root node belongs to and then display it
 
-        public void GenerateSlotDesc()
-        {
-            SlotDesc = "";//Placeholder
+
+            switch (JewelStatType)//Display Medium Jewel Threshold Type(if have 40+ of attribute(s))
+            {
+                case ThresholdTypes.Strength:
+                    SlotDesc += "(Strength Threshold Slot)";
+                    break;
+                case ThresholdTypes.Intelligence:
+                    SlotDesc += "(Intelligence Threshold Slot)";
+                    break;
+                case ThresholdTypes.Dexterity:
+                    SlotDesc += "(Dexterity Threshold Slot)";
+                    break;
+                case ThresholdTypes.StrDexHybrid:
+                    SlotDesc += "(Str+Dex Threshold Slot)";
+                    break;
+                case ThresholdTypes.StrIntHybrid:
+                    SlotDesc += "(Str+Int Threshold Slot)";
+                    break;
+                case ThresholdTypes.IntDexHybrid:
+                    SlotDesc += "(Int+Dex Threshold Slot)";
+                    break;
+                case ThresholdTypes.OmniType:
+                    SlotDesc += "(Omni-Threshold Slot)";
+                    break;
+                default:
+                    SlotDesc += "(Neutral Threshold Slot)";
+                    break;
+            }
+
         }
 
         public JewelNodeData()
@@ -67,8 +145,6 @@ namespace PoESkillTree
             JewelStatType = jewelStatType;
             SlotDesc = "";
         }
-        ///// <summary>The blank jewel node</summary>
-        //public static readonly JewelNodeData BlankJewelNode = new JewelNodeData();
     }
 
     /// <summary>
@@ -345,6 +421,7 @@ namespace PoESkillTree
                     NeutralJewelSlots.Add(NodeId);
                     //GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.Neutral;
                 }
+                this[NodeId].GenerateSlotDesc(NodeId);
             }
         }
 
@@ -498,90 +575,102 @@ namespace PoESkillTree
         {
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            if (PseudoCalcGlobals.CalculateAcc)
             {
-                Subtotal += attrlist["+# Accuracy Rating"][0];
+                if (attrlist.ContainsKey("+# Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# Accuracy Rating"][0];
+                }
+                if (attrlist.ContainsKey("+# to Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# to Accuracy Rating"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
+                }
+                if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
+                {
+                    TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                    Subtotal *= TotalIncrease;
+                }
+                if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
+                {
+                    attrlist[GlobalSettings.DualWandAccKey][0] = Subtotal;
+                }
+                else
+                {
+                    attrlist.Add(GlobalSettings.DualWandAccKey, new List<float>(1) { Subtotal });
+                }
             }
-            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            if (PseudoCalcGlobals.CalculateHP||PseudoCalcGlobals.CalculateHybridHP)
             {
-                Subtotal += attrlist["+# to Accuracy Rating"][0];
-            }
-            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
-            {
-                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
-            }
-            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
-            {
-                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
-            }
-            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
-            {
-                TotalIncrease += attrlist["#% increased Global Accuracy Rating"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
-            {
-                attrlist[GlobalSettings.DualWandAccKey][0] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.DualWandAccKey, new List<float>(1) { Subtotal });
-            }
-            //MaxLife combined with increased life
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# to maximum Life"))
-            {
-                Subtotal = attrlist["+# to maximum Life"][0];
-            }
-            if (attrlist.ContainsKey("#% increased maximum Life"))
-            {
-                TotalIncrease = attrlist["#% increased maximum Life"][0];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
-            {
-                attrlist[GlobalSettings.HPTotalKey][0] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.HPTotalKey, new List<float>(1) { Subtotal });
-            }
-            float ESSubtotal = 0.0f;
-            float ESIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
-            {
-                ESSubtotal = attrlist["+# to maximum Energy Shield"][0];
-            }
-            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
-            {
-                ESIncrease = attrlist["#% increased maximum Energy Shield"][0];
-            }
-            if (attrlist.ContainsKey("+# to Intelligence"))
-            {
-                ESIncrease += attrlist["+# to Intelligence"][0] / 10.0f;
-            }
-            if (ESIncrease != 0.0f)
-            {
-                ESIncrease = (100.0f + ESIncrease) / 100.0f;
-                ESSubtotal *= ESIncrease;
-            }
-            Subtotal += ESSubtotal;
-            if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
-            {
-                attrlist[GlobalSettings.HybridHPKey][0] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.HybridHPKey, new List<float>(1) { Subtotal });
+                //MaxLife combined with increased life
+                Subtotal = 0.0f;
+                TotalIncrease = 0.0f;
+                if (attrlist.ContainsKey("+# to maximum Life"))
+                {
+                    Subtotal = attrlist["+# to maximum Life"][0];
+                }
+                if (attrlist.ContainsKey("#% increased maximum Life"))
+                {
+                    TotalIncrease = attrlist["#% increased maximum Life"][0];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                    Subtotal *= TotalIncrease;
+                }
+                if (PseudoCalcGlobals.CalculateHP)
+                {
+                    if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
+                    {
+                        attrlist[GlobalSettings.HPTotalKey][0] = Subtotal;
+                    }
+                    else
+                    {
+                        attrlist.Add(GlobalSettings.HPTotalKey, new List<float>(1) { Subtotal });
+                    }
+                }
+                if (PseudoCalcGlobals.CalculateHybridHP)
+                {
+                    float ESSubtotal = 0.0f;
+                    float ESIncrease = 0.0f;
+                    if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+                    {
+                        ESSubtotal = attrlist["+# to maximum Energy Shield"][0];
+                    }
+                    if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+                    {
+                        ESIncrease = attrlist["#% increased maximum Energy Shield"][0];
+                    }
+                    if (attrlist.ContainsKey("+# to Intelligence"))
+                    {
+                        ESIncrease += attrlist["+# to Intelligence"][0] / 10.0f;
+                    }
+                    if (ESIncrease != 0.0f)
+                    {
+                        ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                        ESSubtotal *= ESIncrease;
+                    }
+                    Subtotal += ESSubtotal;
+                    if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
+                    {
+                        attrlist[GlobalSettings.HybridHPKey][0] = Subtotal;
+                    }
+                    else
+                    {
+                        attrlist.Add(GlobalSettings.HybridHPKey, new List<float>(1) { Subtotal });
+                    }
+                }
             }
             return attrlist;
         }
@@ -662,90 +751,102 @@ namespace PoESkillTree
 
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# Accuracy Rating"))
+            if (PseudoCalcGlobals.CalculateAcc)
             {
-                Subtotal += attrlist["+# Accuracy Rating"];
+                if (attrlist.ContainsKey("+# Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# Accuracy Rating"];
+                }
+                if (attrlist.ContainsKey("+# to Accuracy Rating"))
+                {
+                    Subtotal += attrlist["+# to Accuracy Rating"];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"];
+                }
+                if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+                {
+                    TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"];
+                }
+                if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
+                {
+                    TotalIncrease += attrlist["#% increased Global Accuracy Rating"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100;
+                    Subtotal *= TotalIncrease;
+                }
+                if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
+                {
+                    attrlist[GlobalSettings.DualWandAccKey] = Subtotal;
+                }
+                else
+                {
+                    attrlist.Add(GlobalSettings.DualWandAccKey, Subtotal);
+                }
             }
-            if (attrlist.ContainsKey("+# to Accuracy Rating"))
+            if (PseudoCalcGlobals.CalculateHP || PseudoCalcGlobals.CalculateHybridHP)
             {
-                Subtotal += attrlist["+# to Accuracy Rating"];
-            }
-            if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
-            {
-                TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"];
-            }
-            if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
-            {
-                TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"];
-            }
-            if (attrlist.ContainsKey("#% increased Global Accuracy Rating"))
-            {
-                TotalIncrease += attrlist["#% increased Global Accuracy Rating"];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey(GlobalSettings.DualWandAccKey))//"# Accuracy Subtotal"
-            {
-                attrlist[GlobalSettings.DualWandAccKey] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.DualWandAccKey, Subtotal);
-            }
-            //MaxLife combined with increased life
-            Subtotal = 0.0f;
-            TotalIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# to maximum Life"))
-            {
-                Subtotal = attrlist["+# to maximum Life"];
-            }
-            if (attrlist.ContainsKey("#% increased maximum Life"))
-            {
-                TotalIncrease = attrlist["#% increased maximum Life"];
-            }
-            if (TotalIncrease != 0.0f)
-            {
-                TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
-                Subtotal *= TotalIncrease;
-            }
-            if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
-            {
-                attrlist[GlobalSettings.HPTotalKey] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.HPTotalKey, Subtotal);
-            }
-            float ESSubtotal = 0.0f;
-            float ESIncrease = 0.0f;
-            if (attrlist.ContainsKey("+# to maximum Energy Shield"))
-            {
-                ESSubtotal = attrlist["+# to maximum Energy Shield"];
-            }
-            if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
-            {
-                ESIncrease = attrlist["#% increased maximum Energy Shield"];
-            }
-            if (attrlist.ContainsKey("+# to Intelligence"))
-            {
-                ESIncrease += attrlist["+# to Intelligence"] / 10.0f;
-            }
-            if (ESIncrease != 0.0f)
-            {
-                ESIncrease = (100.0f + ESIncrease) / 100.0f;
-                ESSubtotal *= ESIncrease;
-            }
-            Subtotal += ESSubtotal;
-            if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
-            {
-                attrlist[GlobalSettings.HybridHPKey] = Subtotal;
-            }
-            else
-            {
-                attrlist.Add(GlobalSettings.HybridHPKey, Subtotal);
+                //MaxLife combined with increased life
+                Subtotal = 0.0f;
+                TotalIncrease = 0.0f;
+                if (attrlist.ContainsKey("+# to maximum Life"))
+                {
+                    Subtotal = attrlist["+# to maximum Life"];
+                }
+                if (attrlist.ContainsKey("#% increased maximum Life"))
+                {
+                    TotalIncrease = attrlist["#% increased maximum Life"];
+                }
+                if (TotalIncrease != 0.0f)
+                {
+                    TotalIncrease = (100.0f + TotalIncrease) / 100.0f;
+                    Subtotal *= TotalIncrease;
+                }
+                if (PseudoCalcGlobals.CalculateHP)
+                {
+                    if (attrlist.ContainsKey(GlobalSettings.HPTotalKey))
+                    {
+                        attrlist[GlobalSettings.HPTotalKey] = Subtotal;
+                    }
+                    else
+                    {
+                        attrlist.Add(GlobalSettings.HPTotalKey, Subtotal);
+                    }
+                }
+                if (PseudoCalcGlobals.CalculateHybridHP)
+                {
+                    float ESSubtotal = 0.0f;
+                    float ESIncrease = 0.0f;
+                    if (attrlist.ContainsKey("+# to maximum Energy Shield"))
+                    {
+                        ESSubtotal = attrlist["+# to maximum Energy Shield"];
+                    }
+                    if (attrlist.ContainsKey("#% increased maximum Energy Shield"))
+                    {
+                        ESIncrease = attrlist["#% increased maximum Energy Shield"];
+                    }
+                    if (attrlist.ContainsKey("+# to Intelligence"))
+                    {
+                        ESIncrease += attrlist["+# to Intelligence"] / 10.0f;
+                    }
+                    if (ESIncrease != 0.0f)
+                    {
+                        ESIncrease = (100.0f + ESIncrease) / 100.0f;
+                        ESSubtotal *= ESIncrease;
+                    }
+                    Subtotal += ESSubtotal;
+                    if (attrlist.ContainsKey(GlobalSettings.HybridHPKey))
+                    {
+                        attrlist[GlobalSettings.HybridHPKey] = Subtotal;
+                    }
+                    else
+                    {
+                        attrlist.Add(GlobalSettings.HybridHPKey, Subtotal);
+                    }
+                }
             }
             return attrlist;
         }
@@ -1005,6 +1106,51 @@ namespace PoESkillTree
                     this.Add(value);
                 }
             }
+        }
+    }
+
+    public class PseudoCalcGlobals
+    {
+        public static bool CalculateAcc = false;
+        public static bool CalculateHP = true;
+        public static bool CalculateHybridHP = true;
+    }
+
+    public class PseudoCalcCon
+    {
+        public float TargetValue;
+        public double Weight;
+        public bool Required;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+        /// </summary>
+        /// <param name="targetValue">The target value.</param>
+        /// <param name="weight">The weight.</param>
+        public PseudoCalcCon(float targetValue, double weight)
+        {
+            TargetValue = targetValue;
+            Weight = weight;
+            Required = false;
+        }
+    }
+
+    /// <summary>
+    /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
+    /// into the applicable attributes and their conversion multiplier.
+    /// </summary>
+    public class ConvertedPseudoCalcCon
+    {
+        public List<Tuple<string, float>> Attributes { get; private set; }
+
+        public Tuple<float, double, bool> TargetWeightTuple { get; private set; }
+
+        //public bool Required { get { return TargetWeightTuple.Item3; } }
+
+        public ConvertedPseudoCalcCon(List<Tuple<string, float>> attributes, Tuple<float, double, bool> tuple)
+        {
+            Attributes = attributes;
+            TargetWeightTuple = tuple;
         }
     }
 
@@ -1409,15 +1555,6 @@ namespace PoESkillTree
         /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
         public static bool AutoTrackStats = true;
-        /// <summary>
-        /// Auto-updated value of types of weapons equipped (0:None;
-        //  1: 2H Axe; 2: 2H Sword; 3: 2H Mace;
-        // 5+ values = Shield+Weapon (5 = shield+fist)
-        // 6: Axe+Shield; 7: Sword+Shield;
-        // 500+ values = Dual Wielding;
-        // 501 = Dual Wand; 502 = Dual Axe; 503 = Dual Sword; 504 = Dual Mace
-        /// </summary>
-        public static int WeaponComboType = 0;
 
         public static InventoryViewModel ItemInfoVal;
 
