@@ -5,7 +5,6 @@
 //using PoESkillTree.TrackedStatViews;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
-using PoESkillTree.Model.Items;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.Utils;
@@ -17,8 +16,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
+using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
-using System.Windows.Documents;
+
 
 namespace PoESkillTree
 {
@@ -1151,6 +1151,9 @@ namespace PoESkillTree
         public static bool CalculateCritsPerSec = true;
 
         public static float PrimaryATKSpeed = 1.20f;
+        public static float PrimaryCrit = 6.50f;
+        public static float SecondaryATKSpeed = 1.20f;
+        public static float SecondaryCrit = 6.50f;
         public static WeaponClass PrimaryWeapon = WeaponClass.Dagger;
         public static WeaponClass SecondaryWeapon = WeaponClass.Dagger;
         public static bool UsingShield = false;
