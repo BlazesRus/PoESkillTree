@@ -188,18 +188,19 @@
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="5" Grid.Column="0">
                 <Label.Content>
-                    <l:Catalog Message="Using Shield" />
+                    <l:Catalog Message="Not Using Shield" />
                 </Label.Content>
             </Label>
             <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=UsingShield}" Height="18" Margin="0,6" />
 
-            <Label Style="{StaticResource SettingLabel}" Grid.Row="6" Grid.Column="0">
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="6" Grid.Column="0" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}">
                 <Label.Content>
                     <l:Catalog Message="Secondary Weapon" />
                 </Label.Content>
             </Label>
             <ComboBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center"
-                                  SelectedValue="{Binding WeaponClass.Value}" ItemsSource="{Binding Source={StaticResource PCGlobals}, Path=SecondaryWeapon}" Height="26" Width="130">
+                SelectedValue="{Binding WeaponClass.Value}" ItemsSource="{Binding Source={StaticResource PCGlobals}, Path=SecondaryWeapon}" Height="26" Width="130"
+                Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
@@ -207,21 +208,21 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Label Style="{StaticResource SettingLabel}"
-                   Grid.Row="6" Grid.Column="2">
+                   Grid.Row="6" Grid.Column="2" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}">
                 <Label.Content>
                     <l:Catalog Message="ATK Speed" />
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="3" Minimum="0.01" Margin="2,4" StringFormat="{}{0:#0.##}"
-                                                 Value="{Binding Source={StaticResource PCGlobals}, Path=SecondaryATKSpeed}" />
+            Value="{Binding Source={StaticResource PCGlobals}, Path=SecondaryATKSpeed}" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}"/>
             <Label Style="{StaticResource SettingLabel}"
-                   Grid.Row="6" Grid.Column="4">
+                   Grid.Row="6" Grid.Column="4" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}">
                 <Label.Content>
                     <l:Catalog Message="Crit. Chance" />
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
-                                                 Value="{Binding Source={StaticResource PCGlobals}, Path=SecondaryATKSpeed}" />
+            Value="{Binding Source={StaticResource PCGlobals}, Path=SecondaryATKSpeed}" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}"/>
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>

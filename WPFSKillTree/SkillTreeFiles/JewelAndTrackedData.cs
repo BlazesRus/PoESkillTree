@@ -599,8 +599,7 @@ namespace PoESkillTree
                         TotalIncrease += attrlist["#% increased Accuracy Rating with Daggers"][0];
                     }
                 }
-                if (PseudoCalcGlobals.UsingShield){}
-                else if (PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
+                if (PseudoCalcGlobals.NotUsingShield&&PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
                 {
                     if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
                     {
@@ -789,8 +788,7 @@ namespace PoESkillTree
                         TotalIncrease += attrlist["#% increased Accuracy Rating with Daggers"];
                     }
                 }
-                if (PseudoCalcGlobals.UsingShield) { }
-                else if (PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
+                if (PseudoCalcGlobals.NotUsingShield&&PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
                 {
                     if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
                     {
@@ -1156,7 +1154,7 @@ namespace PoESkillTree
         public static float SecondaryCrit = 6.50f;
         public static WeaponClass PrimaryWeapon = WeaponClass.Dagger;
         public static WeaponClass SecondaryWeapon = WeaponClass.Dagger;
-        public static bool UsingShield = false;
+        public static bool NotUsingShield = true;
     }
 
     public class PseudoCalcCon
