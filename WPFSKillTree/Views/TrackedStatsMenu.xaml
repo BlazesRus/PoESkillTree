@@ -121,6 +121,7 @@
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
             </Grid.RowDefinitions>
 
             <Label Style="{StaticResource SettingLabel}"
@@ -223,6 +224,50 @@
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
             Value="{Binding Source={StaticResource PCGlobals}, Path=SecondaryATKSpeed}" Visibility="{Binding Source={StaticResource PCGlobals}, Path=NotUsingShield}"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Enable Critical Spell DamageMultiplier" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=CalculateCritSpellMult}" Height="18" Margin="0,6" />
+        </Grid>
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="133"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Spell Behavior" />
+                </Label.Content>
+            </Label>
+            <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center"
+                SelectedValue="{Binding SpellBehaviorTypes.Value}" ItemsSource="{Binding Source={StaticResource PCGlobals}, Path=SpellBehaviorType}" Height="26" Width="130">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Damage Scaling" />
+                </Label.Content>
+            </Label>
+            <ComboBox Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center"
+                SelectedValue="{Binding DamageScaling.Value}" ItemsSource="{Binding Source={StaticResource PCGlobals}, Path=DMScaling}" Height="26" Width="200">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>
