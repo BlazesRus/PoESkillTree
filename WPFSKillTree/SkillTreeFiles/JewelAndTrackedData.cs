@@ -1141,12 +1141,13 @@ namespace PoESkillTree
         public const string AccKey = "# Accuracy Subtotal(PseudoCalc)";
         public const string HPTotalKey = "# HP Subtotal(PseudoCalc)";
         public const string CritsPerSecKey = "# Crits Per Second(PseudoCalc)";
-        public const string PerfectCritSpellMultiplierKey = "#% PerfectCrit Spell Multiplier(PseudoCalc)";
+        public const string PerfectCritSpellMultiplierKey = "#% Critical Spell DamageMultiplier(PseudoCalc)";
 
         public static bool CalculateAcc = false;
         public static bool CalculateHP = true;
         public static bool CalculateHybridHP = true;
         public static bool CalculateCritsPerSec = true;
+        public static bool CalculateCritSpellMult = true;
 
         public static float PrimaryATKSpeed = 1.20f;
         public static float PrimaryCrit = 6.50f;
@@ -1155,6 +1156,32 @@ namespace PoESkillTree
         public static WeaponClass PrimaryWeapon = WeaponClass.Dagger;
         public static WeaponClass SecondaryWeapon = WeaponClass.Dagger;
         public static bool NotUsingShield = true;
+
+        public enum SpellBehaviorTypes
+        {  
+            [Description("ProjectileSpell")]
+            ProjectileSpell,
+            [Description("AreaSpell")]
+            AreaSpell,
+            [Description("AreaSpell")]
+            ChannelledAreaSpell
+        }
+        public static SpellBehaviorTypes SpellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
+        /// <summary>Damage Scaling of Spell</summary>
+        public enum DamageScaling
+        {
+            [Description("100% Physical")]
+            FullPhysical,
+            [Description("Full Physical plus Fire Herald")]
+            PhysicalPlusFireHeraldCon,
+            [Description("Ice")]
+            Ice,
+            [Description("Physical with 60% Cold")]
+            GlCasDamage,
+            [Description("Physical with 60% Cold and Fire Herald")]
+            GlCasDamageWithFHerald
+        }
+        public static DamageScaling DMScaling = DamageScaling.Ice;
     }
 
     public class PseudoCalcCon
