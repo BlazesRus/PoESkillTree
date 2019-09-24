@@ -1148,15 +1148,38 @@ namespace PoESkillTree
         public static bool CalculateHybridHP = true;
         public static bool CalculateCritsPerSec = true;
         public static bool CalculateCritSpellMult = true;
+        private static bool applyWhisperingIceStats = false;
+        /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
+        /// <value>
+        ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
+        public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
+        public static bool LuckyCrits = false;
+
+        /// <summary>  Quality 20 Level 20 Increased Critical active for critical chance calculations </summary>
+        public static bool IncreasedCritActive = false;
+        
+        private static bool nightbladeActive = false;
+        /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
+        public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
+
+        public static int LevelPrecisionActive = 0;
 
         public static float PrimaryATKSpeed = 1.20f;
         public static float PrimaryCrit = 6.50f;
         public static float SecondaryATKSpeed = 1.20f;
         public static float SecondaryCrit = 6.50f;
         public static WeaponClass PrimaryWeapon = WeaponClass.Dagger;
-        public static WeaponClass SecondaryWeapon = WeaponClass.Dagger;
+        private static WeaponClass secondaryWeapon = WeaponClass.Dagger;
+        public static WeaponClass SecondaryWeapon { get => secondaryWeapon;
+            set
+            {
+                secondaryWeapon = value;
+            }
+        }
+
         public static bool NotUsingShield = true;
 
+        /// <summary>Spell Behavior Types</summary>
         public enum SpellBehaviorTypes
         {  
             [Description("ProjectileSpell")]
@@ -1167,6 +1190,7 @@ namespace PoESkillTree
             ChannelledAreaSpell
         }
         public static SpellBehaviorTypes SpellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
+
         /// <summary>Damage Scaling of Spell</summary>
         public enum DamageScaling
         {
@@ -1179,9 +1203,12 @@ namespace PoESkillTree
             [Description("Physical with 60% Cold")]
             GlCasDamage,
             [Description("Physical with 60% Cold and Fire Herald")]
-            GlCasDamageWithFHerald
+            GlCasDamageWithFHerald,
+            [Description("Physical with 100% Cold")]
+            FullConversionGLCas,
         }
         public static DamageScaling DMScaling = DamageScaling.Ice;
+        public static int NumberOfPoisonStacks = 0;
     }
 
     public class PseudoCalcCon

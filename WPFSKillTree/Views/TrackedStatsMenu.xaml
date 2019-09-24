@@ -108,12 +108,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="133"/>
-                <ColumnDefinition Width="67"/>
-                <ColumnDefinition Width="115"/>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="115"/>
+                <ColumnDefinition Width="87"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -151,10 +152,19 @@
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="3" Grid.Column="0">
                 <Label.Content>
-                    <l:Catalog Message="Calculate CritsPerSec" />
+                    <l:Catalog Message="Calculate CritsPerSec(Q20 CoC)" />
                 </Label.Content>
             </Label>
             <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=CalculateCritsPerSec}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="3" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Precision Lvl" />
+                </Label.Content>
+            </Label>
+
+            <Slider Grid.Column="3" Grid.Row="3" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
+            Value="{Binding Source={StaticResource PCGlobals}, Path=LevelPrecisionActive}" Minimum="0" Maximum="30" />
 
             <Label Style="{StaticResource SettingLabel}" Grid.Row="4" Grid.Column="0">
                 <Label.Content>
@@ -231,6 +241,30 @@
                 </Label.Content>
             </Label>
             <CheckBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=CalculateCritSpellMult}" Height="18" Margin="0,6" />
+            
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Poison Stacks" />
+                </Label.Content>
+            </Label>
+            
+            <Slider Grid.Column="3" Grid.Row="7" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
+            Value="{Binding Source={StaticResource PCGlobals}, Path=NumberOfPoisonStacks}" Minimum="0" Maximum="20" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="4">
+                <Label.Content>
+                    <l:Catalog Message="Lucky Crits" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=LuckyCrits}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="8" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Apply Whispering Ice Calculations" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=ApplyWhisperingIceStats}" Height="18" Margin="0,6" />
         </Grid>
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
@@ -240,6 +274,7 @@
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
             </Grid.RowDefinitions>
             <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
@@ -268,6 +303,20 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Q20 Lvl 20 Increased Critical Chance" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=IncreasedCritActive}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="1" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Q20 Lvl 20 Nightblade" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" IsChecked="{Binding Source={StaticResource PCGlobals}, Path=NightbladeActive}" Height="18" Margin="0,6" />
         </Grid>
     </StackPanel>
 </dialogs:CloseableBaseDialog>
