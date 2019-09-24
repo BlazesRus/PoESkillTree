@@ -10,6 +10,7 @@ namespace PoESkillTree.ViewModels.Equipment
 {
     public class JewelSocketObserver : IDisposable
     {
+        public static bool JewelDescNotUpdated = true;
         private readonly ObservableSet<SkillNode> _skilledNodes;
         private IReadOnlyDictionary<ushort, InventoryItemViewModel> _treeJewelViewModels;
 
@@ -26,7 +27,7 @@ namespace PoESkillTree.ViewModels.Equipment
 
         public void ResetTreeJewelViewModels()
         {
-            _treeJewelViewModels = null;
+            _treeJewelViewModels = null;JewelDescNotUpdated = true;
         }
 
         public void SetTreeJewelViewModels(IEnumerable<InventoryItemViewModel> treeJewels)
@@ -37,6 +38,14 @@ namespace PoESkillTree.ViewModels.Equipment
             foreach (var treeJewelViewModel in _treeJewelViewModels.Values)
             {
                 treeJewelViewModel.IsEnabled = _skilledNodes.Any(n => n.Id == treeJewelViewModel.Socket);
+            }
+            if (JewelDescNotUpdated && GlobalSettings.JewelInfo.NotSetup == false)
+            {
+                foreach (var NodeId in GlobalSettings.JewelInfo.Keys)
+                {
+                    _treeJewelViewModels.ApplyIfPresent(NodeId, j => j.TooltipInfo = GlobalSettings.JewelInfo[NodeId].SlotDesc);
+                }
+                JewelDescNotUpdated = false;
             }
         }
 

@@ -26,6 +26,12 @@
             </Rectangle.Style>
         </Rectangle>
         <local:InventoryItemView Width="51" Height="51"
-                                 DataContext="{Binding}" />
+                                 DataContext="{Binding}"><!-- ToolTip="{Binding TooltipInfo, UpdateSourceTrigger=PropertyChanged}" -->
+            <local:InventoryItemView.ToolTip>
+                <ToolTip Placement="Top" VerticalOffset="-5">
+                    <TextBlock Text="{Binding TooltipInfo, UpdateSourceTrigger=PropertyChanged}" />
+                </ToolTip>
+            </local:InventoryItemView.ToolTip> 
+        </local:InventoryItemView>
     </Grid>
 </UserControl>

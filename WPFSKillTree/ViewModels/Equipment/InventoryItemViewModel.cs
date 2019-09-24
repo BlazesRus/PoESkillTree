@@ -132,5 +132,8 @@ namespace PoESkillTree.ViewModels.Equipment
                 draggedItem.Item = oldItem;
             }
         }
+
+        private string tooltipInfo = "";
+        public string TooltipInfo { get => tooltipInfo; set => tooltipInfo = value; }
     }
 }
