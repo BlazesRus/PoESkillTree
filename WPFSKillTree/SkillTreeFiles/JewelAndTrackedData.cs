@@ -88,36 +88,36 @@ namespace PoESkillTree
                     MaxRange += 600.0;
                 }
             } while(ClosestNotable == null||ClosestKeystone == null);
-            SlotDesc = "Closest Keystone to jewel-slot is"+ClosestKeystone.Name;
-            SlotDesc += " Closest Notable to jewel-slot is"+ClosestNotable.Name;
+            SlotDesc = "Closest Keystone to jewel-slot is "+ClosestKeystone.Name+".";
+            SlotDesc += "\nClosest Notable to jewel-slot is "+ClosestNotable.Name+".";
             //Detect which class root node belongs to and then display it
 
 
             switch (JewelStatType)//Display Medium Jewel Threshold Type(if have 40+ of attribute(s))
             {
                 case ThresholdTypes.Strength:
-                    SlotDesc += "(Strength Threshold Slot)";
+                    SlotDesc += "\n(Strength Threshold Slot)";
                     break;
                 case ThresholdTypes.Intelligence:
-                    SlotDesc += "(Intelligence Threshold Slot)";
+                    SlotDesc += "\n(Intelligence Threshold Slot)";
                     break;
                 case ThresholdTypes.Dexterity:
-                    SlotDesc += "(Dexterity Threshold Slot)";
+                    SlotDesc += "\n(Dexterity Threshold Slot)";
                     break;
                 case ThresholdTypes.StrDexHybrid:
-                    SlotDesc += "(Str+Dex Threshold Slot)";
+                    SlotDesc += "\n(Str+Dex Threshold Slot)";
                     break;
                 case ThresholdTypes.StrIntHybrid:
-                    SlotDesc += "(Str+Int Threshold Slot)";
+                    SlotDesc += "\n(Str+Int Threshold Slot)";
                     break;
                 case ThresholdTypes.IntDexHybrid:
-                    SlotDesc += "(Int+Dex Threshold Slot)";
+                    SlotDesc += "\n(Int+Dex Threshold Slot)";
                     break;
                 case ThresholdTypes.OmniType:
-                    SlotDesc += "(Omni-Threshold Slot)";
+                    SlotDesc += "\n(Omni-Threshold Slot)";
                     break;
                 default:
-                    SlotDesc += "(Neutral Threshold Slot)";
+                    SlotDesc += "\n(Neutral Threshold Slot)";
                     break;
             }
 
@@ -1085,53 +1085,58 @@ namespace PoESkillTree
         }
     }
 
-    public class PseudoCalcGlobals
+    public static class PseudoCalcGlobals
     {
+        /// <summary>
+        /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
+        /// </summary>
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        /// <summary>
+        /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
+        /// </summary>
+        public static void NotifyStaticPropertyChanged(string propertyName)
+        {
+            if (StaticPropertyChanged != null)
+                StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
+        }
+
         public const string HybridHPKey = "# HybridHP Subtotal(PseudoCalc)";
         public const string AccKey = "# Accuracy Subtotal(PseudoCalc)";
         public const string HPTotalKey = "# HP Subtotal(PseudoCalc)";
         public const string CritsPerSecKey = "# Crits Per Second(PseudoCalc)";
         public const string PerfectCritSpellMultiplierKey = "#% Critical Spell DamageMultiplier(PseudoCalc)";
 
-        public static bool CalculateAcc = false;
-        public static bool CalculateHP = true;
-        public static bool CalculateHybridHP = true;
-        public static bool CalculateCritsPerSec = true;
-        public static bool CalculateCritSpellMult = true;
+        private static bool calculateAcc = false;
+        private static bool calculateHP = true;
+        private static bool calculateHybridHP = true;
+        private static bool calculateCritsPerSec = true;
+        private static bool calculateCritSpellMult = true;
         private static bool applyWhisperingIceStats = false;
         /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
         /// <value>
         ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
         public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
-        public static bool LuckyCrits = false;
+        private static bool luckyCrits = false;
 
         /// <summary>  Quality 20 Level 20 Increased Critical active for critical chance calculations </summary>
-        public static bool IncreasedCritActive = false;
-        
+        private static bool increasedCritActive = false;
+
         private static bool nightbladeActive = false;
         /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
         public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
 
-        public static int LevelPrecisionActive = 0;
+        private static int levelPrecisionActive = 0;
 
-        public static float PrimaryATKSpeed = 1.20f;
-        public static float PrimaryCrit = 6.50f;
-        public static float SecondaryATKSpeed = 1.20f;
-        public static float SecondaryCrit = 6.50f;
-        public static WeaponClass PrimaryWeapon = WeaponClass.Dagger;
+        private static float primaryATKSpeed = 1.20f;
+        private static float primaryCrit = 6.50f;
+        private static float secondaryATKSpeed = 1.20f;
+        private static float secondaryCrit = 6.50f;
+        private static WeaponClass primaryWeapon = WeaponClass.Dagger;
         private static WeaponClass secondaryWeapon = WeaponClass.Dagger;
-        public static WeaponClass SecondaryWeapon { get => secondaryWeapon;
-            set
-            {
-                secondaryWeapon = value;
-            }
-        }
+        private static bool notUsingShield = true;
 
-        public static bool NotUsingShield = true;
-
-        /// <summary>Spell Behavior Types</summary>
         public enum SpellBehaviorTypes
-        {  
+        {
             [Description("ProjectileSpell")]
             ProjectileSpell,
             [Description("AreaSpell")]
@@ -1139,7 +1144,6 @@ namespace PoESkillTree
             [Description("AreaSpell")]
             ChannelledAreaSpell
         }
-        public static SpellBehaviorTypes SpellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
 
         /// <summary>Damage Scaling of Spell</summary>
         public enum DamageScaling
@@ -1157,8 +1161,42 @@ namespace PoESkillTree
             [Description("Physical with 100% Cold")]
             FullConversionGLCas,
         }
-        public static DamageScaling DMScaling = DamageScaling.Ice;
-        public static int NumberOfPoisonStacks = 0;
+
+        private static SpellBehaviorTypes spellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
+        private static DamageScaling dMScaling = DamageScaling.Ice;
+        private static int numberOfPoisonStacks = 0;
+
+        public static bool CalculateAcc { get => calculateAcc; set { calculateAcc = value; NotifyStaticPropertyChanged("CalculateAcc"); } }
+        public static bool CalculateHP { get => calculateHP; set { calculateHP = value; NotifyStaticPropertyChanged("CalculateHP"); } }
+        public static bool CalculateHybridHP { get => calculateHybridHP; set { calculateHybridHP = value; NotifyStaticPropertyChanged("CalculateHybridHP"); } }
+        public static bool CalculateCritsPerSec { get => calculateCritsPerSec; set { calculateCritsPerSec = value; NotifyStaticPropertyChanged("CalculateCritsPerSec"); } }
+        public static bool CalculateCritSpellMult { get => calculateCritSpellMult; set { calculateCritSpellMult = value; NotifyStaticPropertyChanged("CalculateCritSpellMult"); } }
+        public static bool LuckyCrits { get => luckyCrits; set { luckyCrits = value; NotifyStaticPropertyChanged("LuckyCrits"); } }
+        public static bool IncreasedCritActive { get => increasedCritActive; set { increasedCritActive = value; NotifyStaticPropertyChanged("IncreasedCritActive"); } }
+        public static int LevelPrecisionActive { get => levelPrecisionActive; set { levelPrecisionActive = value; NotifyStaticPropertyChanged("LevelPrecisionActive"); } }
+        public static float PrimaryATKSpeed { get => primaryATKSpeed; set { primaryATKSpeed = value; NotifyStaticPropertyChanged("PrimaryATKSpeed"); } }
+        public static float PrimaryCrit { get => primaryCrit; set { primaryCrit = value; NotifyStaticPropertyChanged("PrimaryCrit"); } }
+        public static float SecondaryATKSpeed { get => secondaryATKSpeed; set { secondaryATKSpeed = value; NotifyStaticPropertyChanged("SecondaryATKSpeed"); } }
+        public static float SecondaryCrit { get => secondaryCrit; set { secondaryCrit = value; NotifyStaticPropertyChanged("SecondaryCrit"); } }
+        public static WeaponClass PrimaryWeapon { get => primaryWeapon;
+            set
+            {
+                primaryWeapon = value; NotifyStaticPropertyChanged("PrimaryWeapon");
+            }
+        }
+        public static WeaponClass SecondaryWeapon
+        {
+            get => secondaryWeapon;
+            set
+            {
+                secondaryWeapon = value; NotifyStaticPropertyChanged("SecondaryWeapon");
+            }
+        }
+
+        public static bool NotUsingShield { get => notUsingShield; set { notUsingShield = value; NotifyStaticPropertyChanged("NotUsingShield"); } }
+        public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
+        public static DamageScaling DMScaling { get => dMScaling; set { dMScaling = value; NotifyStaticPropertyChanged("DMScaling"); } }
+        public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }
     }
 
     public class PseudoCalcCon
