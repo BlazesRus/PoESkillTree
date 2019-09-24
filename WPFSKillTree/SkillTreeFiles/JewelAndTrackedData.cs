@@ -55,7 +55,6 @@ namespace PoESkillTree
             double MaxRange = 1200.0;
             double ClosestKSRange = 99999.0;
             double ClosestNotableRange = 99999.0;
-            double ClosestRootRange = 99999.0;
             double range;
             nodePosition = SkillTree.Skillnodes[NodeId].Position;
             do
@@ -82,21 +81,13 @@ namespace PoESkillTree
                             ClosestKSRange = range;
                         }
                     }
-                    else if (CurrentNode.IsRootNode)
-                    {
-                        range = (CurrentNode.Position - nodePosition).Length;
-                        if (range < ClosestRootRange)
-                        {
-                            ClosestRootRange = range;
-                        }
-                    }
                 }
                 if (ClosestNotable == null||ClosestKeystone == null)
                 {
                     MinRange = MaxRange;
                     MaxRange += 600.0;
                 }
-            } while((ClosestNotable == null||ClosestKeystone == null)&&ClosestRootRange==99999.0);
+            } while(ClosestNotable == null||ClosestKeystone == null);
             SlotDesc = "Closest Keystone to jewel-slot is"+ClosestKeystone.Name;
             SlotDesc += " Closest Notable to jewel-slot is"+ClosestNotable.Name;
             //Detect which class root node belongs to and then display it
@@ -522,47 +513,6 @@ namespace PoESkillTree
                 }
             }
             return AttributeTotal;
-        }
-
-        /// <summary>
-        /// Applies the fake Intuitive Leap Support attribute to nodes in effected area
-        /// </summary>
-        /// <param name="TargetNode">The target node.</param>
-        static public void ApplyIntuitiveLeapSupport(SkillNode TargetNode)
-        {
-            List<float> BlankList = new List<float>(0);
-            Vector2D nodePosition = TargetNode.Position;
-            SkillNode CurrentNode;
-            IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
-                SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 800)).ToList();//Small Jewel Radius
-            foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
-            {
-                CurrentNode = NodePair.Value;
-                if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute) && CurrentNode.Attributes.Count != 0)
-                {
-                    CurrentNode.Attributes.Add(GlobalSettings.FakeIntuitiveLeapSupportAttribute, new List<float>(1));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the fake Intuitive Leap Support attribute to nodes in effected area
-        /// </summary>
-        /// <param name="TargetNode">The target node.</param>
-        static public void RemoveIntuitiveLeapSupport(SkillNode TargetNode)
-        {
-            Vector2D nodePosition = TargetNode.Position;
-            SkillNode CurrentNode;
-            IEnumerable<KeyValuePair<ushort, SkillNode>> affectedNodes =
-                SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 800)).ToList();//Small Jewel Radius
-            foreach (KeyValuePair<ushort, SkillNode> NodePair in affectedNodes)
-            {
-                CurrentNode = NodePair.Value;
-                if (CurrentNode.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
-                {
-                    CurrentNode.Attributes.Remove(GlobalSettings.FakeIntuitiveLeapSupportAttribute);
-                }
-            }
         }
 
         /// <summary>
