@@ -40,7 +40,7 @@ namespace PoESkillTree
         public CharacterClass ClosestClassStartType;
         public ThresholdTypes JewelStatType;
         /// <summary>The slot description of Jewel Node on Tree</summary>
-        string SlotDesc;
+        public string SlotDesc;
 
         /// <summary>Generates the slot description using SkillNodes information from Skill Tree.</summary>
         /// <param name="NodeId">NodeID for target node</param>
@@ -1327,10 +1327,6 @@ namespace PoESkillTree
             }
         }
         /// <summary>
-        /// Saved slot for item slot that are removing Intuitive leap support from node id on tree
-        /// </summary>
-        public static ItemSlot RemovingIntLeapJewels = 0;
-        /// <summary>
         /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
         public static bool AutoTrackStats = true;
@@ -1351,13 +1347,6 @@ namespace PoESkillTree
                 NotifyStaticPropertyChanged("ItemInfo");
             }
         }
-
-        /// <summary>
-        /// The fake intuitive leap support attribute
-        /// </summary>
-        public const string FakeIntuitiveLeapSupportAttribute = "IntuitiveLeapSupported";
-
-        public const string LeapedNode = "Intuitive Leaped";
 
         /// <summary>
         /// The dialog coordinator
