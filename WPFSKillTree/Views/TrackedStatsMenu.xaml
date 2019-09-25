@@ -12,9 +12,9 @@
     xmlns:dialogs="clr-namespace:PoESkillTree.Controls.Dialogs"
     xmlns:converter="clr-namespace:PoESkillTree.Utils.Converter"
     xmlns:metroControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-    xmlns:Pseudo="clr-namespace:PoESkillTree.TreeGenerator.Model.PseudoAttributes"
+    xmlns:EnumCombo="clr-namespace:PoESkillTree.EnumToComboBox"
     d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
-    MaxContentWidth="800">
+    MaxContentWidth="850">
     <ContentControl.Resources>
         <Style x:Key="SectionLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
             <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -26,7 +26,6 @@
         </Style>
         <local:EmptyStringToFallbackvalue x:Key="EmptyStringToFallbackvalue"/>
         <MenuCmd:StringDataAsString x:Key="StringDataAsString"/>
-        <converter:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
         <converter:BoolToVisibilityConverter x:Key="BoolToHiddenConverter" FalseValue="Hidden"/>
     </ContentControl.Resources>
     <StackPanel Orientation="Vertical">
@@ -111,7 +110,7 @@
                 <ColumnDefinition Width="133"/>
                 <ColumnDefinition Width="87"/>
                 <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -172,14 +171,9 @@
                     <l:Catalog Message="Primary Weapon" />
                 </Label.Content>
             </Label>
-            <ComboBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center"
-                                  SelectedValue="{Binding Pseudo.WeaponClass.Value}" ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon)}" Height="26" Width="130">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon)}"
+	        Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="4" Grid.Column="2">
                 <Label.Content>
@@ -191,7 +185,7 @@
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="4" Grid.Column="4">
                 <Label.Content>
-                    <l:Catalog Message="Crit. Chance" />
+                    <l:Catalog Message="Critical Chance" />
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="4" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
@@ -210,15 +204,9 @@
                     <l:Catalog Message="Secondary Weapon" />
                 </Label.Content>
             </Label>
-            <ComboBox Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center"
-                SelectedValue="{Binding Pseudo.WeaponClass.Value}" ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon)}" Height="26" Width="130"
-                Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon)}"
+	        Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="6" Grid.Column="2" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
                 <Label.Content>
@@ -230,7 +218,7 @@
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="6" Grid.Column="4" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
                 <Label.Content>
-                    <l:Catalog Message="Crit. Chance" />
+                    <l:Catalog Message="Critical Chance" />
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
@@ -283,27 +271,17 @@
                     <l:Catalog Message="Spell Behavior" />
                 </Label.Content>
             </Label>
-            <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center"
-                SelectedValue="{Binding SpellBehaviorTypes.Value}" ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType)}" Height="26" Width="130">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType)}"
+	        Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center" Height="26" Width="133"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="2">
                 <Label.Content>
                     <l:Catalog Message="Damage Scaling" />
                 </Label.Content>
             </Label>
-            <ComboBox Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center"
-                SelectedValue="{Binding DamageScaling.Value}" ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling)}" Height="26" Width="200">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling)}"
+	        Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="200"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="1" Grid.Column="0">
                 <Label.Content>
