@@ -195,7 +195,7 @@
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="4" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
-            Value="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryATKSpeed)}" Interval="0.01"/>
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryCrit)}" Interval="0.01"/>
 
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="5" Grid.Column="0">
@@ -226,7 +226,7 @@
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="3" Minimum="0.01" Margin="2,4" StringFormat="{}{0:#0.##}"
-            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryATKSpeed)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}"/>
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryATKSpeed)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}" Interval="0.01"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="6" Grid.Column="4" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
                 <Label.Content>
@@ -234,7 +234,7 @@
                 </Label.Content>
             </Label>
             <metroControls:NumericUpDown Grid.Row="6" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
-            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryATKSpeed)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}"/>
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryCrit)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}"  Interval="0.01"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="7" Grid.Column="0">
                 <Label.Content>
