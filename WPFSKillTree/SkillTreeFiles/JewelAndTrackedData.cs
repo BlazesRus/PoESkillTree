@@ -4,7 +4,6 @@
 // ***********************************************************************
 //using PoESkillTree.TrackedStatViews;
 using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.Utils;
@@ -16,7 +15,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
-using System.Runtime.InteropServices.ComTypes;
+//using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 
 
@@ -1085,8 +1084,13 @@ namespace PoESkillTree
         }
     }
 
+    /// <summary>
+    /// Class PseudoCalcGlobals.
+    /// </summary>
     public static class PseudoCalcGlobals
     {
+        //public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanging;
+
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
@@ -1098,6 +1102,33 @@ namespace PoESkillTree
         {
             if (StaticPropertyChanged != null)
                 StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Sets <paramref name="backingStore"/> to <paramref name="value"/> and
+        /// raises <see cref="PropertyChanging"/> before and <see cref="PropertyChanged"/>
+        /// after setting the value.(Based on Notifier.cs)
+        /// </summary>
+        /// <param name="backingStore">Target variable</param>
+        /// <param name="value">Source variable</param>
+        /// <param name="onChanged">Called after changing the value but before raising <see cref="PropertyChanged"/>.</param>
+        /// <param name="onChanging">Called before changing the value and before raising <see cref="PropertyChanging"/> with <paramref name="value"/> as parameter.</param>
+        /// <param name="propertyName">Name of the changed property</param>
+        public static void SetProperty<T>(
+            ref T backingStore, T value,
+            Action onChanged = null,
+            Action<T> onChanging = null,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
+
+            //onChanging?.Invoke(value);
+            //NotifyStaticPropertyChanging(propertyName);
+
+            backingStore = value;
+
+            onChanged?.Invoke();
+            NotifyStaticPropertyChanged(propertyName);
         }
 
         public const string HybridHPKey = "# HybridHP Subtotal(PseudoCalc)";
@@ -1112,18 +1143,13 @@ namespace PoESkillTree
         private static bool calculateCritsPerSec = true;
         private static bool calculateCritSpellMult = true;
         private static bool applyWhisperingIceStats = false;
-        /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
-        /// <value>
-        ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
-        public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
+
         private static bool luckyCrits = false;
 
         /// <summary>  Quality 20 Level 20 Increased Critical active for critical chance calculations </summary>
         private static bool increasedCritActive = false;
 
         private static bool nightbladeActive = false;
-        /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
-        public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
 
         private static int levelPrecisionActive = 0;
 
@@ -1166,7 +1192,15 @@ namespace PoESkillTree
         private static DamageScaling dMScaling = DamageScaling.Ice;
         private static int numberOfPoisonStacks = 0;
 
-        public static bool CalculateAcc { get => calculateAcc; set { calculateAcc = value; NotifyStaticPropertyChanged("CalculateAcc"); } }
+        /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
+        /// <value>
+        ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
+        public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
+
+        /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
+        public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
+
+        public static bool CalculateAcc { get => calculateAcc; set { SetProperty(ref calculateAcc, value); } }
         public static bool CalculateHP { get => calculateHP; set { calculateHP = value; NotifyStaticPropertyChanged("CalculateHP"); } }
         public static bool CalculateHybridHP { get => calculateHybridHP; set { calculateHybridHP = value; NotifyStaticPropertyChanged("CalculateHybridHP"); } }
         public static bool CalculateCritsPerSec { get => calculateCritsPerSec; set { calculateCritsPerSec = value; NotifyStaticPropertyChanged("CalculateCritsPerSec"); } }

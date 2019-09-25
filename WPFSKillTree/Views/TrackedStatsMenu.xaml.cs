@@ -1,4 +1,4 @@
-﻿//using Xamarin.Forms;
+//using Xamarin.Forms;
 //using Xamarin.Forms.Xaml;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.Utils;
@@ -47,8 +47,6 @@ namespace PoESkillTree.TrackedStatViews
         }
     }
 
-    //    [XamlCompilation(XamlCompilationOptions.Compile)]
-    //    public partial class TrackedStatsMenu : ContentPage
     /// <summary>
     /// Interaction logic for TrackedStatsMenu.xaml
     /// </summary>
