@@ -384,44 +384,33 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
-            if (Settings.TreePlusItemsMode)
+            string StatName;
+            Dictionary<string, PseudoCalcCon> ConstraintDictionary = new Dictionary<string, PseudoCalcCon>(_attrConstraints.Length);
+            Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+            int attrIndex;
+            foreach (var ConversionKey in _attrConversionMultipliers.Keys)
             {
-                string StatName;
-                Dictionary<string, PseudoCalcCon> ConstraintDictionary = new Dictionary<string, PseudoCalcCon>(_attrConstraints.Length);
-                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
-                int attrIndex;
-                foreach (var ConversionKey in _attrConversionMultipliers.Keys)
-                {
-                    attrIndex = ConversionKey.Item2;
-                    StatName = ConversionKey.Item1;
-                    var stat = _attrConstraints[attrIndex];
-                    ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2));
-                    var currentValue = totalStats[attrIndex];
-                    StatTotals.Add(StatName, currentValue);
-                }
-                PseudoCalcCon StatConstraint;
-                StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
-                //Subtotals should have been dealt with during StatUpdater
-                foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
-                {
-                    StatName = Element.Key;
-                    StatConstraint = Element.Value;
-                    if (StatTotals.ContainsKey(StatName))
-                    {
-                        csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
-                    }
-                    else
-                    {
-                        csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
-                    }
-                }
+                attrIndex = ConversionKey.Item2;
+                StatName = ConversionKey.Item1;
+                var stat = _attrConstraints[attrIndex];
+                ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2));
+                var currentValue = totalStats[attrIndex];
+                StatTotals.Add(StatName, currentValue);
             }
-            else
+            PseudoCalcCon StatConstraint;
+            StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals, Settings.TreeInfo);
+            //Subtotals should have been dealt with during StatUpdater
+            foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
             {
-                for (var i = 0; i < _attrConstraints.Length; i++)
+                StatName = Element.Key;
+                StatConstraint = Element.Value;
+                if (StatTotals.ContainsKey(StatName))
                 {
-                    var stat = _attrConstraints[i];
-                    csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
+                    csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                }
+                else
+                {
+                    csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
                 }
             }
 

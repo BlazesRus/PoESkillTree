@@ -7,6 +7,7 @@ using PoESkillTree.Engine.GameModel;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.Utils;
+using PoESkillTree.Utils.Extensions;
 using PoESkillTree.ViewModels;
 using PoESkillTree.ViewModels.Equipment;
 using System;
@@ -534,21 +535,26 @@ namespace PoESkillTree
                 {
                     Subtotal += attrlist["+# to Accuracy Rating"][0];
                 }
-                if (PseudoCalcGlobals.PrimaryWeapon == WeaponClass.Wand)
+                string KeyName = "#% increased Accuracy Rating with ";
+                switch (PseudoCalcGlobals.PrimaryWeapon)
                 {
-                    if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
-                    {
-                        TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"][0];
-                    }
+                    case WeaponClass.Staff:
+                        KeyName += "Staves"; break;
+                    default:
+                        KeyName += PseudoCalcGlobals.PrimaryWeapon.GetDescription() + "s"; break;
                 }
-                else if (PseudoCalcGlobals.PrimaryWeapon == WeaponClass.Dagger)
+                if (attrlist.ContainsKey(KeyName))
                 {
-                    if (attrlist.ContainsKey("#% increased Accuracy Rating with Daggers"))
-                    {
-                        TotalIncrease += attrlist["#% increased Accuracy Rating with Daggers"][0];
-                    }
+                    TotalIncrease += attrlist[KeyName][0];
                 }
                 if (PseudoCalcGlobals.NotUsingShield&&PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
+                {
+                    if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
+                    {
+                        TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"][0];
+                    }
+                }
+                if (PseudoCalcGlobals.NotUsingShield && PseudoCalcGlobals.SecondaryWeapon == WeaponClass.Unarmed)
                 {
                     if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
                     {
@@ -637,11 +643,16 @@ namespace PoESkillTree
             return attrlist;
         }
 
+        /// <summary>
+        /// Add Stats from Equipment to StatTotal
+        /// </summary>
+        /// <param name="attrlist">The attribute list.</param>
+        /// <param name="InvModel">The item information sent from SkillTreeGenerator.</param>
+        /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
         public Dictionary<string, float> EquipmentStatUpdater(Dictionary<string, float> attrlist, InventoryViewModel InvModel)
         {
             Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
             PoESkillTree.Model.Items.Item ItemData = InvModel.Armor.Item;
-            //bool ContinueCalc = true;
             for (int Index = 0; Index < 10; ++Index)
             {
                 switch (Index)
@@ -709,14 +720,8 @@ namespace PoESkillTree
         /// <param name="Tree">The tree.</param>
         /// <param name="InvModel">The item information sent from SkillTreeGenerator.</param>
         /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
-        public Dictionary<string, float> StatUpdater(Dictionary<string, float> attrlist, SkillTree Tree, InventoryViewModel InvModel = null)
+        public Dictionary<string, float> PseudoCalcUpdater(Dictionary<string, float> attrlist, SkillTree Tree)
         {
-            //Calculate Equipment Stats+Jewels on SkilledNodes
-            if (InvModel != null)
-            {
-                attrlist = EquipmentStatUpdater(attrlist, InvModel);
-            }
-
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
             if (PseudoCalcGlobals.CalculateAcc)
@@ -729,21 +734,26 @@ namespace PoESkillTree
                 {
                     Subtotal += attrlist["+# to Accuracy Rating"];
                 }
-                if (PseudoCalcGlobals.PrimaryWeapon == WeaponClass.Wand)
+                string KeyName = "#% increased Accuracy Rating with ";
+                switch (PseudoCalcGlobals.PrimaryWeapon)
                 {
-                    if (attrlist.ContainsKey("#% increased Accuracy Rating with Wands"))
+                    case WeaponClass.Staff:
+                        KeyName += "Staves"; break;
+                    default:
+                        KeyName += PseudoCalcGlobals.PrimaryWeapon.GetDescription() + "s"; break;
+                }
+                if (attrlist.ContainsKey(KeyName))
+                {
+                    TotalIncrease += attrlist[KeyName];
+                }
+                if (PseudoCalcGlobals.NotUsingShield && PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
+                {
+                    if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
                     {
-                        TotalIncrease += attrlist["#% increased Accuracy Rating with Wands"];
+                        TotalIncrease += attrlist["#% increased Accuracy Rating while Dual Wielding"];
                     }
                 }
-                else if(PseudoCalcGlobals.PrimaryWeapon == WeaponClass.Dagger)
-                {
-                    if (attrlist.ContainsKey("#% increased Accuracy Rating with Daggers"))
-                    {
-                        TotalIncrease += attrlist["#% increased Accuracy Rating with Daggers"];
-                    }
-                }
-                if (PseudoCalcGlobals.NotUsingShield&&PseudoCalcGlobals.SecondaryWeapon != WeaponClass.Unarmed)
+                if (PseudoCalcGlobals.NotUsingShield && PseudoCalcGlobals.SecondaryWeapon == WeaponClass.Unarmed)
                 {
                     if (attrlist.ContainsKey("#% increased Accuracy Rating while Dual Wielding"))
                     {
