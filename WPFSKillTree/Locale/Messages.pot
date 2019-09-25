@@ -242,84 +242,82 @@ msgid "Load from tree"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:198
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:198
 msgid "Convert to Pseudo Attributes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:200
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:200
 msgid "Converts the attributes to pseudo attributes where possible using the defined settings."
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:225
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:318
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:225
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:318
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:219
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:326
 msgid "Add"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:234
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:234
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:228
 msgid "Attribute"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:239
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:332
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:239
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:332
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:233
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:340
 msgid "Target"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:252
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:345
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:252
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:345
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:246
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:353
 msgid "Weight"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:283
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:283
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:291
 msgid "Pseudo Attributes"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:327
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:327
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:335
 msgid "Pseudo attribute"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:387
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:387
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:395
 #: Views\MainWindow.xaml:205 ViewModels\SettingsMenuViewModel.cs:30
 msgid "Settings"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:422
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:422
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:430
 msgid "Tree + Items"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:425
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:425
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:433
 msgid "Tree only"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:432
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:432
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:440
 msgid "Reload Pseudo Attributes from filesystem"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:439
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:439
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:447
 msgid "Weapon class"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:454
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:454
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:462
 msgid "Off hand"
 msgstr ""
 
 #: TreeGenerator\Views\AdvancedGeneratorTab.xaml:477
-#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:477
+#: TreeGenerator\Views\PseudoCalcGeneratorTab.xaml:485
 msgid "Tags"
 msgstr ""
 
@@ -1084,7 +1082,7 @@ msgstr ""
 msgid "Build save path"
 msgstr ""
 
-#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:48
+#: Views\SettingsMenuWindow.xaml:100 Views\TrackedStatsMenu.xaml:54
 msgid "Change..."
 msgstr ""
 
@@ -1128,28 +1126,104 @@ msgstr ""
 msgid "Reset selected bandits"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:39
+#: Views\TrackedStatsMenu.xaml:45
 msgid "TrackedStats Path:"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:53
+#: Views\TrackedStatsMenu.xaml:59
 msgid "TargetFile:"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:72
+#: Views\TrackedStatsMenu.xaml:78
 msgid "Load File Names From TrackedStats Directory"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:82
+#: Views\TrackedStatsMenu.xaml:88
 msgid "Load Tracked Stats from Target File"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:87
+#: Views\TrackedStatsMenu.xaml:93
 msgid "Reset Tracking"
 msgstr ""
 
-#: Views\TrackedStatsMenu.xaml:92
+#: Views\TrackedStatsMenu.xaml:98
 msgid "Save Tracked Stats to Target File"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:104
+msgid "PseudoCalc preferences:"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:131
+msgid "Calculate accuracy"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:139
+msgid "Calculate health"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:147
+msgid "Calculate combined health+energy shield"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:155
+msgid "Calculate CritsPerSec(Q20 CoC)"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:162
+msgid "Precision Lvl"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:171
+msgid "Primary Weapon"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:180 Views\TrackedStatsMenu.xaml:213
+msgid "ATK Speed"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:188 Views\TrackedStatsMenu.xaml:221
+msgid "Critical Chance"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:197
+msgid "Not Using Shield"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:204
+msgid "Secondary Weapon"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:229
+msgid "Enable Critical Spell DamageMultiplier"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:237
+msgid "Poison Stacks"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:246
+msgid "Lucky Crits"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:253
+msgid "Apply Whispering Ice Calculations"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:271
+msgid "Spell Behavior"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:279
+msgid "Damage Scaling"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:288
+msgid "Q20 Lvl 20 Increased Critical Chance"
+msgstr ""
+
+#: Views\TrackedStatsMenu.xaml:295
+msgid "Q20 Lvl 20 Nightblade"
 msgstr ""
 
 #: Controls\Dialogs\ExtendedDialogManager.cs:57
@@ -1202,7 +1276,7 @@ msgstr ""
 msgid "Could not import build"
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1268
+#: SkillTreeFiles\SkillTree.cs:1181
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr ""
 
@@ -1264,111 +1338,133 @@ msgid "Nested PseudoAttribute {0} does not exist as top level PseudoAttribute"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:205
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:205
 msgid "Popular"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:214
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:214
 #: Utils\Converter\GroupStringConverter.cs:34
 msgid "Core Attributes"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:215
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:215
 #: Utils\Converter\GroupStringConverter.cs:30
 msgid "General"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:216
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:216
 #: Utils\Converter\GroupStringConverter.cs:19
 msgid "Keystone"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:217
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:217
 #: Utils\Converter\GroupStringConverter.cs:21
 msgid "Charges"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:219
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:219
 #: Utils\Converter\GroupStringConverter.cs:31
 msgid "Defense"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:220
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:220
 #: Utils\Converter\GroupStringConverter.cs:29
 msgid "Block"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:221
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:221
 #: Utils\Converter\GroupStringConverter.cs:28
 msgid "Shield"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:223
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:223
 #: Utils\Converter\GroupStringConverter.cs:20
 msgid "Weapon"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:224
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:224
 #: Utils\Converter\GroupStringConverter.cs:32
 msgid "Spell"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:225
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:225
 #: Utils\Converter\GroupStringConverter.cs:27
 msgid "Critical Strike"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:227
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:227
 #: Utils\Converter\GroupStringConverter.cs:26
 msgid "Aura"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:228
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:228
 #: Utils\Converter\GroupStringConverter.cs:25
 msgid "Curse"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:229
 #: Utils\Converter\GroupStringConverter.cs:22
 msgid "Minion"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:230
 #: Utils\Converter\GroupStringConverter.cs:23
 msgid "Trap"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:231
 #: Utils\Converter\GroupStringConverter.cs:24
 msgid "Totem"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:33
 #: ItemFilter\Model\FilterManager.cs:674
 msgid "Flasks"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:233
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:233
 #: Utils\Converter\GroupStringConverter.cs:36
 msgid "Jewel Types"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:234
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:234
 #: Utils\Converter\GroupStringConverter.cs:37
 msgid "Tracked PseudoTotals"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:235
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:235
 #: Utils\Converter\GroupStringConverter.cs:38
 msgid "Hidden"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:236
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:236
 #: Utils\Converter\GroupStringConverter.cs:35
 msgid "Everything Else"
 msgstr ""
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:624
+#: TreeGenerator\ViewModels\PseudoCalcViewModel.cs:624
 msgid "Advanced"
 msgstr ""
 
@@ -1702,13 +1798,13 @@ msgstr ""
 msgid "New tab with {0} items was added to stash."
 msgstr ""
 
-#: ViewModels\Equipment\StashViewModel.cs:357
+#: ViewModels\Equipment\StashViewModel.cs:338
 msgid ""
 "This will delete all items between this and the next bookmark and can not be undone.\n"
 "Do you want to continue?"
 msgstr ""
 
-#: ViewModels\Equipment\StashViewModel.cs:358
+#: ViewModels\Equipment\StashViewModel.cs:339
 msgid "Delete items"
 msgstr ""
 
@@ -1821,7 +1917,7 @@ msgstr[1] ""
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:949 Views\MainWindow.xaml.cs:2071
+#: Views\MainWindow.xaml.cs:949 Views\MainWindow.xaml.cs:2022
 msgid "An error occurred while copying to Clipboard."
 msgstr ""
 
@@ -1895,42 +1991,42 @@ msgstr ""
 msgid "An error occurred while attempting to start the installation."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1802
+#: Views\MainWindow.xaml.cs:1753
 msgid "An error occurred while attempting to load item data."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1896 Views\MainWindow.xaml.cs:1939
+#: Views\MainWindow.xaml.cs:1847 Views\MainWindow.xaml.cs:1890
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1918
+#: Views\MainWindow.xaml.cs:1869
 msgid "The build you are loading contains information about selected bandits."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1919
+#: Views\MainWindow.xaml.cs:1870
 msgid "Do you want to use it and overwrite current settings?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1920
+#: Views\MainWindow.xaml.cs:1871
 msgid "Replace Bandits settings"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1946
+#: Views\MainWindow.xaml.cs:1897
 msgid "Current: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1947
+#: Views\MainWindow.xaml.cs:1898
 msgid "Loaded: "
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2051
+#: Views\MainWindow.xaml.cs:2002
 msgid "Generating PoEUrl of Skill tree"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2057
+#: Views\MainWindow.xaml.cs:2008
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2067
+#: Views\MainWindow.xaml.cs:2018
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr ""
