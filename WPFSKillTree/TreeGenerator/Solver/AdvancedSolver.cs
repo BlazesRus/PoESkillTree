@@ -433,8 +433,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                     StatTotals.Add(StatName, currentValue);
                 }
                 ConstraintValues StatConstraint;
-                StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
-                //Subtotals should have been dealt with during StatUpdater
+                StatTotals = GlobalSettings.JewelInfo.EquipmentStatUpdater(StatTotals, Settings.ItemInfo);
                 foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
                 {
                     StatName = Element.Key;

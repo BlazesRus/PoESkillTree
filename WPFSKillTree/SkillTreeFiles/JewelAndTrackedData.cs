@@ -637,6 +637,71 @@ namespace PoESkillTree
             return attrlist;
         }
 
+        public Dictionary<string, float> EquipmentStatUpdater(Dictionary<string, float> attrlist, InventoryViewModel InvModel)
+        {
+            Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
+            PoESkillTree.Model.Items.Item ItemData = InvModel.Armor.Item;
+            //bool ContinueCalc = true;
+            for (int Index = 0; Index < 10; ++Index)
+            {
+                switch (Index)
+                {
+                    case 0: break;
+                    case 1:
+                        ItemData = InvModel.MainHand.Item; break;
+                    case 2:
+                        ItemData = InvModel.OffHand.Item; break;
+                    case 3:
+                        ItemData = InvModel.Ring.Item; break;
+                    case 4:
+                        ItemData = InvModel.Ring2.Item; break;
+                    case 5:
+                        ItemData = InvModel.Amulet.Item; break;
+                    case 6:
+                        ItemData = InvModel.Helm.Item; break;
+                    case 7:
+                        ItemData = InvModel.Gloves.Item; break;
+                    case 8:
+                        ItemData = InvModel.Boots.Item; break;
+                    case 9:
+                        ItemData = InvModel.Belt.Item; break;
+                    default:
+                        break;
+                }
+                if (ItemData != null)
+                {
+                    foreach (var TargetMod in ItemData.Mods)
+                    {
+                        if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
+                        {
+                            if (ItemDictionary.ContainsKey(TargetMod.Attribute))
+                            {
+                                ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
+                            }
+                            else
+                            {
+                                ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
+                            }
+                        }
+                    }
+                }
+            }
+            string StatName;
+            foreach (var StatElement in ItemDictionary)
+            {
+                StatName = StatElement.Key;
+                if (attrlist.ContainsKey(StatName))
+                {
+                    attrlist[StatName] += StatElement.Value;
+                }
+                else
+                {
+                    attrlist.Add(StatName, StatElement.Value);
+                }
+            }
+            return attrlist;
+        }
+
         /// <summary>
         /// Updates stats based on Unique Jewels Slotted
         /// </summary>
@@ -649,66 +714,7 @@ namespace PoESkillTree
             //Calculate Equipment Stats+Jewels on SkilledNodes
             if (InvModel != null)
             {
-                Dictionary<string, float> ItemDictionary = new Dictionary<string, float>();
-                PoESkillTree.Model.Items.Item ItemData = InvModel.Armor.Item;
-                //bool ContinueCalc = true;
-                for (int Index = 0; Index < 10; ++Index)
-                {
-                    switch (Index)
-                    {
-                        case 0: break;
-                        case 1:
-                            ItemData = InvModel.MainHand.Item; break;
-                        case 2:
-                            ItemData = InvModel.OffHand.Item; break;
-                        case 3:
-                            ItemData = InvModel.Ring.Item; break;
-                        case 4:
-                            ItemData = InvModel.Ring2.Item; break;
-                        case 5:
-                            ItemData = InvModel.Amulet.Item; break;
-                        case 6:
-                            ItemData = InvModel.Helm.Item; break;
-                        case 7:
-                            ItemData = InvModel.Gloves.Item; break;
-                        case 8:
-                            ItemData = InvModel.Boots.Item; break;
-                        case 9:
-                            ItemData = InvModel.Belt.Item; break;
-                        default:
-                            break;
-                    }
-                    if (ItemData != null)
-                    {
-                        foreach (var TargetMod in ItemData.Mods)
-                        {
-                            if (TargetMod.Values.Count == 1)//Only single value Mods added to dictionary for solver use
-                            {
-                                if (ItemDictionary.ContainsKey(TargetMod.Attribute))
-                                {
-                                    ItemDictionary[TargetMod.Attribute] += TargetMod.Values[0];
-                                }
-                                else
-                                {
-                                    ItemDictionary.Add(TargetMod.Attribute, TargetMod.Values[0]);
-                                }
-                            }
-                        }
-                    }
-                }
-                string StatName;
-                foreach (var StatElement in ItemDictionary)
-                {
-                    StatName = StatElement.Key;
-                    if (attrlist.ContainsKey(StatName))
-                    {
-                        attrlist[StatName] += StatElement.Value;
-                    }
-                    else
-                    {
-                        attrlist.Add(StatName, StatElement.Value);
-                    }
-                }
+                attrlist = EquipmentStatUpdater(attrlist, InvModel);
             }
 
             float Subtotal = 0.0f;
