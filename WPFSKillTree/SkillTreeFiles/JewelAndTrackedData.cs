@@ -219,45 +219,9 @@ namespace PoESkillTree
             return this[Id].JewelStatType;
         }
 
-        /// <summary>
-        /// Keys for Strength Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> StrJewelSlots;
-        /// <summary>
-        /// Keys for Intelligence Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> IntJewelSlots;
-        /// <summary>
-        /// Keys for Dexterity Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> DexJewelSlots;
-        /// <summary>
-        /// Keys for Hybrid Strength+Intelligence Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> StrIntJewelSlots;
-        /// <summary>
-        /// Keys for Hybrid Strength+Dexterity Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> StrDexJewelSlots;
-        /// <summary>
-        /// Keys for Hybrid Intelligence+Dexterity Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> IntDexJewelSlots;
-        /// <summary>
-        /// Keys for Non-Threshold Jewel Slots
-        /// </summary>
-        public System.Collections.Generic.List<ushort> NeutralJewelSlots;
-
         /// <summary>Initializes a new instance of the <see cref="JewelDictionary"/> class.</summary>
         public JewelData() : base(21)
         {
-            StrJewelSlots = new System.Collections.Generic.List<ushort>();
-            IntJewelSlots = new System.Collections.Generic.List<ushort>();
-            DexJewelSlots = new System.Collections.Generic.List<ushort>();
-            StrIntJewelSlots = new System.Collections.Generic.List<ushort>();
-            StrDexJewelSlots = new System.Collections.Generic.List<ushort>();
-            IntDexJewelSlots = new System.Collections.Generic.List<ushort>();
-            NeutralJewelSlots = new System.Collections.Generic.List<ushort>();
             NotSetup = true;
         }
 
@@ -357,7 +321,7 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
                     if (IsIntThreshold)
                     {
-                        StrIntJewelSlots.Add(NodeId);
+                        //StrIntJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(IntThresholdLabel))
                         SetThresholdType(NodeId, ThresholdTypes.StrIntHybrid);
                         SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
@@ -366,7 +330,7 @@ namespace PoESkillTree
                     }
                     else if (IsDexThreshold)
                     {
-                        StrDexJewelSlots.Add(NodeId);
+                        //StrDexJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
                         SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Str JewelSlot", "+1 Dex JewelSlot" };
@@ -374,7 +338,7 @@ namespace PoESkillTree
                     }
                     else
                     {
-                        StrJewelSlots.Add(NodeId);
+                        //StrJewelSlots.Add(NodeId);
                         SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Str JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Strength);
                     }
@@ -385,7 +349,7 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
                     if (IsDexThreshold)
                     {
-                        IntDexJewelSlots.Add(NodeId);
+                        //IntDexJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
                         SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
@@ -393,14 +357,14 @@ namespace PoESkillTree
                     }
                     else
                     {
-                        IntJewelSlots.Add(NodeId);
+                        //IntJewelSlots.Add(NodeId);
                         SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Int JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Intelligence);
                     }
                 }
                 else if (IsDexThreshold)
                 {
-                    DexJewelSlots.Add(NodeId);
+                    //DexJewelSlots.Add(NodeId);
                     if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
                     SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 Jewel Socket", "+1 Int JewelSlot" };
@@ -409,8 +373,7 @@ namespace PoESkillTree
                 }
                 else//Neutral(often ineffective corner jewels)
                 {
-                    NeutralJewelSlots.Add(NodeId);
-                    //GlobalSettings.JewelStorage[JewelElement.Key] = ThresholdTypes.Neutral;
+                    //NeutralJewelSlots.Add(NodeId);
                 }
                 this[NodeId].GenerateSlotDesc(NodeId);
             }
