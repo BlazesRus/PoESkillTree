@@ -83,7 +83,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         private const double UsedNodeCountWeight = 5;
 
         /// <summary>
-        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node coutn.
+        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node count.
         /// </summary>
         /// <remarks>
         /// A tree with less points spent should only better better if the csv satisfaction is not worse.
