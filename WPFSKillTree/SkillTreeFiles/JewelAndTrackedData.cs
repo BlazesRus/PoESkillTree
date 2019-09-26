@@ -484,7 +484,7 @@ namespace PoESkillTree
         /// <param name="attrlist">The attrlist.</param>
         /// <param name="Tree">The tree.</param>
         /// <returns></returns>
-        static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist, SkillTree Tree)
+        static public Dictionary<string, List<float>> StatUpdater(Dictionary<string, List<float>> attrlist)
         {
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
@@ -683,7 +683,7 @@ namespace PoESkillTree
         /// <param name="Tree">The tree.</param>
         /// <param name="InvModel">The item information sent from SkillTreeGenerator.</param>
         /// <returns>Dictionary&lt;System.String, System.Single&gt;</returns>
-        public Dictionary<string, float> PseudoCalcUpdater(Dictionary<string, float> attrlist, SkillTree Tree)
+        public Dictionary<string, float> PseudoCalcUpdater(Dictionary<string, float> attrlist)
         {
             float Subtotal = 0.0f;
             float TotalIncrease = 0.0f;
@@ -1212,6 +1212,7 @@ namespace PoESkillTree
         public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }
     }
 
+    /// <summary>  TargetValue, Weight, and RequiredStat Storage class</summary>
     public class PseudoCalcCon
     {
         public float TargetValue;
@@ -1223,11 +1224,11 @@ namespace PoESkillTree
         /// </summary>
         /// <param name="targetValue">The target value.</param>
         /// <param name="weight">The weight.</param>
-        public PseudoCalcCon(float targetValue, double weight)
+        public PseudoCalcCon(float targetValue, double weight, bool required)
         {
             TargetValue = targetValue;
             Weight = weight;
-            Required = false;
+            Required = required;
         }
     }
 

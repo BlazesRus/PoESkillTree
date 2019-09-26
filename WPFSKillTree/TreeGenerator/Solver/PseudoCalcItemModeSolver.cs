@@ -399,7 +399,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             }
             PseudoCalcCon StatConstraint;
             StatTotals = GlobalSettings.JewelInfo.EquipmentStatUpdater(StatTotals, Settings.ItemInfo);
-            StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals, Settings.TreeInfo);
+            StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals);
             //Subtotals should have been dealt with during StatUpdater
             foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
             {
