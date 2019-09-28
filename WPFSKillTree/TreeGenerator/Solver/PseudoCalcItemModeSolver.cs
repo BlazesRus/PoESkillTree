@@ -113,7 +113,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
-        public PseudoCalcItemModeSolver(SkillTree tree, PseudoCalcSolverSettings settings)
+        public PseudoCalcItemModeSolver(SkillTree tree, PseudoCalcSolverSettings settings, PseudoCalcStatLookup statLookup)
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
@@ -393,7 +393,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                 attrIndex = ConversionKey.Item2;
                 StatName = ConversionKey.Item1;
                 var stat = _attrConstraints[attrIndex];
-                ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2));
+                ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2, stat.Item3));
                 var currentValue = totalStats[attrIndex];
                 StatTotals.Add(StatName, currentValue);
             }

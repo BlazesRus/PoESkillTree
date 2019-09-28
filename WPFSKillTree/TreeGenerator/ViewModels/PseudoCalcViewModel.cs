@@ -25,8 +25,8 @@ using PoESkillTree.Utils.Converter;
 namespace PoESkillTree.TreeGenerator.ViewModels
 {
     // Some aliases to make things clearer without the need of extra classes.
-    using AttributeConstraint = TargetWeightConstraint<string>;
-    using PseudoAttributeConstraint = TargetWeightConstraint<PseudoAttribute>;
+    using AttributeConstraint = PseudoCalcConstraint<string>;
+    using PseudoAttributeConstraint = PseudoCalcConstraint<PseudoAttribute>;
 
     /// <summary>
     /// GeneratorTabViewModel that uses user specified constraints based
@@ -78,6 +78,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             private const string AttributeKey = "Attribute";
             private const string TargetValueKey = "TargetValue";
             private const string WeightKey = "Weight";
+            private const string RequiredKey = "Required";
 
             private readonly PseudoCalcViewModel _vm;
 
@@ -98,17 +99,19 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         var obj = element as JObject;
                         if (obj == null)
                             continue;
-                        JToken attrToken, targetToken, weightToken;
+                        JToken attrToken, targetToken, weightToken, requiredToken;
                         if (!obj.TryGetValue(AttributeKey, out attrToken)
                             || !obj.TryGetValue(TargetValueKey, out targetToken)
-                            || !obj.TryGetValue(WeightKey, out weightToken))
+                            || !obj.TryGetValue(WeightKey, out weightToken)
+                            || !obj.TryGetValue(RequiredKey, out requiredToken))
                             continue;
 
                         var attr = attrToken.ToObject<string>();
                         newConstraints.Add(new AttributeConstraint(attr)
                         {
                             TargetValue = targetToken.ToObject<float>(),
-                            Weight = weightToken.ToObject<int>()
+                            Weight = weightToken.ToObject<int>(),
+                            Required = requiredToken.ToObject<bool>()
                         });
                         _vm._addedAttributes.Add(attr);
                     }
@@ -130,10 +133,11 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         var obj = element as JObject;
                         if (obj == null)
                             continue;
-                        JToken attrToken, targetToken, weightToken;
+                        JToken attrToken, targetToken, weightToken, requiredToken;
                         if (!obj.TryGetValue(AttributeKey, out attrToken)
                             || !obj.TryGetValue(TargetValueKey, out targetToken)
-                            || !obj.TryGetValue(WeightKey, out weightToken))
+                            || !obj.TryGetValue(WeightKey, out weightToken)
+                            || !obj.TryGetValue(RequiredKey, out requiredToken))
                             continue;
 
                         PseudoAttribute attr;
@@ -142,7 +146,8 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         newConstraints.Add(new PseudoAttributeConstraint(attr)
                         {
                             TargetValue = targetToken.ToObject<float>(),
-                            Weight = weightToken.ToObject<int>()
+                            Weight = weightToken.ToObject<int>(),
+                            Required = requiredToken.ToObject<bool>()
                         });
                         _vm._addedPseudoAttributes.Add(attr);
                     }
@@ -158,7 +163,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             {
                 var changed = false;
                 var attrArray = new JArray();
-                _vm.AttributeConstraints.ForEach(c => AddTo(attrArray, c.Data, c.TargetValue, c.Weight));
+                _vm.AttributeConstraints.ForEach(c => AddTo(attrArray, c.Data, c.TargetValue, c.Weight, c.Required));
                 JToken oldToken;
                 if (jObject.TryGetValue(nameof(AttributeConstraints), out oldToken))
                 {
@@ -167,7 +172,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 jObject[nameof(AttributeConstraints)] = attrArray;
 
                 var pseudoArray = new JArray();
-                _vm.PseudoAttributeConstraints.ForEach(c => AddTo(pseudoArray, c.Data.Name, c.TargetValue, c.Weight));
+                _vm.PseudoAttributeConstraints.ForEach(c => AddTo(pseudoArray, c.Data.Name, c.TargetValue, c.Weight, c.Required));
                 if (!changed && jObject.TryGetValue(nameof(PseudoAttributeConstraints), out oldToken)
                     && !JToken.DeepEquals(pseudoArray, oldToken))
                 {
@@ -177,13 +182,14 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 return changed;
             }
 
-            private static void AddTo(JArray array, string attribute, float targetValue, int weight)
+            private static void AddTo(JArray array, string attribute, float targetValue, int weight, bool required)
             {
                 array.Add(new JObject
                 {
                     {AttributeKey, new JValue(attribute)},
                     {TargetValueKey, new JValue(targetValue)},
-                    {WeightKey, new JValue(weight)}
+                    {WeightKey, new JValue(weight)},
+                    {RequiredKey, new JValue(required)}
                 });
             }
 
@@ -280,7 +286,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             get { return Enum.GetValues(typeof(WeaponClass)).Cast<WeaponClass>(); }
         }
 
-        protected override string Key { get; } = "AdvancedTab";
+        protected override string Key { get; } = "PseudoCalcTab";
 
         protected override IReadOnlyList<ISetting> SubSettings { get; }
 
@@ -621,7 +627,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
 
             ReloadPseudoAttributes();
 
-            DisplayName = L10n.Message("Advanced");
+            DisplayName = L10n.Message("PseudoCalc");
 
             SubSettings = new ISetting[]
             {
@@ -821,15 +827,28 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         {
             var attributeConstraints = AttributeConstraints.ToDictionary(
                 constraint => constraint.Data,
-                constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
+                constraint => new Tuple<float, double, bool>(constraint.TargetValue, constraint.Weight / 100.0, constraint.Required));
             var pseudoConstraints = PseudoAttributeConstraints.ToDictionary(
                 constraint => constraint.Data,
-                constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
-            var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
-                CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo, TreePlusItemsMode.Value));
-            if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo); }
-            return Task.FromResult<ISolver>(solver);
+                constraint => new Tuple<float, double, bool>(constraint.TargetValue, constraint.Weight / 100.0, constraint.Required));
+            var StatLookup = new PseudoCalcStatLookup();
+            //var solver = TreePlusItemsMode.Value ?
+            //    new PseudoCalcItemModeSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(), attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo) :
+            //    new PseudoCalcSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(), attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo);
+            if (TreePlusItemsMode.Value)
+            {
+                var solver = new PseudoCalcItemModeSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo), PseudoCalcStatLookup);
+                return Task.FromResult<ISolver>(solver);
+            }
+            else
+            {
+                var solver = new PseudoCalcSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value, TreeInfo), PseudoCalcStatLookup);
+                return Task.FromResult<ISolver>(solver);
+            }
+            //if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo); }
+            
         }
 
         /// <summary>

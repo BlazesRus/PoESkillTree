@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Documents;
 using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
@@ -50,10 +51,10 @@ namespace PoESkillTree.TreeGenerator.Solver
         private const double UsedNodeCountWeight = 5;
 
         /// <summary>
-        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node coutn.
+        /// Factor for the value calculated from the node difference if used node count is lower than the allowed node count.
         /// </summary>
         /// <remarks>
-        /// A tree with less points spent should only better better if the csv satisfaction is not worse.
+        /// A tree with less points spent should only be better if the csv satisfaction is not worse.
         /// Because of that this factor is really small.
         ///</remarks>
         private const double UsedNodeCountFactor = .0005;
@@ -67,20 +68,24 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Maps indexes of constraints (both attribute and pseudo attribute constraints) to their {Target, Weight, Required}-Tuple.
         /// </summary>
         private Tuple<float, double, bool>[] _attrConstraints;
-        /// <summary>
-        /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
-        /// </summary>
-        private Dictionary<string, List<int>> _attrNameLookup;
+
         /// <summary>
         /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
+
         /// <summary>
-        /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.
-        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
+        /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.<br />
+        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.<br/>
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
+
+        /// <summary>
+        /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
+        /// </summary>
+        private Dictionary<string, List<int>> _attrNameLookup;
+
         /// <summary>
         /// Dictionary that saves which nodes (represented by their id) are travel nodes.
         /// </summary>
@@ -386,33 +391,43 @@ namespace PoESkillTree.TreeGenerator.Solver
             var csvs = 1.0;
             string StatName;
             Dictionary<string, PseudoCalcCon> ConstraintDictionary = new Dictionary<string, PseudoCalcCon>(_attrConstraints.Length);
-            Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+            //Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+            List<string> RequiredKeys = new List<string>();
+            List<string> OtherKeys = new List<string>(_attrConstraints.Length);
             int attrIndex;
             foreach (var ConversionKey in _attrConversionMultipliers.Keys)
             {
                 attrIndex = ConversionKey.Item2;
                 StatName = ConversionKey.Item1;
                 var stat = _attrConstraints[attrIndex];
-                ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2));
-                var currentValue = totalStats[attrIndex];
-                StatTotals.Add(StatName, currentValue);
-            }
-            PseudoCalcCon StatConstraint;
-            StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals, Settings.TreeInfo);
-            //Subtotals should have been dealt with during StatUpdater
-            foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
-            {
-                StatName = Element.Key;
-                StatConstraint = Element.Value;
-                if (StatTotals.ContainsKey(StatName))
+                ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2, stat.Item3));
+                if (stat.Item3)
                 {
-                    csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                    RequiredKeys.Add(StatName);
                 }
                 else
                 {
-                    csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                    OtherKeys.Add(StatName);
                 }
+                //var currentValue = totalStats[attrIndex];
+                //StatTotals.Add(StatName, currentValue);
             }
+            PseudoCalcCon StatConstraint;
+            //StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals, Dictionary<string, PseudoCalcCon>);
+
+            //foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
+            //{
+            //    StatName = Element.Key;
+            //    StatConstraint = Element.Value;
+            //    if (StatTotals.ContainsKey(StatName))
+            //    {
+            //        csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+            //    }
+            //    else
+            //    {
+            //        csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+            //    }
+            //}
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
