@@ -24,8 +24,8 @@ using NLog;
 using PoESkillTree.Utils;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Computation;
-using PoESkillTree.Computation.Model;
 using PoESkillTree.Computation.ViewModels;
+using PoESkillTree.Computation.Views;
 using PoESkillTree.Controls;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.GameModel;
@@ -98,7 +98,7 @@ namespace PoESkillTree.Views
         private MenuItem cmAddToGroup, cmDeleteGroup;
 
         private GameData _gameData;
-        private AttributesInJewelRadiusCalculator _attributesInJewelRadiusCalculator;
+        private AttributesInJewelRadiusViewModel _attributesInJewelRadiusViewModel;
 
         private ItemAttributes _itemAttributes;
 
@@ -523,8 +523,8 @@ namespace PoESkillTree.Views
                 _equipmentConverter.Equipment,
                 _equipmentConverter.Jewels,
                 _equipmentConverter.Skills);
-            _attributesInJewelRadiusCalculator = computationInitializer.AttributesInJewelRadiusCalculator;
             ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
+            _attributesInJewelRadiusViewModel = await computationInitializer.CreateAttributesInJewelRadiusViewModel();
             computationInitializer.SetupPeriodicActions();
             _abyssalSocketObserver = computationInitializer.CreateAbyssalSocketObserver(InventoryViewModel.ItemJewels);
             Log.Info($"Computation UI initialized after {stopwatch.ElapsedMilliseconds} ms");
@@ -674,7 +674,7 @@ namespace PoESkillTree.Views
             }
         }
 
-        private async void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -745,7 +745,7 @@ namespace PoESkillTree.Views
                         ToggleShowSummary();
                         if (_hoveredNode != null && !_hoveredNode.IsRootNode)
                         {
-                            await GenerateTooltipForNode(_hoveredNode, true);
+                            GenerateTooltipForNode(_hoveredNode, true);
                         }
                         break;
                     case Key.F:
@@ -1564,7 +1564,7 @@ namespace PoESkillTree.Views
             _sToolTip.IsOpen = false;
         }
 
-        private async void zbSkillTreeBackground_MouseMove(object sender, MouseEventArgs e)
+        private void zbSkillTreeBackground_MouseMove(object sender, MouseEventArgs e)
         {
             var p = e.GetPosition(zbSkillTreeBackground.Child);
             var v = new Vector2D(p.X, p.Y);
@@ -1574,7 +1574,7 @@ namespace PoESkillTree.Views
             _hoveredNode = node;
             if (node != null && !node.IsRootNode)
             {
-                await GenerateTooltipForNode(node);
+                GenerateTooltipForNode(node);
             }
             else if ((Tree.AscButtonPosition - v).Length < 150)
             {
@@ -1598,7 +1598,7 @@ namespace PoESkillTree.Views
                 zbSkillTreeBackground.Reset();
         }
 
-        private async Task GenerateTooltipForNode(SkillNode node, bool forcerefresh = false)
+        private void GenerateTooltipForNode(SkillNode node, bool forcerefresh = false)
         {
             if (!Tree.DrawAscendancy && node.IsAscendancyNode && !forcerefresh)
                 return;
@@ -1629,7 +1629,7 @@ namespace PoESkillTree.Views
                 tooltip += "\n" + node.StatDefinitions.Aggregate((s1, s2) => s1 + "\n" + s2);
             if (!(_sToolTip.IsOpen && _lasttooltip == tooltip) | forcerefresh)
             {
-                _sToolTip.Content = await CreateTooltipForNode(node, tooltip, socketedJewel);
+                _sToolTip.Content = CreateTooltipForNode(node, tooltip, socketedJewel);
                 if (!HighlightByHoverKeys.Any(Keyboard.IsKeyDown))
                 {
                     _sToolTip.IsOpen = true;
@@ -1641,7 +1641,7 @@ namespace PoESkillTree.Views
         private Item? GetSocketedJewel(SkillNode node) =>
             node.Type == PassiveNodeType.JewelSocket ? ItemAttributes.GetItemInSlot(ItemSlot.SkillTree, node.Id) : null;
 
-        private async Task<object> CreateTooltipForNode(SkillNode node, string tooltip, Item? socketedJewel)
+        private object CreateTooltipForNode(SkillNode node, string tooltip, Item? socketedJewel)
         {
             var sp = new StackPanel();
 
@@ -1652,9 +1652,9 @@ namespace PoESkillTree.Views
             else
             {
                 sp.Children.Add(new ItemTooltip {DataContext = socketedJewel});
-                var (strength, dexterity, intelligence) =
-                    await _attributesInJewelRadiusCalculator.GetAttributesInRadiusAsync(node.Id, socketedJewel.JewelRadius);
-                sp.Children.Add(new TextBlock {Text = $"Attributes in radius: {strength} str, {dexterity} dex, {intelligence} int"});
+                _attributesInJewelRadiusViewModel.Calculate(
+                    node.Id, socketedJewel.JewelRadius, socketedJewel.ExplicitMods.Select(m => m.Attribute).ToList());
+                sp.Children.Add(new AttributesInJewelRadiusView {DataContext = _attributesInJewelRadiusViewModel});
             }
 
             if (node.ReminderText != null)
