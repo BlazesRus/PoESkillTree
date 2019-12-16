@@ -1,16 +1,5 @@
-﻿using JetBrains.Annotations;
-using Newtonsoft.Json;
-using PoESkillTree.Common;
-using PoESkillTree.Controls.Dialogs;
-using PoESkillTree.Engine.GameModel;
-using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.Engine.Utils;
-using PoESkillTree.Engine.Utils.Extensions;
-using PoESkillTree.Localization;
-using PoESkillTree.Model;
+﻿using Newtonsoft.Json;
 using PoESkillTree.Utils;
-using PoESkillTree.Utils.UrlProcessing;
-using PoESkillTree.Utils.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -33,6 +22,7 @@ using PoESkillTree.Model;
 using PoESkillTree.Utils.UrlProcessing;
 using PoESkillTree.Utils.Wpf;
 using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
+using static PoESkillTree.SkillTreeFiles.Constants;
 
 namespace PoESkillTree.SkillTreeFiles
 {
@@ -815,13 +805,6 @@ namespace PoESkillTree.SkillTreeFiles
         public List<SkillNode> GetShortestPathTo(SkillNode targetNode, IEnumerable<SkillNode> start)
         {
             var startNodes = start as IList<SkillNode> ?? start.ToList();
-            for (int index = 0; index < startNodes.Count; ++index)
-            {
-                if (startNodes[index].Attributes.ContainsKey("Intuitive Leaped"))//Remove Leaped Nodes from possible start locations
-                {
-                    startNodes.RemoveAt(index);
-                }
-            }
             if (startNodes.Contains(targetNode))
                 return new List<SkillNode>();
             var adjacent = GetAvailableNodes(startNodes);
