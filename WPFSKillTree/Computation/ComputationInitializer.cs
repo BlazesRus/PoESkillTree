@@ -35,7 +35,9 @@ namespace PoESkillTree.Computation
 
         private ObservableSet<IReadOnlyList<Skill>> _skills;
 
+#pragma warning disable CS8618 // The instance variables will be initialized if methods are called and awaited in the correct order
         private ComputationInitializer()
+#pragma warning restore
         {
             _gameData = new GameDataWithOldTreeModel();
         }
@@ -82,12 +84,13 @@ namespace PoESkillTree.Computation
 
         public async Task InitializeAfterBuildLoadAsync(
             ObservableSet<SkillNode> skilledNodes, ObservableSet<(Item, ItemSlot)> items,
-            ObservableSet<IReadOnlyList<Skill>> skills)
+            ObservableSet<(Item, ItemSlot, ushort, JewelRadius)> jewels, ObservableSet<IReadOnlyList<Skill>> skills)
         {
             _skills = skills;
             await Task.WhenAll(_initialParseTask,
                 ConnectToSkilledPassiveNodesAsync(skilledNodes),
                 ConnectToEquipmentAsync(items),
+                ConnectToJewelsAsync(jewels),
                 ConnectToSkillsAsync(skills));
         }
 
@@ -100,6 +103,11 @@ namespace PoESkillTree.Computation
             => await ConnectAsync(
                 _observables.ParseItems(items),
                 _observables.ObserveItems(items));
+
+        private async Task ConnectToJewelsAsync(ObservableSet<(Item, ItemSlot, ushort, JewelRadius)> jewels)
+            => await ConnectAsync(
+                _observables.ParseJewels(jewels),
+                _observables.ObserveJewels(jewels));
 
         private async Task ConnectToSkillsAsync(ObservableSet<IReadOnlyList<Skill>> skills)
             => await ConnectAsync(

@@ -69,10 +69,10 @@ namespace PoESkillTree.ViewModels.Builds
         {
             foreach (var build in Build.Builds)
             {
-                if (build is PoEBuild)
-                    Children.Add(new BuildViewModel((PoEBuild)build, FilterPredicate));
-                else if (build is BuildFolder)
-                    Children.Add(new BuildFolderViewModel((BuildFolder)build, FilterPredicate, _collectionChangedCallback));
+                if (build is PoEBuild poeBuild)
+                    Children.Add(new BuildViewModel(poeBuild, FilterPredicate));
+                else if (build is BuildFolder buildFolder)
+                    Children.Add(new BuildFolderViewModel(buildFolder, FilterPredicate, _collectionChangedCallback));
                 else
                     throw new InvalidOperationException($"Unknown IBuild implementation {build.GetType()}");
             }
@@ -162,16 +162,19 @@ namespace PoESkillTree.ViewModels.Builds
             var ret = Children.FirstOrDefault(vm => vm.Build == build);
             if (ret != null) return ret;
 
-            if (build is PoEBuild)
-                return new BuildViewModel((PoEBuild)build, FilterPredicate);
-            if (build is BuildFolder)
-                return new BuildFolderViewModel((BuildFolder)build, FilterPredicate, _collectionChangedCallback);
-            return null;
+            return build switch
+            {
+                PoEBuild poeBuild => (IBuildViewModel) new BuildViewModel(poeBuild, FilterPredicate),
+                BuildFolder buildFolder => new BuildFolderViewModel(buildFolder, FilterPredicate, _collectionChangedCallback),
+                _ => throw new ArgumentException("Unknown type", nameof(build))
+            };
         }
 
         private void CollectionChanged<TSource, TTarget>(
             NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs,
             ObservableCollection<TTarget> targetCollection, Func<TSource, TTarget> toTargetFunc)
+            where TSource : notnull
+            where TTarget : notnull
         {
             Func<TSource, TTarget, IBuildViewModel> toVmFunc;
             if (typeof(TSource) == typeof(IBuildViewModel))

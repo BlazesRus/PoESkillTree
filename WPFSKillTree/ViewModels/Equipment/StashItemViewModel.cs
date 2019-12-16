@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using System.Windows;
 using PoESkillTree.Model.Items;
 using System.Windows;
 
@@ -9,28 +9,27 @@ namespace PoESkillTree.ViewModels.Equipment
     /// </summary>
     public class StashItemViewModel : DraggableItemViewModel
     {
-        private Item _item;
-        public sealed override Item Item
+        private Item? _item;
+        public sealed override Item? Item
         {
-            get { return _item; }
-            set { SetProperty(ref _item, value); }
+            get => _item;
+            set => SetProperty(ref _item, value);
         }
 
         private bool _highlight;
         /// <summary>
         /// Gets or sets whether this view model should be displayed highlighted.
         /// </summary>
-        // used in styles, Visual Studio/Resharper somehow doesn't recognize that
-        [UsedImplicitly(ImplicitUseKindFlags.Access)]
         public bool Highlight
         {
-            get { return _highlight; }
-            set { SetProperty(ref _highlight, value); }
+            // ReSharper disable once UnusedMember.Global Used in styles
+            get => _highlight;
+            set => SetProperty(ref _highlight, value);
         }
 
         public override DragDropEffects DropOnInventoryEffect => DragDropEffects.Copy;
 
         public StashItemViewModel(Item item)
-            => Item = item;
+            => _item = item;
     }
 }

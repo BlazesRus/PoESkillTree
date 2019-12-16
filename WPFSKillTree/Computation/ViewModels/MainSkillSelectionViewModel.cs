@@ -1,4 +1,8 @@
-using JetBrains.Annotations;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using PoESkillTree.Engine.Computation.Common;
 using PoESkillTree.Engine.Computation.Common.Builders;
 using PoESkillTree.Engine.Computation.Common.Builders.Stats;
@@ -34,7 +38,9 @@ namespace PoESkillTree.Computation.ViewModels
             return vm;
         }
 
+#pragma warning disable CS8618 // SelectedSkill is initalized in Initialize and can't be set to null.
         private MainSkillSelectionViewModel(
+#pragma warning restore
             SkillDefinitions skillDefinitions, IBuilderFactories builderFactories,
             CalculationNodeViewModelFactory nodeFactory)
         {
@@ -65,6 +71,7 @@ namespace PoESkillTree.Computation.ViewModels
         public ObservableCollection<MainSkillViewModel> AvailableSkills { get; } =
             new ObservableCollection<MainSkillViewModel>();
 
+        [AllowNull]
         public MainSkillViewModel SelectedSkill
         {
             get => _selectedSkill;
@@ -78,8 +85,7 @@ namespace PoESkillTree.Computation.ViewModels
             }
         }
 
-        [CanBeNull]
-        private MainSkillViewModel GetSelectedAndAvailableSkill()
+        private MainSkillViewModel? GetSelectedAndAvailableSkill()
             => AvailableSkills.FirstOrDefault(
                 s => s.Skill.ItemSlot == (ItemSlot?)_selectedSkillItemSlot.NumericValue &&
                      s.Skill.SocketIndex == (int?)_selectedSkillSocketIndex.NumericValue);

@@ -30,7 +30,9 @@ namespace PoESkillTree.Computation.ViewModels
         public SharedConfigurationViewModel SharedConfiguration { get; private set; }
         public IndependentResultStatsViewModel IndependentResultStats { get; private set; }
 
+#pragma warning disable CS8618 // The constructor is private and CreateAsync initializes everything
         private ComputationViewModel(ObservableCalculator observableCalculator, ComputationSchedulerProvider schedulers)
+#pragma warning restore
         {
             _observableCalculator = observableCalculator;
             var modifierNodeFactory = new ModifierNodeViewModelFactory(observableCalculator);
@@ -110,7 +112,7 @@ namespace PoESkillTree.Computation.ViewModels
                 a => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.AilmentEffectiveInstances(a)));
 
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillHitDamageSource);
-            AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillNumberOfHitsPerCast);
+            AddAvailableStats(OffensiveStats, f.StatBuilders.SkillNumberOfHitsPerCast);
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillUsesHand(AttackDamageHand.MainHand));
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillUsesHand(AttackDamageHand.OffHand));
 

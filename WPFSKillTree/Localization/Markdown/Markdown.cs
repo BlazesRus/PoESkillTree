@@ -7,6 +7,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Shapes;
+using PoESkillTree.Engine.Utils.Extensions;
 
 namespace Markdown.Xaml
 {
@@ -211,7 +212,7 @@ namespace Markdown.Xaml
             }
         }
 
-        private static string _nestedBracketsPattern;
+        private static string? _nestedBracketsPattern;
 
         /// <summary>
         /// Reusable pattern to match balanced [brackets]. See Friedl's 
@@ -235,7 +236,7 @@ namespace Markdown.Xaml
             return _nestedBracketsPattern;
         }
 
-        private static string _nestedParensPattern;
+        private static string? _nestedParensPattern;
 
         /// <summary>
         /// Reusable pattern to match balanced (parens). See Friedl's 
@@ -576,7 +577,7 @@ namespace Markdown.Xaml
 
                 var regex = new Regex(pattern, RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline);
                 var matches = regex.Matches(list);
-                foreach (Match m in matches)
+                foreach (var m in matches.WhereNotNull())
                 {
                     yield return ListItemEvaluator(m);
                 }
@@ -835,7 +836,7 @@ namespace Markdown.Xaml
 
             var matches = expression.Matches(text);
             var index = 0;
-            foreach (Match m in matches)
+            foreach (var m in matches.WhereNotNull())
             {
                 if (m.Index > index)
                 {

@@ -1,6 +1,13 @@
-﻿using NUnit.Framework;
+﻿using System.Globalization;
+using System.Reactive.Concurrency;
+using System.Reactive.Subjects;
+using System.Threading;
+using Moq;
+using NUnit.Framework;
+using PoESkillTree.Computation.Model;
 using PoESkillTree.Engine.Computation.Builders.Stats;
 using PoESkillTree.Engine.Computation.Common;
+using PoESkillTree.Engine.Computation.Core;
 using PoESkillTree.Engine.GameModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
@@ -46,7 +53,8 @@ namespace PoESkillTree.Computation.ViewModels
         [TestCase(1.235, ExpectedResult = "1.24")]
         public string StringValueOfDoubleReturnsCorrectResult(double? value)
         {
-            var sut = CreateSut<double>((NodeValue?)value);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            var sut = CreateSut<double>((NodeValue?) value);
 
             return sut.StringValue;
         }
@@ -72,11 +80,14 @@ namespace PoESkillTree.Computation.ViewModels
         private static ResultNodeViewModel CreateSut<T>(NodeValue? value)
         {
             var stat = new Stat("", dataType: typeof(T));
-            return new ResultNodeViewModel(null, stat) { Value = value };
+            return new ResultNodeViewModel(CreateModifierNodeViewModelFactory(), stat) { Value = value };
         }
 
         private static ResultNodeViewModel CreateSut(IStat stat, NodeType nodeType)
-            => new ResultNodeViewModel(null, stat, nodeType);
+            => new ResultNodeViewModel(CreateModifierNodeViewModelFactory(), stat, nodeType);
+
+        private static ModifierNodeViewModelFactory CreateModifierNodeViewModelFactory() =>
+            new ModifierNodeViewModelFactory(new ObservableCalculator(Mock.Of<ICalculator>(), Mock.Of<IScheduler>()));
 
         public enum TestEnum
         {

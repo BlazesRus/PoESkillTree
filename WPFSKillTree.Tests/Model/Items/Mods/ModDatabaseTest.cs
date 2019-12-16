@@ -1,4 +1,6 @@
-﻿using MoreLinq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
@@ -18,8 +20,9 @@ namespace PoESkillTree.Model.Items.Mods
             "no_attack_mods", "no_caster_mods", "has_physical_conversion_mod", "has_damage_taken_as_mod",
             "specific_weapon", "two_handed_mod", "shield_mod", "dual_wielding_mod", "one_handed_mod", "melee_mod",
             "grants_crit_chance_support", "local_item_quality", "spell_dodge_mod", "weapon_can_roll_minion_modifiers",
+            "grants_2h_support",
             // map crafting is not supported
-            "map",
+            "map", "unique_map", "no_monster_packs",
             // no idea where these come from
             "no_elemental_damage_mods", "no_physical_damage_mods",
         };
@@ -29,9 +32,11 @@ namespace PoESkillTree.Model.Items.Mods
             "Map", "MapFragment",
         };
 
+#pragma warning disable 8618 // Initialized in InitializeAsync
         private static Dictionary<string, JsonMod> _mods;
         private static JsonCraftingBenchOption[] _benchOptions;
         private static ModDatabase _modDatabase;
+#pragma warning restore
 
         [OneTimeSetUp]
         public static async Task InitializeAsync()
@@ -191,7 +196,8 @@ namespace PoESkillTree.Model.Items.Mods
                 from spawnWeight in mod.SpawnWeights
                 let tag = spawnWeight.Tag
                 where !tag.EndsWith("_shaper") && !tag.EndsWith("_elder")
-                      && !TagsExtensions.TryParse(tag, out var _)
+                      && !tag.EndsWith("_crusader") && !tag.EndsWith("_eyrie") && !tag.EndsWith("_basilisk") && !tag.EndsWith("_adjudicator")
+                      && !TagsExtensions.TryParse(tag, out _)
                       && !UnknownTags.Contains(tag)
                 select tag
             ).ToHashSet();

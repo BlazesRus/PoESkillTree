@@ -1,15 +1,33 @@
-﻿using EnumsNET;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using EnumsNET;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
-using MoreLinq;
 using NLog;
+using PoESkillTree.Utils;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Computation;
 using PoESkillTree.Computation.ViewModels;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.PassiveTree;
-using PoESkillTree.ItemFilter.Views;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Model.Builds;
@@ -46,7 +64,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Attribute = PoESkillTree.ViewModels.Attribute;
-using Version = PoESkillTree.Properties.Version;
 
 namespace PoESkillTree.Views
 {
@@ -62,17 +79,7 @@ namespace PoESkillTree.Views
         /// </summary>
         private static readonly Key[] HighlightByHoverKeys = { Key.LeftShift, Key.RightShift };
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private IExtendedDialogCoordinator _dialogCoordinator
-        {
-            get { return GlobalSettings.SharedDialogCoordinator; }
-            set
-            {
-                if (value == GlobalSettings.SharedDialogCoordinator)
-                    return;
-                GlobalSettings.SharedDialogCoordinator = value;
-            }
-        }
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public IPersistentData PersistentData { get; } = App.PersistentData;
 
@@ -81,19 +88,19 @@ namespace PoESkillTree.Views
         private readonly ToolTip _sToolTip = new ToolTip();
         private readonly BuildUrlNormalizer _buildUrlNormalizer = new BuildUrlNormalizer();
         private ListCollectionView _attributeCollection;
-        private RenderTargetBitmap _clipboardBmp;
 
         private GroupStringConverter _attributeGroups;
         private ContextMenu _attributeContextMenu;
-        private MenuItem cmCreateGroup, cmAddToGroup, cmRemoveFromGroup, cmDeleteGroup;
+        private MenuItem cmAddToGroup, cmDeleteGroup;
 
         private GameData _gameData;
 
         private ItemAttributes _itemAttributes;
-        public ItemAttributes ItemAttributes
+
+        private ItemAttributes ItemAttributes
         {
             get => _itemAttributes;
-            private set => SetProperty(ref _itemAttributes, value);
+            set => SetProperty(ref _itemAttributes, value);
         }
 
         /// <summary>
@@ -113,13 +120,15 @@ namespace PoESkillTree.Views
         private readonly ObservableItemCollectionConverter
             _equipmentConverter = new ObservableItemCollectionConverter();
 
-        private ComputationViewModel _computationViewModel;
-        public ComputationViewModel ComputationViewModel
+        private ComputationViewModel? _computationViewModel;
+
+        [DisallowNull]
+        public ComputationViewModel? ComputationViewModel
         {
             get => _computationViewModel;
             private set
             {
-                value.SharedConfiguration.SetLevel(Tree.Level);
+                value!.SharedConfiguration.SetLevel(Tree.Level);
                 value.SharedConfiguration.SetCharacterClass(Tree.CharClass);
                 value.SharedConfiguration.SetBandit(PersistentData.CurrentBuild.Bandits.Choice);
                 SetProperty(ref _computationViewModel, value);
@@ -134,11 +143,11 @@ namespace PoESkillTree.Views
             {
                 if (_tree != null)
                     _tree.PropertyChanged -= Tree_PropertyChanged;
-                SetProperty(ref _tree, value);
+                SetProperty(ref _tree!, value);
             }
         }
         private async Task<SkillTree> CreateSkillTreeAsync(ProgressDialogController controller,
-            AssetLoader assetLoader = null)
+            AssetLoader? assetLoader = null)
         {
             var tree = await SkillTree.CreateAsync(PersistentData, controller, assetLoader);
             tree.PropertyChanged += Tree_PropertyChanged;
@@ -152,6 +161,7 @@ namespace PoESkillTree.Views
         }
 
         private BuildsControlViewModel _buildsControlViewModel;
+
         public BuildsControlViewModel BuildsControlViewModel
         {
             get => _buildsControlViewModel;
@@ -162,25 +172,25 @@ namespace PoESkillTree.Views
 
         private Vector2D _addtransform;
         private bool _justLoaded;
-        private string _lasttooltip;
+        private string? _lasttooltip;
 
         private Vector2D _multransform;
 
-        private List<SkillNode> _prePath;
-        private HashSet<SkillNode> _toRemove;
+        private List<SkillNode>? _prePath;
+        private HashSet<SkillNode>? _toRemove;
 
         private readonly Stack<string> _undoList = new Stack<string>();
         private readonly Stack<string> _redoList = new Stack<string>();
 
         private MouseButton _lastMouseButton;
-        private bool _userInteraction = false;
+        private bool _userInteraction;
         /// <summary>
         /// The node of the SkillTree that currently has the mouse over it.
         /// Null if no node is under the mouse.
         /// </summary>
-        private SkillNode _hoveredNode;
+        private SkillNode? _hoveredNode;
 
-        private SkillNode _lastHoveredNode;
+        private SkillNode? _lastHoveredNode;
 
         private bool _noAsyncTaskRunning = true;
         /// <summary>
@@ -193,16 +203,16 @@ namespace PoESkillTree.Views
             private set => SetProperty(ref _noAsyncTaskRunning, value);
         }
 
-        private TreeGeneratorInteraction _treeGeneratorInteraction;
+        private TreeGeneratorInteraction? _treeGeneratorInteraction;
 
-        public TreeGeneratorInteraction TreeGeneratorInteraction
+        [DisallowNull]
+        public TreeGeneratorInteraction? TreeGeneratorInteraction
         {
             get => _treeGeneratorInteraction;
             private set => SetProperty(ref _treeGeneratorInteraction, value);
         }
 
-        public string MainWindowTitle { get; } =
-            FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductName;
+        public string MainWindowTitle { get; } = AppData.ProductName;
 
         /// <summary>
         /// Set to true when CurrentBuild.TreeUrl was set after direct SkillTree changes so the SkillTree
@@ -210,24 +220,27 @@ namespace PoESkillTree.Views
         /// </summary>
         private bool _skipLoadOnCurrentBuildTreeChange;
 
-        private string _inputTreeUrl;
+        private string? _inputTreeUrl;
         /// <summary>
         /// The tree url that is the current input of the tree text box. Can be different from
         /// CurrentBuild.TreeUrl if the user changes it (until the user presses "Load Tree" or Enter).
         /// </summary>
-        public string InputTreeUrl
+        [DisallowNull]
+        public string? InputTreeUrl
         {
             get => _inputTreeUrl;
             set => SetProperty(ref _inputTreeUrl, value);
         }
 
+#pragma warning disable CS8618 // Initialized in Window_Loaded
         public MainWindow()
+#pragma warning restore
         {
             InitializeComponent();
         }
 
         private void SetProperty<T>(
-            ref T backingStore, T value, Action onChanged = null, [CallerMemberName] string propertyName = null)
+            ref T backingStore, T value, Action? onChanged = null, [CallerMemberName] string propertyName = "Unspecified")
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
 
@@ -345,7 +358,7 @@ namespace PoESkillTree.Views
         private async void CreateGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
-            foreach (var o in lbAttr.SelectedItems)
+            foreach (var o in lbAttr.SelectedItems.Cast<Attribute>())
             {
                 attributelist.Add(o.ToString());
             }
@@ -380,9 +393,7 @@ namespace PoESkillTree.Views
         private void RemoveFromGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
-            string SelectedAttrName;
-            int index;
-            foreach (var o in lbAttr.SelectedItems)
+            foreach (var o in lbAttr.SelectedItems.Cast<Attribute>())
             {
                 SelectedAttrName = o.ToString();
                 index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
@@ -406,13 +417,13 @@ namespace PoESkillTree.Views
         private void AddToGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
-            foreach (var o in lbAttr.SelectedItems)
+            foreach (var o in lbAttr.SelectedItems.Cast<Attribute>())
             {
                 attributelist.Add(o.ToString());
             }
             if (attributelist.Count > 0)
             {
-                _attributeGroups.AddGroup(((MenuItem)sender).Header.ToString(), attributelist.ToArray());
+                _attributeGroups.AddGroup(((MenuItem)sender).Header.ToString()!, attributelist.ToArray());
                 RefreshAttributeLists();
             }
         }
@@ -423,7 +434,7 @@ namespace PoESkillTree.Views
             //Remove submenus that work with the group
             for (var i = 0; i < cmAddToGroup.Items.Count; i++)
             {
-                if (((MenuItem)cmAddToGroup.Items[i]).Header.ToString().ToLower().Equals(((MenuItem)sender).Header.ToString().ToLower()))
+                if (((MenuItem)cmAddToGroup.Items[i]).Header.ToString()!.ToLower().Equals(((MenuItem)sender).Header.ToString()!.ToLower()))
                 {
                     cmAddToGroup.Items.RemoveAt(i);
                     if (cmAddToGroup.Items.Count == 0)
@@ -433,7 +444,7 @@ namespace PoESkillTree.Views
             }
             for (var i = 0; i < cmDeleteGroup.Items.Count; i++)
             {
-                if (((MenuItem)cmDeleteGroup.Items[i]).Header.ToString().ToLower().Equals(((MenuItem)sender).Header.ToString().ToLower()))
+                if (((MenuItem)cmDeleteGroup.Items[i]).Header.ToString()!.ToLower().Equals(((MenuItem)sender).Header.ToString()!.ToLower()))
                 {
                     cmDeleteGroup.Items.RemoveAt(i);
                     if (cmDeleteGroup.Items.Count == 0)
@@ -442,7 +453,7 @@ namespace PoESkillTree.Views
                 }
             }
 
-            _attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString());
+            _attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString()!);
             RefreshAttributeLists();
         }
 
@@ -490,7 +501,10 @@ namespace PoESkillTree.Views
 
             await initialComputationTask;
             await computationInitializer.InitializeAfterBuildLoadAsync(
-                Tree.SkilledNodes, _equipmentConverter.Items, _equipmentConverter.Skills);
+                Tree.SkilledNodes,
+                _equipmentConverter.Equipment,
+                _equipmentConverter.Jewels,
+                _equipmentConverter.Skills);
             ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
             computationInitializer.SetupPeriodicActions();
             _abyssalSocketObserver = computationInitializer.CreateAbyssalSocketObserver(InventoryViewModel.ItemJewels);
@@ -514,7 +528,7 @@ namespace PoESkillTree.Views
                 Header = L10n.Message("Remove highlights by attribute")
             };
             cmRemoveHighlight.Click += UnhighlightNodesByAttribute;
-            cmCreateGroup = new MenuItem { Header = "Create new group" };
+            var cmCreateGroup = new MenuItem { Header = "Create new group" };
             cmCreateGroup.Click += CreateGroup;
             cmAddToGroup = new MenuItem
             {
@@ -526,7 +540,7 @@ namespace PoESkillTree.Views
                 Header = "Delete group...",
                 IsEnabled = false
             };
-            cmRemoveFromGroup = new MenuItem { Header = "Remove from group" };
+            var cmRemoveFromGroup = new MenuItem { Header = "Remove from group" };
             cmRemoveFromGroup.Click += RemoveFromGroup;
 
             _attributeGroups = new GroupStringConverter();
@@ -539,7 +553,7 @@ namespace PoESkillTree.Views
             _attributeContextMenu.Items.Add(cmRemoveFromGroup);
 
             _attributeCollection = new ListCollectionView(_attiblist);
-            _attributeCollection.GroupDescriptions?.Add(new PropertyGroupDescription("Text", _attributeGroups));
+            _attributeCollection.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Attribute.Text), _attributeGroups));
             _attributeCollection.CustomSort = _attributeGroups;
             lbAttr.ItemsSource = _attributeCollection;
             lbAttr.SelectionMode = SelectionMode.Extended;
@@ -845,7 +859,7 @@ namespace PoESkillTree.Views
                     xmax = ymax * aspect;
                 }
 
-                _clipboardBmp = new RenderTargetBitmap((int)xmax, (int)ymax, 96, 96, PixelFormats.Pbgra32);
+                var clipboardBmp = new RenderTargetBitmap((int)xmax, (int)ymax, 96, 96, PixelFormats.Pbgra32);
                 var db = new VisualBrush(Tree.SkillTreeVisual)
                 {
                     ViewboxUnits = BrushMappingMode.Absolute,
@@ -857,16 +871,16 @@ namespace PoESkillTree.Views
                 {
                     dc.DrawRectangle(db, null, new Rect(0, 0, xmax, ymax));
                 }
-                _clipboardBmp.Render(dw);
-                _clipboardBmp.Freeze();
+                clipboardBmp.Render(dw);
+                clipboardBmp.Freeze();
 
                 //Save image in clipboard
-                Clipboard.SetImage(_clipboardBmp);
+                Clipboard.SetImage(clipboardBmp);
 
                 //Convert renderTargetBitmap to bitmap
                 var stream = new MemoryStream();
                 BitmapEncoder encoder = new BmpBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(_clipboardBmp));
+                encoder.Frames.Add(BitmapFrame.Create(clipboardBmp));
                 encoder.Save(stream);
 
                 var image = System.Drawing.Image.FromStream(stream);
@@ -923,14 +937,8 @@ namespace PoESkillTree.Views
 
         private async void Menu_ImportStash(object sender, RoutedEventArgs e)
         {
-            var vm = new DownloadStashViewModel(DialogCoordinator.Instance, _gameData, PersistentData, StashViewModel);
+            var vm = new DownloadStashViewModel(DialogCoordinator.Instance, PersistentData, StashViewModel);
             await this.ShowDialogAsync(vm, new DownloadStashWindow(), () => vm.ViewLoaded());
-        }
-
-        private void Menu_ItemFilterEditor(object sender, RoutedEventArgs e)
-        {
-            var window = new ItemFilterOpenWindow() { Owner = this };
-            window.ShowDialog();
         }
 
         private async void Menu_CopyStats(object sender, RoutedEventArgs e)
@@ -1053,7 +1061,7 @@ namespace PoESkillTree.Views
                 {
                     var message = release.IsUpdate
                         ? string.Format(L10n.Message("An update for {0} ({1}) is available!"),
-                            Version.ProductName, release.Version)
+                            AppData.ProductName, release.Version)
                           + "\n\n" +
                           L10n.Message("The application will be closed when download completes to proceed with the update.")
                         : string.Format(L10n.Message("A new version {0} is available!"), release.Version)
@@ -1061,7 +1069,7 @@ namespace PoESkillTree.Views
                           L10n.Message(
                               "The new version of application will be installed side-by-side with earlier versions.");
 
-                    if (release.IsPrerelease)
+                    if (release.IsPreRelease)
                         message += "\n\n" +
                                    L10n.Message("Warning: This is a pre-release, meaning there could be some bugs!");
 
@@ -1071,7 +1079,7 @@ namespace PoESkillTree.Views
                                    : L10n.Message("Do you want to download and install the new version?"));
 
                     var download = await this.ShowQuestionAsync(message, title: L10n.Message("Continue installation?"),
-                        image: release.IsPrerelease ? MessageBoxImage.Warning : MessageBoxImage.Question);
+                        image: release.IsPreRelease ? MessageBoxImage.Warning : MessageBoxImage.Question);
                     if (download == MessageBoxResult.Yes)
                         await InstallUpdateAsync();
                     else
@@ -1127,7 +1135,7 @@ namespace PoESkillTree.Views
                 {
                     Updater.Install();
                     // Release being installed is an update, we have to exit application.
-                    if (Updater.GetLatestRelease().IsUpdate) App.Current.Shutdown();
+                    if (Updater.LatestReleaseIsUpdate) Application.Current.Shutdown();
                 }
                 catch (UpdaterException ex)
                 {
@@ -1342,7 +1350,7 @@ namespace PoESkillTree.Views
             if (listBox == null || !listBox.IsVisible) return;
 
             var newHighlightedAttribute =
-                "^" + Regex.Replace(listBox.SelectedItem.ToString()
+                "^" + Regex.Replace(listBox.SelectedItem.ToString()!
                         .Replace(@"+", @"\+")
                         .Replace(@"-", @"\-")
                         .Replace(@"%", @"\%"), @"[0-9]*\.?[0-9]+", @"[0-9]*\.?[0-9]+") + "$";
@@ -1640,13 +1648,17 @@ namespace PoESkillTree.Views
                         {
                             attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_prePath);
                             tooltip = "Total gain:";
-                            changedNodes = _prePath.Count();
+                            changedNodes = _prePath.Count;
                         }
-                        else
+                        else if (_toRemove != null)
                         {
                             attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_toRemove);
                             tooltip = "Total loss:";
-                            changedNodes = _toRemove.Count();
+                            changedNodes = _toRemove.Count;
+                        }
+                        else
+                        {
+                            changedNodes = 0;
                         }
 
                         if (changedNodes > 1)
@@ -1763,7 +1775,7 @@ namespace PoESkillTree.Views
             UpdateUI();
         }
 
-        private void ItemAttributesOnItemDataChanged(object sender, EventArgs args)
+        private void ItemAttributesOnItemDataChanged(object? sender, EventArgs args)
         {
             _pauseLoadItemData = true;
             PersistentData.CurrentBuild.ItemData = ItemAttributes.ToJsonString();
@@ -1854,7 +1866,7 @@ namespace PoESkillTree.Views
             {
                 var normalizedUrl = await _buildUrlNormalizer.NormalizeAsync(treeUrl, AwaitAsyncTask);
                 BuildUrlData data = SkillTree.DecodeUrl(normalizedUrl, Tree);
-                var newTreeUrl = new SkillTreeSerializer(data, SkillTree.Skillnodes.Keys.ToHashSet()).ToUrl();
+                var newTreeUrl = new BuildUrlDataToUrlSerializer(data, SkillTree.Skillnodes.Keys.ToHashSet()).ToUrl();
 
                 BanditSettings bandits = PersistentData.CurrentBuild.Bandits;
                 if (forceBanditsUpdate)
@@ -2027,36 +2039,32 @@ namespace PoESkillTree.Views
 
         #region Theme
 
-        private void mnuSetTheme_Click(object sender, RoutedEventArgs e)
+        private void mnuSetTheme_Click(object? sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
 
-            SetTheme(menuItem.Tag as string);
+            SetTheme((string) menuItem.Tag);
         }
 
         private void SetTheme(string sTheme)
         {
-            var accent = ThemeManager.Accents.First(x => Equals(x.Name, PersistentData.Options.Accent));
-            var theme = ThemeManager.GetAppTheme("Base" + sTheme);
-            ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
+            ThemeManager.ChangeTheme(Application.Current, sTheme, PersistentData.Options.Accent);
             ((MenuItem)NameScope.GetNameScope(this).FindName("mnuViewTheme" + sTheme)).IsChecked = true;
             PersistentData.Options.Theme = sTheme;
         }
 
-        private void mnuSetAccent_Click(object sender, RoutedEventArgs e)
+        private void mnuSetAccent_Click(object? sender, RoutedEventArgs e)
         {
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
 
-            SetAccent(menuItem.Tag as string);
+            SetAccent((string) menuItem.Tag);
         }
 
         private void SetAccent(string sAccent)
         {
-            var accent = ThemeManager.Accents.First(x => Equals(x.Name, sAccent));
-            var theme = ThemeManager.GetAppTheme("Base" + PersistentData.Options.Theme);
-            ThemeManager.ChangeAppStyle(Application.Current, accent, theme);
+            ThemeManager.ChangeTheme(Application.Current, PersistentData.Options.Theme, sAccent);
             ((MenuItem)NameScope.GetNameScope(this).FindName("mnuViewAccent" + sAccent)).IsChecked = true;
             PersistentData.Options.Accent = sAccent;
         }
@@ -2103,7 +2111,6 @@ namespace PoESkillTree.Views
             }
 
             var item = viewModel.Item;
-            item.SetJsonBase();
             if (StashViewModel.Items.Count > 0)
             {
                 item.Y = StashViewModel.LastOccupiedRow + 1;
@@ -2174,9 +2181,9 @@ namespace PoESkillTree.Views
             provider.Initialize(null, null);
             appSettings.Providers.Add(provider);
             // Change the provider for each SettingsProperty.
-            foreach (var property in appSettings.Properties)
+            foreach (var property in appSettings.Properties.Cast<SettingsProperty>())
             {
-                ((SettingsProperty)property).Provider = provider;
+                property.Provider = provider;
             }
             appSettings.Reload();
             return settings;

@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace PoESkillTree.ViewModels.Equipment
 {
-    public class JewelSocketObserver : IDisposable
+    public sealed class JewelSocketObserver : IDisposable
     {
         public static bool JewelDescNotUpdated = true;
         private readonly ObservableSet<SkillNode> _skilledNodes;
-        private IReadOnlyDictionary<ushort, InventoryItemViewModel> _treeJewelViewModels;
+        private IReadOnlyDictionary<ushort, InventoryItemViewModel>? _treeJewelViewModels;
 
         public JewelSocketObserver(ObservableSet<SkillNode> skilledNodes)
         {
@@ -34,7 +34,7 @@ namespace PoESkillTree.ViewModels.Equipment
         {
             _treeJewelViewModels = treeJewels
                 .Where(j => j.Socket.HasValue)
-                .ToDictionary(j => j.Socket.Value);
+                .ToDictionary(j => j.Socket!.Value);
             foreach (var treeJewelViewModel in _treeJewelViewModels.Values)
             {
                 treeJewelViewModel.IsEnabled = _skilledNodes.Any(n => n.Id == treeJewelViewModel.Socket);

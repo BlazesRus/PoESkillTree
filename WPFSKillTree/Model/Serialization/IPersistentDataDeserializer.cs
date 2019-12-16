@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.Threading.Tasks;
 using PoESkillTree.Controls.Dialogs;
 using System;
 using System.Threading.Tasks;
@@ -14,15 +15,13 @@ namespace PoESkillTree.Model.Serialization
         /// The minimum version this instance can deserialize. <c>null</c> indicates any version, include
         /// no version being specified at all.
         /// </summary>
-        [CanBeNull]
-        Version MinimumDeserializableVersion { get; }
+        Version? MinimumDeserializableVersion { get; }
 
         /// <summary>
         /// The maximum version this instance can deserialize. <c>null</c> indicates that this instance can only
         /// deserialize if there was no version specified.
         /// </summary>
-        [CanBeNull]
-        Version MaximumDeserializableVersion { get; }
+        Version? MaximumDeserializableVersion { get; }
 
         /// <summary>
         /// Sets the <see cref="AbstractPersistentData"/> this deserializer works on. Should not be set after

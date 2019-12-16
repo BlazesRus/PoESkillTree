@@ -1,3 +1,5 @@
+using System.Net.Http;
+using System.Threading.Tasks;
 using PoESkillTree.SkillTreeFiles;
 using System.Threading.Tasks;
 
@@ -6,16 +8,13 @@ namespace UpdateDB.DataLoading
     /// <summary>
     /// Loads the skill tree assets using <see cref="AssetLoader"/>.
     /// </summary>
-    public class SkillTreeLoader : DataLoader
+    public class SkillTreeLoader : IDataLoader
     {
-        public override bool SavePathIsFolder
-        {
-            get { return false; }
-        }
+        public bool SavePathIsFolder => false;
 
-        protected override async Task LoadAsync()
+        public async Task LoadAndSaveAsync(HttpClient httpClient, string savePath)
         {
-            var assetLoader = new AssetLoader(HttpClient, SavePath, true);
+            var assetLoader = new AssetLoader(httpClient, savePath, true);
             try
             {
                 await assetLoader.DownloadAllAsync();

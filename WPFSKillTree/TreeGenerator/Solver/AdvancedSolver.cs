@@ -39,9 +39,9 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private class ConvertedPseudoAttributeConstraint
         {
-            public List<Tuple<string, float>> Attributes { get; private set; }
+            public List<Tuple<string, float>> Attributes { get; }
 
-            public Tuple<float, double> TargetWeightTuple { get; private set; }
+            public Tuple<float, double> TargetWeightTuple { get; }
 
             public ConvertedPseudoAttributeConstraint(List<Tuple<string, float>> attributes, Tuple<float, double> tuple)
             {
@@ -63,10 +63,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         // It doesn't gain anything from larger populations and more generations.
         // Running more generations has the upside that it doesn't take much longer because
         // the GA reaches a point where not many new DNAs are generated and it can use the cache nearly always.
-        protected override int Generations
-        {
-            get { return 200; }
-        }
+        protected override int Generations => 200;
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -105,7 +102,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private Dictionary<string, List<int>> _attrNameLookup;
         /// <summary>
-        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the converions multiplier
+        /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversions multiplier
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
@@ -130,23 +127,20 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private float[] _fixedAttributes;
 
-        protected override GeneticAlgorithmParameters GaParameters
-        {
-            get
-            {
-                return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
-                    SearchSpace.Count,
-                    maxMutateClusterSize: MaxMutateClusterSize);
-            }
-        }
+        protected override GeneticAlgorithmParameters GaParameters =>
+            new GeneticAlgorithmParameters(
+                (int) (PopMultiplier * SearchSpace.Count),
+                SearchSpace.Count,
+                maxMutateClusterSize: MaxMutateClusterSize);
 
         /// <summary>
         /// Creates a new, uninitialized instance.
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
+#pragma warning disable CS8618 // Initialized in Initialize
         public AdvancedSolver(SkillTree tree, AdvancedSolverSettings settings)
+#pragma warning restore
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
@@ -353,7 +347,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                             dict[tuple.Item1] += tuple.Item2;
                         }
                     }
-                    _nodeAttributes[containedNode] = null;
+                    _nodeAttributes[containedNode] = null!;
                 }
                 _nodeAttributes[node] = dict.Select(p => Tuple.Create(p.Key, p.Value)).ToList();
             }

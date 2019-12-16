@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -47,7 +48,7 @@ namespace PoESkillTree.Controls
 
         private BindingEvaluator _valuePathEvaluator;
         private ICollectionView _itemsSourceView;
-        private Predicate<object> _oldFilter;
+        private Predicate<object>? _oldFilter;
         private TextBox _searchBox;
 
         static SearchableComboBox()
@@ -56,7 +57,9 @@ namespace PoESkillTree.Controls
                 new FrameworkPropertyMetadata(typeof(SearchableComboBox)));
         }
 
+#pragma warning disable CS8618 // _itemsSourceView and _searchBox are initalized before first being used
         public SearchableComboBox()
+#pragma warning restore
         {
             _valuePathEvaluator = new BindingEvaluator(SearchValuePath);
         }
@@ -113,12 +116,12 @@ namespace PoESkillTree.Controls
             return ToValue(item).Contains(SearchFilter, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        private string ToValue(object item)
+        [return: NotNullIfNotNull("item")]
+        private string? ToValue(object? item)
         {
             if (item == null)
                 return null;
-            var comboBoxItem = item as ComboBoxItem;
-            if (comboBoxItem != null)
+            if (item is ComboBoxItem comboBoxItem)
             {
                 return comboBoxItem.Content.ToString();
             }
@@ -163,7 +166,7 @@ namespace PoESkillTree.Controls
         {
             base.OnApplyTemplate();
 
-            _searchBox = GetTemplateChild("PART_SearchBox") as TextBox;
+            _searchBox = (TextBox) GetTemplateChild("PART_SearchBox");
             if (_searchBox == null)
                 throw new NullReferenceException();
         }
@@ -234,8 +237,7 @@ namespace PoESkillTree.Controls
 
             if (HasItems && IsDropDownOpen && e.Key == Key.Enter)
             {
-                var focused = Keyboard.FocusedElement as UIElement;
-                if (focused != null)
+                if (Keyboard.FocusedElement is UIElement focused)
                 {
                     var item = ItemContainerGenerator.ItemFromContainer(focused);
                     if (item != null && item != DependencyProperty.UnsetValue)

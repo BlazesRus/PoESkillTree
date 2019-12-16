@@ -1,5 +1,8 @@
-﻿using GongSolutions.Wpf.DragDrop;
-using JetBrains.Annotations;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using GongSolutions.Wpf.DragDrop;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Model.Items;
@@ -14,7 +17,7 @@ namespace PoESkillTree.ViewModels.Equipment
     /// <summary>
     /// View model for draggable items in the inventory. This is also a drop target.
     /// </summary>
-    public class InventoryItemViewModel : DraggableItemViewModel, IDropTarget, IDisposable
+    public sealed class InventoryItemViewModel : DraggableItemViewModel, IDropTarget, IDisposable
     {
         private readonly IExtendedDialogCoordinator _dialogCoordinator;
         private readonly ItemAttributes _itemAttributes;
@@ -23,8 +26,7 @@ namespace PoESkillTree.ViewModels.Equipment
         public ushort? Socket { get; }
 
         // the item is delegated to this view model's slot in ItemAttributes
-        [CanBeNull]
-        public override Item Item
+        public override Item? Item
         {
             get => _itemAttributes.GetItemInSlot(_slot, Socket);
             set => _itemAttributes.SetItemInSlot(value, _slot, Socket);
@@ -49,15 +51,10 @@ namespace PoESkillTree.ViewModels.Equipment
             }
         }
 
-        private string _emptyBackgroundImagePath;
         /// <summary>
         /// Gets or sets the path to the image that should be shown if Item is null.
         /// </summary>
-        public string EmptyBackgroundImagePath
-        {
-            get => _emptyBackgroundImagePath;
-            set => SetProperty(ref _emptyBackgroundImagePath, value);
-        }
+        public string EmptyBackgroundImagePath { get; }
 
         public override DragDropEffects DropOnInventoryEffect => DragDropEffects.Link;
         public override DragDropEffects DropOnStashEffect => DragDropEffects.Copy;
@@ -65,12 +62,14 @@ namespace PoESkillTree.ViewModels.Equipment
         public ICommand EditSocketedGemsCommand { get; }
 
         public InventoryItemViewModel(
-            IExtendedDialogCoordinator dialogCoordinator, ItemAttributes itemAttributes, ItemSlot slot, ushort? socket)
+            IExtendedDialogCoordinator dialogCoordinator, ItemAttributes itemAttributes, ItemSlot slot, ushort? socket,
+            string emptyBackgroundImagePath)
         {
             _dialogCoordinator = dialogCoordinator;
             _itemAttributes = itemAttributes;
             _slot = slot;
             Socket = socket;
+            EmptyBackgroundImagePath = emptyBackgroundImagePath;
             _isEnabled = ItemIsEnabled;
 
             EditSocketedGemsCommand = new AsyncRelayCommand(EditSocketedGemsAsync, CanEditSocketedGems);
@@ -118,7 +117,7 @@ namespace PoESkillTree.ViewModels.Equipment
 
             var oldItem = Item;
             var newItem = dropEffects == DragDropEffects.Copy
-                ? new Item(draggedItem.Item) : draggedItem.Item;
+                ? new Item(draggedItem.Item!) : draggedItem.Item;
 
             if (dropEffects == DragDropEffects.Move || dropEffects == DragDropEffects.Link)
             {
