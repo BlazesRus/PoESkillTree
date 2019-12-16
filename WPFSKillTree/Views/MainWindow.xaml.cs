@@ -24,9 +24,12 @@ using NLog;
 using PoESkillTree.Utils;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Computation;
+using PoESkillTree.Computation.Model;
 using PoESkillTree.Computation.ViewModels;
+using PoESkillTree.Controls;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
@@ -64,6 +67,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Attribute = PoESkillTree.ViewModels.Attribute;
+using Item = PoESkillTree.Model.Items.Item;
 
 namespace PoESkillTree.Views
 {
@@ -94,6 +98,7 @@ namespace PoESkillTree.Views
         private MenuItem cmAddToGroup, cmDeleteGroup;
 
         private GameData _gameData;
+        private AttributesInJewelRadiusCalculator _attributesInJewelRadiusCalculator;
 
         private ItemAttributes _itemAttributes;
 
@@ -110,6 +115,13 @@ namespace PoESkillTree.Views
         {
             get => GlobalSettings.ItemInfoVal;
             private set => SetProperty(ref GlobalSettings.ItemInfoVal, value);
+        }
+
+        private SkillTreeAreaViewModel _skillTreeAreaViewModel;
+        public SkillTreeAreaViewModel SkillTreeAreaViewModel
+        {
+            get => _skillTreeAreaViewModel;
+            private set => SetProperty(ref _skillTreeAreaViewModel, value);
         }
 
         private JewelSocketObserver _jewelSocketObserver;
@@ -155,6 +167,12 @@ namespace PoESkillTree.Views
                 BuildsControlViewModel.SkillTree = tree;
             if (TreeGeneratorInteraction != null)
                 TreeGeneratorInteraction.SkillTree = tree;
+            if (InventoryViewModel != null)
+            {
+                tree.JewelViewModels = InventoryViewModel.TreeJewels;
+                SkillTreeAreaViewModel.Dispose();
+                SkillTreeAreaViewModel = new SkillTreeAreaViewModel(SkillTree.Skillnodes, InventoryViewModel.TreeJewels);
+            }
             _jewelSocketObserver?.Dispose();
             _jewelSocketObserver = new JewelSocketObserver(tree.SkilledNodes);
             return tree;
@@ -505,6 +523,7 @@ namespace PoESkillTree.Views
                 _equipmentConverter.Equipment,
                 _equipmentConverter.Jewels,
                 _equipmentConverter.Skills);
+            _attributesInJewelRadiusCalculator = computationInitializer.AttributesInJewelRadiusCalculator;
             ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
             computationInitializer.SetupPeriodicActions();
             _abyssalSocketObserver = computationInitializer.CreateAbyssalSocketObserver(InventoryViewModel.ItemJewels);
@@ -655,7 +674,7 @@ namespace PoESkillTree.Views
             }
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private async void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
@@ -726,7 +745,7 @@ namespace PoESkillTree.Views
                         ToggleShowSummary();
                         if (_hoveredNode != null && !_hoveredNode.IsRootNode)
                         {
-                            GenerateTooltipForNode(_hoveredNode, true);
+                            await GenerateTooltipForNode(_hoveredNode, true);
                         }
                         break;
                     case Key.F:
@@ -1545,7 +1564,7 @@ namespace PoESkillTree.Views
             _sToolTip.IsOpen = false;
         }
 
-        private void zbSkillTreeBackground_MouseMove(object sender, MouseEventArgs e)
+        private async void zbSkillTreeBackground_MouseMove(object sender, MouseEventArgs e)
         {
             var p = e.GetPosition(zbSkillTreeBackground.Child);
             var v = new Vector2D(p.X, p.Y);
@@ -1555,7 +1574,7 @@ namespace PoESkillTree.Views
             _hoveredNode = node;
             if (node != null && !node.IsRootNode)
             {
-                GenerateTooltipForNode(node);
+                await GenerateTooltipForNode(node);
             }
             else if ((Tree.AscButtonPosition - v).Length < 150)
             {
@@ -1579,7 +1598,7 @@ namespace PoESkillTree.Views
                 zbSkillTreeBackground.Reset();
         }
 
-        private void GenerateTooltipForNode(SkillNode node, bool forcerefresh = false)
+        private async Task GenerateTooltipForNode(SkillNode node, bool forcerefresh = false)
         {
             if (!Tree.DrawAscendancy && node.IsAscendancyNode && !forcerefresh)
                 return;
@@ -1587,9 +1606,10 @@ namespace PoESkillTree.Views
                 node.AscendancyName != Tree.AscendancyClassName)
                 return;
 
+            var socketedJewel = GetSocketedJewel(node);
             if (node.Type == PassiveNodeType.JewelSocket)
             {
-                Tree.DrawJewelHighlight(node);
+                Tree.DrawJewelHighlight(node, socketedJewel);
             }
 
             if (Tree.SkilledNodes.Contains(node))
@@ -1609,84 +1629,98 @@ namespace PoESkillTree.Views
                 tooltip += "\n" + node.StatDefinitions.Aggregate((s1, s2) => s1 + "\n" + s2);
             if (!(_sToolTip.IsOpen && _lasttooltip == tooltip) | forcerefresh)
             {
-                var sp = new StackPanel();
-                sp.Children.Add(new TextBlock
-                {
-                    Text = tooltip
-                });
-                if (node.ReminderText != null)
-                {
-                    sp.Children.Add(new Separator());
-                    sp.Children.Add(new TextBlock { Text = node.ReminderText.Aggregate((s1, s2) => s1 + '\n' + s2) });
-                }
-                if (_prePath != null && node.Type != PassiveNodeType.Mastery)
-                {
-                    var points = _prePath.Count;
-                    if (_prePath.Any(x => x.IsAscendancyStart))
-                        points--;
-                    sp.Children.Add(new Separator());
-                    sp.Children.Add(new TextBlock { Text = "Points to skill node: " + points });
-                }
-                if (node.Type == PassiveNodeType.JewelSocket)
-                {
-                    ushort ID = node.Id;
-                    sp.Children.Add(new Separator());
-                }
-
-                //Change summary, activated with ctrl
-                if (PersistentData.Options.ChangeSummaryEnabled)
-                {
-                    //Sum up the total change to attributes and add it to the tooltip
-                    if (_prePath != null | _toRemove != null)
-                    {
-
-                        var attributechanges = new Dictionary<string, List<float>>();
-
-                        int changedNodes;
-
-                        if (_prePath != null)
-                        {
-                            attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_prePath);
-                            tooltip = "Total gain:";
-                            changedNodes = _prePath.Count;
-                        }
-                        else if (_toRemove != null)
-                        {
-                            attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_toRemove);
-                            tooltip = "Total loss:";
-                            changedNodes = _toRemove.Count;
-                        }
-                        else
-                        {
-                            changedNodes = 0;
-                        }
-
-                        if (changedNodes > 1)
-                        {
-                            foreach (var attrchange in attributechanges)
-                            {
-                                if (attrchange.Value.Count != 0)
-                                {
-                                    var regex = new Regex(Regex.Escape("#"));
-                                    var attr = attrchange.Key;
-                                    foreach (var val in attrchange.Value)
-                                        attr = regex.Replace(attr, val.ToString(), 1);
-                                    tooltip += "\n" + attr;
-                                }
-                            }
-                            sp.Children.Add(new Separator());
-                            sp.Children.Add(new TextBlock { Text = tooltip });
-                        }
-                    }
-                }
-
-                _sToolTip.Content = sp;
+                _sToolTip.Content = await CreateTooltipForNode(node, tooltip, socketedJewel);
                 if (!HighlightByHoverKeys.Any(Keyboard.IsKeyDown))
                 {
                     _sToolTip.IsOpen = true;
                 }
                 _lasttooltip = tooltip;
             }
+        }
+
+        private Item? GetSocketedJewel(SkillNode node) =>
+            node.Type == PassiveNodeType.JewelSocket ? ItemAttributes.GetItemInSlot(ItemSlot.SkillTree, node.Id) : null;
+
+        private async Task<object> CreateTooltipForNode(SkillNode node, string tooltip, Item? socketedJewel)
+        {
+            var sp = new StackPanel();
+
+            if (socketedJewel is null)
+            {
+                sp.Children.Add(new TextBlock {Text = tooltip});
+            }
+            else
+            {
+                sp.Children.Add(new ItemTooltip {DataContext = socketedJewel});
+                var (strength, dexterity, intelligence) =
+                    await _attributesInJewelRadiusCalculator.GetAttributesInRadiusAsync(node.Id, socketedJewel.JewelRadius);
+                sp.Children.Add(new TextBlock {Text = $"Attributes in radius: {strength} str, {dexterity} dex, {intelligence} int"});
+            }
+
+            if (node.ReminderText != null)
+            {
+                sp.Children.Add(new Separator());
+                sp.Children.Add(new TextBlock {Text = node.ReminderText.Aggregate((s1, s2) => s1 + '\n' + s2)});
+            }
+
+            if (_prePath != null && node.Type != PassiveNodeType.Mastery)
+            {
+                var points = _prePath.Count;
+                if (_prePath.Any(x => x.IsAscendancyStart))
+                    points--;
+                sp.Children.Add(new Separator());
+                sp.Children.Add(new TextBlock {Text = "Points to skill node: " + points});
+            }
+
+            //Change summary, activated with ctrl
+            if (PersistentData.Options.ChangeSummaryEnabled)
+            {
+                //Sum up the total change to attributes and add it to the tooltip
+                if (_prePath != null | _toRemove != null)
+                {
+
+                    var attributechanges = new Dictionary<string, List<float>>();
+
+                    int changedNodes;
+
+                    if (_prePath != null)
+                    {
+                        attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_prePath);
+                        tooltip = "Total gain:";
+                        changedNodes = _prePath.Count;
+                    }
+                    else if (_toRemove != null)
+                    {
+                        attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_toRemove);
+                        tooltip = "Total loss:";
+                        changedNodes = _toRemove.Count;
+                    }
+                    else
+                    {
+                        changedNodes = 0;
+                    }
+
+                    if (changedNodes > 1)
+                    {
+                        foreach (var attrchange in attributechanges)
+                        {
+                            if (attrchange.Value.Count != 0)
+                            {
+                                var regex = new Regex(Regex.Escape("#"));
+                                var attr = attrchange.Key;
+                                foreach (var val in attrchange.Value)
+                                    attr = regex.Replace(attr, val.ToString(), 1);
+                                tooltip += "\n" + attr;
+                            }
+                        }
+
+                        sp.Children.Add(new Separator());
+                        sp.Children.Add(new TextBlock {Text = tooltip});
+                    }
+                }
+            }
+
+            return sp;
         }
 
         private void HighlightNodesByHover()
@@ -1749,6 +1783,7 @@ namespace PoESkillTree.Views
                 ItemAttributes.ItemDataChanged -= ItemAttributesOnItemDataChanged;
                 ItemAttributes.Dispose();
             }
+            SkillTreeAreaViewModel?.Dispose();
             InventoryViewModel?.Dispose();
 
             var equipmentData = PersistentData.EquipmentData;
@@ -1771,7 +1806,9 @@ namespace PoESkillTree.Views
             ItemAttributes = itemAttributes;
             InventoryViewModel =
                 new InventoryViewModel(_dialogCoordinator, itemAttributes, await GetJewelPassiveNodesAsync());
+            SkillTreeAreaViewModel = new SkillTreeAreaViewModel(SkillTree.Skillnodes, InventoryViewModel.TreeJewels);
             _abyssalSocketObserver?.SetItemJewelViewModels(InventoryViewModel.ItemJewels);
+            Tree.JewelViewModels = InventoryViewModel.TreeJewels;
             UpdateUI();
         }
 

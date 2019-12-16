@@ -12,6 +12,13 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
+using PoESkillTree.Model;
+using MoreLinq;
+using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
+using PoESkillTree.Model.Items;
+using PoESkillTree.Utils.Wpf;
+using PoESkillTree.ViewModels.Equipment;
 
 namespace PoESkillTree.SkillTreeFiles
 {
@@ -50,7 +57,6 @@ namespace PoESkillTree.SkillTreeFiles
         private DrawingVisual _activeNodeSurround;
         private DrawingVisual _characterFaces;
         private DrawingVisual _highlights;
-        private DrawingVisual _jewelHighlight;
 
         private DrawingVisual _ascSkillTreeVisual;
         private DrawingVisual _ascClassFaces;
@@ -64,7 +70,20 @@ namespace PoESkillTree.SkillTreeFiles
         private DrawingVisual _ascActiveSkillIcons;
         private DrawingVisual _ascNodeSurround;
         private DrawingVisual _ascActiveNodeSurround;
+
+        private TreeJewelDrawer _jewelDrawer;
+        private JewelRadiusDrawer _jewelRadiusDrawer;
+
+        public IReadOnlyList<InventoryItemViewModel> JewelViewModels
+        {
+            set
+            {
+                _jewelDrawer.JewelViewModels = value;
+                _jewelRadiusDrawer.JewelViewModels = value;
+            }
+        }
         #endregion
+
         private void InitialSkillTreeDrawing()
         {
 
@@ -74,6 +93,10 @@ namespace PoESkillTree.SkillTreeFiles
             InitializeDrawingVisuals();
             InitializeNodeSurroundBrushes();
             InitializeFaceBrushes();
+
+            _jewelDrawer = new TreeJewelDrawer(Assets, Skillnodes);
+            _jewelRadiusDrawer = new JewelRadiusDrawer(PoESkillTreeOptions, Skillnodes, SkilledNodes);
+
             //Drawing
             DrawBackgroundLayer();
             DrawInitialPaths();
@@ -96,7 +119,10 @@ namespace PoESkillTree.SkillTreeFiles
             DrawActiveSkillIconsAndSurrounds();
             DrawActivePaths();
             DrawCharacterFaces();
+            _jewelRadiusDrawer.DrawSkilledNodes();
+            _jewelDrawer.Draw();
         }
+
         /// <summary>
         /// This will initialize all drawing visuals. If a new drawing visual is added then it should be initialized here as well.
         /// </summary>
@@ -115,7 +141,6 @@ namespace PoESkillTree.SkillTreeFiles
             _activeNodeSurround = new DrawingVisual();
             _characterFaces = new DrawingVisual();
             _highlights = new DrawingVisual();
-            _jewelHighlight = new DrawingVisual();
 
             _ascSkillTreeVisual = new DrawingVisual();
             _ascClassFaces = new DrawingVisual();
@@ -145,6 +170,8 @@ namespace PoESkillTree.SkillTreeFiles
             SkillTreeVisual.Children.Add(_nodeSurround);
             SkillTreeVisual.Children.Add(_activeNodeSurround);
             SkillTreeVisual.Children.Add(_characterFaces);
+            SkillTreeVisual.Children.Add(_jewelDrawer.Visual);
+            SkillTreeVisual.Children.Add(_jewelRadiusDrawer.Visual);
 
             _ascSkillTreeVisual.Children.Add(_ascClassFaces);
             _ascSkillTreeVisual.Children.Add(_ascNodeComparisonHighlight);
@@ -160,7 +187,6 @@ namespace PoESkillTree.SkillTreeFiles
             SkillTreeVisual.Children.Add(_ascSkillTreeVisual);
             SkillTreeVisual.Children.Add(_ascButtons);
             SkillTreeVisual.Children.Add(_highlights);
-            SkillTreeVisual.Children.Add(_jewelHighlight);
         }
 
         private void InitializeNodeSurroundBrushes()
@@ -220,10 +246,8 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        private void DrawSkillNodeIcon(DrawingContext dc, SkillNode skillNode, bool onlyAscendancy = false, bool isActive = false)
+        private void DrawSkillNodeIcon(DrawingContext dc, SkillNode skillNode, bool isActive = false)
         {
-            if (onlyAscendancy && !skillNode.IsAscendancyNode) return;
-
             Rect rect;
             BitmapImage bitmapImage;
 
@@ -250,9 +274,8 @@ namespace PoESkillTree.SkillTreeFiles
             dc.DrawEllipse(imageBrush, null, skillNode.Position, rect.Width, rect.Height);
         }
 
-        private void DrawSurround(DrawingContext dc, SkillNode node, bool onlyAscendancy = false, bool isActive = false, bool isHighlight = false)
+        private void DrawSurround(DrawingContext dc, SkillNode node, bool isActive = false, bool isHighlight = false)
         {
-            if (onlyAscendancy && !node.IsAscendancyNode) return;
             var surroundBrush = _nodeSurroundBrushes;
             var factor = 1f;
             var offset = isActive ? 1 : 0;
@@ -325,7 +348,7 @@ namespace PoESkillTree.SkillTreeFiles
             DrawingContext? dcSkillIcons = null;
             DrawingContext? dcSkillSurround = null;
             var ascSkillIcons = _ascSkillIcons.RenderOpen();
-            var adcAsctiveSkillSurround = _ascNodeSurround.RenderOpen();
+            var ascSkillSurround = _ascNodeSurround.RenderOpen();
 
             if (!onlyAscendancy)
             {
@@ -343,8 +366,8 @@ namespace PoESkillTree.SkillTreeFiles
                     if (!DrawAscendancy) continue;
                     if ((!_persistentData.Options.ShowAllAscendancyClasses &&
                             n.Value.AscendancyName != AscendancyClassName)) continue;
-                    DrawSkillNodeIcon(ascSkillIcons, n.Value, onlyAscendancy);
-                    DrawSurround(adcAsctiveSkillSurround, n.Value, onlyAscendancy);
+                    DrawSkillNodeIcon(ascSkillIcons, n.Value);
+                    DrawSurround(ascSkillSurround, n.Value);
                 }
                 else
                 {
@@ -354,7 +377,7 @@ namespace PoESkillTree.SkillTreeFiles
                 }
             }
             ascSkillIcons.Close();
-            adcAsctiveSkillSurround.Close();
+            ascSkillSurround.Close();
             dcSkillIcons?.Close();
             dcSkillSurround?.Close();
         }
@@ -380,14 +403,14 @@ namespace PoESkillTree.SkillTreeFiles
                     if (!DrawAscendancy) continue;
                     if ((!_persistentData.Options.ShowAllAscendancyClasses &&
                             skillNode.AscendancyName != AscendancyClassName)) continue;
-                    DrawSkillNodeIcon(ascActiveSkillIcons, skillNode, onlyAscendancy, true);
-                    DrawSurround(ascActiveSkillSurround, skillNode, onlyAscendancy, true);
+                    DrawSkillNodeIcon(ascActiveSkillIcons, skillNode, true);
+                    DrawSurround(ascActiveSkillSurround, skillNode, true);
                 }
                 else
                 {
                     if (onlyAscendancy) continue;
-                    DrawSkillNodeIcon(dcActiveSkillIcons!, skillNode, false, true);
-                    DrawSurround(dcActiveSkillSurround!, skillNode, false, true);
+                    DrawSkillNodeIcon(dcActiveSkillIcons!, skillNode, true);
+                    DrawSurround(dcActiveSkillSurround!, skillNode, true);
                 }
             }
             ascActiveSkillIcons.Close();
@@ -404,7 +427,7 @@ namespace PoESkillTree.SkillTreeFiles
 
         public void ClearJewelHighlight()
         {
-            _jewelHighlight.RenderOpen().Close();
+            _jewelRadiusDrawer.ClearHighlight();
         }
 
         public void ToggleAscendancyTree()
@@ -882,7 +905,7 @@ namespace PoESkillTree.SkillTreeFiles
                     foreach (var n1 in HighlightedNodes)
                     {
                         seen.Add(n1);
-                        DrawSurround(n1.IsAscendancyNode ? dcAsc : dc, n1, false, false, true);
+                        DrawSurround(n1.IsAscendancyNode ? dcAsc : dc, n1, false, true);
                         foreach (var n2 in n1.VisibleNeighbors)
                         {
                             if (!HighlightedNodes.Contains(n2) || seen.Contains(n2)) continue;
@@ -1044,43 +1067,9 @@ namespace PoESkillTree.SkillTreeFiles
             _initialized = false;
         }
 
-        public void DrawJewelHighlight(SkillNode node)
+        public void DrawJewelHighlight(SkillNode node, Item? socketedJewel)
         {
-            const int thickness = 10;
-            var radiusPen = new Pen(Brushes.Cyan, thickness);
-
-            double smallRadius = 800;
-            double mediumRadius = 1200;
-            double largeRadius = 1500;
-            if (PoESkillTreeOptions?.Circles != null)
-            {
-                if (PoESkillTreeOptions.Circles.ContainsKey("Small") && Constants.AssetZoomLevel < PoESkillTreeOptions.Circles["Small"].Count)
-                {
-                    var circle = PoESkillTreeOptions.Circles["Small"][Constants.AssetZoomLevel];
-                    smallRadius = Math.Round((circle.Width / circle.ZoomLevel) / 2);
-                }
-
-                if (PoESkillTreeOptions.Circles.ContainsKey("Medium") && Constants.AssetZoomLevel < PoESkillTreeOptions.Circles["Medium"].Count)
-                {
-                    var circle = PoESkillTreeOptions.Circles["Medium"][Constants.AssetZoomLevel];
-                    mediumRadius = Math.Round((circle.Width / circle.ZoomLevel) / 2);
-                }
-
-                if (PoESkillTreeOptions.Circles.ContainsKey("Large") && Constants.AssetZoomLevel < PoESkillTreeOptions.Circles["Large"].Count)
-                {
-                    var circle = PoESkillTreeOptions.Circles["Large"][Constants.AssetZoomLevel];
-                    largeRadius = Math.Round((circle.Width / circle.ZoomLevel) / 2);
-                }
-            }
-            smallRadius -= thickness / 2;
-            mediumRadius -= thickness / 2;
-            largeRadius -= thickness / 2;
-            using (var dc = _jewelHighlight.RenderOpen())
-            {
-                dc.DrawEllipse(null, radiusPen, node.Position, smallRadius, smallRadius);
-                dc.DrawEllipse(null, radiusPen, node.Position, mediumRadius, mediumRadius);
-                dc.DrawEllipse(null, radiusPen, node.Position, largeRadius, largeRadius);
-            }
+            _jewelRadiusDrawer.DrawHighlight(node, socketedJewel);
         }
     }
 }
