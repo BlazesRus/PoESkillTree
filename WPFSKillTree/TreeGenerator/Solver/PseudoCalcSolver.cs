@@ -118,7 +118,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
-        public PseudoCalcSolver(SkillTree tree, PseudoCalcSolverSettings settings)
+        public PseudoCalcSolver(SkillTree tree, PseudoCalcSolverSettings settings, PseudoCalcStatLookup)
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
