@@ -45,47 +45,6 @@
 		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.15"/>
 		<Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.15"/>
     </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualWands+4PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
-		<Attribute Name="#% increased Critical Strike Chance with Wands"/>
-		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[Dagger+4PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
-		<Attribute Name="#% increased Melee Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualDaggers+4PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
-		<Attribute Name="#% increased Melee Critical Strike Chance" />
-		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[RangedDualDaggers+5PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
-		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="5.0"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualWands+5PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
-		<Attribute Name="#% increased Critical Strike Chance with Wands"/>
-		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance[RangedDualDaggers+4PowerCharges]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-		<Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
-		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
-		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
-    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Attack Speed[DualDaggers]" Group="Damage">
         <Attribute Name="#% increased Attack Speed"/>
 		<Attribute Name="#% increased Melee Attack Speed"/>
@@ -551,26 +510,6 @@
         <Attribute Name="#% increased Melee Physical Damage"/>
         <Attribute Name="#% increased Physical Damage with One Handed Melee Weapons"/>
     </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance with Spells[Non-Tagged]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-        <Attribute Name="#% increased Critical Strike Chance for Spells" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Multiplier with Spells[Non-Tagged]" Group="Critical Strike">
-        <Attribute Name="+#% to Critical Strike Multiplier" />
-		<Attribute Name="+#% to Critical Strike Multiplier for Spells" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Critical Strike Chance with One-Handed Sword Attacks[Non-Tagged]" Group="Critical Strike">
-        <Attribute Name="#% increased Critical Strike Chance" />
-        <Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Swords" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Melee Critical Strike Chance with Sword and Mace[Non-Tagged]" Group="Critical Strike">
-        <Attribute Name="#% increased Melee Critical Strike Chance" />
-        <Attribute Name="#% increased Critical Strike Chance" />
-        <Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
-        <Attribute Name="#% increased Critical Strike Chance with Swords"  ConversionMultiplier="0.5"/>
-        <Attribute Name="#% increased Critical Strike Chance with Maces"  ConversionMultiplier="0.5"/>
-    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Attack Speed  with Sword and Mace[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Attack Speed"/>
         <Attribute Name="#% increased Attack Speed with One Handed Melee Weapons"/>
@@ -684,28 +623,6 @@
         <Attribute Name="#% increased Spell Damage" />
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
-    <PseudoAttribute Name="+# maximum Base Energy Shield" Group="Defense">
-        <Attribute Name="+# to maximum Energy Shield" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="+# maximum Base Life" Group="Defense">
-        <Attribute Name="+# to maximum Life" />
-        <Attribute Name="+# to Strength" ConversionMultiplier="0.5" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="+# maximum Life/Energy Shield" Group="Defense">
-        <Attribute Name="+# to maximum Energy Shield" />
-        <Attribute Name="+# to maximum Life" />
-        <Attribute Name="+# to Strength" ConversionMultiplier="0.5" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Hybrid Life/ES Percent" Group="Defense">
-        <Attribute Name="#% increased maximum Life" />
-        <Attribute Name="#% increased maximum Energy Shield" />
-        <Attribute Name="+# to Intelligence" ConversionMultiplier="0.2" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="+# combined attributes" Group="Defense">
-        <Attribute Name="+# to Strength"/>
-        <Attribute Name="+# to Intelligence" />
-        <Attribute Name="+# to Dexterity" />
-    </PseudoAttribute>
     <PseudoAttribute Name="#% increased Chaos Projectile Spell Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Chaos Damage"/>
         <Attribute Name="#% increased Damage"/>
@@ -789,30 +706,6 @@
         <Attribute Name="#% increased Chaos Damage"/>
         <Attribute Name="#% increased Burning Damage"/>
         <Attribute Name="#% increased Projectile Damage" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% Total increased Burn Duration" Group="Damage">
-        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
-        <Attribute Name="#% increased Ignite Duration on Enemies"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% Total increased Freeze Duration" Group="Damage">
-        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
-        <Attribute Name="#% increased Freeze Duration on Enemies"/>
-    </PseudoAttribute>
-        <PseudoAttribute Name="#% Total increased Shock Duration" Group="Damage">
-        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
-        <Attribute Name="#% increased Shock Duration on Enemies"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% Total increased Ignite Chance" Group="Damage">
-        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
-        <Attribute Name="#% chance to Ignite" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% Total increased Shock Chance" Group="Damage">
-        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
-        <Attribute Name="#% chance to Shock" />
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% Total increased Freeze Chance" Group="Damage">
-        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
-        <Attribute Name="#% chance to Freeze" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Whispering Ice Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Cold Damage"/>
@@ -952,12 +845,5 @@ Average of 57.65% of Non-chaos is Physical
         <Attribute Name="#% increased Physical Damage"  ConversionMultiplier="0.576519318"/>
         <Attribute Name="Minions deal #% increased Damage" />
         <Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.04"/>
-    </PseudoAttribute>
-
-    <PseudoAttribute Name="+#% to Combined Elemental Resistances" Group="Defense">
-        <Attribute Name="+#% to Fire Resistance" />
-        <Attribute Name="+#% to Cold Resistance" />
-        <Attribute Name="+#% to Lightning Resistance" />
-        <Attribute Name="+#% to all Elemental Resistances"  ConversionMultiplier="3.0"/>
     </PseudoAttribute>
 </PseudoAttributes>

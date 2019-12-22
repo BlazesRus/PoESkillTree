@@ -359,11 +359,6 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         }
 
         /// <summary>
-        /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
-        /// </summary>
-        public SkillTree TreeInfo;
-
-        /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
         /// </summary>
         public LeafSetting<bool> TreePlusItemsMode { get; }
@@ -806,7 +801,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
+                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value,
+                TreeInfo, TreePlusItemsMode.Value));
+            if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo); }
             return Task.FromResult<ISolver?>(solver);
         }
 

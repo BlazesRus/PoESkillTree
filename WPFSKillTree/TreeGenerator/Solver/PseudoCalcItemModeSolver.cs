@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Documents;
 using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
@@ -13,10 +14,44 @@ using PoESkillTree.TreeGenerator.Settings;
 namespace PoESkillTree.TreeGenerator.Solver
 {
     /// <summary>
-    /// Implementation of AbstractGeneticSolver that tries to find optimal trees based on constraints. (PseudoCalcSolver with Settings.TreePlusItemsMode activate)
+    /// Implementation of AbstractGeneticSolver that tries to find optimal trees based on constraints.
     /// </summary>
-    public class PseudoCalcItemModeSolver : AbstractGeneticSolver<PseudoCalcSolverSettings>
+    public class PseudoCalcSolver : AbstractGeneticSolver<PseudoCalcSolverSettings>
     {
+        private class ConstraintValues
+        {
+            public float TargetValue;
+            public double Weight;
+            public bool Required;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+            /// </summary>
+            /// <param name="targetValue">The target value.</param>
+            /// <param name="weight">The weight.</param>
+            public ConstraintValues(float targetValue, double weight, bool Required)
+            {
+                TargetValue = targetValue;
+                Weight = weight;
+                Required = required;
+            }
+        }
+        /// <summary>
+        /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
+        /// into the applicable attributes and their conversion multiplier.
+        /// </summary>
+        private class ConvertedPseudoAttributeConstraint
+        {
+            public List<Tuple<string, float>> Attributes { get; private set; }
+
+            public Tuple<float, double> TargetWeightTuple { get; private set; }
+
+            public ConvertedPseudoAttributeConstraint(List<Tuple<string, float>> attributes, Tuple<float, double> tuple)
+            {
+                Attributes = attributes;
+                TargetWeightTuple = tuple;
+            }
+        }
         /// <summary>
         /// Regex to search for Wildcards of the form '{number}' in attribute names.
         /// </summary>
@@ -30,10 +65,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         // It doesn't gain anything from larger populations and more generations.
         // Running more generations has the upside that it doesn't take much longer because
         // the GA reaches a point where not many new DNAs are generated and it can use the cache nearly always.
-        protected override int Generations
-        {
-            get { return 200; }
-        }
+        protected override int Generations => 200;
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -67,6 +99,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Maps indexes of constraints (both attribute and pseudo attribute constraints) to their {Target, Weight, Required}-Tuple.
         /// </summary>
         private Tuple<float, double, bool>[] _attrConstraints;
+
         /// <summary>
         /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
         /// </summary>
@@ -76,11 +109,13 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// that gets applied when they are calculated.
         /// </summary>
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
+
         /// <summary>
-        /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.
-        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
+        /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.<br />
+        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.<br/>
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
+
         /// <summary>
         /// Dictionary that saves which nodes (represented by their id) are travel nodes.
         /// </summary>
@@ -97,23 +132,20 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private float[] _fixedAttributes;
 
-        protected override GeneticAlgorithmParameters GaParameters
-        {
-            get
-            {
-                return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
-                    SearchSpace.Count,
-                    maxMutateClusterSize: MaxMutateClusterSize);
-            }
-        }
+        protected override GeneticAlgorithmParameters GaParameters =>
+            new GeneticAlgorithmParameters(
+                (int) (PopMultiplier * SearchSpace.Count),
+                SearchSpace.Count,
+                maxMutateClusterSize: MaxMutateClusterSize);
 
         /// <summary>
         /// Creates a new, uninitialized instance.
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
-        public PseudoCalcItemModeSolver(SkillTree tree, PseudoCalcSolverSettings settings, PseudoCalcStatLookup statLookup)
+#pragma warning disable CS8618 // Initialized in Initialize
+        public PseudoCalcSolver(SkillTree tree, PseudoCalcSolverSettings settings, PseudoCalcStatLookup)
+#pragma warning restore
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
@@ -226,7 +258,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         }
 
         /// <summary>
-        /// Evaluates <see cref="PseudoCalcItemModeSolverSettings.PseudoAttributeConstraints"/> and converts each
+        /// Evaluates <see cref="PseudoCalcSolverSettings.PseudoAttributeConstraints"/> and converts each
         /// PseudoAttribute into a list of the attribute names that evaluated to true and their conversion multiplier.
         /// </summary>
         private List<ConvertedPseudoCalcCon> EvalPseudoAttrConstraints()
@@ -331,7 +363,7 @@ namespace PoESkillTree.TreeGenerator.Solver
 
         /// <summary>
         /// Sets the fixed attribute values from <see cref="AbstractSolver{T}.TargetNodes"/> and
-        /// from <see cref="PseudoCalcItemModeSolverSettings.InitialAttributes"/>.
+        /// from <see cref="PseudoCalcSolverSettings.InitialAttributes"/>.
         /// </summary>
         private void CreateFixedAttributes()
         {

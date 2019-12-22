@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +83,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Factor for the value calculated from the node difference if used node count is lower than the allowed node count.
         /// </summary>
         /// <remarks>
-        /// A tree with less points spent should only better better if the csv satisfaction is not worse.
+        /// A tree with less points spent should only be better if the csv satisfaction is not worse.
         /// Because of that this factor is really small.
         ///</remarks>
         private const double UsedNodeCountFactor = .0005;

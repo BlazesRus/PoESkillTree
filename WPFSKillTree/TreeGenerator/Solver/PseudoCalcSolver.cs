@@ -18,6 +18,40 @@ namespace PoESkillTree.TreeGenerator.Solver
     /// </summary>
     public class PseudoCalcSolver : AbstractGeneticSolver<PseudoCalcSolverSettings>
     {
+        private class ConstraintValues
+        {
+            public float TargetValue;
+            public double Weight;
+            public bool Required;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ConstraintValues"/> class.
+            /// </summary>
+            /// <param name="targetValue">The target value.</param>
+            /// <param name="weight">The weight.</param>
+            public ConstraintValues(float targetValue, double weight, bool Required)
+            {
+                TargetValue = targetValue;
+                Weight = weight;
+                Required = required;
+            }
+        }
+        /// <summary>
+        /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
+        /// into the applicable attributes and their conversion multiplier.
+        /// </summary>
+        private class ConvertedPseudoAttributeConstraint
+        {
+            public List<Tuple<string, float>> Attributes { get; private set; }
+
+            public Tuple<float, double> TargetWeightTuple { get; private set; }
+
+            public ConvertedPseudoAttributeConstraint(List<Tuple<string, float>> attributes, Tuple<float, double> tuple)
+            {
+                Attributes = attributes;
+                TargetWeightTuple = tuple;
+            }
+        }
         /// <summary>
         /// Regex to search for Wildcards of the form '{number}' in attribute names.
         /// </summary>
@@ -31,10 +65,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         // It doesn't gain anything from larger populations and more generations.
         // Running more generations has the upside that it doesn't take much longer because
         // the GA reaches a point where not many new DNAs are generated and it can use the cache nearly always.
-        protected override int Generations
-        {
-            get { return 200; }
-        }
+        protected override int Generations => 200;
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -70,6 +101,10 @@ namespace PoESkillTree.TreeGenerator.Solver
         private Tuple<float, double, bool>[] _attrConstraints;
 
         /// <summary>
+        /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
+        /// </summary>
+        private Dictionary<string, List<int>> _attrNameLookup;
+        /// <summary>
         /// Dictionary that maps attribute names and numbers (as indexes of _attrConstraints) to the conversion multiplier
         /// that gets applied when they are calculated.
         /// </summary>
@@ -80,11 +115,6 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.<br/>
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
-
-        /// <summary>
-        /// Dictionary that maps attribute names to the constraint numbers they apply to (as indexes of _attrConstraints).
-        /// </summary>
-        private Dictionary<string, List<int>> _attrNameLookup;
 
         /// <summary>
         /// Dictionary that saves which nodes (represented by their id) are travel nodes.
@@ -102,23 +132,20 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private float[] _fixedAttributes;
 
-        protected override GeneticAlgorithmParameters GaParameters
-        {
-            get
-            {
-                return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
-                    SearchSpace.Count,
-                    maxMutateClusterSize: MaxMutateClusterSize);
-            }
-        }
+        protected override GeneticAlgorithmParameters GaParameters =>
+            new GeneticAlgorithmParameters(
+                (int) (PopMultiplier * SearchSpace.Count),
+                SearchSpace.Count,
+                maxMutateClusterSize: MaxMutateClusterSize);
 
         /// <summary>
         /// Creates a new, uninitialized instance.
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
+#pragma warning disable CS8618 // Initialized in Initialize
         public PseudoCalcSolver(SkillTree tree, PseudoCalcSolverSettings settings, PseudoCalcStatLookup)
+#pragma warning restore
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
@@ -392,42 +419,57 @@ namespace PoESkillTree.TreeGenerator.Solver
             string StatName;
             Dictionary<string, PseudoCalcCon> ConstraintDictionary = new Dictionary<string, PseudoCalcCon>(_attrConstraints.Length);
             //Dictionary<string, float> StatTotals = new Dictionary<string, float>();
-            List<string> RequiredKeys = new List<string>();
-            List<string> OtherKeys = new List<string>(_attrConstraints.Length);
+            //List<string> RequiredKeys = new List<string>();
+            //List<string> OtherKeys = new List<string>(_attrConstraints.Length);
             int attrIndex;
+            //List<string> DebugList = new List<string>();
             foreach (var ConversionKey in _attrConversionMultipliers.Keys)
             {
                 attrIndex = ConversionKey.Item2;
                 StatName = ConversionKey.Item1;
                 var stat = _attrConstraints[attrIndex];
                 ConstraintDictionary.Add(StatName, new PseudoCalcCon(stat.Item1, stat.Item2, stat.Item3));
-                if (stat.Item3)
-                {
-                    RequiredKeys.Add(StatName);
-                }
-                else
-                {
-                    OtherKeys.Add(StatName);
-                }
+                //if (stat.Item3)
+                //{
+                //    RequiredKeys.Add(StatName);
+
+                //}
+                //else
+                //{
+                //    OtherKeys.Add(StatName);
+                //}
                 //var currentValue = totalStats[attrIndex];
                 //StatTotals.Add(StatName, currentValue);
             }
-            PseudoCalcCon StatConstraint;
+            //PseudoCalcCon StatConstraint;
             //StatTotals = GlobalSettings.JewelInfo.PseudoCalcUpdater(StatTotals, Dictionary<string, PseudoCalcCon>);
 
             //foreach (KeyValuePair<string, PseudoCalcCon> Element in ConstraintDictionary)
             //{
-            //    StatName = Element.Key;
-            //    StatConstraint = Element.Value;
-            //    if (StatTotals.ContainsKey(StatName))
-            //    {
-            //        csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
-            //    }
-            //    else
-            //    {
-            //        csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
-            //    }
+                //    StatName = Element.Key;
+                //    StatConstraint = Element.Value;
+                //    if (StatTotals.ContainsKey(StatName))
+                //    {
+                //        csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                //    }
+                //    else
+                //    {
+                //        csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                //    }
             //}
+            for (var i = 0; i < _attrConstraints.Length; i++)
+            {
+                var stat = _attrConstraints[i];
+                var Value = totalStats[i];
+                if(Value<stat.Item1&&stat.Item3==true)//Score as zero if fail to reach required value
+                {
+                    return 0;
+                }
+                else
+                {
+                    csvs *= CalcCsv(Value, stat.Item2, stat.Item1);
+                }
+            }
 
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)

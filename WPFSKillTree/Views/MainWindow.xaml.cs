@@ -411,6 +411,8 @@ namespace PoESkillTree.Views
         private void RemoveFromGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
+            string SelectedAttrName;
+            int index;
             foreach (var o in lbAttr.SelectedItems.Cast<Attribute>())
             {
                 SelectedAttrName = o.ToString();
