@@ -98,7 +98,6 @@ namespace PoESkillTree.Views
         private MenuItem cmAddToGroup, cmDeleteGroup;
 
         private GameData _gameData;
-        private AttributesInJewelRadiusViewModel _attributesInJewelRadiusViewModel;
 
         private ItemAttributes _itemAttributes;
 
@@ -173,6 +172,10 @@ namespace PoESkillTree.Views
                 SkillTreeAreaViewModel.Dispose();
                 SkillTreeAreaViewModel = new SkillTreeAreaViewModel(SkillTree.Skillnodes, InventoryViewModel.TreeJewels);
             }
+            if (ComputationViewModel != null)
+            {
+                tree.ItemConnectedNodesSelector = ComputationViewModel.PassiveTreeConnections.GetConnectedNodes;
+            }
             _jewelSocketObserver?.Dispose();
             _jewelSocketObserver = new JewelSocketObserver(tree.SkilledNodes);
             return tree;
@@ -194,8 +197,8 @@ namespace PoESkillTree.Views
 
         private Vector2D _multransform;
 
-        private List<SkillNode>? _prePath;
-        private HashSet<SkillNode>? _toRemove;
+        private IReadOnlyCollection<SkillNode>? _prePath;
+        private IReadOnlyCollection<SkillNode>? _toRemove;
 
         private readonly Stack<string> _undoList = new Stack<string>();
         private readonly Stack<string> _redoList = new Stack<string>();
@@ -520,15 +523,7 @@ namespace PoESkillTree.Views
             Log.Info($"Build UI initialized after {stopwatch.ElapsedMilliseconds} ms");
 
             await initialComputationTask;
-            await computationInitializer.InitializeAfterBuildLoadAsync(
-                Tree.SkilledNodes,
-                _equipmentConverter.Equipment,
-                _equipmentConverter.Jewels,
-                _equipmentConverter.Skills);
-            ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
-            _attributesInJewelRadiusViewModel = await computationInitializer.CreateAttributesInJewelRadiusViewModel();
-            computationInitializer.SetupPeriodicActions();
-            _abyssalSocketObserver = computationInitializer.CreateAbyssalSocketObserver(InventoryViewModel.ItemJewels);
+            await InitializeComputationDependentAsync(computationInitializer);
             Log.Info($"Computation UI initialized after {stopwatch.ElapsedMilliseconds} ms");
 
             await controller.CloseAsync();
@@ -644,6 +639,22 @@ namespace PoESkillTree.Views
                         break;
                 }
             };
+        }
+
+        private async Task InitializeComputationDependentAsync(ComputationInitializer computationInitializer)
+        {
+            await computationInitializer.InitializeAfterBuildLoadAsync(
+                Tree.SkilledNodes,
+                _equipmentConverter.Equipment,
+                _equipmentConverter.Jewels,
+                _equipmentConverter.Skills);
+            computationInitializer.SetupPeriodicActions();
+            ComputationViewModel = await computationInitializer.CreateComputationViewModelAsync(PersistentData);
+            Tree.ItemConnectedNodesSelector = ComputationViewModel.PassiveTreeConnections.GetConnectedNodes;
+            _abyssalSocketObserver = computationInitializer.CreateAbyssalSocketObserver(InventoryViewModel.ItemJewels);
+            (await computationInitializer.CreateItemAllocatedPassiveNodesObservableAsync()).Subscribe(
+                nodes => Tree.ItemAllocatedNodes = nodes,
+                ex => Log.Error(ex, "Error in ItemAllocatedPassiveNodesObservable"));
         }
 
         private void Options_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -1525,7 +1536,7 @@ namespace PoESkillTree.Views
                         if (Tree.SkilledNodes.Contains(node))
                         {
                             Tree.ForceRefundNode(node);
-                            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+                            _prePath = Tree.GetShortestPathTo(node);
                             Tree.DrawPath(_prePath);
                         }
                         else if (_prePath != null)
@@ -1622,7 +1633,7 @@ namespace PoESkillTree.Views
             }
             else
             {
-                _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
+                _prePath = Tree.GetShortestPathTo(node);
                 if (node.Type != PassiveNodeType.Mastery)
                     Tree.DrawPath(_prePath);
             }
@@ -1654,9 +1665,9 @@ namespace PoESkillTree.Views
             else
             {
                 sp.Children.Add(new ItemTooltip {DataContext = socketedJewel});
-                _attributesInJewelRadiusViewModel.Calculate(
+                ComputationViewModel!.AttributesInJewelRadius.Calculate(
                     node.Id, socketedJewel.JewelRadius, socketedJewel.ExplicitMods.Select(m => m.Attribute).ToList());
-                sp.Children.Add(new AttributesInJewelRadiusView {DataContext = _attributesInJewelRadiusViewModel});
+                sp.Children.Add(new AttributesInJewelRadiusView {DataContext = ComputationViewModel.AttributesInJewelRadius});
             }
 
             if (node.ReminderText != null)
@@ -1667,9 +1678,7 @@ namespace PoESkillTree.Views
 
             if (_prePath != null && node.Type != PassiveNodeType.Mastery)
             {
-                var points = _prePath.Count;
-                if (_prePath.Any(x => x.IsAscendancyStart))
-                    points--;
+                var points = _prePath.Count(n => !n.IsAscendancyStart && !Tree.SkilledNodes.Contains(n));
                 sp.Children.Add(new Separator());
                 sp.Children.Add(new TextBlock {Text = "Points to skill node: " + points});
             }
@@ -1687,9 +1696,10 @@ namespace PoESkillTree.Views
 
                     if (_prePath != null)
                     {
-                        attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_prePath);
+                        var nodesToAdd = _prePath.Where(n => !Tree.SkilledNodes.Contains(n)).ToList();
+                        attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(nodesToAdd);
                         tooltip = "Total gain:";
-                        changedNodes = _prePath.Count;
+                        changedNodes = nodesToAdd.Count;
                     }
                     else if (_toRemove != null)
                     {
