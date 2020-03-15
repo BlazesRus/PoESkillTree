@@ -52,4 +52,29 @@
         <Attribute Name="+# to Intelligence" />
         <Attribute Name="+# to Dexterity" />
     </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Lightning Penatration" Group="Damage">
+        <Attribute Name="Damage Penatrates #% Lightning Resistance"/>
+        <Attribute Name="Damage Penatrates #% Elemental Resistances"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="Lightning Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Lightning Spells have #% of Physical Damage Converted to Lightning Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+        <!--Attribute Name="#% of Physical Damage Converted to Fire Damage" /-->
+        <!--Attribute Name="#% of Physical Damage Converted to Lightning Damage" /-->
+    </PseudoAttribute>
+	<PseudoAttribute Name="Cold Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Cold Spells have #% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+    </PseudoAttribute>
+	<PseudoAttribute Name="Fire Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Fire Spells have #% of Physical Damage Converted to Fire Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Fire Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Attack Poison Chance[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% chance to Poison on Hit"/>
+        <Attribute Name="#% chance to Poison on Hit with Attacks"/>
+    </PseudoAttribute>
 </PseudoAttributes>
