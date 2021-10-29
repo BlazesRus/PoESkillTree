@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MoreLinq;
 using NUnit.Framework;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Engine.GameModel.Items;
@@ -17,11 +16,14 @@ namespace PoESkillTree.Model.Items.Mods
             // only added by other mods, which is not supported anyway
             "no_attack_mods", "no_caster_mods", "has_physical_conversion_mod", "has_damage_taken_as_mod",
             "specific_weapon", "two_handed_mod", "shield_mod", "dual_wielding_mod", "one_handed_mod", "melee_mod",
-            "grants_crit_chance_support", "local_item_quality", "spell_dodge_mod",
+            "grants_crit_chance_support", "local_item_quality", "spell_dodge_mod", "weapon_can_roll_minion_modifiers",
+            "grants_2h_support",
             // map crafting is not supported
-            "map",
+            "map", "unique_map", "no_monster_packs",
             // no idea where these come from
             "no_elemental_damage_mods", "no_physical_damage_mods",
+            // crafting Cluster Jewels properly also requires enchant crafting -> not supported yet
+            "expansion_jewel_large", "expansion_jewel_medium", "expansion_jewel_small",
         };
         private static readonly ISet<string> UnknownItemClasses = new HashSet<string>
         {
@@ -29,9 +31,11 @@ namespace PoESkillTree.Model.Items.Mods
             "Map", "MapFragment",
         };
 
+#pragma warning disable 8618 // Initialized in InitializeAsync
         private static Dictionary<string, JsonMod> _mods;
         private static JsonCraftingBenchOption[] _benchOptions;
         private static ModDatabase _modDatabase;
+#pragma warning restore
 
         [OneTimeSetUp]
         public static async Task InitializeAsync()
@@ -141,9 +145,6 @@ namespace PoESkillTree.Model.Items.Mods
                 Tags.Jewel | Tags.DexJewel | Tags.NotInt | Tags.NotStr, ItemClass.Jewel).ToList();
             Assert.AreEqual(1, jewelChaosDamage.Count);
             Assert.AreEqual("ChaosDamageJewel", ((Mod) jewelChaosDamage[0]).Id);
-            var amuletChaosDamage = chaosDamage.GetMatchingMods(Tags.Amulet, ItemClass.Amulet).ToList();
-            Assert.AreEqual(2, amuletChaosDamage.Count);
-            Assert.AreEqual("EinharMasterAddedChaosDamage1", ((Mod) amuletChaosDamage[0]).Id);
         }
 
         [Test]
@@ -191,7 +192,9 @@ namespace PoESkillTree.Model.Items.Mods
                 from spawnWeight in mod.SpawnWeights
                 let tag = spawnWeight.Tag
                 where !tag.EndsWith("_shaper") && !tag.EndsWith("_elder")
-                      && !TagsExtensions.TryParse(tag, out var _)
+                      && !tag.EndsWith("_crusader") && !tag.EndsWith("_eyrie") && !tag.EndsWith("_basilisk") && !tag.EndsWith("_adjudicator")
+                      && !tag.StartsWith("affliction_")
+                      && !TagsExtensions.TryParse(tag, out _)
                       && !UnknownTags.Contains(tag)
                 select tag
             ).ToHashSet();

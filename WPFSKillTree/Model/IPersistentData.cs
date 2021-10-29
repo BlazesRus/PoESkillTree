@@ -14,9 +14,8 @@ namespace PoESkillTree.Model
     public interface IPersistentData : INotifyPropertyChanged, INotifyPropertyChanging
     {
         Options Options { get; }
-        string StatTrackingSavePath { get; set; }
         PoEBuild CurrentBuild { get; set; }
-        IBuild SelectedBuild { get; set; }
+        IBuild? SelectedBuild { get; set; }
         BuildFolder RootBuild { get; }
         EquipmentData EquipmentData { get; }
         List<Item> StashItems { get; }
@@ -27,7 +26,7 @@ namespace PoESkillTree.Model
         IDictionary<string, IEnumerable<StashBookmark>> LeagueStashes { get; }
 
         /// <summary>
-        /// Initializes all fields that require asynchronous actions like dialogs.
+        /// Initializes all fields that require asnychronous actions like dialogs.
         /// </summary>
         Task InitializeAsync(IDialogCoordinator dialogCoordinator);
 
@@ -66,7 +65,7 @@ namespace PoESkillTree.Model
         /// Asynchronously imports a PoEBuild from the given xml string and adds it to the root folder as current
         /// build if it could be imported successfully.
         /// </summary>
-        Task<PoEBuild> ImportBuildAsync(string buildXml);
+        Task<PoEBuild?> ImportBuildAsync(string buildXml);
 
         /// <summary>
         /// Exports the PoEBuild as a xml string and returns that string.

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Model.Builds;
 
@@ -10,32 +11,18 @@ namespace PoESkillTree.ViewModels.Builds
         private readonly IBuildViewModel<PoEBuild> _buildVm;
         private readonly BuildValidator _buildValidator;
         private string _name;
-        private string _note;
-        private string _characterName;
-        private string _accountName;
+        private string? _note;
 
         public string Name
         {
-            get { return _name; }
-            set { SetProperty(ref _name, value); }
+            get => _name;
+            set => SetProperty(ref _name, value);
         }
 
-        public string Note
+        public string? Note
         {
-            get { return _note; }
-            set { SetProperty(ref _note, value); }
-        }
-
-        public string CharacterName
-        {
-            get { return _characterName; }
-            set { SetProperty(ref _characterName, value); }
-        }
-
-        public string AccountName
-        {
-            get { return _accountName; }
-            set { SetProperty(ref _accountName, value); }
+            get => _note;
+            set => SetProperty(ref _note, value);
         }
 
         public DateTime LastUpdated { get; }
@@ -45,28 +32,26 @@ namespace PoESkillTree.ViewModels.Builds
             _buildVm = buildVm;
             _buildValidator = buildValidator;
             var build = buildVm.Build;
-            Name = build.Name;
-            Note = build.Note;
-            CharacterName = build.CharacterName;
-            AccountName = build.AccountName;
+            _name = build.Name;
+            _note = build.Note;
             LastUpdated = build.LastUpdated;
         }
 
-        protected override IEnumerable<string> ValidateProperty(string propertyName)
+        protected override IEnumerable<string?> ValidateProperty(string propertyName)
         {
             switch (propertyName)
             {
                 case nameof(Name):
                     return new[] {_buildValidator.ValidateExistingFileName(Name, _buildVm)};
                 default:
-                    return null;
+                    return Enumerable.Empty<string>();
             }
         }
 
         protected override bool CanClose(bool param)
         {
             // Always allow canceling
-            return !param || !HasErrors;
+            return !param || base.CanClose(true);
         }
     }
 }

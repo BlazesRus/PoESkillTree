@@ -52,7 +52,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         /// <param name="xmlPseudoAttributes">The XmlPseudoAttributes to convert if they shouldn't be loaded from the filesystem.</param>
         /// <returns>The converted PseudoAttributes (not null)</returns>
         /// <exception cref="PseudoAttributeDataInvalidException">If the xml files or given XmlPseudoAttributes are invalid.</exception>
-        public List<PseudoAttribute> LoadPseudoAttributes(XmlPseudoAttributes xmlPseudoAttributes = null)
+        public List<PseudoAttribute> LoadPseudoAttributes(XmlPseudoAttributes? xmlPseudoAttributes = null)
         {
             XmlPseudoAttribute[] xmlPseudos;
             if (xmlPseudoAttributes == null)
@@ -89,7 +89,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
         /// <summary>
         /// Deserializes the given file into XmlPseudoAttributes.
         /// </summary>
-        private XmlPseudoAttributes DeserializeFile(string filename)
+        private static XmlPseudoAttributes DeserializeFile(string filename)
         {
             var ser = new XmlSerializer(typeof(XmlPseudoAttributes));
             using (var reader = XmlReader.Create(filename))
@@ -173,16 +173,16 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
                                 break;
 
                             case XmlItemsChoiceType.OffHand:
-                                condition = new OffHandCondition(xmlCondition.ToString());
+                                condition = new OffHandCondition(xmlCondition.ToString()!);
                                 break;
                             case XmlItemsChoiceType.Tag:
-                                condition = new TagCondition(xmlCondition.ToString());
+                                condition = new TagCondition(xmlCondition.ToString()!);
                                 break;
                             case XmlItemsChoiceType.WeaponClass:
-                                condition = new WeaponClassCondition(xmlCondition.ToString());
+                                condition = new WeaponClassCondition(xmlCondition.ToString()!);
                                 break;
                             case XmlItemsChoiceType.Keystone:
-                                condition = new KeystoneCondition(xmlCondition.ToString());
+                                condition = new KeystoneCondition(xmlCondition.ToString()!);
                                 break;
 
                             default:

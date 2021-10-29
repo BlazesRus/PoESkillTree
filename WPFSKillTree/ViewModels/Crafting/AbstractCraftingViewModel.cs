@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using EnumsNET;
-using MoreLinq;
 using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Engine.GameModel.Items;
 using PoESkillTree.Engine.GameModel.Modifiers;
 using PoESkillTree.Engine.GameModel.StatTranslation;
+using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Model.Items;
 using PoESkillTree.Model.Items.Mods;
 using PoESkillTree.Utils;
@@ -29,8 +27,8 @@ namespace PoESkillTree.ViewModels.Crafting
         private bool _showDropDisabledItems;
         public bool ShowDropDisabledItems
         {
-            get { return _showDropDisabledItems; }
-            set { SetProperty(ref _showDropDisabledItems, value, UpdateSecondLevel); }
+            get => _showDropDisabledItems;
+            set => SetProperty(ref _showDropDisabledItems, value, UpdateSecondLevel);
         }
 
         // Bases are filtered in three levels:
@@ -45,18 +43,18 @@ namespace PoESkillTree.ViewModels.Crafting
         private IEnumerable<TBase> EligibleBases
             => _bases.Where(b => ShowDropDisabledItems || !b.DropDisabled);
 
-        private IReadOnlyList<TBase> _baseList;
-        public IReadOnlyList<TBase> BaseList
+        private IReadOnlyList<TBase>? _baseList;
+        public IReadOnlyList<TBase>? BaseList
         {
-            get { return _baseList; }
-            private set { SetProperty(ref _baseList, value); }
+            get => _baseList;
+            private set => SetProperty(ref _baseList, value);
         }
 
         private TBase _selectedBase;
         public TBase SelectedBase
         {
-            get { return _selectedBase; }
-            set { SetProperty(ref _selectedBase, value, UpdateBase); }
+            get => _selectedBase;
+            set => SetProperty(ref _selectedBase, value, UpdateBase);
         }
 
         // First level
@@ -66,8 +64,8 @@ namespace PoESkillTree.ViewModels.Crafting
         private BaseGroup _selectedFirstLevel;
         public BaseGroup SelectedFirstLevel
         {
-            get { return _selectedFirstLevel; }
-            set { SetProperty(ref _selectedFirstLevel, value, UpdateSecondLevel); }
+            get => _selectedFirstLevel;
+            set => SetProperty(ref _selectedFirstLevel, value, UpdateSecondLevel);
         }
 
         // Second level
@@ -75,15 +73,15 @@ namespace PoESkillTree.ViewModels.Crafting
         private IReadOnlyList<ItemClass> _secondLevelList;
         public IReadOnlyList<ItemClass> SecondLevelList
         {
-            get { return _secondLevelList; }
-            private set { SetProperty(ref _secondLevelList, value); }
+            get => _secondLevelList;
+            private set => SetProperty(ref _secondLevelList, value);
         }
 
         private ItemClass _selectedSecondLevel;
         public ItemClass SelectedSecondLevel
         {
-            get { return _selectedSecondLevel; }
-            set { SetProperty(ref _selectedSecondLevel, value, UpdateThirdLevel); }
+            get => _selectedSecondLevel;
+            set => SetProperty(ref _selectedSecondLevel, value, UpdateThirdLevel);
         }
 
         // Third level
@@ -99,15 +97,15 @@ namespace PoESkillTree.ViewModels.Crafting
         private IReadOnlyList<Tags> _thirdLevelList;
         public IReadOnlyList<Tags> ThirdLevelList
         {
-            get { return _thirdLevelList; }
-            private set { SetProperty(ref _thirdLevelList, value); }
+            get => _thirdLevelList;
+            private set => SetProperty(ref _thirdLevelList, value);
         }
 
         private Tags _selectedThirdLevel;
         public Tags SelectedThirdLevel
         {
-            get { return _selectedThirdLevel; }
-            set { SetProperty(ref _selectedThirdLevel, value, UpdateBaseList); }
+            get => _selectedThirdLevel;
+            set => SetProperty(ref _selectedThirdLevel, value, UpdateBaseList);
         }
 
 
@@ -115,15 +113,15 @@ namespace PoESkillTree.ViewModels.Crafting
 
         public Item Item
         {
-            get { return _item; }
-            private set { SetProperty(ref _item, value); }
+            get => _item;
+            private set => SetProperty(ref _item, value);
         }
 
         private IReadOnlyList<ModSelectorViewModel> _msImplicits = new ModSelectorViewModel[0];
         public IReadOnlyList<ModSelectorViewModel> MsImplicits
         {
-            get { return _msImplicits; }
-            private set { SetProperty(ref _msImplicits, value); }
+            get => _msImplicits;
+            private set => SetProperty(ref _msImplicits, value);
         }
 
         private readonly SliderViewModel _qualitySlider;
@@ -132,15 +130,17 @@ namespace PoESkillTree.ViewModels.Crafting
         private bool _showQualitySlider;
         public bool ShowQualitySlider
         {
-            get { return _showQualitySlider; }
-            private set { SetProperty(ref _showQualitySlider, value); }
+            get => _showQualitySlider;
+            private set => SetProperty(ref _showQualitySlider, value);
         }
 
         protected SimpleMonitor Monitor { get; } = new SimpleMonitor();
 
         protected EquipmentData EquipmentData { get; }
 
+#pragma warning disable CS8618 // All levels are initialized in Init
         protected AbstractCraftingViewModel(EquipmentData equipmentData, IEnumerable<TBase> bases)
+#pragma warning restore
         {
             EquipmentData = equipmentData;
             _bases = bases.ToList();
@@ -284,7 +284,11 @@ namespace PoESkillTree.ViewModels.Crafting
                 var ibase = SelectedBase;
                 Item = new Item(ibase);
 
-                MsImplicits.ForEach(ms => ms.PropertyChanged -= MsOnPropertyChanged);
+                foreach (var modSelector in MsImplicits)
+                {
+                    modSelector.PropertyChanged -= MsOnPropertyChanged;
+                }
+
                 var modSelectors = new List<ModSelectorViewModel>();
                 foreach (var implicitMod in ibase.ImplicitMods)
                 {
@@ -328,15 +332,7 @@ namespace PoESkillTree.ViewModels.Crafting
             var quality = SelectedBase.CanHaveQuality 
                 ? _qualitySlider.Value
                 : 0;
-            var properties = Item.BaseType.GetRawProperties(quality)
-                .Concat(GetAdditionalProperties());
-            Item.Properties = new ObservableCollection<ItemMod>(properties);
-            ApplyLocals();
-
-            if (Item.IsWeapon)
-            {
-                ApplyElementalMods(Item.Mods);
-            }
+            Item.UpdateProperties(quality, GetAdditionalProperties().ToArray());
 
             if (MsImplicits.Any())
             {
@@ -382,120 +378,12 @@ namespace PoESkillTree.ViewModels.Crafting
 
             var lines = EquipmentData.StatTranslator.GetTranslations(statIds)
                 .Select(t => t.Translate(merged))
-                .Where(l => l != null);
+                .WhereNotNull();
             foreach (var line in lines)
             {
                 var attr = ItemMod.Numberfilter.Replace(line, "#");
                 var isLocal = ModifierLocalityTester.IsLocal(attr, SelectedBase.Tags);
                 yield return new ItemMod(line, isLocal);
-            }
-        }
-
-        private void ApplyElementalMods(IEnumerable<ItemMod> allMods)
-        {
-            var elementalMods = new List<ItemMod>();
-            var chaosMods = new List<ItemMod>();
-            foreach (var mod in allMods)
-            {
-                string attr = mod.Attribute;
-                if (attr.StartsWith("Adds") && !attr.Contains("in Main Hand") && !attr.Contains("in Off Hand"))
-                {
-                    if (attr.Contains("Fire") || attr.Contains("Cold") || attr.Contains("Lightning"))
-                    {
-                        elementalMods.Add(mod);
-                    }
-                    if (attr.Contains("Chaos"))
-                    {
-                        chaosMods.Add(mod);
-                    }
-                }
-            }
-
-            if (elementalMods.Any())
-            {
-                var values = new List<float>();
-                var mods = new List<string>();
-                var cols = new List<ValueColoring>();
-
-                var fmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Fire"));
-                if (fmod != null)
-                {
-                    values.AddRange(fmod.Values);
-                    mods.Add("#-#");
-                    cols.Add(ValueColoring.Fire);
-                    cols.Add(ValueColoring.Fire);
-                }
-
-                var cmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Cold"));
-                if (cmod != null)
-                {
-                    values.AddRange(cmod.Values);
-                    mods.Add("#-#");
-                    cols.Add(ValueColoring.Cold);
-                    cols.Add(ValueColoring.Cold);
-                }
-
-                var lmod = elementalMods.FirstOrDefault(m => m.Attribute.Contains("Lightning"));
-                if (lmod != null)
-                {
-                    values.AddRange(lmod.Values);
-                    mods.Add("#-#");
-                    cols.Add(ValueColoring.Lightning);
-                    cols.Add(ValueColoring.Lightning);
-                }
-
-                Item.Properties.Add(new ItemMod("Elemental Damage: " + string.Join(", ", mods), true, values, cols));
-            }
-
-            if (chaosMods.Any())
-            {
-                Item.Properties.Add(new ItemMod("Chaos Damage: #-#", true, chaosMods[0].Values,
-                    new[] { ValueColoring.Chaos, ValueColoring.Chaos }));
-            }
-        }
-
-        private void ApplyLocals()
-        {
-            foreach (var pair in Item.GetModsAffectingProperties())
-            {
-                ItemMod prop = pair.Key;
-                List<ItemMod> applymods = pair.Value;
-
-                List<ItemMod> percm = applymods.Where(m => Regex.IsMatch(m.Attribute, @"(?<!\+)#%")).ToList();
-                List<ItemMod> valuem = applymods.Except(percm).ToList();
-
-                if (valuem.Count > 0)
-                {
-                    IReadOnlyList<float> val = valuem
-                        .Select(m => m.Values)
-                        .Aggregate((l1, l2) => l1.Zip(l2, (f1, f2) => f1 + f2)
-                        .ToList());
-                    IReadOnlyList<float> nval = prop.Values
-                        .Zip(val, (f1, f2) => f1 + f2)
-                        .ToList();
-                    prop.ValueColors = prop.ValueColors
-                        .Select((c, i) => val[i] == nval[i] ? prop.ValueColors[i] : ValueColoring.LocallyAffected)
-                        .ToList();
-                    prop.Values = nval;
-                }
-
-                Func<float, float> roundf = val => (float)Math.Round(val);
-
-                if (prop.Attribute.Contains("Critical"))
-                {
-                    roundf = f => (float)(Math.Round(f * 10) / 10);
-                }
-                else if (prop.Attribute.Contains("per Second"))
-                {
-                    roundf = f => (float)(Math.Round(f * 100) / 100);
-                }
-
-                if (percm.Count > 0)
-                {
-                    var perc = 1f + percm.Select(m => m.Values[0]).Sum() / 100f;
-                    prop.ValueColors = prop.ValueColors.Select(c => ValueColoring.LocallyAffected).ToList();
-                    prop.Values = prop.Values.Select(v => roundf(v * perc)).ToList();
-                }
             }
         }
 
@@ -507,7 +395,7 @@ namespace PoESkillTree.ViewModels.Crafting
             }
         }
 
-        private void QualitySliderOnValueChanged(object sender, SliderValueChangedEventArgs e)
+        private void QualitySliderOnValueChanged(object? sender, SliderValueChangedEventArgs e)
         {
             RecalculateItem();
         }

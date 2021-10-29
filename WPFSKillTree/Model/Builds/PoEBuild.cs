@@ -17,13 +17,14 @@ namespace PoESkillTree.Model.Builds
     /// </summary>
     public class PoEBuild : AbstractBuild<PoEBuild>
     {
-        private string _note;
-        private string _characterName;
-        private string _accountName;
-        private string _league;
+        private string? _note;
+        private string? _characterName;
+        private string? _accountName;
+        private string? _league;
+        private Realm _realm;
         private int _level = 1;
         private string _treeUrl = Constants.DefaultTree;
-        private string _itemData;
+        private string? _itemData;
         private DateTime _lastUpdated = DateTime.Now;
         private ObservableCollection<string[]> _customGroups;
         private BanditSettings _bandits;
@@ -32,12 +33,12 @@ namespace PoESkillTree.Model.Builds
         private ConfigurationStats _configurationStats;
         private JObject _additionalData;
         private bool _isDirty;
-        private IMemento<PoEBuild> _memento;
+        private IMemento<PoEBuild>? _memento;
 
         /// <summary>
         /// Gets or sets a arbitrary note.
         /// </summary>
-        public string Note
+        public string? Note
         {
             get => _note;
             set => SetProperty(ref _note, value);
@@ -46,7 +47,7 @@ namespace PoESkillTree.Model.Builds
         /// <summary>
         /// Gets or sets the character name this builds represents.
         /// </summary>
-        public string CharacterName
+        public string? CharacterName
         {
             get => _characterName;
             set => SetProperty(ref _characterName, value);
@@ -55,7 +56,7 @@ namespace PoESkillTree.Model.Builds
         /// <summary>
         /// Gets or sets the account name that owns the represented character.
         /// </summary>
-        public string AccountName
+        public string? AccountName
         {
             get => _accountName;
             set => SetProperty(ref _accountName, value);
@@ -64,10 +65,16 @@ namespace PoESkillTree.Model.Builds
         /// <summary>
         /// Gets or sets the league of the represented character.
         /// </summary>
-        public string League
+        public string? League
         {
             get => _league;
             set => SetProperty(ref _league, value);
+        }
+
+        public Realm Realm
+        {
+            get => _realm;
+            set => SetProperty(ref _realm, value);
         }
 
         /// <summary>
@@ -91,7 +98,7 @@ namespace PoESkillTree.Model.Builds
         /// <summary>
         /// Gets or sets the item data of this build as serialized JSON.
         /// </summary>
-        public string ItemData
+        public string? ItemData
         {
             get => _itemData;
             set => SetProperty(ref _itemData, value);
@@ -174,7 +181,9 @@ namespace PoESkillTree.Model.Builds
         /// </summary>
         public bool CanRevert => _memento != null;
 
+#pragma warning disable CS8618 // All non-nullable fields are initialized here through their properties
         public PoEBuild()
+#pragma warning restore
         {
             PropertyChanged += PropertyChangedHandler;
             Bandits = new BanditSettings();
@@ -186,9 +195,11 @@ namespace PoESkillTree.Model.Builds
             PropertyChanging += PropertyChangingHandler;
         }
 
-        public PoEBuild(BanditSettings bandits, IEnumerable<string[]> customGroups,
+#pragma warning disable CS8618 // All non-nullable fields are initialized here through their properties
+        public PoEBuild(BanditSettings? bandits, IEnumerable<string[]> customGroups,
             IEnumerable<ushort> checkedNodeIds, IEnumerable<ushort> crossedNodeIds,
-            IEnumerable<(string, double?)> configurationStats, string additionalData)
+            IEnumerable<(string, double?)> configurationStats, string? additionalData)
+#pragma warning restore
         {
             PropertyChanged += PropertyChangedHandler;
             Bandits = bandits ?? new BanditSettings();
@@ -246,7 +257,7 @@ namespace PoESkillTree.Model.Builds
                 IsDirty = true;
         }
 
-        private void ChangedHandler(object sender, EventArgs args)
+        private void ChangedHandler(object? sender, EventArgs args)
         {
             IsDirty = true;
         }
@@ -265,7 +276,7 @@ namespace PoESkillTree.Model.Builds
         /// <exception cref="NullReferenceException">When <see cref="KeepChanges"/> was never called.</exception>
         public void RevertChanges()
         {
-            _memento.Restore(this);
+            _memento!.Restore(this);
             IsDirty = false;
         }
 
@@ -326,6 +337,7 @@ namespace PoESkillTree.Model.Builds
                 target.CharacterName = _build.CharacterName;
                 target.AccountName = _build.AccountName;
                 target.League = _build.League;
+                target.Realm = _build.Realm;
                 target.Level = _build.Level;
                 target.TreeUrl = _build.TreeUrl;
                 target.ItemData = _build.ItemData;

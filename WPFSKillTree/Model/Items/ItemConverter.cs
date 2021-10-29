@@ -38,7 +38,7 @@ namespace PoESkillTree.Model.Items
             var textBlock = d as TextBlock;
             if (textBlock == null)
                 return;
-            SetTextBlockInlines(textBlock, e.NewValue as IEnumerable<Inline>);
+            SetTextBlockInlines(textBlock, (IEnumerable<Inline>) e.NewValue);
         }
     }
 
@@ -51,7 +51,9 @@ namespace PoESkillTree.Model.Items
         private static readonly SolidColorBrush LightningAffectedColor = new SolidColorBrush(Color.FromRgb(0xFF, 0xD7, 0x00));
         private static readonly SolidColorBrush ChaosAffectedColor = new SolidColorBrush(Color.FromRgb(0xD0, 0x20, 0x90));
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        private static readonly Regex BackReplace = new Regex("#");
+
+        public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             var mod = value as ItemMod;
             if (mod == null)
@@ -61,9 +63,7 @@ namespace PoESkillTree.Model.Items
 
             var inlines = new List<Inline>();
 
-            var backrep = ItemAttributes.Attribute.Backreplace;
-
-            var matches = backrep.Matches(mod.Attribute).Cast<Match>().ToArray();
+            var matches = BackReplace.Matches(mod.Attribute).Cast<Match>().ToArray();
             int from = 0;
             string istring;
             Run r;

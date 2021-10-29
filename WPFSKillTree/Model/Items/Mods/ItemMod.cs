@@ -13,7 +13,7 @@ namespace PoESkillTree.Model.Items.Mods
     public class ItemMod
     {
 
-        public static readonly Regex Numberfilter = new Regex(@"[0-9]*\.?[0-9]+");
+        public static readonly Regex Numberfilter = new Regex(@"((?<!\d)-)?\d*\.?\d+");
 
         public string Attribute { get; }
 
@@ -40,7 +40,7 @@ namespace PoESkillTree.Model.Items.Mods
         /// <summary>
         /// Creates an ItemMod using the given values
         /// </summary>
-        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values,
+        public ItemMod(string attribute, bool isLocal, IEnumerable<float> values, 
             IEnumerable<ValueColoring> valueColors)
         {
             IsLocal = isLocal;
@@ -49,22 +49,7 @@ namespace PoESkillTree.Model.Items.Mods
             ValueColors = valueColors?.ToList() ?? new List<ValueColoring>();
         }
 
-        private ItemMod(ItemMod other)
-        {
-            IsLocal = other.IsLocal;
-            Attribute = other.Attribute;
-            ValueColors = other.ValueColors.ToList();
-        }
-
-        public ItemMod Sum(ItemMod m)
-        {
-            return new ItemMod(m)
-            {
-                Values = Values.Zip(m.Values, (f1, f2) => f1 + f2).ToList()
-            };
-        }
-
-        public string ToModifierString()
+        public override string ToString()
         {
             var index = 0;
             return InsertValues(Attribute, ref index);
@@ -84,11 +69,11 @@ namespace PoESkillTree.Model.Items.Mods
             return tokens.Select(t => new JArray(InsertValues(t, ref valueIndex), ValueColors[valueIndex - 1])).ToArray();
         }
 
-        public JToken ToJobject(bool asMod = false)
+        public JToken ToJObject(bool asMod = false)
         {
             if (asMod)
             {
-                return new JValue(ToModifierString());
+                return new JValue(ToString());
             }
 
             const string allowedTokens = @"(#|#%|\+#%|#-#|#/#)";
@@ -125,22 +110,6 @@ namespace PoESkillTree.Model.Items.Mods
             {
                 {"name", name}, {"values", new JArray(ValueTokensToJArrays(tokens))}, {"displayMode", displayMode}
             };
-        }
-
-        /// <summary>
-        ///   Create string based on attribute information
-        /// </summary>
-        public string CreateModString()
-        {
-            if (Values.Count == 0)
-            {
-                return Attribute;
-            }
-            var regex = new Regex(Regex.Escape("#"));
-            string ModString = Attribute;
-            foreach (var val in Values)
-                ModString = regex.Replace(ModString, val.ToString(), 1);
-            return ModString;
         }
     }
 

@@ -100,9 +100,9 @@
         </Label>
         <metroControls:NumericUpDown Grid.Row="0" Grid.Column="1"
                                      Margin="0 5"
-                                     Minimum="{Binding Tree.UndefinedLevel}" Maximum="{Binding Tree.MaximumLevel}"
-                                     HasDecimals="False"
-                                     Value="{Binding Tree.Level}" />
+                                     Minimum="0" Maximum="100"
+                                     NumericInputMode="Numbers"
+                                     Value="{Binding PersistentData.CurrentBuild.Level}" />
 
         <Label Grid.Row="1" Grid.Column="0"
                Margin="5">
@@ -110,7 +110,7 @@
         </Label>
         <metroControls:NumericUpDown Grid.Row="1" Grid.Column="1"
                                      Margin="0 5" Minimum="0"
-                                     HasDecimals="False"
+                                     NumericInputMode="Numbers"
                                      Value="{Binding AdditionalPoints.Value, ValidatesOnDataErrors=True}" />
 
         <Label Grid.Row="2" Grid.Column="0"
@@ -119,6 +119,7 @@
         </Label>
         <TextBox Grid.Row="2" Grid.Column="1"
                  Margin="0 5" Padding="0 0 45 0"
+                 VerticalContentAlignment="Center"
                  HorizontalContentAlignment="Right"
                  Text="{Binding TotalPoints, Mode=OneWay}" IsReadOnly="True" />
 
@@ -127,7 +128,7 @@
                   IsChecked="{Binding IncludeChecked.Value}">
             <l:Catalog Message="include Check-tagged nodes"/>
             <CheckBox.ToolTip>
-                <l:Catalog>Select if Check-tagged nodes must be skilled by possible solutions.</l:Catalog>
+                <l:Catalog Message="Select if Check-tagged nodes must be skilled by possible solutions." />
             </CheckBox.ToolTip>
         </CheckBox>
 
@@ -136,7 +137,7 @@
                   IsChecked="{Binding ExcludeCrossed.Value}">
             <l:Catalog Message="exclude Cross-tagged nodes"/>
             <CheckBox.ToolTip>
-                <l:Catalog>Select if Cross-tagged nodes must not be skilled by possible solutions.</l:Catalog>
+                <l:Catalog Message="Select if Cross-tagged nodes must not be skilled by possible solutions." />
             </CheckBox.ToolTip>
         </CheckBox>
 
@@ -153,7 +154,7 @@
         </Label>
         <metroControls:NumericUpDown Grid.Row="2" Grid.Column="3"
                                      Margin="0 5" Minimum="1"
-                                     HasDecimals="False"
+                                     NumericInputMode="Numbers"
                                      Value="{Binding Iterations.Value, ValidatesOnDataErrors=True}" />
 
         <Button Grid.Row="1" Grid.Column="4"
@@ -171,8 +172,8 @@
         </Button>
 
         <TabControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5"
-                    metroControls:TabControlHelper.IsUnderlined="True" Style="{DynamicResource TabControlStyle1}">
-            <TabItem metroControls:ControlsHelper.HeaderFontSize="15">
+                    metroControls:TabControlHelper.Underlined="TabItems" Style="{DynamicResource TabControlStyle1}">
+            <TabItem metroControls:HeaderedControlHelper.HeaderFontSize="15">
                 <TabItem.Header>
                     <l:Catalog Message="Attributes"/>
                 </TabItem.Header>
@@ -209,7 +210,7 @@
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate DataType="CollectionViewGroup">
-                                        <TextBlock Foreground="{StaticResource AccentColorBrush}" Text="{Binding Name}"/>
+                                        <TextBlock Foreground="{StaticResource MahApps.Brushes.Accent}" Text="{Binding Name}"/>
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
                             </GroupStyle>
@@ -266,9 +267,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Command="{Binding DataContext.RemoveAttributeConstraintCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}" Width="30" Height="30"
-                                                Style="{DynamicResource MetroCircleButtonStyle}">
-                                            <iconPacks:PackIconModern Kind="Close" Height="10" Width="10"/>
+                                                CommandParameter="{Binding}" Width="22" Height="22"
+                                                Style="{StaticResource MahApps.Styles.Button.Circle}">
+                                            <iconPacks:PackIconModern Kind="Close" Height="8" Width="8"/>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -278,7 +279,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem metroControls:ControlsHelper.HeaderFontSize="15">
+            <TabItem metroControls:HeaderedControlHelper.HeaderFontSize="15">
                 <TabItem.Header>
                     <l:Catalog Message="Pseudo Attributes"/>
                 </TabItem.Header>
@@ -302,7 +303,7 @@
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock d:DataContext="{d:DesignInstance CollectionViewGroup}" Foreground="{StaticResource AccentColorBrush}" Text="{Binding Name}"/>
+                                        <TextBlock d:DataContext="{d:DesignInstance CollectionViewGroup}" Foreground="{StaticResource MahApps.Brushes.Accent}" Text="{Binding Name}"/>
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
                             </GroupStyle>
@@ -359,9 +360,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Command="{Binding DataContext.RemovePseudoConstraintCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
-                                                CommandParameter="{Binding}" Width="30" Height="30"
-                                                Style="{DynamicResource MetroCircleButtonStyle}">
-                                            <iconPacks:PackIconModern Kind="Close" Height="10" Width="10"/>
+                                                CommandParameter="{Binding}" Width="22" Height="22"
+                                                Style="{StaticResource MahApps.Styles.Button.Circle}">
+                                            <iconPacks:PackIconModern Kind="Close" Height="8" Width="8"/>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -382,7 +383,7 @@
                 </TabItem.ToolTip>
             </TabItem>-->
 
-            <TabItem metroControls:ControlsHelper.HeaderFontSize="15">
+            <TabItem metroControls:HeaderedControlHelper.HeaderFontSize="15">
                 <TabItem.Header>
                     <l:Catalog Message="Settings"/>
                 </TabItem.Header>
@@ -402,28 +403,27 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" TextWrapping="Wrap" MaxWidth="600" Margin="5"
-                               FontSize="{DynamicResource NormalFontSize}">
+                               FontSize="{DynamicResource MahApps.Font.Size.Default}">
                         <Run>
-                            <l:Catalog>These settings define which attributes influence pseudo attributes.</l:Catalog>
+                            <l:Catalog Message="These settings define which attributes influence pseudo attributes." />
                         </Run>
                         <LineBreak/><LineBreak/>
                         <Run>
-                            <l:Catalog>For example, '#% increased Melee Physical Damage' will only influence the 
-                                pseudo attribute '#% increased Physical Damage' if the Tag 'Melee' is selected.</l:Catalog>
+                            <l:Catalog Message="For example, '#% increased Melee Physical Damage' will only influence the pseudo attribute '#% increased Physical Damage' if the Tag 'Melee' is selected." />
                         </Run>
                     </TextBlock>
                     
-                    <!-- 'Tree + gear' mode partially implemented -->
+                    <!-- 'Tree + gear' mode implementation code not enabled -->
                     <metroControls:ToggleSwitch Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="5,0,0,5"
                                                 HorizontalAlignment="Center"
-                                                IsChecked="{Binding TreePlusItemsMode.Value}"
-                                                Visibility="Visible">
-                        <metroControls:ToggleSwitch.OnLabel>
+                                                IsOn="{Binding TreePlusItemsMode.Value}"
+                                                Visibility="Collapsed">
+                        <metroControls:ToggleSwitch.OnContent>
                             <l:Catalog Message="Tree + Items"/>
-                        </metroControls:ToggleSwitch.OnLabel>
-                        <metroControls:ToggleSwitch.OffLabel>
+                        </metroControls:ToggleSwitch.OnContent>
+                        <metroControls:ToggleSwitch.OffContent>
                             <l:Catalog Message="Tree only"/>
-                        </metroControls:ToggleSwitch.OffLabel>
+                        </metroControls:ToggleSwitch.OffContent>
                     </metroControls:ToggleSwitch>
 
                     <Button Grid.Column="0" Grid.Row="3" Margin="4,4,4,4" Grid.ColumnSpan="5"

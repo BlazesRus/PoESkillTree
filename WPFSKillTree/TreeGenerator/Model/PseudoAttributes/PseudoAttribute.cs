@@ -63,11 +63,11 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
             return TotalStat;
         }
 
-        public PseudoAttribute(PseudoAttribute Target, string name)
-        {
-            Name = name;
-            Group = Target.Group;
-            Attributes = Target.Attributes;
-        }
+        //public PseudoAttribute(PseudoAttribute Target, string name)
+        //{
+        //    Name = name;
+        //    Group = Target.Group;
+        //    Attributes = Target.Attributes;
+        //}
     }
 }

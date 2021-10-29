@@ -1,62 +1,48 @@
 ﻿using NUnit.Framework;
+using PoESkillTree.Utils.UrlProcessing.Decoders;
 
 namespace PoESkillTree.Utils.UrlProcessing
 {
     [TestFixture]
     public class BuildConverterTest
     {
-        private IBuildConverter _buildConverter;
-
-        [SetUp]
-        public void TestInitialize()
-        {
-            _buildConverter = new BuildConverter(null);
-            RegisterFactories();
-        }
-
         [Test]
         public void GetUrlDeserializerReturnsNullWhenNoFactories()
         {
-            UnregisterAllFactories();
-
-            var deserializer = _buildConverter.GetUrlDeserializer("some.url");
-
-            Assert.IsNull(deserializer);
+            var data = SkillTreeUrlDecoders.TryDecode("some.url");
+            Assert.IsFalse(data.IsValid);
         }
 
         [Test]
-        public void GetUrlDeserializerReturnsCorrectDeserializer()
+        public void SkilLTreeUrlDecodersReturnValidDataWhenUrlIsNotSupported()
         {
-            var deserializer = _buildConverter.GetUrlDeserializer("http://www.pathofexile.com/passive-skill-tree/AAAABAAAAA==");
+            var data = SkillTreeUrlDecoders.TryDecode("https://example.com/AAAABgMAAAAA");
 
-            Assert.AreEqual(typeof(PathofexileUrlDeserializer), deserializer.GetType());
+            Assert.IsTrue(data.IsValid);
         }
 
         [Test]
-        public void GetUrlDeserializerReturnsDefaultDeserializerWhenUrlNotSupported()
+        public void SkilLTreeUrlDecodersReturnValidDataWhenUrlIsSupported()
         {
-            var deserializer = _buildConverter.GetUrlDeserializer("https://example.com/AAAABAAAAA==");
+            var data = SkillTreeUrlDecoders.TryDecode("https://www.pathofexile.com/passive-skill-tree/AAAABgMAAAAA");
 
-            Assert.AreEqual(typeof(NaivePoEUrlDeserializer), deserializer.GetType());
+            Assert.IsTrue(data.IsValid);
         }
 
-        #region Helpers
-
-        private void RegisterFactories()
+        [Test]
+        public void SkilLTreeUrlDecodersReturnValidDataWhenUrlIsSupportedFullscreen()
         {
-            _buildConverter.RegisterDeserializersFactories(
-                PathofexileUrlDeserializer.TryCreate,
-                PoeplannerUrlDeserializer.TryCreate);
+            var data = SkillTreeUrlDecoders.TryDecode("https://www.pathofexile.com/fullscreen-passive-skill-tree/AAAABgMAAAAA");
 
-            _buildConverter.RegisterDefaultDeserializer(url => new NaivePoEUrlDeserializer(url, null));
+            Assert.IsTrue(data.IsValid);
         }
 
-        private void UnregisterAllFactories()
+        [Test]
+        public void SkilLTreeUrlDecodersReturnValidDataWhenUrlIsSupportedFullscreenWithVersion()
         {
-            _buildConverter.RegisterDefaultDeserializer(url => null as NaivePoEUrlDeserializer);
-            _buildConverter.RegisterDeserializersFactories();
-        }
+            var data = SkillTreeUrlDecoders.TryDecode("https://www.pathofexile.com/fullscreen-passive-skill-tree/3.16.0/AAAABgMAAAAA");
 
-        #endregion
+            Assert.IsTrue(data.IsValid);
+        }
     }
 }

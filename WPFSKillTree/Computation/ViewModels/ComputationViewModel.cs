@@ -29,8 +29,12 @@ namespace PoESkillTree.Computation.ViewModels
         public GainOnActionStatsViewModel GainOnActionStats { get; private set; }
         public SharedConfigurationViewModel SharedConfiguration { get; private set; }
         public IndependentResultStatsViewModel IndependentResultStats { get; private set; }
+        public PassiveTreeConnectionsViewModel PassiveTreeConnections { get; private set; }
+        public AttributesInJewelRadiusViewModel AttributesInJewelRadius { get; private set; }
 
+#pragma warning disable CS8618 // The constructor is private and CreateAsync initializes everything
         private ComputationViewModel(ObservableCalculator observableCalculator, ComputationSchedulerProvider schedulers)
+#pragma warning restore
         {
             _observableCalculator = observableCalculator;
             var modifierNodeFactory = new ModifierNodeViewModelFactory(observableCalculator);
@@ -41,25 +45,28 @@ namespace PoESkillTree.Computation.ViewModels
         }
 
         private async Task InitializeAsync(
-            SkillDefinitions skillDefinitions, IBuilderFactories f, ObservableSet<IReadOnlyList<Skill>> skills)
+            GameData gameData, IBuilderFactories f, ObservableSet<IReadOnlyList<Skill>> skills)
         {
-            MainSkillSelection = MainSkillSelectionViewModel.Create(skillDefinitions, f, _nodeFactory, skills);
+            MainSkillSelection = MainSkillSelectionViewModel.Create(await gameData.Skills, f, _nodeFactory, skills);
 
             InitializeOffensiveStats(f);
             InitializeDefensiveStats(f);
 
             ConfigurationStats = await ConfigurationStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
             AddConfigurationStat(f.StatBuilders.Level, Entity.Enemy);
+            AddConfigurationStat(f.StatBuilders.Armour, Entity.Enemy);
 
             GainOnActionStats = await GainOnActionStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
             SharedConfiguration = SharedConfigurationViewModel.Create(_nodeFactory, f);
-            IndependentResultStats =
-                await IndependentResultStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
+            IndependentResultStats = await IndependentResultStatsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
+            PassiveTreeConnections = await PassiveTreeConnectionsViewModel.CreateAsync(_observableCalculator, _nodeFactory);
+            AttributesInJewelRadius = new AttributesInJewelRadiusViewModel(await gameData.PassiveTree, f, _observableCalculator);
         }
 
         private void InitializeOffensiveStats(IBuilderFactories f)
         {
             AddStats(OffensiveStats, f.MetaStatBuilders.SkillDpsWithHits);
+            AddStats(OffensiveStats, f.MetaStatBuilders.SkillDpsWithHitsCalculationMode);
             AddStats(OffensiveStats, f.MetaStatBuilders.SkillDpsWithDoTs);
             ForEachDamagingAilment(a => AddStats(OffensiveStats, f.MetaStatBuilders.AilmentDps(a)));
 
@@ -74,6 +81,16 @@ namespace PoESkillTree.Computation.ViewModels
                 t => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EnemyResistanceAgainstCrits(t)));
             ForEachDamageType(
                 t => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EnemyResistanceAgainstNonCrits(t)));
+            ForEachDamageType(
+                t => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EffectiveDamageMultiplierWithCrits(t)));
+            ForEachDamageType(
+                t => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EffectiveDamageMultiplierWithNonCrits(t)));
+            ForEachDamageType(
+                t => AddAvailableStats(OffensiveStats, f.DamageTypeBuilders.From(t).DamageMultiplierWithCrits));
+            ForEachDamageType(
+                t => AddAvailableStats(OffensiveStats, f.DamageTypeBuilders.From(t).DamageMultiplierWithNonCrits));
+            ForEachDamageType(
+                t => AddAvailableStats(OffensiveStats, f.DamageTypeBuilders.From(t).Damage.Taken, Entity.Enemy));
             AddStats(OffensiveStats,
                 f.MetaStatBuilders.Damage(DamageType.Physical).WithSkills.With(DamageSource.Attack));
             AddStats(OffensiveStats,
@@ -97,6 +114,9 @@ namespace PoESkillTree.Computation.ViewModels
 
             AddStats(OffensiveStats, f.StatBuilders.ChanceToHit);
             AddAvailableStats(OffensiveStats, f.StatBuilders.Accuracy);
+            AddAvailableStats(OffensiveStats, f.StatBuilders.Evasion, Entity.Enemy);
+            AddAvailableStats(OffensiveStats, f.MetaStatBuilders.EnemyDamageReductionFromArmourAgainstNonCrits);
+            AddAvailableStats(OffensiveStats, f.StatBuilders.Armour, Entity.Enemy);
 
             ForEachDamagingAilment(
                 a => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.AilmentInstanceLifetimeDamage(a)));
@@ -110,7 +130,7 @@ namespace PoESkillTree.Computation.ViewModels
                 a => AddAvailableStats(OffensiveStats, f.MetaStatBuilders.AilmentEffectiveInstances(a)));
             
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillHitDamageSource);
-            AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillNumberOfHitsPerCast);
+            AddAvailableStats(OffensiveStats, f.StatBuilders.SkillNumberOfHitsPerCast);
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillUsesHand(AttackDamageHand.MainHand));
             AddAvailableStats(OffensiveStats, f.MetaStatBuilders.SkillUsesHand(AttackDamageHand.OffHand));
 
@@ -161,7 +181,7 @@ namespace PoESkillTree.Computation.ViewModels
             AddAvailableStats(DefensiveStats, f.StatBuilders.Evasion.ChanceAgainstProjectileAttacks);
             AddAvailableStats(DefensiveStats, f.StatBuilders.Accuracy, Entity.Enemy);
             AddStats(DefensiveStats, f.DamageTypeBuilders.AnyDamageType().Resistance);
-            ForEachDamageType(t => AddAvailableStats(DefensiveStats, f.MetaStatBuilders.ResistanceAgainstHits(t)));
+            ForEachDamageType(t => AddAvailableStats(DefensiveStats, f.DamageTypeBuilders.From(t).ResistanceAgainstHits));
             ForEachDamageType(t => AddAvailableStats(DefensiveStats, f.MetaStatBuilders.MitigationAgainstHits(t)));
             ForEachDamageType(t => AddAvailableStats(DefensiveStats, f.MetaStatBuilders.MitigationAgainstDoTs(t)));
             ForEachDamageType(t => AddAvailableStats(DefensiveStats, f.MetaStatBuilders.MitigationAgainstDoTs(t)));
@@ -238,9 +258,8 @@ namespace PoESkillTree.Computation.ViewModels
             ObservableCalculator observableCalculator, ComputationSchedulerProvider schedulers,
             ObservableSet<IReadOnlyList<Skill>> skills)
         {
-            var skillDefinitions = await gameData.Skills;
             var vm = new ComputationViewModel(observableCalculator, schedulers);
-            await vm.InitializeAsync(skillDefinitions, builderFactories, skills);
+            await vm.InitializeAsync(gameData, builderFactories, skills);
             return vm;
         }
     }

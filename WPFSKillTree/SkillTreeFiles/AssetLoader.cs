@@ -10,6 +10,7 @@ using PoESkillTree.Engine.Utils;
 using PoESkillTree.Engine.Utils.Extensions;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
+using PoESkillTree.ViewModels.PassiveTree;
 
 namespace PoESkillTree.SkillTreeFiles
 {
@@ -22,8 +23,8 @@ namespace PoESkillTree.SkillTreeFiles
     {
         private const string SpriteUrl = "http://www.pathofexile.com/image/passive-skill/";
 
-        private const string SkillTreeFile = "SkillTree.txt";
-        private const string OptsFile = "Opts.txt";
+        public static string SkillTreeFile = "SkillTree.json";
+        public static string OptsFile = "Opts.json";
         private const string AssetsFolder = "Assets/";
 
         private const string TempFolder = "Temp/";
@@ -68,25 +69,12 @@ namespace PoESkillTree.SkillTreeFiles
         public async Task<string> DownloadSkillTreeToFileAsync()
         {
             var code = await _httpClient.GetStringAsync(Constants.TreeAddress);
-            var regex = new Regex("var passiveSkillTreeData.*");
+            var start = "var passiveSkillTreeData = ";
+            var regex = new Regex($"{start}{{(?>[^{{}}]|(?<open>){{|(?<-open>)}})*}}(?(o)(?!))");
             var skillTreeObj = regex.Match(code).Value.Replace("\\/", "/");
-            skillTreeObj = skillTreeObj.Substring(27, skillTreeObj.Length - 27 - 1);
+            skillTreeObj = skillTreeObj.Substring(start.Length, skillTreeObj.Length - start.Length);
             await FileUtils.WriteAllTextAsync(_tempSkillTreePath, skillTreeObj);
             return skillTreeObj;
-        }
-
-        /// <summary>
-        /// Downloads the opt Json file asynchronously. Overwrites an existing file.
-        /// </summary>
-        /// <returns>The contents of the opts file.</returns>
-        public async Task<string> DownloadOptsToFileAsync()
-        {
-            var code = await _httpClient.GetStringAsync(Constants.TreeAddress);
-            var regex = new Regex(@"ascClasses:.*");
-            var optsObj = regex.Match(code).Value.Replace("ascClasses", "{ \"ascClasses\"");
-            optsObj = optsObj.Substring(0, optsObj.Length - 1) + "}";
-            await FileUtils.WriteAllTextAsync(_tempOptsPath, optsObj);
-            return optsObj;
         }
 
         /// <summary>
@@ -97,17 +85,18 @@ namespace PoESkillTree.SkillTreeFiles
         /// <param name="reportProgress">If specified, it is called to set this method's progress as a value
         /// from 0 to 1.</param>
         /// <returns></returns>
-        internal async Task DownloadSkillNodeSpritesAsync(PoESkillTree inTree,
-            Action<double> reportProgress = null)
+        internal async Task DownloadSkillNodeSpritesAsync(PassiveTreeViewModel inTree,
+            Action<double>? reportProgress = null)
         {
             Directory.CreateDirectory(_tempAssetsPath);
             var perSpriteProgress = 1.0 / inTree.SkillSprites.Count;
             var progress = 0.0;
             foreach (var obj in inTree.SkillSprites)
             {
-                var sprite = obj.Value[Constants.AssetZoomLevel];
-                var path = _tempAssetsPath + sprite.FileName;
-                var url = SpriteUrl + sprite.FileName;
+                var sprite = obj.Value[inTree.MaxImageZoomLevelIndex];
+                var filename = sprite.FileName.Replace("https://web.poecdn.com/image/passive-skill/", string.Empty);
+                var path = _tempAssetsPath + filename;
+                var url = SpriteUrl + filename;
                 if (path.Contains('?'))
                     path = path.Remove(path.IndexOf('?'));
                 await DownloadAsync(url, path);
@@ -124,10 +113,10 @@ namespace PoESkillTree.SkillTreeFiles
         /// <param name="reportProgress">If specified, it is called to set this method's progress as a value
         /// from 0 to 1.</param>
         /// <returns></returns>
-        internal async Task DownloadAssetsAsync(PoESkillTree inTree, Action<double> reportProgress = null)
+        internal async Task DownloadAssetsAsync(PassiveTreeViewModel inTree, Action<double>? reportProgress = null)
         {
             Directory.CreateDirectory(_tempAssetsPath);
-            var zoomLevel = inTree.ImageZoomLevels[Constants.AssetZoomLevel].ToString(CultureInfo.InvariantCulture);
+            var zoomLevel = inTree.ImageZoomLevels[inTree.MaxImageZoomLevelIndex].ToString(CultureInfo.InvariantCulture);
             var perAssetProgress = 1.0 / inTree.Assets.Count;
             var progress = 0.0;
             foreach (var asset in inTree.Assets)
@@ -157,14 +146,13 @@ namespace PoESkillTree.SkillTreeFiles
         public async Task DownloadAllAsync()
         {
             var skillTreeTask = DownloadSkillTreeToFileAsync();
-            var optsTask = DownloadOptsToFileAsync();
 
             var treeString = await skillTreeTask;
-            var inTree = JsonConvert.DeserializeObject<PoESkillTree>(treeString, new PoESkillTreeConverter());
+            var inTree = new PassiveTreeViewModel(treeString);
             var spritesTask = DownloadSkillNodeSpritesAsync(inTree);
             var assetsTask = DownloadAssetsAsync(inTree);
 
-            await Task.WhenAll(optsTask, spritesTask, assetsTask);
+            await Task.WhenAll(spritesTask, assetsTask);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Genetic;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 using PoESkillTree.TreeGenerator.Settings;
+using PoESkillTree.ViewModels.PassiveTree;
 
 namespace PoESkillTree.TreeGenerator.Solver
 {
@@ -17,6 +18,7 @@ namespace PoESkillTree.TreeGenerator.Solver
     /// </summary>
     public class AdvancedSolver : AbstractGeneticSolver<AdvancedSolverSettings>
     {
+/*
         private class ConstraintValues
         {
             public float TargetValue;
@@ -33,6 +35,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                 Weight = weight;
             }
         }
+*/
 
         /// <summary>
         /// PseudoAttributeConstraint data object where the PseudoAttribute is converted
@@ -40,9 +43,9 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private class ConvertedPseudoAttributeConstraint
         {
-            public List<Tuple<string, float>> Attributes { get; private set; }
+            public List<Tuple<string, float>> Attributes { get; }
 
-            public Tuple<float, double> TargetWeightTuple { get; private set; }
+            public Tuple<float, double> TargetWeightTuple { get; }
 
             public ConvertedPseudoAttributeConstraint(List<Tuple<string, float>> attributes, Tuple<float, double> tuple)
             {
@@ -64,10 +67,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         // It doesn't gain anything from larger populations and more generations.
         // Running more generations has the upside that it doesn't take much longer because
         // the GA reaches a point where not many new DNAs are generated and it can use the cache nearly always.
-        protected override int Generations
-        {
-            get { return 200; }
-        }
+        protected override int Generations => 200;
         private const double PopMultiplier = 7;
 
         // Between 3 and 5 seems to be the optimal point. Anything higher or lower is worse.
@@ -131,66 +131,23 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         private float[] _fixedAttributes;
 
-        protected override GeneticAlgorithmParameters GaParameters
-        {
-            get
-            {
-                return new GeneticAlgorithmParameters(
-                    (int) (PopMultiplier * SearchSpace.Count),
-                    SearchSpace.Count,
-                    maxMutateClusterSize: MaxMutateClusterSize);
-            }
-        }
+        protected override GeneticAlgorithmParameters GaParameters =>
+            new GeneticAlgorithmParameters(
+                (int) (PopMultiplier * SearchSpace.Count),
+                SearchSpace.Count,
+                maxMutateClusterSize: MaxMutateClusterSize);
 
         /// <summary>
         /// Creates a new, uninitialized instance.
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
+#pragma warning disable CS8618 // Initialized in Initialize
         public AdvancedSolver(SkillTree tree, AdvancedSolverSettings settings)
+#pragma warning restore
             : base(tree, settings)
         {
             FinalHillClimbEnabled = true;
-            //if (settings.AttributeConstraints.ContainsKey(DualWandAccKey) && settings.AttributeConstraints[DualWandAccKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanDualWandAcc = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanDualWandAcc = false;
-            //}
-            ////if (settings.AttributeConstraints.ContainsKey(PseudoAccKey) && settings.AttributeConstraints[PseudoAccKey].Item1 > 0)
-            ////{
-            ////    GlobalSettings.ScanPseudoAccuracy = true;
-            ////}
-            ////else
-            ////{
-            ////    GlobalSettings.ScanPseudoAccuracy = false;
-            ////}
-            //if (settings.AttributeConstraints.ContainsKey(HPTotalKey) && settings.AttributeConstraints[HPTotalKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanHPTotal = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanHPTotal = false;
-            //}
-            //if (settings.AttributeConstraints.ContainsKey(HybridHPKey) && settings.AttributeConstraints[HybridHPKey].Item1 > 0)
-            //{
-            //    GlobalSettings.ScanHybridHP = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.ScanHybridHP = false;
-            //}
-            //if (GlobalSettings.ScanDualWandAcc || GlobalSettings.ScanPseudoAccuracy || GlobalSettings.ScanHPTotal || GlobalSettings.ScanHybridHP)
-            //{
-            //    GlobalSettings.AdvancedTreeSearch = true;
-            //}
-            //else
-            //{
-            //    GlobalSettings.AdvancedTreeSearch = false;
-            //}
         }
 
         public override void Initialize()
@@ -245,17 +202,17 @@ namespace PoESkillTree.TreeGenerator.Solver
             }
         }
 
-        protected override bool MustIncludeNodeGroup(SkillNode node)
+        protected override bool MustIncludeNodeGroup(PassiveNodeViewModel node)
         {
             // If the node has stats and is not a travel node,
             // the group is included.
             return _nodeAttributes[node.Id].Count > 0 && !_areTravelNodes[node.Id];
         }
 
-        protected override bool IncludeNodeInSearchGraph(SkillNode node)
+        protected override bool IncludeNodeInSearchGraph(PassiveNodeViewModel node)
         {
             // Keystones can only be included if they are check-tagged.
-            return node.Type != PassiveNodeType.Keystone;
+            return node.PassiveNodeType != PassiveNodeType.Keystone;
         }
 
         /// <summary>
@@ -306,7 +263,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         private List<ConvertedPseudoAttributeConstraint> EvalPseudoAttrConstraints()
         {
             var keystones = from node in Settings.Checked
-                            where node.Type == PassiveNodeType.Keystone
+                            where node.PassiveNodeType == PassiveNodeType.Keystone
                             select node.Name;
             var conditionSettings = new ConditionSettings(Settings.Tags, Settings.OffHand, keystones.ToArray(), Settings.WeaponClass);
 
@@ -394,7 +351,7 @@ namespace PoESkillTree.TreeGenerator.Solver
                             dict[tuple.Item1] += tuple.Item2;
                         }
                     }
-                    _nodeAttributes[containedNode] = null;
+                    _nodeAttributes[containedNode] = null!;
                 }
                 _nodeAttributes[node] = dict.Select(p => Tuple.Create(p.Key, p.Value)).ToList();
             }
@@ -458,6 +415,7 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
+/*
             if (Settings.TreePlusItemsMode||GlobalSettings.AdvancedTreeSearch)
             {
                 string StatName;
@@ -534,6 +492,12 @@ namespace PoESkillTree.TreeGenerator.Solver
                     var currentValue = totalStats[i];
                     csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
                 }
+            }
+*/
+            for (var i = 0; i < _attrConstraints.Length; i++)
+            {
+                var stat = _attrConstraints[i];
+                csvs *= CalcCsv(totalStats[i], stat.Item2, stat.Item1);
             }
 
             // Total points spent is another csv.

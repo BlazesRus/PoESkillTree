@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
@@ -10,12 +11,12 @@ using Attribute = PoESkillTree.ViewModels.Attribute;
 
 namespace PoESkillTree.Utils.Converter
 {
-    [ValueConversion(typeof (string), typeof (string))]
+    [ValueConversion(typeof (string), typeof (AttributeGroup))]
     //list view sorter here
     public class GroupStringConverter : IValueConverter, IComparer
     {
         public Dictionary<string, AttributeGroup> AttributeGroups = new Dictionary<string, AttributeGroup>();
-        private IList<string[]> CustomGroups;
+        private IList<string[]> _customGroups;
         private static readonly string Keystone = L10n.Message("Keystone");
         private static readonly string Weapon = L10n.Message("Weapon");
         private static readonly string Charges = L10n.Message("Charges");
@@ -39,24 +40,6 @@ namespace PoESkillTree.Utils.Converter
         private static readonly string DecimalRegex = "\\d+(\\.\\d*)?";
         private static readonly IReadOnlyList<string[]> DefaultGroups = new List<string[]>
         {
-            new[] {"(Total)", PseudoTotal},
-            new[] {"[Non-Tagged]", PseudoTotal},
-            new[] {"Charged Dash Damage", PseudoTotal},
-            new[] {"before tags", PseudoTotal},
-            new[] {"SharedStrength", PseudoTotal},
-            new[] {"maximum Base", PseudoTotal},
-            new[] {"combined", PseudoTotal},
-            new[] {"increased Hybrid", PseudoTotal},
-            new[] {"increased Total", PseudoTotal},
-            new[] {"[Tagged]", PseudoTotal},
-            new[] {"Life with", PseudoTotal},
-            new[] {"Energy Shield with", PseudoTotal},
-            new[] {"Strength from Passives in Radius is Transformed to Intelligence", Hidden },
-            new[] {"Strength from Passives in Radius is Transformed to Dexterity", Hidden },
-            new[] {"Dexterity from Passives in Radius is Transformed to Intelligence", Hidden },
-            new[] {"Dexterity from Passives in Radius is Transformed to Strength", Hidden },
-            new[] {"Intelligence from Passives in Radius is Transformed to Strength", Hidden },
-            new[] {"Intelligence from Passives in Radius is Transformed to Dexterity", Hidden },
             new[] {"Share Endurance, Frenzy and Power Charges with nearby party members", Keystone},
             new[] {"Critical Strike Chance with Claws", CriticalStrike},
             new[] {"with Claws", Weapon},
@@ -101,7 +84,6 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Minions have", Minion},
             new[] {"Minions Leech", Minion},
             new[] {"Minions Regenerate", Minion},
-            new[] {"Skeletons", Minion},
             new[] {"Mine Damage", Trap},
             new[] {"Trap Damage", Trap},
             new[] {"Trap Duration", Trap},
@@ -243,10 +225,6 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Melee Physical Damage", Weapon},
             new[] {"with Swords", Weapon},
             new[] {"with Wands", Weapon},
-            new[] {"Cold Damage with Attack Skills", Weapon},
-            new[] {"Fire Damage with Attack Skills", Weapon},
-            new[] {"Lightning Damage with Attack Skills", Weapon},
-            new[] {"Elemental Damage with Attack Skills", Weapon},
             new[] {"Cold Damage with Weapons", Weapon},
             new[] {"Fire Damage with Weapons", Weapon},
             new[] {"Lightning Damage with Weapons", Weapon},
@@ -263,7 +241,6 @@ namespace PoESkillTree.Utils.Converter
             new[] {"increased Physical Damage", General},
             new[] {"Elemental Damage", General},
             new[] {"Jewel Socket", JewelTypes},
-            new[] {"Jewel", JewelTypes},
             new[] {"Cast Speed", Spell},
             new[] {"Cold Damage", General},
             new[] {"Fire Damage", General},
@@ -275,6 +252,31 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Strength", CoreAttributes},
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
+            new[] {"Jewel", JewelTypes},
+/*
+            new[] {"Skeletons", Minion},
+            new[] {"Cold Damage with Attack Skills", Weapon},
+            new[] {"Fire Damage with Attack Skills", Weapon},
+            new[] {"Lightning Damage with Attack Skills", Weapon},
+            new[] {"Elemental Damage with Attack Skills", Weapon},
+            new[] {"(Total)", PseudoTotal},
+            new[] {"[Non-Tagged]", PseudoTotal},
+            new[] {"Charged Dash Damage", PseudoTotal},
+            new[] {"before tags", PseudoTotal},
+            new[] {"SharedStrength", PseudoTotal},
+            new[] {"maximum Base", PseudoTotal},
+            new[] {"combined", PseudoTotal},
+            new[] {"increased Hybrid", PseudoTotal},
+            new[] {"increased Total", PseudoTotal},
+            new[] {"[Tagged]", PseudoTotal},
+            new[] {"Life with", PseudoTotal},
+            new[] {"Energy Shield with", PseudoTotal},
+            new[] {"Strength from Passives in Radius is Transformed to Intelligence", Hidden },
+            new[] {"Strength from Passives in Radius is Transformed to Dexterity", Hidden },
+            new[] {"Dexterity from Passives in Radius is Transformed to Intelligence", Hidden },
+            new[] {"Dexterity from Passives in Radius is Transformed to Strength", Hidden },
+            new[] {"Intelligence from Passives in Radius is Transformed to Strength", Hidden },
+            new[] {"Intelligence from Passives in Radius is Transformed to Dexterity", Hidden },
             new[] {"DualWand Accuracy Subtotal", Weapon},
             new[] {"HP Subtotal", Defense},
             new[] {"Jewel Socket ID:", Hidden},
@@ -282,14 +284,15 @@ namespace PoESkillTree.Utils.Converter
             new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
             new[] {"Intuitive Leaped", Hidden },
 			new[] {" (TrackedAttr)", PseudoTotal},
+*/
         };
 
         private static readonly Regex NumberRegex = new Regex(@"[0-9]*\.?[0-9]+");
-        private static readonly Dictionary<string, string> AttributeToDefaultGroup = new Dictionary<string, string>();
+        private static readonly Dictionary<string, string?> AttributeToDefaultGroup = new Dictionary<string, string?>();
 
         public GroupStringConverter()
         {
-            CustomGroups = new List<string[]>();
+            _customGroups = new List<string[]>();
             foreach (var group in DefaultGroups)
             {
                 if (!AttributeGroups.ContainsKey(group[1]))
@@ -297,7 +300,7 @@ namespace PoESkillTree.Utils.Converter
                     AttributeGroups.Add(group[1], new AttributeGroup(group[1]));
                 }
             }
-            foreach (var group in CustomGroups)
+            foreach (var group in _customGroups)
             {
                 if (!AttributeGroups.ContainsKey(group[1]))
                 {
@@ -309,7 +312,7 @@ namespace PoESkillTree.Utils.Converter
 
         public void ResetGroups(IList<string[]> newgroups)
         {
-            CustomGroups = newgroups;
+            _customGroups = newgroups;
 
             AttributeGroups = new Dictionary<string, AttributeGroup>();
             foreach (var group in DefaultGroups)
@@ -319,7 +322,7 @@ namespace PoESkillTree.Utils.Converter
                     AttributeGroups.Add(group[1], new AttributeGroup(group[1]));
                 }
             }
-            foreach (var group in CustomGroups)
+            foreach (var group in _customGroups)
             {
                 if (!AttributeGroups.ContainsKey(group[1]))
                 {
@@ -345,7 +348,7 @@ namespace PoESkillTree.Utils.Converter
         {
             //Remove it from any existing custom groups first
             RemoveFromGroup(new string[] { attribute });
-            CustomGroups.Insert(0, new string[] { attribute, groupname });
+            _customGroups.Insert(0, new string[] { attribute, groupname });
         }
 
         public void RemoveFromGroup(string[] attributes)
@@ -353,7 +356,7 @@ namespace PoESkillTree.Utils.Converter
             List<string[]> linesToRemove = new List<string[]>();
             foreach (string attr in attributes)
             {
-                foreach (var gp in CustomGroups)
+                foreach (var gp in _customGroups)
                 {
                     if (NumberRegex.Replace(attr.ToLowerInvariant(), "") == NumberRegex.Replace(gp[0].ToLowerInvariant(), ""))
                     {
@@ -363,14 +366,14 @@ namespace PoESkillTree.Utils.Converter
             }
             foreach (string[] line in linesToRemove)
             {
-                CustomGroups.Remove(line);
+                _customGroups.Remove(line);
             }
         }
 
         public void DeleteGroup(string groupname)
         {
             List<string[]> linesToRemove = new List<string[]>();
-            foreach (var gp in CustomGroups)
+            foreach (var gp in _customGroups)
             {
                 if (groupname.ToLower().Equals(gp[1].ToLower()))
                 {
@@ -379,7 +382,7 @@ namespace PoESkillTree.Utils.Converter
             }
             foreach (string[] line in linesToRemove)
             {
-                CustomGroups.Remove(line);
+                _customGroups.Remove(line);
             }
             AttributeGroups.Remove(groupname);
         }
@@ -388,7 +391,7 @@ namespace PoESkillTree.Utils.Converter
         {
             Dictionary<string, float> groupTotals = new Dictionary<string, float>();
             Dictionary<string, float> groupDeltas = new Dictionary<string, float>();
-            foreach (var gp in CustomGroups)
+            foreach (var gp in _customGroups)
             {
                 //only sum for the groups that need it
                 if (!gp[1].Contains("#"))
@@ -422,21 +425,21 @@ namespace PoESkillTree.Utils.Converter
                     if (groupDeltas[key] == 0)
                         deltaString = "";
                     else if (groupDeltas[key] > 0)
-                        deltaString = " +" + groupDeltas[key].ToString();
+                        deltaString = " +" + groupDeltas[key];
                     else
-                        deltaString = " " + groupDeltas[key].ToString();
+                        deltaString = " " + groupDeltas[key];
                     AttributeGroups[key].GroupName = "Custom: "+key.Replace("#", groupTotals[key].ToString())+deltaString;
                 }
             }
 
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            return Convert(value.ToString());
+            return Convert(value?.ToString() ?? "");
         }
 
-        private static bool TryGetDefaultGroup(string attribute, out string group)
+        private static bool TryGetDefaultGroup(string attribute, [NotNullWhen(true)] out string? group)
         {
             if (AttributeToDefaultGroup.TryGetValue(attribute, out group))
             {
@@ -456,10 +459,10 @@ namespace PoESkillTree.Utils.Converter
             return false;
         }
 
-        public int Compare(object a, object b)
+        public int Compare(object? a, object? b)
         {
-            string attr1 = ((Attribute)a).Text;
-            string attr2 = ((Attribute)b).Text;
+            string attr1 = ((Attribute?) a)?.Text ?? "";
+            string attr2 = ((Attribute?) b)?.Text ?? "";
             var attr1Lower = attr1.ToLowerInvariant();
             var attr2Lower = attr2.ToLowerInvariant();
             //find the group names and types that the attributes belong in
@@ -468,7 +471,7 @@ namespace PoESkillTree.Utils.Converter
             int group2 = 2;
             string attrgroup1 = MiscLabel;
             string attrgroup2 = MiscLabel;
-            foreach (var gp in CustomGroups)
+            foreach (var gp in _customGroups)
             {
                 if (NumberRegex.Replace(attr1Lower, "") == NumberRegex.Replace(gp[0].ToLowerInvariant(), ""))
                 {
@@ -479,14 +482,13 @@ namespace PoESkillTree.Utils.Converter
             }
             if (group1 == 2)
             {
-                string group;
-                if (TryGetDefaultGroup(attr1Lower, out group))
+                if (TryGetDefaultGroup(attr1Lower, out var group))
                 {
                     attrgroup1 = group;
                     group1 = 1;
                 }
             }
-            foreach (var gp in CustomGroups)
+            foreach (var gp in _customGroups)
             {
                 if (NumberRegex.Replace(attr2Lower, "") == NumberRegex.Replace(gp[0].ToLowerInvariant(), ""))
                 {
@@ -497,8 +499,7 @@ namespace PoESkillTree.Utils.Converter
             }
             if (group2 == 2)
             {
-                string group;
-                if (TryGetDefaultGroup(attr1Lower, out group))
+                if (TryGetDefaultGroup(attr1Lower, out var group))
                 {
                     attrgroup2 = group;
                     group2 = 1;
@@ -525,15 +526,15 @@ namespace PoESkillTree.Utils.Converter
 
         public AttributeGroup Convert(string s)
         {
-            foreach (var gp in CustomGroups)
+            foreach (var gp in _customGroups)
             {
                 if (NumberRegex.Replace(s.ToLowerInvariant(), "") == NumberRegex.Replace(gp[0].ToLowerInvariant(), ""))
                 {
                     return AttributeGroups[gp[1]];
                 }
             }
-            string group;
-            if (TryGetDefaultGroup(s.ToLowerInvariant(), out group))
+
+            if (TryGetDefaultGroup(s.ToLowerInvariant(), out var group))
             {
                 return AttributeGroups[group];
             }

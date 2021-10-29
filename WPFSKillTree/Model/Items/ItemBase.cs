@@ -124,45 +124,7 @@ namespace PoESkillTree.Model.Items
                 }
             }
 
-            // This might miss some tags, but those are only important for mod crafting,
-            // which will not happen with this item.
-            Tags = ItemClass.ToTags();
-
-            Image = new ItemImage(itemImageService, ItemClass);
-        }
-
-        /// <summary>
-        /// Creates an ItemBase that sets <see cref="ItemClass"/> and <see cref="Tags"/> on
-        /// a best effort basis. They might not be set correctly.
-        /// <para/>
-        /// Only <see cref="Name"/>, <see cref="ItemClass"/> and <see cref="Tags"/> may be called on
-        /// ItemBases created via this constructor. It is not meant to produce bases that can exist independent
-        /// of the <see cref="JewelItem"/> they are created for.
-        /// </summary>
-        /// <param name="itemImageService"></param>
-        /// <param name="itemSlot">The slot the parent <see cref="JewelItem"/> is slotted into.
-        /// <see cref="ItemSlot.Unequipable"/> if is not equipped.</param>
-        /// <param name="typeLine">The TypeLine property of the parent <see cref="JewelItem"/>.</param>
-        /// <param name="frameType">The frame type of the item.</param>
-        public ItemBase(ItemImageService itemImageService, string typeLine, FrameType frameType, bool AbyssJewel=false)
-        {
-            // These don't matter as we won't create new items from this base.
-            Level = 0;
-            RequiredStrength = 0;
-            RequiredDexterity = 0;
-            RequiredIntelligence = 0;
-            DropDisabled = false;
-            InventoryHeight = 0;
-            InventoryWidth = 0;
-            MetadataId = "";
-            ImplicitMods = new List<IMod>();
-            _properties = new List<string>();
-            CanHaveQuality = false;
-
-            Name = typeLine;
-            ItemClass = AbyssJewel?ItemClass.AbyssJewel:ItemClass.Jewel;
-
-            // This might miss some tags, but those are only important for mod crafting,
+            // This might miss some tags, but those are only important for mod crafting, 
             // which will not happen with this item.
             Tags = ItemClass.ToTags();
 
@@ -209,7 +171,7 @@ namespace PoESkillTree.Model.Items
                 else if (itemClass == ItemClass.ThrustingOneHandSword)
                     itemClass = ItemClass.OneHandSword;
                 // replace "Hand" by "Handed" and add a space in front of each capital letter
-                var itemClassStr = Regex.Replace(itemClass.ToString().Replace("Hand", "Handed"),
+                var itemClassStr = Regex.Replace(itemClass.ToString().Replace("Hand", "Handed"), 
                     @"([a-z])([A-Z])", @"$1 $2");
                 props.Add(new ItemMod(itemClassStr, true));
             }

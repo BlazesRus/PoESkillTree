@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
-using PoESkillTree.ViewModels.Equipment;
+//using PoESkillTree.SkillTreeFiles;
+//using PoESkillTree.ViewModels.Equipment;
 
 namespace PoESkillTree.TreeGenerator.Settings
 {
@@ -35,6 +35,7 @@ namespace PoESkillTree.TreeGenerator.Settings
         /// </summary>
         public readonly Dictionary<PseudoAttribute, Tuple<float, double>> PseudoAttributeConstraints;
 
+/*
         /// <summary>
         /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
         /// </summary>
@@ -52,6 +53,7 @@ namespace PoESkillTree.TreeGenerator.Settings
         /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
         /// </summary>
         public readonly SkillTree TreeInfo;
+*/
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculation.
@@ -74,6 +76,46 @@ namespace PoESkillTree.TreeGenerator.Settings
         /// </summary>
         public readonly Dictionary<string, float> InitialAttributes;
 
+        /// <summary>
+        /// Creates new AdvancesSolverSettings.
+        /// </summary>
+        /// <param name="baseSettings">Base settings to copy.</param>
+        /// <param name="totalPoints">Maximum for points spent in the result tree. (>= 0)</param>
+        /// <param name="initialAttributes">Starting attributes of stats that calculations are based on.</param>
+        /// <param name="attributeConstraints">The attribute constraints the solver should try to fullfill.</param>
+        /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints the solver should try to fullfill.</param>
+        /// <param name="weaponClass">WeaponClass used for pseudo attribute calculation.</param>
+        /// <param name="tags">Tags used for pseudo attribute calculation.</param>
+        /// <param name="offHand">OffHand used for pseudo attribute calculation.</param>
+        public AdvancedSolverSettings(SolverSettings baseSettings,
+            int totalPoints,
+            Dictionary<string, float> initialAttributes,
+            Dictionary<string, Tuple<float, double>> attributeConstraints,
+            Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints,
+            WeaponClass weaponClass, Tags tags, OffHand offHand)
+            : base(baseSettings)
+        {
+            if (totalPoints < 0) throw new ArgumentOutOfRangeException(nameof(totalPoints), totalPoints, "must be >= 0");
+
+            TotalPoints = totalPoints;
+            WeaponClass = weaponClass;
+            Tags = tags;
+            OffHand = offHand;
+            AttributeConstraints = attributeConstraints ?? new Dictionary<string, Tuple<float, double>>();
+            PseudoAttributeConstraints = pseudoAttributeConstraints ?? new Dictionary<PseudoAttribute, Tuple<float, double>>();
+            InitialAttributes = initialAttributes ?? new Dictionary<string, float>();
+
+            if (AttributeConstraints.Values.Any(tuple => tuple.Item2 < 0 || tuple.Item2 > 1))
+                throw new ArgumentException("Weights need to be between 0 and 1", "attributeConstraints");
+            if (AttributeConstraints.Values.Any(t => t.Item1 <= 0))
+                throw new ArgumentException("Target values need to be greater zero", "attributeConstraints");
+            if (PseudoAttributeConstraints.Values.Any(tuple => tuple.Item2 < 0 || tuple.Item2 > 1))
+                throw new ArgumentException("Weights need to be between 0 and 1", "pseudoAttributeConstraints");
+            if (PseudoAttributeConstraints.Values.Any(t => t.Item1 <= 0))
+                throw new ArgumentException("Target values need to be greater zero", "pseudoAttributeConstraints");
+        }
+
+/*
         /// <summary>
         /// Creates new AdvancesSolverSettings.
         /// </summary>
@@ -116,4 +158,5 @@ namespace PoESkillTree.TreeGenerator.Settings
                 throw new ArgumentException("Target values need to be greater zero", "pseudoAttributeConstraints");
         }
     }
+*/
 }

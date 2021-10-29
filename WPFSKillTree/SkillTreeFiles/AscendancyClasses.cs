@@ -2,6 +2,7 @@
 using System.Linq;
 using EnumsNET;
 using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree.Base;
 
 namespace PoESkillTree.SkillTreeFiles
 {
@@ -13,33 +14,23 @@ namespace PoESkillTree.SkillTreeFiles
         private readonly Dictionary<CharacterClass, List<Class>> _classes =
             new Dictionary<CharacterClass, List<Class>>();
 
-        internal AscendancyClasses(Dictionary<int, CharacterToAscendancyOption> ascClasses)
+        internal AscendancyClasses(IReadOnlyCollection<JsonPassiveTreeCharacterClass> characters)
         {
-            if (ascClasses == null) return;
+            if (characters == null) return;
 
             _classes.Clear();
 
-            foreach (KeyValuePair<int, CharacterToAscendancyOption> ascClass in ascClasses)
+            foreach (var character in characters)
             {
                 var classes = new List<Class>();
-                foreach (KeyValuePair<int, AscendancyClassOption> asc in ascClass.Value.AscendancyClasses)
+                var i = 0;
+                foreach (var ascendancy in character.AscendancyClasses)
                 {
-                    var newClass = new Class
-                    {
-                        Order = asc.Key,
-                        DisplayName = asc.Value.DisplayName,
-                        Name = asc.Value.Name,
-                        FlavourText = asc.Value.FlavourText,
-                        FlavourTextColour = asc.Value.FlavourTextColour.Split(',').Select(int.Parse).ToArray()
-                    };
-                    int[] tempPointList = asc.Value.FlavourTextRect.Split(',').Select(int.Parse).ToArray();
-                    newClass.FlavourTextRect = new Vector2D(tempPointList[0], tempPointList[1]);
-                    classes.Add(newClass);
-
+                    classes.Add(new Class(++i, ascendancy.Id, ascendancy.Name, ascendancy.FlavourText, new Vector2D(ascendancy.FlavourTextBounds.X, ascendancy.FlavourTextBounds.Y), ascendancy.FlavourTextColour));
                 }
 
-                var characterClass = Enums.Parse<CharacterClass>(ascClass.Value.CharacterName);
-                _classes.Add(characterClass, classes);
+                var characterClass = Enums.Parse<CharacterClass>(character.Name);
+                _classes[characterClass] = classes;
             }
         }
 
@@ -53,7 +44,7 @@ namespace PoESkillTree.SkillTreeFiles
         public IEnumerable<string> AscendancyClassesForCharacter(CharacterClass characterClass)
             => GetClasses(characterClass).Select(c => c.DisplayName);
 
-        public string GetAscendancyClassName(CharacterClass characterClass, int ascOrder)
+        public string? GetAscendancyClassName(CharacterClass characterClass, int ascOrder)
         {
             if (ascOrder > 0)
                 ascOrder -= 1;

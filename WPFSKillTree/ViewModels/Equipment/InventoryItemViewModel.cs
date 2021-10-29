@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using GongSolutions.Wpf.DragDrop;
@@ -12,28 +13,51 @@ namespace PoESkillTree.ViewModels.Equipment
     /// <summary>
     /// View model for draggable items in the inventory. This is also a drop target.
     /// </summary>
-    public class InventoryItemViewModel : DraggableItemViewModel, IDropTarget
+    public sealed class InventoryItemViewModel : DraggableItemViewModel, IDropTarget, IDisposable
     {
         private readonly IExtendedDialogCoordinator _dialogCoordinator;
         private readonly ItemAttributes _itemAttributes;
         private readonly ItemSlot _slot;
 
+        public ushort? Socket { get; }
+
         // the item is delegated to this view model's slot in ItemAttributes
-        public override Item Item
+        public override Item? Item
         {
-            get => _itemAttributes.GetItemInSlot(_slot);
-            set => _itemAttributes.SetItemInSlot(value, _slot);
+            get => _itemAttributes.GetItemInSlot(_slot, Socket);
+            set => _itemAttributes.SetItemInSlot(value, _slot, Socket);
         }
 
-        private string _emptyBackgroundImagePath;
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set => SetProperty(ref _isEnabled, value, () => ItemIsEnabled = value);
+        }
+
+        private bool ItemIsEnabled
+        {
+            get => Item?.IsEnabled ?? true;
+            set
+            {
+                if (Item is Item item)
+                {
+                    item.IsEnabled = value;
+                }
+            }
+        }
+
+        private bool _isCurrent;
+        public bool IsCurrent
+        {
+            get => _isCurrent;
+            set => SetProperty(ref _isCurrent, value);
+        }
+
         /// <summary>
         /// Gets or sets the path to the image that should be shown if Item is null.
         /// </summary>
-        public string EmptyBackgroundImagePath
-        {
-            get => _emptyBackgroundImagePath;
-            set => SetProperty(ref _emptyBackgroundImagePath, value);
-        }
+        public string EmptyBackgroundImagePath { get; }
 
         public override DragDropEffects DropOnInventoryEffect => DragDropEffects.Link;
         public override DragDropEffects DropOnStashEffect => DragDropEffects.Copy;
@@ -41,64 +65,70 @@ namespace PoESkillTree.ViewModels.Equipment
         public ICommand EditSocketedGemsCommand { get; }
 
         public InventoryItemViewModel(
-            IExtendedDialogCoordinator dialogCoordinator, ItemAttributes itemAttributes, ItemSlot slot)
+            IExtendedDialogCoordinator dialogCoordinator, ItemAttributes itemAttributes, ItemSlot slot, ushort? socket,
+            string emptyBackgroundImagePath)
         {
             _dialogCoordinator = dialogCoordinator;
             _itemAttributes = itemAttributes;
             _slot = slot;
+            Socket = socket;
+            EmptyBackgroundImagePath = emptyBackgroundImagePath;
+            _isEnabled = ItemIsEnabled;
 
             EditSocketedGemsCommand = new AsyncRelayCommand(EditSocketedGemsAsync, CanEditSocketedGems);
 
-            // Item changes when the slotted item in ItemAttribute changes as they are the same
-            _itemAttributes.PropertyChanged += (sender, args) =>
+            _itemAttributes.ItemChanged += ItemAttributesOnItemChanged;
+        }
+
+        public void Dispose()
+        {
+            _itemAttributes.ItemChanged -= ItemAttributesOnItemChanged;
+        }
+
+        private void ItemAttributesOnItemChanged((ItemSlot, ushort?) args)
+        {
+            if ((_slot, Socket) == args)
             {
-                if (args.PropertyName == slot.ToString())
-                {
-                    OnPropertyChanged(nameof(Item));
-                }
-            };
+                ItemIsEnabled = IsEnabled;
+                OnPropertyChanged(nameof(Item));
+            }
         }
 
         private async Task EditSocketedGemsAsync()
             => await _dialogCoordinator.EditSocketedGemsAsync(this, _itemAttributes, _slot);
 
         private bool CanEditSocketedGems()
-            => !_slot.IsFlask();
+            => !_slot.IsFlask() && Socket is null;
 
         public void DragOver(IDropInfo dropInfo)
         {
-            var draggedItem = dropInfo.Data as DraggableItemViewModel;
-
-            if (draggedItem == null
-                || !_itemAttributes.CanEquip(draggedItem.Item, _slot)
-                || draggedItem == this) // can't drop onto itself
+            if (dropInfo.Data is DraggableItemViewModel draggedItem
+                && _itemAttributes.CanEquip(draggedItem.Item, _slot, Socket)
+                && draggedItem != this) // can't drop onto itself
             {
-                return;
+                dropInfo.Effects = draggedItem.DropOnInventoryEffect;
             }
-            dropInfo.Effects = draggedItem.DropOnInventoryEffect;
         }
 
         public void Drop(IDropInfo dropInfo)
         {
             var draggedItem = (DraggableItemViewModel) dropInfo.Data;
+            var dropEffects = dropInfo.Effects;
 
-            if (dropInfo.Effects == DragDropEffects.Move)
+            var oldItem = Item;
+            var newItem = dropEffects == DragDropEffects.Copy
+                ? new Item(draggedItem.Item!) : draggedItem.Item;
+
+            if (dropEffects == DragDropEffects.Move || dropEffects == DragDropEffects.Link)
             {
-                Item = draggedItem.Item;
                 draggedItem.Item = null;
             }
-            else if (dropInfo.Effects == DragDropEffects.Copy)
+
+            Item = newItem;
+
+            if (dropEffects == DragDropEffects.Link)
             {
-                Item = new Item(draggedItem.Item);
-            }
-            else if (dropInfo.Effects == DragDropEffects.Link)
-            {
-                // Link = Swap
-                var newItem = draggedItem.Item;
-                var oldItem = Item;
-                Item = null;
                 draggedItem.Item = oldItem;
-                Item = newItem;
             }
         }
     }

@@ -11,9 +11,10 @@
     xmlns:dialogs="clr-namespace:PoESkillTree.Controls.Dialogs"
     d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
     AllowMove="True" IsModal="False" ShowCloseButton="True"
-    dialogs:DialogParticipation.Register="{Binding}">
+    dialogs:DialogParticipation.Register="{Binding}"
+    Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
     <simpleChildWindow:ChildWindow.Title>
-        <l:Catalog>Skill Tree Generator</l:Catalog>
+        <l:Catalog Message="Passive Tree Generator" />
     </simpleChildWindow:ChildWindow.Title>
     <Grid Height="510" Width="600"
           Margin="0 0 0 0">

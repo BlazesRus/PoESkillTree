@@ -10,11 +10,11 @@ namespace PoESkillTree.ViewModels
 {
     class AttributeToTextblockConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var attr = value as Attribute;
             if (attr == null)
-                throw new NotSupportedException();
+                return new TextBlock();
 
             var tb = new TextBlock { TextWrapping = TextWrapping.Wrap };
             var txt = new Run(attr.Text);
@@ -37,7 +37,7 @@ namespace PoESkillTree.ViewModels
             return tb;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotSupportedException();
         }
