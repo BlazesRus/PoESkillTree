@@ -3,9 +3,12 @@
 // Latest GlobalCode Release at https://github.com/BlazesRus/MultiPlatformGlobalCode
 // ***********************************************************************
 using PoESkillTree.Engine.GameModel;
+using PoESkillTree.Engine.GameModel.PassiveTree;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.Utils;
 using PoESkillTree.Utils.Extensions;
+using PoESkillTree.ViewModels;
+using PoESkillTree.ViewModels.PassiveTree;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,14 +59,14 @@ namespace PoESkillTree
             double ClosestKSRange = 99999.0;
             double ClosestNotableRange = 99999.0;
             double range;
-            nodePosition = SkillTree.PassiveNodeViewModels[NodeId].Position;
+            nodePosition = SkillTree.Skillnodes[NodeId].Position;
             do
             {
-                affectedNodes = SkillTree.PassiveNodeViewModels.Where(n => (((n.Value.Position - nodePosition).Length < MaxRange)) && ((n.Value.Position - nodePosition).Length > MinRange)).ToList();
+                affectedNodes = SkillTree.Skillnodes.Where(n => (((n.Value.Position - nodePosition).Length < MaxRange)) && ((n.Value.Position - nodePosition).Length > MinRange)).ToList();
                 foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
                 {
                     CurrentNode = NodePair.Value;
-                    if (CurrentNode.IsNotable)
+                    if (CurrentNode.PassiveNodeType == PassiveNodeType.Notable)
                     {
                         range = (CurrentNode.Position - nodePosition).Length;
                         if (range < ClosestNotableRange)
@@ -72,7 +75,7 @@ namespace PoESkillTree
                             ClosestNotableRange = range;
                         }
                     }
-                    else if (CurrentNode.IsKeystone)
+                    else if (CurrentNode.PassiveNodeType == PassiveNodeType.Keystone)
                     {
                         range = (CurrentNode.Position - nodePosition).Length;
                         if (range < ClosestKSRange)
@@ -159,9 +162,9 @@ namespace PoESkillTree
         /// <param name="propertyName">Name of the changed property</param>
         protected void SetProperty<T>(
             ref T backingStore, T value,
-            Action onChanged = null,
-            Action<T> onChanging = null,
-            [CallerMemberName] string propertyName = null)
+            Action onChanged,
+            Action<T> onChanging,
+            [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
 
@@ -243,11 +246,12 @@ namespace PoESkillTree
             bool IsIntThreshold;
             bool IsDexThreshold;
 
-            PassiveNodeViewModel CurrentNode = null;
+            PassiveNodeViewModel CurrentNode;
             //string IDLabel = "Jewel Socket ID: #";
             string StrThresholdLabel = "+# Str JewelSlot";
             string IntThresholdLabel = "+# Int JewelSlot";
             string DexThresholdLabel = "+# Dex JewelSlot";
+            string JewelSocketLabel = "+# NonCluster JewelSocket";
             string AttributeName = "";
             float AttributeTotal;
             List<float> SingleVal = new List<float>(1);
@@ -278,8 +282,8 @@ namespace PoESkillTree
                             AttributeName = "+# to Strength";
                             break;
                     }
-                    nodePosition = SkillTree.PassiveNodeViewModels[NodeId].Position;
-                    affectedNodes = SkillTree.PassiveNodeViewModels.Where(n => ((n.Value.Position - nodePosition).Length < 1200.0)).ToList();
+                    nodePosition = SkillTree.Skillnodes[NodeId].Position;
+                    affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 1200.0)).ToList();
                     foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
                     {
                         CurrentNode = NodePair.Value;
@@ -304,70 +308,75 @@ namespace PoESkillTree
                         }
                     }
                 }
+                if (IsDexThreshold || IsStrThreshold || IsIntThreshold)
+                {
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(JewelSocketLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(JewelSocketLabel, SingleVal);
+                }
                 if (IsDexThreshold && IsStrThreshold && IsIntThreshold)
                 {
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(StrThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(IntThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(DexThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                    SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(StrThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(IntThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
+                    //SkillTree.Skillnodes[NodeId].StatDescriptions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                     SetThresholdType(NodeId, ThresholdTypes.OmniType);
                 }
                 else if (IsStrThreshold)
                 {
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(StrThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(StrThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
                     if (IsIntThreshold)
                     {
                         //StrIntJewelSlots.Add(NodeId);
-                        if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(IntThresholdLabel))
+                        if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(IntThresholdLabel))
                         SetThresholdType(NodeId, ThresholdTypes.StrIntHybrid);
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
-                        SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot" };
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
+                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.StrIntHybrid);
                     }
                     else if (IsDexThreshold)
                     {
                         //StrDexJewelSlots.Add(NodeId);
-                        if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(DexThresholdLabel))
-                            SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                        SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Dex JewelSlot" };
+                        if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
+                            SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
+                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Dex JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.StrDexHybrid);
                     }
                     else
                     {
                         //StrJewelSlots.Add(NodeId);
-                        SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot" };
+                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Strength);
                     }
                 }
                 else if (IsIntThreshold)
                 {
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(IntThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(IntThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
                     if (IsDexThreshold)
                     {
                         //IntDexJewelSlots.Add(NodeId);
-                        if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(DexThresholdLabel))
-                            SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                        SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
+                        if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
+                            SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
+                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.IntDexHybrid);
                     }
                     else
                     {
                         //IntJewelSlots.Add(NodeId);
-                        SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
+                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Intelligence);
                     }
                 }
                 else if (IsDexThreshold)
                 {
                     //DexJewelSlots.Add(NodeId);
-                    if (!SkillTree.PassiveNodeViewModels[NodeId].Attributes.ContainsKey(DexThresholdLabel))
-                        SkillTree.PassiveNodeViewModels[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                    SkillTree.PassiveNodeViewModels[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
+                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
+                        SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
+                    //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
                     SetThresholdType(NodeId, ThresholdTypes.Dexterity);
 
                 }
@@ -394,7 +403,7 @@ namespace PoESkillTree
         //var v = new Vector2D(p.X, p.Y);
         //v = v * _multransform + _addtransform;
         //IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> nodes =
-        //    SkillTree.PassiveNodeViewModels.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
+        //    SkillTree.Skillnodes.Where(n => ((n.Value.Position - v).Length < 50)).ToList();
 
         /// <summary>
         /// Calculates the total of target attribute inside jewel area.
@@ -424,14 +433,15 @@ namespace PoESkillTree
             PassiveNodeViewModel CurrentNode;
             float AttributeTotal = 0.0f;
             Vector2D nodePosition = TargetNode.Position;
-            //IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.PassiveNodeViewModels.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
-			var nodes = Skillnodes.Where(n =>
-            {
-                var size = GetNodeSurroundBrushSize(n.Value, 0);
-                var range = JewelRadius;//size.Width * size.Height * n.Value.ZoomLevel;
-                var length = (n.Value.Position - mousePointer).Length;
-                return length * length < range;
-            }).ToList();//Based on FindNodesInRange from SkillTree
+            IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
+            ////Or use
+            //var nodes = Skillnodes.Where(n =>
+            //{
+            //    var size = GetNodeSurroundBrushSize(n.Value, 0);
+            //    var range = JewelRadius;//size.Width * size.Height * n.Value.ZoomLevel;
+            //    var length = (n.Value.Position - mousePointer).Length;
+            //    return length * length < range;
+            //}).ToList();//Based on FindNodesInRange from SkillTree
             foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
@@ -443,7 +453,6 @@ namespace PoESkillTree
             return AttributeTotal;
         }
 
-/*
         /// <summary>
         /// Calculates the total of unallocated target attributes inside jewel area.
         /// </summary>
@@ -472,7 +481,7 @@ namespace PoESkillTree
             PassiveNodeViewModel CurrentNode;
             float AttributeTotal = 0.0f;
             Vector2D nodePosition = TargetNode.Position;
-            //IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.PassiveNodeViewModels.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
+            //IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
             foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;
@@ -483,7 +492,6 @@ namespace PoESkillTree
             }
             return AttributeTotal;
         }
-*/
 
 /*
         /// <summary>
