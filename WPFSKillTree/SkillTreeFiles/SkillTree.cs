@@ -299,7 +299,13 @@ namespace PoESkillTree.SkillTreeFiles
                         }
                     }
                 }
-                int Statnumber;
+                string MasteryLabel = "+# Mastery Nodes";
+                string ClusterLabel = "+# Expansion JewelSlot";
+                string LClusterLabel = "+# Expansion JewelSlot";
+                string MClusterLabel = "+# Expansion JewelSlot";
+                string SClusterLabel = "+# Expansion JewelSlot";
+                List<float> SingleVal = new List<float>(1);
+                SingleVal.Add(1);
                 foreach (var (_, node) in PoESkillTree.PassiveNodes)
                 {
                     if (node.IsAscendancyStart && !AscRootNodeList.Contains(node))
@@ -308,10 +314,8 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.Mastery)
                     {
-                        Statnumber = node.StatDefinitions.Length;
-                        //Expand Array Size by one
-                        Array.Resize(ref myArray, Statnumber+1);
-                        node.StatDefinitions[Statnumber] = "+1 Mastery Nodes";
+                        if (!node.Attributes.ContainsKey(MasteryLabel))
+                            node.Attributes.Add(MasteryLabel, SingleVal);
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.JewelSocket)
                     {
@@ -319,15 +323,14 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)//Cluster Jewel
                     {
-                        Statnumber = node.StatDefinitions.Length;
-                        Array.Resize(ref myArray, Statnumber+2);
-                        node.StatDefinitions[Statnumber] = "+1 Expansion JewelSlot";
-                        if(node.Name.Contains("Large Jewel Socket"))
-                            node.StatDefinitions[Statnumber+1] = "+1 Large JewelSlot";
-                        else if(node.Name.Contains("Medium Jewel Socket"))
-                            node.StatDefinitions[Statnumber+1] = "+1 Medium JewelSlot";
-                        else
-                            node.StatDefinitions[Statnumber+1] = "+1 Small JewelSlot";
+                        if (!node.Attributes.ContainsKey(ClusterLabel))
+                            node.Attributes.Add(ClusterLabel, SingleVal);
+                        if(node.Name.Contains("Large Jewel Socket")&&!node.Attributes.ContainsKey(LClusterLabel))
+                            node.Attributes.Add(LClusterLabel, SingleVal);
+                        else if(node.Name.Contains("Medium Jewel Socket")&&!node.Attributes.ContainsKey(MClusterLabel))
+                            node.Attributes.Add(MClusterLabel, SingleVal);
+                        else if(!node.Attributes.ContainsKey(SClusterLabel))
+                            node.Attributes.Add(SClusterLabel, SingleVal);
                     }
                 }
 
