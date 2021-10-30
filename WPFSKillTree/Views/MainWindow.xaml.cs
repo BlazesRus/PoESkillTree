@@ -614,7 +614,7 @@ namespace PoESkillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
-            //GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
+            GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             _importViewModels = new ImportViewModels(_dialogCoordinator, PersistentData, StashViewModel);
@@ -1206,71 +1206,6 @@ namespace PoESkillTree.Views
             //IntuitiveLeapCheckup();
         }
 
-/*
-        public void UpdateAllAttributeList()
-        {
-            lbAllAttr.SelectedIndex = -1;
-            _allAttributesList.Clear();
-
-            if (_itemAttributes == null) return;
-
-            var attritemp = Tree.SelectedAttributesWithoutImplicit;
-
-            var itemAttris = _itemAttributes.NonLocalMods
-                .Select(m => new KeyValuePair<string, IReadOnlyList<float>>(m.Attribute, m.Values))
-                .SelectMany(SkillTree.ExpandHybridAttributes);
-            foreach (var mod in itemAttris)
-            {
-                if (attritemp.ContainsKey(mod.Key))
-                {
-                    for (var i = 0; i < mod.Value.Count; i++)
-                    {
-                        attritemp[mod.Key][i] += mod.Value[i];
-                    }
-                }
-                else
-                {
-                    attritemp[mod.Key] = new List<float>(mod.Value);
-                }
-            }
-
-            foreach (var a in SkillTree.ImplicitAttributes(attritemp, Tree.Level))
-            {
-                var key = SkillTree.RenameImplicitAttributes.ContainsKey(a.Key)
-                    ? SkillTree.RenameImplicitAttributes[a.Key]
-                    : a.Key;
-
-                if (!attritemp.ContainsKey(key))
-                    attritemp[key] = new List<float>();
-                for (var i = 0; i < a.Value.Count; i++)
-                {
-                    if (attritemp.ContainsKey(key) && attritemp[key].Count > i)
-                        attritemp[key][i] += a.Value[i];
-                    else
-                    {
-                        attritemp[key].Add(a.Value[i]);
-                    }
-                }
-            }
-
-            attritemp = JewelData.StatUpdater(attritemp, Tree);
-            if (GlobalSettings.JewelInfo.NotSetup) {
-                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false; }
-
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                attritemp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(attritemp);
-            }
-
-            foreach (var item in (attritemp.Select(InsertNumbersInAttributes)))
-            {
-                var a = new Attribute(item);
-                if (!CheckIfAttributeMatchesFilter(a)) continue;
-                _allAttributesList.Add(a);
-            }
-        }
-*/
-
         public void UpdateClass()
         {
             cbCharType.SelectedItem = Tree.CharClass;
@@ -1288,6 +1223,11 @@ namespace PoESkillTree.Views
                 ? null
                 : new Dictionary<string, List<float>>(Tree.HighlightedAttributes);
 
+            if (GlobalSettings.JewelInfo.NotSetup)
+            {
+                GlobalSettings.JewelInfo.CategorizeJewelSlots(); GlobalSettings.JewelInfo.NotSetup = false;
+            }
+
             foreach (var item in Tree.SelectedAttributes)
             {
                 var a = new Attribute(InsertNumbersInAttributes(item));
@@ -1304,6 +1244,27 @@ namespace PoESkillTree.Views
                 }
                 _attiblist.Add(a);
             }
+
+/*
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                TreeGenerator.Model.PseudoAttributes.PseudoAttribute Element;
+                string AttrName;
+                for (int Index = 0; Index < GlobalSettings.TrackedStats.Count; ++Index)
+                {
+                    Element = GlobalSettings.TrackedStats[Index];
+                    AttrName = Element.Name;
+                    if (Tree.SelectedAttributes.ContainsKey(AttrName))
+                    {
+                        Tree.SelectedAttributes[AttrName] = new List<float> { Element.CalculateValue(Tree.SelectedAttributes) };
+                    }
+                    else
+                    {
+                        Tree.SelectedAttributes.Add(AttrName, new List<float> { Element.CalculateValue(Tree.SelectedAttributes) });
+                    }
+                }
+            }
+*/
 
             if (copy != null)
             {

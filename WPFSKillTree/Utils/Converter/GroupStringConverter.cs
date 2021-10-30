@@ -253,21 +253,27 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
             new[] {"Jewel", JewelTypes},
+			new[] {"JewelSlot", JewelTypes},
+            new[] {"[Non-Tagged]", PseudoTotal},
+            new[] {"[IntBoosted]", PseudoTotal},
+            new[] {"MinionBoosted", PseudoTotal},
+            new[] {"ScourgeBoosted", PseudoTotal},
+            new[] {"[WandBoosted]", PseudoTotal},
+            new[] {"SharedStrength", PseudoTotal},
+            new[] {"maximum Base", PseudoTotal},
+            new[] {"combined", PseudoTotal},
+			new[] {"Mastery Nodes", General},
 /*
+            new[] {"increased Total", PseudoTotal},
             new[] {"Skeletons", Minion},
             new[] {"Cold Damage with Attack Skills", Weapon},
             new[] {"Fire Damage with Attack Skills", Weapon},
             new[] {"Lightning Damage with Attack Skills", Weapon},
             new[] {"Elemental Damage with Attack Skills", Weapon},
             new[] {"(Total)", PseudoTotal},
-            new[] {"[Non-Tagged]", PseudoTotal},
             new[] {"Charged Dash Damage", PseudoTotal},
             new[] {"before tags", PseudoTotal},
-            new[] {"SharedStrength", PseudoTotal},
-            new[] {"maximum Base", PseudoTotal},
-            new[] {"combined", PseudoTotal},
             new[] {"increased Hybrid", PseudoTotal},
-            new[] {"increased Total", PseudoTotal},
             new[] {"[Tagged]", PseudoTotal},
             new[] {"Life with", PseudoTotal},
             new[] {"Energy Shield with", PseudoTotal},
@@ -336,7 +342,7 @@ namespace PoESkillTree.Utils.Converter
         {
             if (!AttributeGroups.ContainsKey(groupname))
             {
-                AttributeGroups.Add(groupname, new AttributeGroup("Custom: "+groupname));
+                AttributeGroups.Add(groupname, new AttributeGroup("Custom: " + groupname));
             }
             foreach (string attr in attributes)
             {

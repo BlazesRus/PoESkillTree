@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PseudoAttributes>
+<!--[WandBoosted]= Spell Damage applied to Wand Attack damage from Wand Mastery-->
+    <PseudoAttribute Name="#% increased ScourgeBoosted Physical Attack Damage[WandBoosted]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Attack Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage while wielding a Wand"/>
+		<Attribute Name="#% increased Physical Damage with Wands"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Physical Attack Damage[WandBoosted][IntBoosted]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Attack Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="#% increased Damage while wielding a Wand"/>
+		<Attribute Name="#% increased Physical Damage with Wands"/>
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
+    </PseudoAttribute>
+</PseudoAttributes>

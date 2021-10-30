@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PseudoAttributes>
+    <PseudoAttribute Name="#% Total increased Burn Duration" Group="Damage">
+        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+        <Attribute Name="#% increased Ignite Duration on Enemies"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% Total increased Freeze Duration" Group="Damage">
+        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+        <Attribute Name="#% increased Freeze Duration on Enemies"/>
+    </PseudoAttribute>
+        <PseudoAttribute Name="#% Total increased Shock Duration" Group="Damage">
+        <Attribute Name="#% increased Duration of Elemental Ailments on Enemies" />
+        <Attribute Name="#% increased Shock Duration on Enemies"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% Total increased Ignite Chance" Group="Damage">
+        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+        <Attribute Name="#% chance to Ignite" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% Total increased Shock Chance" Group="Damage">
+        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+        <Attribute Name="#% chance to Shock" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% Total increased Freeze Chance" Group="Damage">
+        <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
+        <Attribute Name="#% chance to Freeze" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+#% to Combined Elemental Resistances" Group="Defense">
+        <Attribute Name="+#% to Fire Resistance" />
+        <Attribute Name="+#% to Cold Resistance" />
+        <Attribute Name="+#% to Lightning Resistance" />
+        <Attribute Name="+#% to all Elemental Resistances"  ConversionMultiplier="3.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# maximum Base Energy Shield" Group="Defense">
+        <Attribute Name="+# to maximum Energy Shield" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# maximum Base Life" Group="Defense">
+        <Attribute Name="+# to maximum Life" />
+        <Attribute Name="+# to Strength" ConversionMultiplier="0.5" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# maximum Life/Energy Shield" Group="Defense">
+        <Attribute Name="+# to maximum Energy Shield" />
+        <Attribute Name="+# to maximum Life" />
+        <Attribute Name="+# to Strength" ConversionMultiplier="0.5" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Hybrid Life/ES Percent" Group="Defense">
+        <Attribute Name="#% increased maximum Life" />
+        <Attribute Name="#% increased maximum Energy Shield" />
+        <Attribute Name="+# to Intelligence" ConversionMultiplier="0.2" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# combined attributes" Group="Defense">
+        <Attribute Name="+# to Strength"/>
+        <Attribute Name="+# to Intelligence" />
+        <Attribute Name="+# to Dexterity" />
+    </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Lightning Penatration" Group="Damage">
+        <Attribute Name="Damage Penatrates #% Lightning Resistance"/>
+        <Attribute Name="Damage Penatrates #% Elemental Resistances"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="Lightning Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Lightning Spells have #% of Physical Damage Converted to Lightning Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+        <!--Attribute Name="#% of Physical Damage Converted to Fire Damage" /-->
+        <!--Attribute Name="#% of Physical Damage Converted to Lightning Damage" /-->
+    </PseudoAttribute>
+	<PseudoAttribute Name="Cold Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Cold Spells have #% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Lightning Damage" />
+    </PseudoAttribute>
+	<PseudoAttribute Name="Fire Spells have #% Physical Converted/Gained to/as Elemental[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% of Physical Damage Converted to Cold Damage" />
+		<Attribute Name="Fire Spells have #% of Physical Damage Converted to Fire Damage" />
+		<Attribute Name="Gain #% of Physical Damage as Extra Fire Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Attack Poison Chance[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% chance to Poison on Hit"/>
+        <Attribute Name="#% chance to Poison on Hit with Attacks"/>
+    </PseudoAttribute>
+</PseudoAttributes>

@@ -273,6 +273,7 @@ namespace PoESkillTree.SkillTreeFiles
                     };
                 }
 
+                GlobalSettings.JewelStorage = new JewelData();
                 if (PoESkillTree.Root != null)
                 {
                     foreach (var i in PoESkillTree.Root.OutPassiveNodeIds)
@@ -298,12 +299,35 @@ namespace PoESkillTree.SkillTreeFiles
                         }
                     }
                 }
-
+                int Statnumber;
                 foreach (var (_, node) in PoESkillTree.PassiveNodes)
                 {
                     if (node.IsAscendancyStart && !AscRootNodeList.Contains(node))
                     {
                         AscRootNodeList.Add(node);
+                    }
+                    else if(node.PassiveNodeType == PassiveNodeType.Mastery)
+                    {
+                        Statnumber = node.StatDefinitions.Length;
+                        //Expand Array Size by one
+                        Array.Resize(ref myArray, Statnumber+1);
+                        node.StatDefinitions[Statnumber] = "+1 Mastery Nodes";
+                    }
+                    else if(node.PassiveNodeType == PassiveNodeType.JewelSocket)
+                    {
+                        GlobalSettings.JewelInfo.AddJewelSlot(node.Id);
+                    }
+                    else if(node.PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)//Cluster Jewel
+                    {
+                        Statnumber = node.StatDefinitions.Length;
+                        Array.Resize(ref myArray, Statnumber+2);
+                        node.StatDefinitions[Statnumber] = "+1 Expansion JewelSlot";
+                        if(node.Name.Contains("Large Jewel Socket"))
+                            node.StatDefinitions[Statnumber+1] = "+1 Large JewelSlot";
+                        else if(node.Name.Contains("Medium Jewel Socket"))
+                            node.StatDefinitions[Statnumber+1] = "+1 Medium JewelSlot";
+                        else
+                            node.StatDefinitions[Statnumber+1] = "+1 Small JewelSlot";
                     }
                 }
 
@@ -457,6 +481,13 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
+/*
+            //Perform PseudoCalc as needed
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
+*/
             return temp;
         }
 
@@ -491,7 +522,12 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-
+/*
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
+*/
             return temp;
         }
 
@@ -517,7 +553,12 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-
+/*
+            if (GlobalSettings.TrackedStats.Count != 0)
+            {
+                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            }
+*/
             return temp;
         }
 
