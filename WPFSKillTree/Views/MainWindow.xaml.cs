@@ -614,7 +614,7 @@ namespace PoESkillTree.Views
         private void InitializePersistentDataDependentUI()
         {
             _dialogCoordinator = new ExtendedDialogCoordinator(_gameData, PersistentData);
-            GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
+            //GlobalSettings.dialogCoordinatorRef = _dialogCoordinator;
             RegisterPersistentDataHandlers();
             StashViewModel.Initialize(_dialogCoordinator, PersistentData);
             _importViewModels = new ImportViewModels(_dialogCoordinator, PersistentData, StashViewModel);

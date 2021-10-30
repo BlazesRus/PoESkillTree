@@ -316,6 +316,7 @@ namespace PoESkillTree.SkillTreeFiles
                     {
                         if (!node.Attributes.ContainsKey(MasteryLabel))
                             node.Attributes.Add(MasteryLabel, SingleVal);
+						node.UpdateStatDescription();
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.JewelSocket)
                     {
@@ -331,6 +332,7 @@ namespace PoESkillTree.SkillTreeFiles
                             node.Attributes.Add(MClusterLabel, SingleVal);
                         else if(!node.Attributes.ContainsKey(SClusterLabel))
                             node.Attributes.Add(SClusterLabel, SingleVal);
+						node.UpdateStatDescription();
                     }
                 }
 

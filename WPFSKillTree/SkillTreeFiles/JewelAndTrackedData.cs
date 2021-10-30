@@ -49,9 +49,10 @@ namespace PoESkillTree
         /// <param name="NodeId">NodeID for target node</param>
         public void GenerateSlotDesc(ushort NodeId)
         {
-            PassiveNodeViewModel ClosestKeystone = null;
-            PassiveNodeViewModel ClosestNotable = null;
-            PassiveNodeViewModel CurrentNode = null;
+            PassiveNodeViewModel NullNode = new PassiveNodeViewModel(0);
+            PassiveNodeViewModel ClosestKeystone = NullNode;
+            PassiveNodeViewModel ClosestNotable = NullNode;
+            PassiveNodeViewModel CurrentNode = NullNode;
             Vector2D nodePosition;
             IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes;
             double MinRange = 0.0;
@@ -85,7 +86,7 @@ namespace PoESkillTree
                         }
                     }
                 }
-                if (ClosestNotable == null||ClosestKeystone == null)
+                if (ClosestNotable== NullNode || ClosestKeystone == NullNode)
                 {
                     MinRange = MaxRange;
                     MaxRange += 600.0;
@@ -150,64 +151,64 @@ namespace PoESkillTree
     public class JewelData : Dictionary<ushort, JewelNodeData>
     {//Notifier combined directly into class since can't have 2 base classes
         #region NotifierCode
-        /// <summary>
-        /// Sets <paramref name="backingStore"/> to <paramref name="value"/> and
-        /// raises <see cref="PropertyChanging"/> before and <see cref="PropertyChanged"/>
-        /// after setting the value.
-        /// </summary>
-        /// <param name="backingStore">Target variable</param>
-        /// <param name="value">Source variable</param>
-        /// <param name="onChanged">Called after changing the value but before raising <see cref="PropertyChanged"/>.</param>
-        /// <param name="onChanging">Called before changing the value and before raising <see cref="PropertyChanging"/> with <paramref name="value"/> as parameter.</param>
-        /// <param name="propertyName">Name of the changed property</param>
-        protected void SetProperty<T>(
-            ref T backingStore, T value,
-            Action onChanged,
-            Action<T> onChanging,
-            [CallerMemberName] string propertyName = "")
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
+        ///// <summary>
+        ///// Sets <paramref name="backingStore"/> to <paramref name="value"/> and
+        ///// raises <see cref="PropertyChanging"/> before and <see cref="PropertyChanged"/>
+        ///// after setting the value.
+        ///// </summary>
+        ///// <param name="backingStore">Target variable</param>
+        ///// <param name="value">Source variable</param>
+        ///// <param name="onChanged">Called after changing the value but before raising <see cref="PropertyChanged"/>.</param>
+        ///// <param name="onChanging">Called before changing the value and before raising <see cref="PropertyChanging"/> with <paramref name="value"/> as parameter.</param>
+        ///// <param name="propertyName">Name of the changed property</param>
+        //protected void SetProperty<T>(
+        //    ref T backingStore, T value,
+        //    Action onChanged,
+        //    Action<T> onChanging,
+        //    [CallerMemberName] string propertyName = "")
+        //{
+        //    if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
 
-            onChanging?.Invoke(value);
-            OnPropertyChanging(propertyName);
+        //    onChanging?.Invoke(value);
+        //    OnPropertyChanging(propertyName);
 
-            backingStore = value;
+        //    backingStore = value;
 
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-        }
+        //    onChanged?.Invoke();
+        //    OnPropertyChanged(propertyName);
+        //}
 
-        /// <summary>
-        /// INotifyPropertyChanged event that is called right before a property is changed.
-        /// </summary>
-        public event PropertyChangingEventHandler PropertyChanging;
+        ///// <summary>
+        ///// INotifyPropertyChanged event that is called right before a property is changed.
+        ///// </summary>
+        //public event PropertyChangingEventHandler PropertyChanging;
 
-        private void OnPropertyChanging(string propertyName)
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
+        //private void OnPropertyChanging(string propertyName)
+        //{
+        //    PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
+        //}
 
-        /// <summary>
-        /// INotifyPropertyChanged event that is called right after a property is changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        ///// <summary>
+        ///// INotifyPropertyChanged event that is called right after a property is changed.
+        ///// </summary>
+        //public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
-        /// <summary>
-        /// Equivalent to <c>o.MemberwiseClone()</c> except that events are set to null.
-        /// Override if your subclass has events or if you need to re-register handlers.
-        /// </summary>
-        protected virtual JewelData SafeMemberwiseClone()
-        {
-            var t = (JewelData)MemberwiseClone();
-            t.PropertyChanged = null;
-            t.PropertyChanging = null;
-            return t;
-        }
+        ///// <summary>
+        ///// Equivalent to <c>o.MemberwiseClone()</c> except that events are set to null.
+        ///// Override if your subclass has events or if you need to re-register handlers.
+        ///// </summary>
+        //protected virtual JewelData SafeMemberwiseClone()
+        //{
+        //    var t = (JewelData)MemberwiseClone();
+        //    t.PropertyChanged;
+        //    t.PropertyChanging;
+        //    return t;
+        //}
         #endregion
 
         /// <summary>  Initialize JewelData with CategorizeJewelNodes method once(and then set to false) after skilltree nodes are finished generating onto tree</summary>
@@ -384,6 +385,7 @@ namespace PoESkillTree
                 {
                     //NeutralJewelSlots.Add(NodeId);
                 }
+                SkillTree.Skillnodes[NodeId].UpdateStatDescription();
                 this[NodeId].GenerateSlotDesc(NodeId);
             }
         }
@@ -481,7 +483,7 @@ namespace PoESkillTree
             PassiveNodeViewModel CurrentNode;
             float AttributeTotal = 0.0f;
             Vector2D nodePosition = TargetNode.Position;
-            //IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
+            IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
             foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
             {
                 CurrentNode = NodePair.Value;

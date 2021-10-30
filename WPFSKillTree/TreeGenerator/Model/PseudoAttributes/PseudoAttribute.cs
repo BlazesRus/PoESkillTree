@@ -40,6 +40,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
 
         public override string ToString() => Name;
 
+/*
         /// <summary>
         /// Calculates updated value
         /// </summary>
@@ -62,6 +63,7 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
             }
             return TotalStat;
         }
+*/
 
         //public PseudoAttribute(PseudoAttribute Target, string name)
         //{

@@ -191,5 +191,21 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 Attributes[cs] = values;
             }
         }
+
+        public void UpdateStatDescription()
+        {
+            int Statnumber = 0;
+            System.Array.Resize(ref _statDescriptions, Attributes.Count);
+            var numberCharacter = new Regex(Regex.Escape("#"));
+            string cultureSpecifier = "G";//https://docs.microsoft.com/en-us/dotnet/api/system.single.tostring?view=net-5.0
+            foreach (var Attr in Attributes)
+            {
+                _statDescriptions[Statnumber] = Attr.Key;
+                foreach(var AttrVal in Attr.Value)
+                {//https://stackoverflow.com/questions/8809354/replace-first-occurrence-of-pattern-in-a-string
+                    _statDescriptions[Statnumber] = numberCharacter.Replace(_statDescriptions[Statnumber], AttrVal.ToString(cultureSpecifier, CultureInfo.InvariantCulture), 1);
+                }
+            }
+        }
     }
 }
