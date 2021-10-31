@@ -234,7 +234,7 @@ namespace PoESkillTree
                     var radius = Engine.GameModel.Items.JewelRadiusExtensions.GetRadius(mediumJewelArea, SkillTree.Skillnodes[NodeId].ZoomLevel);
                     affectedNodes = SkillTree.Skillnodes.Values
                         .Where(n => !n.IsRootNode && !n.IsAscendancyNode)
-                        .Where(n => Distance(n.Position, SkillTree.Skillnodes[NodeId].Position) <= radius);
+                        .Where(n => Distance(n.Position, SkillTree.Skillnodes[NodeId].Position) <= radius*1.2f);
                     foreach (var n in affectedNodes)
                     {
                         if (n.Attributes != null && n.Attributes.ContainsKey(AttributeName))

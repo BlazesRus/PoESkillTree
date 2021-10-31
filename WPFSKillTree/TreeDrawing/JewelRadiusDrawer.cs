@@ -108,7 +108,7 @@ namespace PoESkillTree.TreeDrawing
             if (radiusEnum == JewelRadius.None)
                 return;
 
-            double radius = radiusEnum.GetRadius(node.ZoomLevel) - (RadiusPenThickness / 2);
+            double radius = radiusEnum.GetRadius(node.ZoomLevel)*1.2f - (RadiusPenThickness / 2);//Multiplier to fix slightly off jewel radius
             var pen = new Pen(RadiusBrushes[radiusEnum], RadiusPenThickness);
 
             context.DrawEllipse(null, pen, node.Position, radius, radius);
@@ -122,7 +122,7 @@ namespace PoESkillTree.TreeDrawing
             var radius = radiusEnum.GetRadius(node.ZoomLevel);
             var nodesInRadius = _skillNodes.Values
                 .Where(n => !n.IsRootNode && !n.IsAscendancyNode)
-                .Where(n => Distance(n.Position, node.Position) <= radius);
+                .Where(n => Distance(n.Position, node.Position) <= radius*1.2f);
             var pen = new Pen(RadiusBrushes[radiusEnum], RadiusPenThickness);
             foreach (var n in nodesInRadius)
             {
