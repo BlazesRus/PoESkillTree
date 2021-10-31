@@ -205,6 +205,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 {//https://stackoverflow.com/questions/8809354/replace-first-occurrence-of-pattern-in-a-string
                     _statDescriptions[Statnumber] = numberCharacter.Replace(_statDescriptions[Statnumber], AttrVal.ToString(cultureSpecifier, CultureInfo.InvariantCulture), 1);
                 }
+                Statnumber++;
             }
         }
     }
