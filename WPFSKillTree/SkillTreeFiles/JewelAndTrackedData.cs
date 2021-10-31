@@ -322,7 +322,6 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
                     if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                    //SkillTree.Skillnodes[NodeId].StatDescriptions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                     SetThresholdType(NodeId, ThresholdTypes.OmniType);
                 }
                 else if (IsStrThreshold)
@@ -331,25 +330,18 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeId].Attributes.Add(StrThresholdLabel, SingleVal);
                     if (IsIntThreshold)
                     {
-                        //StrIntJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(IntThresholdLabel))
-                        SetThresholdType(NodeId, ThresholdTypes.StrIntHybrid);
                         SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
-                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Int JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.StrIntHybrid);
                     }
                     else if (IsDexThreshold)
                     {
-                        //StrDexJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot", "+1 Dex JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.StrDexHybrid);
                     }
                     else
                     {
-                        //StrJewelSlots.Add(NodeId);
-                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Str JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Strength);
                     }
                 }
@@ -359,25 +351,19 @@ namespace PoESkillTree
                         SkillTree.Skillnodes[NodeId].Attributes.Add(IntThresholdLabel, SingleVal);
                     if (IsDexThreshold)
                     {
-                        //IntDexJewelSlots.Add(NodeId);
                         if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                             SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot", "+1 Dex JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.IntDexHybrid);
                     }
                     else
                     {
-                        //IntJewelSlots.Add(NodeId);
-                        //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
                         SetThresholdType(NodeId, ThresholdTypes.Intelligence);
                     }
                 }
                 else if (IsDexThreshold)
                 {
-                    //DexJewelSlots.Add(NodeId);
                     if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(DexThresholdLabel))
                         SkillTree.Skillnodes[NodeId].Attributes.Add(DexThresholdLabel, SingleVal);
-                    //SkillTree.Skillnodes[NodeId].StatDefinitions = new[] { "+1 to Jewel Socket", "+1 NonCluster JewelSocket", "+1 Int JewelSlot" };
                     SetThresholdType(NodeId, ThresholdTypes.Dexterity);
 
                 }
