@@ -63,7 +63,7 @@ namespace PoESkillTree
             nodePosition = SkillTree.Skillnodes[NodeId].Position;
             do
             {
-                affectedNodes = SkillTree.Skillnodes.Where(n => (((n.Value.Position - nodePosition).Length < MaxRange)) && ((n.Value.Position - nodePosition).Length > MinRange)).ToList();
+                affectedNodes = SkillTree.Skillnodes.Where(n => (((n.Value.Position - nodePosition).Length < MaxRange)) && ((n.Value.Position - nodePosition).Length > MinRange)).ToList();//Need to update search code here
                 foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
                 {
                     CurrentNode = NodePair.Value;
@@ -149,68 +149,7 @@ namespace PoESkillTree
     /// <seealso cref="System.Collections.Generic.Dictionary{System.UInt16, PoESkillTree.JewelNodeData}" />
     [Serializable]
     public class JewelData : Dictionary<ushort, JewelNodeData>
-    {//Notifier combined directly into class since can't have 2 base classes
-        #region NotifierCode
-        ///// <summary>
-        ///// Sets <paramref name="backingStore"/> to <paramref name="value"/> and
-        ///// raises <see cref="PropertyChanging"/> before and <see cref="PropertyChanged"/>
-        ///// after setting the value.
-        ///// </summary>
-        ///// <param name="backingStore">Target variable</param>
-        ///// <param name="value">Source variable</param>
-        ///// <param name="onChanged">Called after changing the value but before raising <see cref="PropertyChanged"/>.</param>
-        ///// <param name="onChanging">Called before changing the value and before raising <see cref="PropertyChanging"/> with <paramref name="value"/> as parameter.</param>
-        ///// <param name="propertyName">Name of the changed property</param>
-        //protected void SetProperty<T>(
-        //    ref T backingStore, T value,
-        //    Action onChanged,
-        //    Action<T> onChanging,
-        //    [CallerMemberName] string propertyName = "")
-        //{
-        //    if (EqualityComparer<T>.Default.Equals(backingStore, value)) return;
-
-        //    onChanging?.Invoke(value);
-        //    OnPropertyChanging(propertyName);
-
-        //    backingStore = value;
-
-        //    onChanged?.Invoke();
-        //    OnPropertyChanged(propertyName);
-        //}
-
-        ///// <summary>
-        ///// INotifyPropertyChanged event that is called right before a property is changed.
-        ///// </summary>
-        //public event PropertyChangingEventHandler PropertyChanging;
-
-        //private void OnPropertyChanging(string propertyName)
-        //{
-        //    PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        //}
-
-        ///// <summary>
-        ///// INotifyPropertyChanged event that is called right after a property is changed.
-        ///// </summary>
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //protected virtual void OnPropertyChanged(string propertyName)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
-
-        ///// <summary>
-        ///// Equivalent to <c>o.MemberwiseClone()</c> except that events are set to null.
-        ///// Override if your subclass has events or if you need to re-register handlers.
-        ///// </summary>
-        //protected virtual JewelData SafeMemberwiseClone()
-        //{
-        //    var t = (JewelData)MemberwiseClone();
-        //    t.PropertyChanged;
-        //    t.PropertyChanging;
-        //    return t;
-        //}
-        #endregion
-
+    {
         /// <summary>  Initialize JewelData with CategorizeJewelNodes method once(and then set to false) after skilltree nodes are finished generating onto tree</summary>
         public bool NotSetup;
 #if DEBUG
@@ -229,7 +168,7 @@ namespace PoESkillTree
         }
 
         /// <summary>Initializes a new instance of the <see cref="JewelDictionary"/> class.</summary>
-        public JewelData() : base(21)
+        public JewelData() : base(15)
         {
             NotSetup = true;
 #if DEBUG
@@ -256,8 +195,6 @@ namespace PoESkillTree
             bool IsIntThreshold;
             bool IsDexThreshold;
 
-            PassiveNodeViewModel CurrentNode;
-            //string IDLabel = "Jewel Socket ID: #";
             string StrThresholdLabel = "+# Str JewelSlot";
             string IntThresholdLabel = "+# Int JewelSlot";
             string DexThresholdLabel = "+# Dex JewelSlot";
@@ -266,8 +203,7 @@ namespace PoESkillTree
             float AttributeTotal;
             List<float> SingleVal = new List<float>(1);
             SingleVal.Add(1);
-            Vector2D nodePosition;
-            IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes;
+            IEnumerable<PassiveNodeViewModel>? affectedNodes;
             //Copying keys so can change elements during foreach loop
             List<ushort> ElementList = new List<ushort>(GlobalSettings.JewelInfo.Keys);
             foreach (ushort NodeId in ElementList)
@@ -292,14 +228,18 @@ namespace PoESkillTree
                             AttributeName = "+# to Strength";
                             break;
                     }
-                    nodePosition = SkillTree.Skillnodes[NodeId].Position;
-                    affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < 1200.0)).ToList();
-                    foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
+
+                    //New Area scan code based on JewelRadiusDrawer.cs::DrawNodeHighlights
+                    Engine.GameModel.Items.JewelRadius mediumJewelArea = Engine.GameModel.Items.JewelRadius.Medium;
+                    var radius = Engine.GameModel.Items.JewelRadiusExtensions.GetRadius(mediumJewelArea, SkillTree.Skillnodes[NodeId].ZoomLevel);
+                    affectedNodes = SkillTree.Skillnodes.Values
+                        .Where(n => !n.IsRootNode && !n.IsAscendancyNode)
+                        .Where(n => Distance(n.Position, SkillTree.Skillnodes[NodeId].Position) <= radius);
+                    foreach (var n in affectedNodes)
                     {
-                        CurrentNode = NodePair.Value;
-                        if (CurrentNode.Attributes != null && CurrentNode.Attributes.ContainsKey(AttributeName))
+                        if (n.Attributes != null && n.Attributes.ContainsKey(AttributeName))
                         {
-                            AttributeTotal += CurrentNode.Attributes[AttributeName][0];
+                            AttributeTotal += n.Attributes[AttributeName][0];
                         }
                     }
                     if (AttributeTotal >= 40.0f)
@@ -388,6 +328,13 @@ namespace PoESkillTree
 #endif
         }
 
+        private static float Distance(Vector2D a, Vector2D b)
+        {
+            var xDistance = a.X - b.X;
+            var yDistance = a.Y - b.Y;
+            return (float)Math.Sqrt(xDistance * xDistance + yDistance * yDistance);
+        }
+
         public static explicit operator System.Collections.Generic.List<ushort>(JewelData self)
         {
             return new List<ushort>(self.Keys);
@@ -398,7 +345,7 @@ namespace PoESkillTree
         /// </summary>
         public System.Collections.Generic.List<ushort> JewelIds { get { return (System.Collections.Generic.List<ushort>)this; } }
 
-        //(Most of JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163)
+        //Old JewelData node searching code based on https://github.com/PoESkillTree/PoESkillTree/issues/163 but new code based on JewelRadiusDrawer.cs::DrawNodeHighlights instead
         //Point p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
         //var v = new Vector2D(p.X, p.Y);
         //v = v * _multransform + _addtransform;
@@ -413,41 +360,21 @@ namespace PoESkillTree
         /// <param name="SkilledNodes">The skilled nodes.</param>
         /// <param name="JewelRadiusType">Jewel Radius Type(Large/Medium/Small)(Default:Large"")</param>
         /// <returns></returns>
-        static public float CalculateTotalOfAttributeInJewelArea(PassiveNodeViewModel TargetNode, string AttributeName, ObservableSet<PassiveNodeViewModel> SkilledNodes, string JewelRadiusType = "")
+        static public float CalculateTotalOfAttributeInJewelArea(PassiveNodeViewModel TargetNode, string AttributeName, Dictionary<ushort, PassiveNodeViewModel> SkilledNodes, Engine.GameModel.Items.JewelRadius JewelArea = Engine.GameModel.Items.JewelRadius.Large)
         {
-            int JewelRadius;
-            switch (JewelRadiusType)
-            {
-                case "Medium":
-                    JewelRadius = 1200;
-                    break;
-
-                case "Small":
-                    JewelRadius = 800;
-                    break;
-
-                default://"Large"
-                    JewelRadius = 1500;
-                    break;
-            }
-            PassiveNodeViewModel CurrentNode;
             float AttributeTotal = 0.0f;
-            Vector2D nodePosition = TargetNode.Position;
-            IEnumerable<KeyValuePair<ushort, PassiveNodeViewModel>> affectedNodes = SkillTree.Skillnodes.Where(n => ((n.Value.Position - nodePosition).Length < JewelRadius)).ToList();
-            ////Or use
-            //var nodes = Skillnodes.Where(n =>
-            //{
-            //    var size = GetNodeSurroundBrushSize(n.Value, 0);
-            //    var range = JewelRadius;//size.Width * size.Height * n.Value.ZoomLevel;
-            //    var length = (n.Value.Position - mousePointer).Length;
-            //    return length * length < range;
-            //}).ToList();//Based on FindNodesInRange from SkillTree
-            foreach (KeyValuePair<ushort, PassiveNodeViewModel> NodePair in affectedNodes)
+
+            //New Area scan code based on JewelRadiusDrawer.cs::DrawNodeHighlights
+            IEnumerable<PassiveNodeViewModel>? affectedNodes;
+            var radius = Engine.GameModel.Items.JewelRadiusExtensions.GetRadius(JewelArea, TargetNode.ZoomLevel);
+            affectedNodes = SkilledNodes.Values
+                .Where(n => !n.IsRootNode && !n.IsAscendancyNode)
+                .Where(n => Distance(n.Position, TargetNode.Position) <= radius);
+            foreach (var n in affectedNodes)
             {
-                CurrentNode = NodePair.Value;
-                if (CurrentNode.Attributes.ContainsKey(AttributeName) && SkilledNodes.Contains(CurrentNode))
+                if (n.Attributes.ContainsKey(AttributeName) && SkilledNodes.ContainsValue(n))
                 {
-                    AttributeTotal += CurrentNode.Attributes[AttributeName][0];
+                    AttributeTotal += n.Attributes[AttributeName][0];
                 }
             }
             return AttributeTotal;
