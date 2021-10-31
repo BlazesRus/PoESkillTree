@@ -383,9 +383,9 @@ namespace PoESkillTree.SkillTreeFiles
                             node.Attributes.Add(LifeMStat, SingleVal);
                         else if (node.Name.Contains("Mana") && !node.Attributes.ContainsKey(ManaMStat))
                             node.Attributes.Add(ManaMStat, SingleVal);
-                        else if (node.Name.Contains("Minion Offense") && !node.Attributes.ContainsKey(MinionAttackMStat))
+                        else if (node.Name.Contains("Minion Offence") && !node.Attributes.ContainsKey(MinionAttackMStat))
                             node.Attributes.Add(MinionAttackMStat, SingleVal);
-                        else if (node.Name.Contains("Minion Defense") && !node.Attributes.ContainsKey(MinionDefMStat))
+                        else if (node.Name.Contains("Minion Defence") && !node.Attributes.ContainsKey(MinionDefMStat))
                             node.Attributes.Add(MinionDefMStat, SingleVal);
                         else if (node.Name.Contains("Shield") && !node.Attributes.ContainsKey(ShieldMStat))
                             node.Attributes.Add(ShieldMStat, SingleVal);
