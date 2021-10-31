@@ -183,7 +183,9 @@ namespace PoESkillTree
         public void AddJewelSlot(ushort nodeID)
         {
             Add(nodeID, new JewelNodeData());
+#if DEBUG
             ++NumberOfJewelsFound;
+#endif
         }
 
         /// <summary>

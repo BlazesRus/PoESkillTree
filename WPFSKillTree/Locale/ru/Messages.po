@@ -1470,11 +1470,11 @@ msgstr "Не удалось импортировать билд"
 msgid "New build"
 msgstr "Новый билд"
 
-#: SkillTreeFiles\SkillTree.cs:1010 SkillTreeFiles\SkillTree.cs:1011
+#: SkillTreeFiles\SkillTree.cs:1227 SkillTreeFiles\SkillTree.cs:1228
 msgid "Could not encode skill tree url. Something is very wrong..."
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1054
+#: SkillTreeFiles\SkillTree.cs:1271
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr "Некоторые узлы ({unknownNodes}) неизвестны и были опущены."
 
@@ -1620,11 +1620,26 @@ msgid "Flasks"
 msgstr "Флаконы"
 
 #: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:229
+#: Utils\Converter\GroupStringConverter.cs:37
+msgid "Jewel Types"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:230
+#: Utils\Converter\GroupStringConverter.cs:38
+msgid "Tracked PseudoTotals"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:231
+#: Utils\Converter\GroupStringConverter.cs:39
+msgid "Hidden"
+msgstr ""
+
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:232
 #: Utils\Converter\GroupStringConverter.cs:36
 msgid "Everything Else"
 msgstr "Все Остальное"
 
-#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:273
+#: TreeGenerator\ViewModels\AdvancedTabViewModel.cs:289
 msgid "Advanced"
 msgstr "Дополнительные"
 
@@ -1685,11 +1700,11 @@ msgstr "Помеченные Узлы"
 msgid "Please tag non-skilled nodes by right-clicking them."
 msgstr "Пожалуйста, отметьте невыбранные навыки, используя правую кнопку мыши."
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:68
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:82
 msgid "The Skill Tree Generator is already open"
 msgstr "Генератор Дерева Навыков уже открыт"
 
-#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:83
+#: TreeGenerator\ViewModels\TreeGeneratorInteraction.cs:97
 msgid "Could not open Skill Tree Generator"
 msgstr "Не удалось открыть Генератор Дерева Навыков"
 
@@ -1868,7 +1883,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr "Это приведет к удалению папки билда \"{0} \" и всего его содержимого.\n"
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:424
-#: Views\MainWindow.xaml.cs:967
+#: Views\MainWindow.xaml.cs:992
 msgid "Do you want to continue?"
 msgstr "Хотите продолжить?"
 
@@ -1949,7 +1964,7 @@ msgstr[0] "{0}, {1} умений использовано"
 msgstr[1] "{0}, {1} умений использовано"
 msgstr[2] ""
 
-#: ViewModels\Equipment\StashViewModel.cs:340
+#: ViewModels\Equipment\StashViewModel.cs:361
 msgid ""
 "This will delete all items between this and the next bookmark and can not be undone.\n"
 "Do you want to continue?"
@@ -1957,7 +1972,7 @@ msgstr ""
 "Это приведет к удалению всех элементов между этой и следующей закладкой и не сможет быть отменено.\n"
 "Вы хотите продолжить?"
 
-#: ViewModels\Equipment\StashViewModel.cs:341
+#: ViewModels\Equipment\StashViewModel.cs:362
 msgid "Delete items"
 msgstr "Удалить предметы"
 
@@ -2074,64 +2089,64 @@ msgstr "Вы уверены?"
 msgid "Untag All Skill Nodes"
 msgstr "Снять все Отмеченные Узлы Навыков"
 
-#: Views\MainWindow.xaml.cs:403
+#: Views\MainWindow.xaml.cs:413
 msgid "Create New Attribute Group"
 msgstr "Создать Новую Группу Атрибутов"
 
-#: Views\MainWindow.xaml.cs:403
+#: Views\MainWindow.xaml.cs:413
 msgid "Group name"
 msgstr "Имя Группы"
 
-#: Views\MainWindow.xaml.cs:408
+#: Views\MainWindow.xaml.cs:418
 msgid "A group with that name already exists."
 msgstr "Группа с таким названием уже существует."
 
-#: Views\MainWindow.xaml.cs:495
+#: Views\MainWindow.xaml.cs:519
 msgid "Initialization"
 msgstr "Инициализация"
 
-#: Views\MainWindow.xaml.cs:496 Views\MainWindow.xaml.cs:516
+#: Views\MainWindow.xaml.cs:520 Views\MainWindow.xaml.cs:540
 msgid "Initializing window ..."
 msgstr "Инициализация окна ..."
 
-#: Views\MainWindow.xaml.cs:511
+#: Views\MainWindow.xaml.cs:535
 msgid "Loading skill tree assets ..."
 msgstr "Загрузка ресурсов дерева навыков ..."
 
-#: Views\MainWindow.xaml.cs:547
+#: Views\MainWindow.xaml.cs:571
 msgid "Highlight nodes by attribute"
 msgstr "Выделить узлы по атрибуту"
 
-#: Views\MainWindow.xaml.cs:552
+#: Views\MainWindow.xaml.cs:576
 msgid "Remove highlights by attribute"
 msgstr "Удалить выделения по атрибуту"
 
-#: Views\MainWindow.xaml.cs:555
+#: Views\MainWindow.xaml.cs:579
 #, fuzzy
 msgid "Create new group"
 msgstr "Создать Новую Группу Атрибутов"
 
-#: Views\MainWindow.xaml.cs:559
+#: Views\MainWindow.xaml.cs:583
 msgid "Add to group..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:564
+#: Views\MainWindow.xaml.cs:588
 msgid "Delete group..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:567
+#: Views\MainWindow.xaml.cs:591
 msgid "Remove from group"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:624
+#: Views\MainWindow.xaml.cs:649
 msgid "Load Tree"
 msgstr "Загрузить"
 
-#: Views\MainWindow.xaml.cs:630
+#: Views\MainWindow.xaml.cs:655
 msgid "Load as new build"
 msgstr "Загрузить как новый билд"
 
-#: Views\MainWindow.xaml.cs:831
+#: Views\MainWindow.xaml.cs:856
 msgid ""
 "There are unsaved builds. Do you want to save them before closing?\n"
 "\n"
@@ -2141,7 +2156,7 @@ msgstr ""
 "\n"
 "Отмена останавливает закрытие программы и не сохраняет никаких билдов."
 
-#: Views\MainWindow.xaml.cs:911
+#: Views\MainWindow.xaml.cs:936
 #, fuzzy, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
@@ -2149,106 +2164,106 @@ msgstr[0] "{0}, {1} умений использовано"
 msgstr[1] "{0}, {1} умений использовано"
 msgstr[2] ""
 
-#: Views\MainWindow.xaml.cs:945
+#: Views\MainWindow.xaml.cs:970
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr "Ваш билд должен использовать по крайней мере один узел для создания скриншота"
 
-#: Views\MainWindow.xaml.cs:946
+#: Views\MainWindow.xaml.cs:971
 #, fuzzy
 msgid "Screenshot Generator"
 msgstr "Сссылка"
 
-#: Views\MainWindow.xaml.cs:964
+#: Views\MainWindow.xaml.cs:989
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr "Существующие данные дерева навыков будут удалены. Данные будут загружены из официального онлайн-дерева навыков и взяты из последней выпущенной версии игры."
 
-#: Views\MainWindow.xaml.cs:973
+#: Views\MainWindow.xaml.cs:998
 msgid "Downloading skill tree assets ..."
 msgstr "Загрузка ресурсов дерева навыков ..."
 
-#: Views\MainWindow.xaml.cs:994
+#: Views\MainWindow.xaml.cs:1019
 msgid "An error occurred while downloading assets."
 msgstr "Произошла ошибка при загрузке ресурсов."
 
-#: Views\MainWindow.xaml.cs:1011
+#: Views\MainWindow.xaml.cs:1036
 msgid "Checking for updates"
 msgstr "Проверяется наличие обновлений"
 
-#: Views\MainWindow.xaml.cs:1016
+#: Views\MainWindow.xaml.cs:1041
 msgid "You have the latest version!"
 msgstr "Вы используете последнюю версию!"
 
-#: Views\MainWindow.xaml.cs:1021
+#: Views\MainWindow.xaml.cs:1046
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr "Доступно обновление {0} ({1})"
 
-#: Views\MainWindow.xaml.cs:1024
+#: Views\MainWindow.xaml.cs:1049
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr "Приложение будет закрыито по завершению загрузки для продолжения обновления."
 
-#: Views\MainWindow.xaml.cs:1025
+#: Views\MainWindow.xaml.cs:1050
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr "Длступна новая версия {0}!"
 
-#: Views\MainWindow.xaml.cs:1028
+#: Views\MainWindow.xaml.cs:1053
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr "Новая версия прилодения будет установлена поверх предидущей."
 
-#: Views\MainWindow.xaml.cs:1032
+#: Views\MainWindow.xaml.cs:1057
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr "Внимание! Это пре-релизная версия, что значит, что моут возникать баги."
 
-#: Views\MainWindow.xaml.cs:1036
+#: Views\MainWindow.xaml.cs:1061
 msgid "Do you want to download and install the update?"
 msgstr "Хотите загрузить и установить обновление?"
 
-#: Views\MainWindow.xaml.cs:1037
+#: Views\MainWindow.xaml.cs:1062
 msgid "Do you want to download and install the new version?"
 msgstr "Хотите загрузить и установить новую версию?"
 
-#: Views\MainWindow.xaml.cs:1039
+#: Views\MainWindow.xaml.cs:1064
 msgid "Continue installation?"
 msgstr "Продолжить установку?"
 
-#: Views\MainWindow.xaml.cs:1050
+#: Views\MainWindow.xaml.cs:1075
 msgid "An error occurred while attempting to contact the update location."
 msgstr "Произошла ошибка при попытке соединения."
 
-#: Views\MainWindow.xaml.cs:1058
+#: Views\MainWindow.xaml.cs:1083
 msgid "Downloading latest version"
 msgstr "Загрузить последнюю версию"
 
-#: Views\MainWindow.xaml.cs:1073 Views\MainWindow.xaml.cs:1088
+#: Views\MainWindow.xaml.cs:1098 Views\MainWindow.xaml.cs:1113
 msgid "An error occurred during the download operation."
 msgstr "Произошла ошибка при загрузке."
 
-#: Views\MainWindow.xaml.cs:1101
+#: Views\MainWindow.xaml.cs:1126
 msgid "An error occurred while attempting to start the installation."
 msgstr "Произошла ошибка при попытке начать установку."
 
-#: Views\MainWindow.xaml.cs:1649
+#: Views\MainWindow.xaml.cs:1833
 msgid "An error occurred while attempting to load item data."
 msgstr "Произошла ошибка при попытке загрузки базы данных предметов."
 
-#: Views\MainWindow.xaml.cs:1745 Views\MainWindow.xaml.cs:1769
+#: Views\MainWindow.xaml.cs:1929 Views\MainWindow.xaml.cs:1953
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr "Произошла ошибка при попытке загрузить ссылку."
 
-#: Views\MainWindow.xaml.cs:1861
+#: Views\MainWindow.xaml.cs:2045
 msgid "Generating PoEUrl of Skill tree"
 msgstr "Создается ссылка PoEUrl"
 
-#: Views\MainWindow.xaml.cs:1867
+#: Views\MainWindow.xaml.cs:2051
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr "Произошла ошибка при попытке соединения с PoEUrl."
 
-#: Views\MainWindow.xaml.cs:1877
+#: Views\MainWindow.xaml.cs:2061
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr "Сссылка PoEUrl была скопирована."
 
-#: Views\MainWindow.xaml.cs:1881
+#: Views\MainWindow.xaml.cs:2065
 msgid "An error occurred while copying to Clipboard."
 msgstr "Произошла ошибка при копировании."
 
