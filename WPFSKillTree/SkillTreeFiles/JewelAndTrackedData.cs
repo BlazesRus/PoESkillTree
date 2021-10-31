@@ -213,6 +213,11 @@ namespace PoESkillTree
 
         /// <summary>  Initialize JewelData with CategorizeJewelNodes method once(and then set to false) after skilltree nodes are finished generating onto tree</summary>
         public bool NotSetup;
+#if DEBUG
+        public int NumberOfJewelsFound;
+#endif
+
+
         public void SetThresholdType(ushort Id,ThresholdTypes Value)
         {
             this[Id].JewelStatType = Value;
@@ -227,6 +232,9 @@ namespace PoESkillTree
         public JewelData() : base(21)
         {
             NotSetup = true;
+#if DEBUG
+            NumberOfJewelsFound = 0;
+#endif
         }
 
         /// <summary>
@@ -236,6 +244,7 @@ namespace PoESkillTree
         public void AddJewelSlot(ushort nodeID)
         {
             Add(nodeID, new JewelNodeData());
+            ++NumberOfJewelsFound;
         }
 
         /// <summary>
@@ -374,6 +383,9 @@ namespace PoESkillTree
                 SkillTree.Skillnodes[NodeId].UpdateStatDescription();
                 this[NodeId].GenerateSlotDesc(NodeId);
             }
+#if DEBUG
+            Console.WriteLine("Number of Non-Cluster JewelSlots found:" + NumberOfJewelsFound);
+#endif
         }
 
         public static explicit operator System.Collections.Generic.List<ushort>(JewelData self)
