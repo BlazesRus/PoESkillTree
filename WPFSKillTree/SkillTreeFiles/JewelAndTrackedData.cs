@@ -168,7 +168,7 @@ namespace PoESkillTree
         }
 
         /// <summary>Initializes a new instance of the <see cref="JewelDictionary"/> class.</summary>
-        public JewelData() : base(15)
+        public JewelData() : base(21)
         {
             NotSetup = true;
 #if DEBUG
@@ -200,7 +200,6 @@ namespace PoESkillTree
             string StrThresholdLabel = "+# Str JewelSlot";
             string IntThresholdLabel = "+# Int JewelSlot";
             string DexThresholdLabel = "+# Dex JewelSlot";
-            string JewelSocketLabel = "+# NonCluster JewelSocket";
             string AttributeName = "";
             float AttributeTotal;
             List<float> SingleVal = new List<float>(1);
@@ -260,11 +259,6 @@ namespace PoESkillTree
                         }
                     }
                 }
-                if (IsDexThreshold || IsStrThreshold || IsIntThreshold)
-                {
-                    if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(JewelSocketLabel))
-                        SkillTree.Skillnodes[NodeId].Attributes.Add(JewelSocketLabel, SingleVal);
-                }
                 if (IsDexThreshold && IsStrThreshold && IsIntThreshold)
                 {
                     if (!SkillTree.Skillnodes[NodeId].Attributes.ContainsKey(StrThresholdLabel))
@@ -323,10 +317,10 @@ namespace PoESkillTree
                     //NeutralJewelSlots.Add(NodeId);
                 }
                 SkillTree.Skillnodes[NodeId].UpdateStatDescription();
-                this[NodeId].GenerateSlotDesc(NodeId);
+                //this[NodeId].GenerateSlotDesc(NodeId);//Not needed at moment
             }
 #if DEBUG
-            Console.WriteLine("Number of Non-Cluster JewelSlots found:" + NumberOfJewelsFound);
+            Console.WriteLine("Number of Large+Normal JewelSlots found:" + NumberOfJewelsFound);
 #endif
         }
 

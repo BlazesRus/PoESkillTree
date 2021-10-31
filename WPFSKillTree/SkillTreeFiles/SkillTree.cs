@@ -366,6 +366,7 @@ namespace PoESkillTree.SkillTreeFiles
                 string LClusterLabel = "+# Large JewelSlot";
                 string MClusterLabel = "+# Medium JewelSlot";
                 string SClusterLabel = "+# Small JewelSlot";
+                string JewelSocketLabel = "+# NonCluster JewelSocket";
 
                 List<float> SingleVal = new List<float>(1);
                 SingleVal.Add(1);
@@ -491,6 +492,8 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.JewelSocket)
                     {
+                        if (!node.Attributes.ContainsKey(JewelSocketLabel))
+                            node.Attributes.Add(JewelSocketLabel, SingleVal);
                         GlobalSettings.JewelInfo.AddJewelSlot(node.Id);
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)//Cluster Jewel
@@ -498,7 +501,11 @@ namespace PoESkillTree.SkillTreeFiles
                         if (!node.Attributes.ContainsKey(ClusterLabel))
                             node.Attributes.Add(ClusterLabel, SingleVal);
                         if(node.Name.Contains("Large Jewel Socket")&&!node.Attributes.ContainsKey(LClusterLabel))
+                        {
                             node.Attributes.Add(LClusterLabel, SingleVal);
+                            //Including Large Cluster Jewels as potential Threshold Jewel Slots(since at least one Dex Threshold jewel slot exists that is a cluster Jewel Slot)
+                            GlobalSettings.JewelInfo.AddJewelSlot(node.Id);
+                        }
                         else if(node.Name.Contains("Medium Jewel Socket")&&!node.Attributes.ContainsKey(MClusterLabel))
                             node.Attributes.Add(MClusterLabel, SingleVal);
                         else if(!node.Attributes.ContainsKey(SClusterLabel))

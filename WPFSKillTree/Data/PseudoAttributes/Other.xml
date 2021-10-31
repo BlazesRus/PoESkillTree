@@ -23,4 +23,8 @@
 			</Conditions>
 		</Attribute>
 	</PseudoAttribute>
+	<PseudoAttribute Name="+# to LargeOrNormal Jewel Sockets" Group="Other">
+		<Attribute Name="+# NonCluster JewelSocket" />
+		<Attribute Name="+# Large JewelSlot" />
+	</PseudoAttribute>
 </PseudoAttributes>
