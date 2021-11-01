@@ -1638,7 +1638,28 @@ namespace PoESkillTree.Views
                 if (node.PassiveNodeType == PassiveNodeType.Mastery)//Add extra Details for Potential Mastery Choices
                 {
                     tooltip += "\nMastery Node Options are:\n";
-
+                    switch(node.Name)
+                    {
+                        case "Life Mastery":
+                            tooltip += "\n[\n]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            break;
+                        case "Mana Mastery":
+                            tooltip += "\n[Regenerate 5 Mana per second while you have Arcane Surge]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            tooltip += "\n[]";
+                            break;
+                        default:
+                            tooltip += "\n(Not Listed Yet)";
+                            break;
+                    }
                 }
                 /*
                                 if (node.PassiveNodeType == PassiveNodeType.JewelSocket)
