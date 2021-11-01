@@ -22,10 +22,16 @@
         <Attribute Name="#% increased Chaos Damage"/>
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
-    <PseudoAttribute Name="#% increased MinionBoosted Generic Chaos Damage" Group="Damage">
+    <PseudoAttribute Name="#% increased ScourgeBoosted Generic Chaos Damage" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Generic Chaos Damage[IntBoosted]" Group="Damage">
         <Attribute Name="Minions deal #% increased Damage" />
         <Attribute Name="#% increased Chaos Damage"/>
         <Attribute Name="#% increased Damage"/>
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased MinionBoosted Chaos Spell Damage" Group="Damage">
         <Attribute Name="Minions deal #% increased Damage" />

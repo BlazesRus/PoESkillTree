@@ -1475,11 +1475,11 @@ msgstr "Nie można było zaimportować buildu"
 msgid "New build"
 msgstr "Nowy build"
 
-#: SkillTreeFiles\SkillTree.cs:1227 SkillTreeFiles\SkillTree.cs:1228
+#: SkillTreeFiles\SkillTree.cs:1234 SkillTreeFiles\SkillTree.cs:1235
 msgid "Could not encode skill tree url. Something is very wrong..."
 msgstr ""
 
-#: SkillTreeFiles\SkillTree.cs:1271
+#: SkillTreeFiles\SkillTree.cs:1278
 msgid "Some nodes ({unknownNodes}) are unknown and have been omitted."
 msgstr "Niektóre węzły ({unknownNodes}) są nieznane i zostały pominięte."
 
