@@ -932,6 +932,7 @@ namespace PoESkillTree.Views
                 var dialog = new Microsoft.Win32.SaveFileDialog();
 
                 // Default file name -- current build name ("buildname - xxx points used")
+                //To-Do switch to ("buildname - xxx skillpoints used") //not counting AscendancyPoints
                 var skilledNodes = (uint)Tree.GetPointCount()["NormalUsed"];
                 dialog.FileName = PersistentData.CurrentBuild.Name + " - " + string.Format(L10n.Plural("{0} point", "{0} points", skilledNodes), skilledNodes);
 
@@ -1104,7 +1105,7 @@ namespace PoESkillTree.Views
         // Invoked when update download completes, aborts or fails.
         private async Task UpdateDownloadCompleted(AsyncCompletedEventArgs e)
         {
-            if (e.Cancelled) // Check whether download was cancelled.
+            if (e.Cancelled) // Check whether download was canceled.
             {
                 Updater.Dispose();
             }
@@ -1634,37 +1635,42 @@ namespace PoESkillTree.Views
                 {
                     _sToolTip.IsOpen = true;
                 }
-/*
-                if (node.Type == PassiveNodeType.JewelSocket)
+                if (node.PassiveNodeType == PassiveNodeType.Mastery)//Add extra Details for Potential Mastery Choices
                 {
-                    ushort ID = node.Id;
-                    sp.Children.Add(new Separator());
+                    tooltip += "\nMastery Node Options are:\n";
 
-                    JewelNodeData JewelValue;
-                    if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
-                    {
-                        JewelItem EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
-                        if (EquippedJewel != null)
-                        {
-                            sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
-                            bool HasMods = false;
-                            foreach (var attriStat in EquippedJewel.Mods)
-                            {
-                                if (HasMods == false)
-                                {
-                                    sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
-                                    HasMods = true;
-                                }
-                                sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
-                            }
-                            if (!PersistentData.Options.ChangeSummaryEnabled)
-                            {
-                                sp.Children.Add(new Separator());
-                            }
-                        }
-                    }
                 }
-*/
+                /*
+                                if (node.PassiveNodeType == PassiveNodeType.JewelSocket)
+                                {
+                                    ushort ID = node.Id;
+                                    sp.Children.Add(new Separator());
+
+                                    JewelNodeData JewelValue;
+                                    if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
+                                    {
+                                        JewelItem EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
+                                        if (EquippedJewel != null)
+                                        {
+                                            sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
+                                            bool HasMods = false;
+                                            foreach (var attriStat in EquippedJewel.Mods)
+                                            {
+                                                if (HasMods == false)
+                                                {
+                                                    sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
+                                                    HasMods = true;
+                                                }
+                                                sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
+                                            }
+                                            if (!PersistentData.Options.ChangeSummaryEnabled)
+                                            {
+                                                sp.Children.Add(new Separator());
+                                            }
+                                        }
+                                    }
+                                }
+                */
                 _lasttooltip = tooltip;
             }
         }

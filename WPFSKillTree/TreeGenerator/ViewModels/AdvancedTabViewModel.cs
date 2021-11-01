@@ -242,8 +242,8 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
             "+# to Jewel Socket", "+# Str JewelSlot", "+# Int JewelSlot", "+# Dex JewelSlot",
-			"+# Mastery Nodes", "+# NonCluster JewelSocket",
-			"+# Expansion JewelSlot", "+1 Large JewelSlot", "+1 Medium JewelSlot", "+1 Small JewelSlot"
+            "+# Mastery Nodes", "+# NonCluster JewelSocket",
+            "+# Expansion JewelSlot", "+1 Large JewelSlot", "+1 Medium JewelSlot", "+1 Small JewelSlot"
             //, GlobalSettings.DualWandAccKey, GlobalSettings.HPTotalKey, GlobalSettings.HybridHPKey
         };
 
