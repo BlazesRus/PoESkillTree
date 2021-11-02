@@ -17,8 +17,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;//Needed for Notifier parts of JewelData
 //using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
-//using PoESkillTree.ViewModels;
-//using PoESkillTree.ViewModels.Equipment;
+#if PoESkillTree_EnableItemInfluencedGenerator
+using PoESkillTree.ViewModels;
+using PoESkillTree.ViewModels.Equipment;
+#endif
 //using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 //using PoESkillTree.TrackedStatViews;
 
@@ -1207,124 +1209,263 @@ namespace PoESkillTree
         static string ChargeMStat = "+# Charge Mastery Nodes";
 
         static string ArmourMStat = "+# Armour Mastery Nodes";
-        static string ArmourESMStat = "+# Armour&Energy Shield Mastery Nodes";
-        static string ArmourEvasionMStat = "+# Armour&Evasion Mastery Nodes";
         static string EvasionMStat = "+# Evasion Mastery Nodes";
         static string ESMStat = "+# Energy Shield Mastery Nodes";
+        static string ArmourESMStat = "+# Armour&Energy Shield Mastery Nodes";
+        static string ArmourEvasionMStat = "+# Armour&Evasion Mastery Nodes";
+        static string EvasionESMStat = "+# Evasion&Energy Shield Mastery Nodes";
+
         static string StatMStat = "+# Attribute Mastery Nodes";
         static List<float> SingleVal = new List<float>(1) { 1 };
         public static void ApplyMasteryLabel(PassiveNodeViewModel node)
-        {//To-Do Order by most to least used
+        {//Organized from largest count to least count on tree
             if (!node.Attributes.ContainsKey(MasteryLabel))
                 node.Attributes.Add(MasteryLabel, SingleVal);
-            if (node.Name.Contains("Life") && !node.Attributes.ContainsKey(LifeMStat))
+            //19 Count
+            if (node.Name.StartsWith("Life") && !node.Attributes.ContainsKey(LifeMStat))
                 node.Attributes.Add(LifeMStat, SingleVal);
-            else if (node.Name.Contains("Mana") && !node.Attributes.ContainsKey(ManaMStat))
+            //9 Count
+            else if (node.Name.StartsWith("Mana") && !node.Attributes.ContainsKey(ManaMStat))
                 node.Attributes.Add(ManaMStat, SingleVal);
-            else if (node.Name.Contains("Minion Offence") && !node.Attributes.ContainsKey(MinionAttackMStat))
-                node.Attributes.Add(MinionAttackMStat, SingleVal);
-            else if (node.Name.Contains("Minion Defence") && !node.Attributes.ContainsKey(MinionDefMStat))
-                node.Attributes.Add(MinionDefMStat, SingleVal);
-            else if (node.Name.Contains("Shield") && !node.Attributes.ContainsKey(ShieldMStat))
-                node.Attributes.Add(ShieldMStat, SingleVal);
-            else if (node.Name.Contains("Bow") && !node.Attributes.ContainsKey(BowMStat))
-                node.Attributes.Add(BowMStat, SingleVal);
-            else if (node.Name.Contains("Two Hand") && !node.Attributes.ContainsKey(TwoHMStat))
-                node.Attributes.Add(TwoHMStat, SingleVal);
-            else if (node.Name.Contains("Wand") && !node.Attributes.ContainsKey(WandMStat))
-                node.Attributes.Add(WandMStat, SingleVal);
-            else if (node.Name.Contains("Staff") && !node.Attributes.ContainsKey(StaffMStat))
-                node.Attributes.Add(StaffMStat, SingleVal);
-            else if (node.Name.Contains("Dual") && !node.Attributes.ContainsKey(DualMStat))
-                node.Attributes.Add(DualMStat, SingleVal);
-            else if (node.Name.Contains("Mace") && !node.Attributes.ContainsKey(MaceMStat))
-                node.Attributes.Add(MaceMStat, SingleVal);
-            else if (node.Name.Contains("Dagger") && !node.Attributes.ContainsKey(DaggerMStat))
-                node.Attributes.Add(DaggerMStat, SingleVal);
-            else if (node.Name.Contains("Sword") && !node.Attributes.ContainsKey(SwordMStat))
-                node.Attributes.Add(SwordMStat, SingleVal);
-            else if (node.Name.Contains("Claw") && !node.Attributes.ContainsKey(ClawMStat))
-                node.Attributes.Add(ClawMStat, SingleVal);
-            else if (node.Name.Contains("Axe") && !node.Attributes.ContainsKey(AxeMStat))
-                node.Attributes.Add(AxeMStat, SingleVal);
-            else if (node.Name.Contains("Block") && !node.Attributes.ContainsKey(BlockMStat))
-                node.Attributes.Add(BlockMStat, SingleVal);
-            else if (node.Name.Contains("Attack") && !node.Attributes.ContainsKey(AttackMStat))
+            //8 Count
+            else if (node.Name.StartsWith("Attack") && !node.Attributes.ContainsKey(AttackMStat))
                 node.Attributes.Add(AttackMStat, SingleVal);
-            else if (node.Name.Contains("Elemental") && !node.Attributes.ContainsKey(ElemMStat))
-                node.Attributes.Add(ElemMStat, SingleVal);
-            else if (node.Name.Contains("Chaos") && !node.Attributes.ContainsKey(ChaosMStat))
-                node.Attributes.Add(ChaosMStat, SingleVal);
-            else if (node.Name.Contains("Fire") && !node.Attributes.ContainsKey(FireMStat))
-                node.Attributes.Add(FireMStat, SingleVal);
-            else if (node.Name.Contains("Cold") && !node.Attributes.ContainsKey(ColdMStat))
-                node.Attributes.Add(ColdMStat, SingleVal);
-            else if (node.Name.Contains("Lightning") && !node.Attributes.ContainsKey(LightMStat))
-                node.Attributes.Add(LightMStat, SingleVal);
-            else if (node.Name.Contains("Physical") && !node.Attributes.ContainsKey(PhysicalMStat))
-                node.Attributes.Add(PhysicalMStat, SingleVal);
-            else if (node.Name.Contains("Projectile") && !node.Attributes.ContainsKey(ProjMStat))
-                node.Attributes.Add(ProjMStat, SingleVal);
-            else if (node.Name.Contains("Poison") && !node.Attributes.ContainsKey(PoisonMStat))
-                node.Attributes.Add(PoisonMStat, SingleVal);
-            else if (node.Name.Contains("Damage Over Time") && !node.Attributes.ContainsKey(DOTMStat))
-                node.Attributes.Add(DOTMStat, SingleVal);
-            else if (node.Name.Contains("Armour and Energy Shield") && !node.Attributes.ContainsKey(ArmourESMStat))
-                node.Attributes.Add(ArmourESMStat, SingleVal);
-            else if (node.Name.Contains("Armour and Evasion") && !node.Attributes.ContainsKey(ArmourEvasionMStat))
-                node.Attributes.Add(ArmourEvasionMStat, SingleVal);
-            else if (node.Name.Contains("Armour") && !node.Attributes.ContainsKey(ArmourMStat))
-                node.Attributes.Add(ArmourMStat, SingleVal);
-            else if (node.Name.Contains("Evasion") && !node.Attributes.ContainsKey(EvasionMStat))
-                node.Attributes.Add(EvasionMStat, SingleVal);
-            else if (node.Name.Contains("Energy Shield") && !node.Attributes.ContainsKey(ESMStat))
-                node.Attributes.Add(ESMStat, SingleVal);
-            else if (node.Name.Contains("Flask") && !node.Attributes.ContainsKey(FlaskMStat))
+            else if (node.Name.StartsWith("Flask") && !node.Attributes.ContainsKey(FlaskMStat))
                 node.Attributes.Add(FlaskMStat, SingleVal);
-            else if (node.Name.Contains("Accuracy") && !node.Attributes.ContainsKey(HitMStat))
-                node.Attributes.Add(HitMStat, SingleVal);
-            else if (node.Name.Contains("Critical") && !node.Attributes.ContainsKey(CritMStat))
-                node.Attributes.Add(CritMStat, SingleVal);
-            else if (node.Name.Contains("Caster") && !node.Attributes.ContainsKey(CasterMStat))
-                node.Attributes.Add(CasterMStat, SingleVal);
-            else if (node.Name.Contains("Curse") && !node.Attributes.ContainsKey(CurseMStat))
-                node.Attributes.Add(CurseMStat, SingleVal);
-            else if (node.Name.Contains("Mine") && !node.Attributes.ContainsKey(MineMStat))
-                node.Attributes.Add(MineMStat, SingleVal);
-            else if (node.Name.Contains("Trap") && !node.Attributes.ContainsKey(TrapMStat))
-                node.Attributes.Add(TrapMStat, SingleVal);
-            else if (node.Name.Contains("Totem") && !node.Attributes.ContainsKey(TotemMStat))
-                node.Attributes.Add(TotemMStat, SingleVal);
-            else if (node.Name.Contains("Brand") && !node.Attributes.ContainsKey(BrandMStat))
-                node.Attributes.Add(BrandMStat, SingleVal);
-            else if (node.Name.Contains("Leech") && !node.Attributes.ContainsKey(LeechMStat))
+            else if (node.Name.StartsWith("Leech") && !node.Attributes.ContainsKey(LeechMStat))
                 node.Attributes.Add(LeechMStat, SingleVal);
-            else if (node.Name.Contains("Spell Suppression") && !node.Attributes.ContainsKey(SpellDefMStat))
-                node.Attributes.Add(SpellDefMStat, SingleVal);
-            else if (node.Name.Contains("Mark") && !node.Attributes.ContainsKey(MarkMStat))
-                node.Attributes.Add(MarkMStat, SingleVal);
-            else if (node.Name.Contains("Charge") && !node.Attributes.ContainsKey(ChargeMStat))
-                node.Attributes.Add(ChargeMStat, SingleVal);
-            else if (node.Name.Contains("Blind") && !node.Attributes.ContainsKey(BlindMStat))
-                node.Attributes.Add(BlindMStat, SingleVal);
-            else if (node.Name.Contains("Duration") && !node.Attributes.ContainsKey(DurationMStat))
-                node.Attributes.Add(DurationMStat, SingleVal);
-            else if (node.Name.Contains("Fortify") && !node.Attributes.ContainsKey(FortifyMStat))
-                node.Attributes.Add(FortifyMStat, SingleVal);
-            else if (node.Name.Contains("Warcry") && !node.Attributes.ContainsKey(WarcryMStat))
-                node.Attributes.Add(WarcryMStat, SingleVal);
-            else if (node.Name.Contains("Reservation") && !node.Attributes.ContainsKey(AuraMStat))
+            else if (node.Name.StartsWith("Caster") && !node.Attributes.ContainsKey(CasterMStat))
+                node.Attributes.Add(CasterMStat, SingleVal);
+            else if (node.Name.StartsWith("Minion Offence") && !node.Attributes.ContainsKey(MinionAttackMStat))
+                node.Attributes.Add(MinionAttackMStat, SingleVal);
+            //7 Count
+            else if (node.Name.StartsWith("Critical") && !node.Attributes.ContainsKey(CritMStat))
+                node.Attributes.Add(CritMStat, SingleVal);
+            else if (node.Name.StartsWith("Fire") && !node.Attributes.ContainsKey(FireMStat))
+                node.Attributes.Add(FireMStat, SingleVal);
+            //6 Count
+            else if (node.Name.StartsWith("Elemental") && !node.Attributes.ContainsKey(ElemMStat))
+                node.Attributes.Add(ElemMStat, SingleVal);
+            else if (node.Name.StartsWith("Energy Shield") && !node.Attributes.ContainsKey(ESMStat))
+                node.Attributes.Add(ESMStat, SingleVal);
+            else if (node.Name.StartsWith("Physical") && !node.Attributes.ContainsKey(PhysicalMStat))
+                node.Attributes.Add(PhysicalMStat, SingleVal);
+            else if (node.Name.StartsWith("Mine") && !node.Attributes.ContainsKey(MineMStat))
+                node.Attributes.Add(MineMStat, SingleVal);
+            else if (node.Name.StartsWith("Reservation") && !node.Attributes.ContainsKey(AuraMStat))
                 node.Attributes.Add(AuraMStat, SingleVal);
-            else if (node.Name.Contains("Resistance") && !node.Attributes.ContainsKey(ResMStat))
+            else if (node.Name.StartsWith("Totem") && !node.Attributes.ContainsKey(TotemMStat))
+                node.Attributes.Add(TotemMStat, SingleVal);
+            else if (node.Name.StartsWith("Resistance") && !node.Attributes.ContainsKey(ResMStat))
                 node.Attributes.Add(ResMStat, SingleVal);
-            else if (node.Name.Contains("Bleeding") && !node.Attributes.ContainsKey(BleedMStat))
-                node.Attributes.Add(BleedMStat, SingleVal);
-            else if (node.Name.Contains("Impale") && !node.Attributes.ContainsKey(ImpaleMStat))
-                node.Attributes.Add(ImpaleMStat, SingleVal);
-            else if (node.Name.Contains("Attributes") && !node.Attributes.ContainsKey(StatMStat))
+            //5 Count
+            else if (node.Name.StartsWith("Armour") && !node.Attributes.ContainsKey(ArmourMStat))
+                node.Attributes.Add(ArmourMStat, SingleVal);
+            else if (node.Name.StartsWith("Minion Defence") && !node.Attributes.ContainsKey(MinionDefMStat))
+                node.Attributes.Add(MinionDefMStat, SingleVal);
+            else if (node.Name.StartsWith("Cold") && !node.Attributes.ContainsKey(ColdMStat))
+                node.Attributes.Add(ColdMStat, SingleVal);
+            else if (node.Name.StartsWith("Curse") && !node.Attributes.ContainsKey(CurseMStat))
+                node.Attributes.Add(CurseMStat, SingleVal);
+            else if (node.Name.StartsWith("Bow") && !node.Attributes.ContainsKey(BowMStat))
+                node.Attributes.Add(BowMStat, SingleVal);
+            else if (node.Name.StartsWith("Evasion") && !node.Attributes.ContainsKey(EvasionMStat))
+                node.Attributes.Add(EvasionMStat, SingleVal);
+            else if (node.Name.StartsWith("Mace") && !node.Attributes.ContainsKey(MaceMStat))
+                node.Attributes.Add(MaceMStat, SingleVal);
+            else if (node.Name.StartsWith("Shield") && !node.Attributes.ContainsKey(ShieldMStat))
+                node.Attributes.Add(ShieldMStat, SingleVal);
+            else if (node.Name.StartsWith("Staff") && !node.Attributes.ContainsKey(StaffMStat))
+                node.Attributes.Add(StaffMStat, SingleVal);
+            else if (node.Name.StartsWith("Trap") && !node.Attributes.ContainsKey(TrapMStat))
+                node.Attributes.Add(TrapMStat, SingleVal);
+            //4 Count
+            else if (node.Name.StartsWith("Accuracy") && !node.Attributes.ContainsKey(HitMStat))
+                node.Attributes.Add(HitMStat, SingleVal);
+            else if (node.Name.StartsWith("Wand") && !node.Attributes.ContainsKey(WandMStat))
+                node.Attributes.Add(WandMStat, SingleVal);
+            else if (node.Name.StartsWith("Dagger") && !node.Attributes.ContainsKey(DaggerMStat))
+                node.Attributes.Add(DaggerMStat, SingleVal);
+            else if (node.Name.StartsWith("Poison") && !node.Attributes.ContainsKey(PoisonMStat))
+                node.Attributes.Add(PoisonMStat, SingleVal);
+            else if (node.Name.StartsWith("Charge") && !node.Attributes.ContainsKey(ChargeMStat))
+                node.Attributes.Add(ChargeMStat, SingleVal);
+            else if (node.Name.StartsWith("Claw") && !node.Attributes.ContainsKey(ClawMStat))
+                node.Attributes.Add(ClawMStat, SingleVal);
+            else if (node.Name.StartsWith("Lightning") && !node.Attributes.ContainsKey(LightMStat))
+                node.Attributes.Add(LightMStat, SingleVal);
+            else if (node.Name.StartsWith("Warcry") && !node.Attributes.ContainsKey(WarcryMStat))
+                node.Attributes.Add(WarcryMStat, SingleVal);
+            else if (node.Name.StartsWith("Axe") && !node.Attributes.ContainsKey(AxeMStat))
+                node.Attributes.Add(AxeMStat, SingleVal);
+            else if (node.Name.StartsWith("Sword") && !node.Attributes.ContainsKey(SwordMStat))
+                node.Attributes.Add(SwordMStat, SingleVal);
+            else if (node.Name.StartsWith("Two Hand") && !node.Attributes.ContainsKey(TwoHMStat))
+                node.Attributes.Add(TwoHMStat, SingleVal);
+            else if (node.Name.StartsWith("Damage Over Time") && !node.Attributes.ContainsKey(DOTMStat))
+                node.Attributes.Add(DOTMStat, SingleVal);
+            //3 Count
+            else if (node.Name.StartsWith("Block") && !node.Attributes.ContainsKey(BlockMStat))
+                node.Attributes.Add(BlockMStat, SingleVal);
+            else if (node.Name.StartsWith("Chaos") && !node.Attributes.ContainsKey(ChaosMStat))
+                node.Attributes.Add(ChaosMStat, SingleVal);
+            else if (node.Name.StartsWith("Dual") && !node.Attributes.ContainsKey(DualMStat))
+                node.Attributes.Add(DualMStat, SingleVal);
+            else if (node.Name.StartsWith("Projectile") && !node.Attributes.ContainsKey(ProjMStat))
+                node.Attributes.Add(ProjMStat, SingleVal);
+            else if (node.Name.StartsWith("Attributes") && !node.Attributes.ContainsKey(StatMStat))
                 node.Attributes.Add(StatMStat, SingleVal);
-            else if (node.Name.Contains("Link") && !node.Attributes.ContainsKey(LinkMStat))
+            else if (node.Name.StartsWith("Brand") && !node.Attributes.ContainsKey(BrandMStat))
+                node.Attributes.Add(BrandMStat, SingleVal);
+            else if (node.Name.StartsWith("Spell Suppression") && !node.Attributes.ContainsKey(SpellDefMStat))
+                node.Attributes.Add(SpellDefMStat, SingleVal);
+            else if (node.Name.StartsWith("Impale") && !node.Attributes.ContainsKey(ImpaleMStat))
+                node.Attributes.Add(ImpaleMStat, SingleVal);
+            //2 Count
+            else if (node.Name.StartsWith("Armour and Energy Shield") && !node.Attributes.ContainsKey(ArmourESMStat))
+                node.Attributes.Add(ArmourESMStat, SingleVal);
+            else if (node.Name.StartsWith("Armour and Evasion") && !node.Attributes.ContainsKey(ArmourEvasionMStat))
+                node.Attributes.Add(ArmourEvasionMStat, SingleVal);
+            else if (node.Name.StartsWith("Evasion and Energy Shield") && !node.Attributes.ContainsKey(EvasionESMStat))
+                node.Attributes.Add(EvasionESMStat, SingleVal);
+            else if (node.Name.StartsWith("Fortify") && !node.Attributes.ContainsKey(FortifyMStat))
+                node.Attributes.Add(FortifyMStat, SingleVal);
+            else if (node.Name.StartsWith("Bleeding") && !node.Attributes.ContainsKey(BleedMStat))
+                node.Attributes.Add(BleedMStat, SingleVal);
+            else if (node.Name.StartsWith("Mark") && !node.Attributes.ContainsKey(MarkMStat))
+                node.Attributes.Add(MarkMStat, SingleVal);
+            else if (node.Name.StartsWith("Duration") && !node.Attributes.ContainsKey(DurationMStat))
+                node.Attributes.Add(DurationMStat, SingleVal);
+            else if (node.Name.StartsWith("Link") && !node.Attributes.ContainsKey(LinkMStat))
                 node.Attributes.Add(LinkMStat, SingleVal);
+            else if (node.Name.StartsWith("Blind") && !node.Attributes.ContainsKey(BlindMStat))
+                node.Attributes.Add(BlindMStat, SingleVal);
+            node.UpdateStatDescription();
+        }
+
+        public static void RemoveMasteryLabel(PassiveNodeViewModel node)
+        {//Organized from largest count to least count on tree
+            if (!node.Attributes.ContainsKey(MasteryLabel))
+                node.Attributes.Remove(MasteryLabel);
+            //19 Count
+            if (node.Name.StartsWith("Life") && node.Attributes.ContainsKey(LifeMStat))
+                node.Attributes.Remove(LifeMStat);
+            //9 Count
+            else if (node.Name.StartsWith("Mana") && node.Attributes.ContainsKey(ManaMStat))
+                node.Attributes.Remove(ManaMStat);
+            //8 Count
+            else if (node.Name.StartsWith("Attack") && node.Attributes.ContainsKey(AttackMStat))
+                node.Attributes.Remove(AttackMStat);
+            else if (node.Name.StartsWith("Flask") && node.Attributes.ContainsKey(FlaskMStat))
+                node.Attributes.Remove(FlaskMStat);
+            else if (node.Name.StartsWith("Leech") && node.Attributes.ContainsKey(LeechMStat))
+                node.Attributes.Remove(LeechMStat);
+            else if (node.Name.StartsWith("Caster") && node.Attributes.ContainsKey(CasterMStat))
+                node.Attributes.Remove(CasterMStat);
+            else if (node.Name.StartsWith("Minion Offence") && node.Attributes.ContainsKey(MinionAttackMStat))
+                node.Attributes.Remove(MinionAttackMStat);
+            //7 Count
+            else if (node.Name.StartsWith("Critical") && node.Attributes.ContainsKey(CritMStat))
+                node.Attributes.Remove(CritMStat);
+            else if (node.Name.StartsWith("Fire") && node.Attributes.ContainsKey(FireMStat))
+                node.Attributes.Remove(FireMStat);
+            //6 Count
+            else if (node.Name.StartsWith("Elemental") && node.Attributes.ContainsKey(ElemMStat))
+                node.Attributes.Remove(ElemMStat);
+            else if (node.Name.StartsWith("Energy Shield") && node.Attributes.ContainsKey(ESMStat))
+                node.Attributes.Remove(ESMStat);
+            else if (node.Name.StartsWith("Physical") && node.Attributes.ContainsKey(PhysicalMStat))
+                node.Attributes.Remove(PhysicalMStat);
+            else if (node.Name.StartsWith("Mine") && node.Attributes.ContainsKey(MineMStat))
+                node.Attributes.Remove(MineMStat);
+            else if (node.Name.StartsWith("Reservation") && node.Attributes.ContainsKey(AuraMStat))
+                node.Attributes.Remove(AuraMStat);
+            else if (node.Name.StartsWith("Totem") && node.Attributes.ContainsKey(TotemMStat))
+                node.Attributes.Remove(TotemMStat);
+            else if (node.Name.StartsWith("Resistance") && node.Attributes.ContainsKey(ResMStat))
+                node.Attributes.Remove(ResMStat);
+            //5 Count
+            else if (node.Name.StartsWith("Armour") && node.Attributes.ContainsKey(ArmourMStat))
+                node.Attributes.Remove(ArmourMStat);
+            else if (node.Name.StartsWith("Minion Defence") && node.Attributes.ContainsKey(MinionDefMStat))
+                node.Attributes.Remove(MinionDefMStat);
+            else if (node.Name.StartsWith("Cold") && node.Attributes.ContainsKey(ColdMStat))
+                node.Attributes.Remove(ColdMStat);
+            else if (node.Name.StartsWith("Curse") && node.Attributes.ContainsKey(CurseMStat))
+                node.Attributes.Remove(CurseMStat);
+            else if (node.Name.StartsWith("Bow") && node.Attributes.ContainsKey(BowMStat))
+                node.Attributes.Remove(BowMStat);
+            else if (node.Name.StartsWith("Evasion") && node.Attributes.ContainsKey(EvasionMStat))
+                node.Attributes.Remove(EvasionMStat);
+            else if (node.Name.StartsWith("Mace") && node.Attributes.ContainsKey(MaceMStat))
+                node.Attributes.Remove(MaceMStat);
+            else if (node.Name.StartsWith("Shield") && node.Attributes.ContainsKey(ShieldMStat))
+                node.Attributes.Remove(ShieldMStat);
+            else if (node.Name.StartsWith("Staff") && node.Attributes.ContainsKey(StaffMStat))
+                node.Attributes.Remove(StaffMStat);
+            else if (node.Name.StartsWith("Trap") && node.Attributes.ContainsKey(TrapMStat))
+                node.Attributes.Remove(TrapMStat);
+            //4 Count
+            else if (node.Name.StartsWith("Accuracy") && node.Attributes.ContainsKey(HitMStat))
+                node.Attributes.Remove(HitMStat);
+            else if (node.Name.StartsWith("Wand") && node.Attributes.ContainsKey(WandMStat))
+                node.Attributes.Remove(WandMStat);
+            else if (node.Name.StartsWith("Dagger") && node.Attributes.ContainsKey(DaggerMStat))
+                node.Attributes.Remove(DaggerMStat);
+            else if (node.Name.StartsWith("Poison") && node.Attributes.ContainsKey(PoisonMStat))
+                node.Attributes.Remove(PoisonMStat);
+            else if (node.Name.StartsWith("Charge") && node.Attributes.ContainsKey(ChargeMStat))
+                node.Attributes.Remove(ChargeMStat);
+            else if (node.Name.StartsWith("Claw") && node.Attributes.ContainsKey(ClawMStat))
+                node.Attributes.Remove(ClawMStat);
+            else if (node.Name.StartsWith("Lightning") && node.Attributes.ContainsKey(LightMStat))
+                node.Attributes.Remove(LightMStat);
+            else if (node.Name.StartsWith("Warcry") && node.Attributes.ContainsKey(WarcryMStat))
+                node.Attributes.Remove(WarcryMStat);
+            else if (node.Name.StartsWith("Axe") && node.Attributes.ContainsKey(AxeMStat))
+                node.Attributes.Remove(AxeMStat);
+            else if (node.Name.StartsWith("Sword") && node.Attributes.ContainsKey(SwordMStat))
+                node.Attributes.Remove(SwordMStat);
+            else if (node.Name.StartsWith("Two Hand") && node.Attributes.ContainsKey(TwoHMStat))
+                node.Attributes.Remove(TwoHMStat);
+            else if (node.Name.StartsWith("Damage Over Time") && node.Attributes.ContainsKey(DOTMStat))
+                node.Attributes.Remove(DOTMStat);
+            //3 Count
+            else if (node.Name.StartsWith("Block") && node.Attributes.ContainsKey(BlockMStat))
+                node.Attributes.Remove(BlockMStat);
+            else if (node.Name.StartsWith("Chaos") && node.Attributes.ContainsKey(ChaosMStat))
+                node.Attributes.Remove(ChaosMStat);
+            else if (node.Name.StartsWith("Dual") && node.Attributes.ContainsKey(DualMStat))
+                node.Attributes.Remove(DualMStat);
+            else if (node.Name.StartsWith("Projectile") && node.Attributes.ContainsKey(ProjMStat))
+                node.Attributes.Remove(ProjMStat);
+            else if (node.Name.StartsWith("Attributes") && node.Attributes.ContainsKey(StatMStat))
+                node.Attributes.Remove(StatMStat);
+            else if (node.Name.StartsWith("Brand") && node.Attributes.ContainsKey(BrandMStat))
+                node.Attributes.Remove(BrandMStat);
+            else if (node.Name.StartsWith("Spell Suppression") && node.Attributes.ContainsKey(SpellDefMStat))
+                node.Attributes.Remove(SpellDefMStat);
+            else if (node.Name.StartsWith("Impale") && node.Attributes.ContainsKey(ImpaleMStat))
+                node.Attributes.Remove(ImpaleMStat);
+            //2 Count
+            else if (node.Name.StartsWith("Armour and Energy Shield") && node.Attributes.ContainsKey(ArmourESMStat))
+                node.Attributes.Remove(ArmourESMStat);
+            else if (node.Name.StartsWith("Armour and Evasion") && node.Attributes.ContainsKey(ArmourEvasionMStat))
+                node.Attributes.Remove(ArmourEvasionMStat);
+            else if (node.Name.StartsWith("Evasion and Energy Shield") && node.Attributes.ContainsKey(EvasionESMStat))
+                node.Attributes.Remove(EvasionESMStat);
+            else if (node.Name.StartsWith("Fortify") && node.Attributes.ContainsKey(FortifyMStat))
+                node.Attributes.Remove(FortifyMStat);
+            else if (node.Name.StartsWith("Bleeding") && node.Attributes.ContainsKey(BleedMStat))
+                node.Attributes.Remove(BleedMStat);
+            else if (node.Name.StartsWith("Mark") && node.Attributes.ContainsKey(MarkMStat))
+                node.Attributes.Remove(MarkMStat);
+            else if (node.Name.StartsWith("Duration") && node.Attributes.ContainsKey(DurationMStat))
+                node.Attributes.Remove(DurationMStat);
+            else if (node.Name.StartsWith("Link") && node.Attributes.ContainsKey(LinkMStat))
+                node.Attributes.Remove(LinkMStat);
+            else if (node.Name.StartsWith("Blind") && node.Attributes.ContainsKey(BlindMStat))
+                node.Attributes.Remove(BlindMStat);
             node.UpdateStatDescription();
         }
 
@@ -1411,7 +1552,7 @@ namespace PoESkillTree
         public static bool AutoTrackStats = true;
 */
 
-/*
+#if PoESkillTree_EnableItemInfluencedGenerator
         public static InventoryViewModel ItemInfoVal;
 
         /// <summary>
@@ -1428,7 +1569,7 @@ namespace PoESkillTree
                 NotifyStaticPropertyChanged("ItemInfo");
             }
         }
-*/
+#endif
 
         /// <summary>
         /// The dialog coordinator
