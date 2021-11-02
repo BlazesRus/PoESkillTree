@@ -1639,59 +1639,416 @@ namespace PoESkillTree.Views
                 {
                     tooltip += "\nMastery Node Options are:\n";
                     switch(node.Name)
-                    {
+                    {//Description and number of counts listed on https://poedb.tw/us/Passive_mastery
                         case "Life Mastery":
-                            tooltip += "\n[\n]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
+                            tooltip += "\n[10% increased maximum Life\n10% reduced Life Recovery rate]";
+                            tooltip += "\n[Regenerate 2% of Life per second while moving]";
+                            tooltip += "\n[+50 to maximum Life]";
+                            tooltip += "\n[15% reduced Life Cost of Skills]";
+                            tooltip += "\n[50% increased Life Recovery from Flasks used when on Low Life]";
+                            tooltip += "\n[Vitality has 100% increased Mana Reservation Efficiency]";
                             break;
                         case "Mana Mastery":
                             tooltip += "\n[Regenerate 5 Mana per second while you have Arcane Surge]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
-                            tooltip += "\n[]";
+                            tooltip += "\n[Recover 10% of Mana over 1 second when you use a Guard Skill]";
+                            tooltip += "\n[10% of Damage taken Recouped as Mana]";
+                            tooltip += "\n[10% reduced Mana Cost of Skills]";
+                            tooltip += "\n[10% chance to Recover 10% of Mana when you use a Skill]";
+                            tooltip += "\n[Clarity has 100% increased Mana Reservation Efficiency]";
+                            break;
+                        case "Attack Mastery":
+                            tooltip += "\n[+3 to Melee Strike Range]";
+                            tooltip += "\n[Strike Skills which target additional Enemies can do so from 30% further away]";
+                            tooltip += "\n[50% increased Mana Reservation Efficiency of Stance Skills]";
+                            tooltip += "\n[40% increased Melee Damage with Hits at Close Range]";
+                            tooltip += "\n[1% increased Attack Damage per 16 Strength]";
+                            tooltip += "\n[Ruthless Hits Intimidate Enemies for 4 seconds]";
+                            break;
+                        case "Flask Mastery":
+                            tooltip += "\n[Recover 10% of Life when you use a Life Flask while on Low Life]";
+                            tooltip += "\n[Utility Flasks gain 1 Charge every 3 seconds]";
+                            tooltip += "\n[Life Flasks gain 1 Charge every 3 seconds/nMana Flasks gain 1 Charge every 3 seconds]";
+                            tooltip += "\n[Flasks applied to you have 10% increased Effect]";
+                            tooltip += "\n[Remove a random Elemental Ailment when you use a Mana Flask]";
+                            tooltip += "\n[Remove a random non-Elemental Ailment when you use a Life Flask]";
+                            break;
+                        case "Leech Mastery":
+                            tooltip += "\n[20% increased Maximum total Life Recovery per second from Leech]";
+                            tooltip += "\n[30% increased Maximum total Mana Recovery per second from Leech]";
+                            tooltip += "\n[30% increased Maximum total Energy Shield Recovery per second from Leech]";
+                            tooltip += "\n[30% increased Damage while Leeching]";
+                            tooltip += "\n[100% increased total Recovery per second from Life, Mana, or Energy Shield Leech]";
+                            break;
+                        case "Caster Mastery":
+                            tooltip += "\n[Final Repeat of Spells has 30% increased Area of Effect]";
+                            tooltip += "\n[Spells cause you to gain Mana equal to their Upfront Cost every fifth time you Pay it]";
+                            tooltip += "\n[Cannot be Chilled or Frozen while Casting a Spell]";
+                            tooltip += "\n[Spells which can gain Intensity have +1 to maximum Intensity]";
+                            tooltip += "\n[Skills supported by Unleash have +1 to maximum number of Seals]";
+                            tooltip += "\n[1% increased Spell Damage per 16 Intelligence]";
+                            break;
+                        case "Minion Offence Mastery":
+                            tooltip += "\n[Minions Attacks Overwhelm 20% Physical Damage Reduction]";
+                            tooltip += "\n[Minions Penetrate 8% of Cursed Enemies' Elemental Resistances]";
+                            tooltip += "\n[Minions have 25% chance to gain Unholy Might for 4 seconds on Kill]";
+                            tooltip += "\n[Minions have 100% increased Critical Strike Chance]";
+                            tooltip += "\n[Minions have +250 to Accuracy Rating]";
+                            tooltip += "\n[20% increased effect of Offerings]";
+                            break;
+                        case "Critical Mastery":
+                            tooltip += "\n[50% increased Effect of non-Damaging Ailments you inflict with Critical Strikes]";
+                            tooltip += "\n[+25% to Critical Strike Multiplier against Unique Enemies]";
+                            tooltip += "\n[Stuns from Critical Strikes have 100% increased Duration]";
+                            tooltip += "\n[+3 to Level of all Critical Support Gems]";
+                            tooltip += "\n[You take 30% reduced Extra Damage from Critical Strikes]";
+                            tooltip += "\n[150% increased Critical Strike Chance against Enemies on Full Life]";
+                            break;
+                        case "Fire Mastery":
+                            tooltip += "\n[Fire Exposure you inflict applies an extra -5% to Fire Resistance]";
+                            tooltip += "\n[Recover 2% of Life when you Ignite a non-Ignited Enemy]";
+                            tooltip += "\n[40% of Physical Damage Converted to Fire Damage]";
+                            tooltip += "\n[20% chance to cover Enemies in Ash when they Hit you]";
+                            tooltip += "\n[1% increased Fire Damage per 20 Strength]";
+                            tooltip += "\n[+20% to Fire Damage over Time Multiplier/n-30% to Fire Resistance]";
+                            break;
+                        case "Elemental Mastery":
+                            tooltip += "\n[Exposure you inflict applies at least -18% to the affected Resistance]";
+                            tooltip += "\n[60% reduced Reflected Elemental Damage taken]";
+                            tooltip += "\n[Gain 10% of Physical Damage as Extra Damage of a random Element]";
+                            tooltip += "\n[40% increased Effect of Non-Damaging Ailments]";
+                            tooltip += "\n[+15% to all Elemental Resistances]";
+                            tooltip += "\n[1% of Elemental Damage Leeched as Energy Shield]";
+                            break;
+                        case "Energy Shield Mastery":
+                            tooltip += "\n[30% increased Light Radius/nLight Radius is based on Energy Shield instead of Life]";
+                            tooltip += "\n[Cannot be Frozen if Energy Shield Recharge has started Recently]";
+                            tooltip += "\n[Stun Threshold is based on 50% of your Energy Shield instead of Life]";
+                            tooltip += "\n[Regenerate 2% of Energy Shield per second]";
+                            tooltip += "\n[Gain 3% of Maximum Mana as Extra Maximum Energy Shield]";
+                            tooltip += "\n[Discipline has 25% increased Mana Reservation Efficiency]";
+                            break;
+                        case "Physical Mastery":
+                            tooltip += "\n[War Banner has 100% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[20% chance to Impale Enemies on Hit]";
+                            tooltip += "\n[60% reduced Reflected Physical Damage taken]";
+                            tooltip += "\n[Overwhelm 15% Physical Damage Reduction]";
+                            tooltip += "\n[40% increased Physical Damage with Skills that Cost Life]";
+                            tooltip += "\n[Skills that leave Lingering Blades have 20% chance to leave two Lingering Blades instead of one/nSkills that leave Lingering Blades have +10 to Maximum Lingering Blades]";
+                            break;
+                        case "Mine Mastery":
+                            tooltip += "\n[Each Mine applies 2% increased Damage taken to Enemies near it, up to 10%]";
+                            tooltip += "\n[Each Mine applies 2% reduced Damage dealt to Enemies near it, up to 10%]";
+                            tooltip += "\n[30% increased Effect of Auras from Mines]";
+                            tooltip += "\n[Summoned Skitterbots have 100% increased Cooldown Recovery]";
+                            tooltip += "\n[Mines cannot be Damaged]";
+                            tooltip += "\n[Regenerate 2.5% of Life per Second if you've Detonated a Mine Recently]";
+                            break;
+                        case "Reservation Mastery":
+                            tooltip += "\n[8% increased Damage for each of your Aura or Herald Skills affecting you]";
+                            tooltip += "\n[15% increased Mana Reservation Efficiency of Skills]";
+                            tooltip += "\n[30% increased Life Reservation Efficiency of Skills]";
+                            tooltip += "\n[30% increased Area of Effect of Aura Skills]";
+                            tooltip += "\n[Auras from your Skills have 15% increased Effect on you]";
+                            tooltip += "\n[Non-Curse Aura Skills have 50% increased Duration]";
+                            break;
+                        case "Resistance and Ailment Protection Mastery":
+                            tooltip += "\n[Corrupted Blood cannot be inflicted on you]";
+                            tooltip += "\n[You cannot be Maimed/nYou cannot be Hindered]";
+                            tooltip += "\n[You cannot be Impaled]";
+                            tooltip += "\n[20% chance to Avoid being Stunned]";
+                            tooltip += "\n[20% reduced Effect of Curses on you]";
+                            tooltip += "\n[+12% to all Elemental Resistances/n+7% to Chaos Resistance]";
+                            break;
+                        case "Armour Mastery":
+                            tooltip += "\n[+600 to Armour while affected by a Guard Skill Buff]";
+                            tooltip += "\n[You take 30% reduced Extra Damage from Critical Strikes]";
+                            tooltip += "\n[20% chance to Defend with 200% of Armour]";
+                            tooltip += "\n[50% increased Stun Threshold]";
+                            tooltip += "\n[Determination has 25% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[100% increased Armour from Equipped Shield]";
+                            break;
+                        case "Bow Mastery":
+                            tooltip += "\n[Blink Arrow and Mirror Arrow have 60% increased Cooldown Recovery Rate]";
+                            tooltip += "\n[20% increased Area of Effect while wielding a Bow]";
+                            tooltip += "\n[Arrows gain Critical Strike Chance as they travel farther, up to 100% increased Critical Strike Chance]";
+                            tooltip += "\n[50% increased Mirage Archer Duration]";
+                            tooltip += "\n[8% increased Movement Speed while Phasing/n20% chance to gain Phasing for 4 seconds on Kill]";
+                            tooltip += "\n[35% increased Damage while you are wielding a Bow and have a Totem]";
+                            break;
+                        case "Cold Mastery":
+                            tooltip += "\n[Enemies Become Chilled as they Unfreeze, causing 30% reduced Action Speed]";
+                            tooltip += "\n[40% of Physical Damage Converted to Cold Damage]";
+                            tooltip += "\n[60% increased Freeze Duration on Enemies]";
+                            tooltip += "\n[25% chance to gain a Frenzy Charge when you Shatter an Enemy]";
+                            tooltip += "\n[Cold Exposure you inflict applies an extra -5% to Cold Resistance]";
+                            tooltip += "\n[Curses on Enemies in your Chilling Areas have 15% increased Effect]";
+                            break;
+                        case "Curse Mastery":
+                            tooltip += "\n[+20% chance to Ignite, Freeze, Shock, and Poison Cursed Enemies]";
+                            tooltip += "\n[20% chance for Hexes you Cast which can gain Doom to be applied with Maximum Doom]";
+                            tooltip += "\n[Non-Cursed Enemies you inflict Non-Aura Curses on are Blinded for 4 seconds]";
+                            tooltip += "\n[Your Curses have 20% increased Effect if 50% of Curse Duration expired]";
+                            tooltip += "\n[Enemies you Curse are Hindered, with 15% reduced Movement Speed]";
+                            tooltip += "\n[30% increased Mana Reservation Efficiency of Curse Aura Skills]";
+                            break;
+                        case "Evasion Mastery":
+                            tooltip += "\n[Cannot be Stunned if you haven't been Hit Recently]";
+                            tooltip += "\n[40% increased Evasion Rating if you have been Hit Recently]";
+                            tooltip += "\n[10% increased Movement Speed if you haven't taken Damage Recently]";
+                            tooltip += "\n[30% chance to Avoid being Poisoned/n30% chance to Avoid Bleeding/n30% chance to Avoid being Impaled]";
+                            tooltip += "\n[Grace has 25% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[100% increased Evasion Rating from your Body Armour]";
+                            break;
+                        case "Mace Mastery":
+                            tooltip += "\n[All Damage with Maces and Sceptres inflicts Chill]";
+                            tooltip += "\n[20% increased Area of Effect if you've dealt a Critical Strike Recently]";
+                            tooltip += "\n[Crush Enemies on hit with Maces and Sceptres]";
+                            tooltip += "\n[12% chance to deal Double Damage with Attacks if Attack Time is longer than 1 second]";
+                            tooltip += "\n[50% increased Stun Duration on Enemies]";
+                            tooltip += "\n[Hits that Stun Enemies have Culling Strike]";
+                            break;
+                        case "Minion Defence Mastery":
+                            tooltip += "\n[Minions have +8% to all maximum Elemental Resistances]";
+                            tooltip += "\n[Link Skills can target Damageable Minions]";
+                            tooltip += "\n[Minions Leech 1% of Damage as Life]";
+                            tooltip += "\n[Convocation has 40% increased Cooldown Recovery Rate]";
+                            tooltip += "\n[Minions have 15% reduced Life Recovery rate/nMinions have 30% increased maximum Life]";
+                            tooltip += "\n[Minions Recover 5% of Life on Minion Death]";
+                            break;
+                        case "Shield Mastery":
+                            tooltip += "\n[Counterattacks have a 50% chance to Debilitate on Hit for 1 second]";
+                            tooltip += "\n[+1% Chance to Block Attack Damage per 5% Chance to Block on Equipped Shield]";
+                            tooltip += "\n[Intimidate Enemies for 4 seconds on Block while holding a Shield]";
+                            tooltip += "\n[20% chance to Avoid Elemental Ailments while holding a Shield]";
+                            tooltip += "\n[2% increased Attack Damage per 75 Armour or Evasion Rating on Shield]";
+                            tooltip += "\n[+1% to Critical Strike Multiplier per 10 Maximum Energy Shield on Shield]";
+                            break;
+                        case "Staff Mastery":
+                            tooltip += "\n[Recover 2% of Energy Shield when you Block Spell Damage while wielding a Staff/nRecover 2% of Life when you Block Attack Damage while wielding a Staff]";
+                            tooltip += "\n[30% increased Defences while wielding a Staff]";
+                            tooltip += "\n[+8% Chance to Block Attack Damage if you've Stunned an Enemy Recently]";
+                            tooltip += "\n[20% chance to double Stun Duration]";
+                            tooltip += "\n[Gain Unholy Might on block for 3 seconds]";
+                            tooltip += "\n[+60% to Critical Strike Multiplier if you haven't dealt a Critical Strike Recently]";
+                            break;
+                        case "Trap Mastery":
+                            tooltip += "\n[5% chance to throw up to 4 additional Traps]";
+                            tooltip += "\n[Summon Skitterbots has 50% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[Can have up to 5 additional Traps placed at a time]";
+                            tooltip += "\n[60% increased Trap Trigger Area of Effect]";
+                            tooltip += "\n[Recover 30 Life when your Trap is triggered by an Enemy]";
+                            tooltip += "\n[Traps cannot be Damaged]";
+                            break;
+                        case "Accuracy Mastery":
+                            tooltip += "\n[30% increased Accuracy Rating if you haven't Killed Recently]";
+                            tooltip += "\n[Precision has 100% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[Dexterity's Accuracy Bonus instead grants +3 to Accuracy Rating per Dexterity]";
+                            tooltip += "\n[40% increased Accuracy Rating against Unique Enemies]";
+                            break;
+                        case "Axe Mastery":
+                            tooltip += "\n[Enemies you hit are destroyed on Kill]";
+                            tooltip += "\n[Bleeding you inflict deals Damage 15% faster]";
+                            tooltip += "\n[40% increased Onslaught Effect]";
+                            tooltip += "\n[30% increased Damage while in Blood Stance/n15% increased Area of Effect while in Sand Stance]";
+                            tooltip += "\n[10% more Damage with Hits and Ailments against Enemies that are on Low Life]";
+                            tooltip += "\n[Attacks with Axes or Swords grant 1 Rage on Hit, no more than once every second]";
+                            break;
+                        case "Charge Mastery":
+                            tooltip += "\n[Cannot be Ignited while at maximum Endurance Charges]";
+                            tooltip += "\n[Cannot be Chilled while at maximum Frenzy Charges]";
+                            tooltip += "\n[Cannot be Shocked while at maximum Power Charges]";
+                            tooltip += "\n[100% increased Charge Duration]";
+                            tooltip += "\n[3% increased Damage per Endurance, Frenzy or Power Charge]";
+                            break;
+                        case "Claw Mastery":
+                            tooltip += "\n[1% of Attack Damage Leeched as Life/n1% of Attack Damage Leeched as Mana]";
+                            tooltip += "\n[20% chance to Blind Enemies on Critical Strike]";
+                            tooltip += "\n[+10 Life gained for each Enemy hit by your Attacks/n+5 Mana gained for each Enemy hit by your Attacks]";
+                            tooltip += "\n[6% chance to gain a Frenzy Charge and a Power Charge on Kill]";
+                            tooltip += "\n[Enemies Poisoned by you cannot deal Critical Strikes]";
+                            tooltip += "\n[Skills Supported by Nightblade have 40% increased Effect of Elusive]";
+                            break;
+                        case "Dagger Mastery":
+                            tooltip += "\n[+100% to Critical Strike Multiplier against Enemies that are on Full Life]";
+                            tooltip += "\n[Critical Strikes have Culling Strike]";
+                            tooltip += "\n[+8% chance to Suppress Spell Damage for each Dagger you're Wielding]";
+                            tooltip += "\n[8% more Damage with Hits and Ailments against Enemies affected by at least 5 Poisons]";
+                            tooltip += "\n[15% more Maximum Physical Attack Damage with Daggers]";
+                            tooltip += "\n[Elusive also grants +40% to Critical Strike Multiplier for Skills Supported by Nightblade]";
+                            break;
+                        case "Damage Over Time Mastery":
+                            tooltip += "\n[30% increased Effect of Cruelty]";
+                            tooltip += "\n[+10% to Damage over Time Multiplier if you've Killed Recently]";
+                            tooltip += "\n[15% increased Duration of Ailments on Enemies/n15% increased Skill Effect Duration]";
+                            tooltip += "\n[10% less Damage Taken from Damage over Time]";
+                            break;
+                        case "Lightning Mastery":
+                            tooltip += "\n[40% of Physical Damage Converted to Lightning Damage]";
+                            tooltip += "\n[Lightning Damage with Non-Critical Strikes is Lucky]";
+                            tooltip += "\n[Your Shocks can increase Damage taken by up to a maximum of 60%]";
+                            tooltip += "\n[80% increased Critical Strike Chance against Shocked Enemies]";
+                            tooltip += "\n[Non-Projectile Chaining Lightning Skills Chain +1 times]";
+                            tooltip += "\n[Increases and reductions to Maximum Mana also apply to Shock Effect at 30% of their value]";
+                            break;
+                        case "Poison Mastery":
+                            tooltip += "\n[Poisons you inflict on non-Poisoned Enemies deal 300% increased Damage]";
+                            tooltip += "\n[Poisons you inflict deal Damage 20% faster]";
+                            tooltip += "\n[+12% to Damage over Time Multiplier for Poison you inflict on Bleeding Enemies]";
+                            tooltip += "\n[20% increased Poison Duration]";
+                            tooltip += "\n[Recover 3% of Life on Killing a Poisoned Enemy]";
+                            tooltip += "\n[Plague Bearer has 20% increased Maximum Plague Value]";
+                            break;
+                        case "Sword Mastery":
+                            tooltip += "\n[+3 to Melee Strike Range with Swords]";
+                            tooltip += "\n[20% chance to Impale Enemies on Hit with Attacks]";
+                            tooltip += "\n[8% chance to gain a Frenzy Charge when you Hit a Unique Enemy]";
+                            tooltip += "\n[Off Hand Accuracy is equal to Main Hand Accuracy while wielding a Sword]";
+                            tooltip += "\n[120% increased Critical Strike Chance with Swords\n-20% to Critical Strike Multiplier with Swords]";
+                            tooltip += "\n[50% reduced Enemy Chance to Block Sword Attacks]";
+                            break;
+                        case "Two Hand Mastery":
+                            tooltip += "\n[3% chance to deal Triple Damage]";
+                            tooltip += "\n[40% increased Damage with Hits against Rare and Unique Enemies]";
+                            tooltip += "\n[10% increased Armour per Red Socket on Main Hand Weapon/n10% increased Evasion Rating per Green Socket on Main Hand Weapon]";
+                            tooltip += "\n[15% more Stun Duration with Two Handed Weapons]";
+                            tooltip += "\n[Attacks with Two Handed Weapons deal 60% increased Damage with Hits and Ailments/n10% reduced Attack Speed]";
+                            break;
+                        case "Wand Mastery":
+                            tooltip += "\n[10% chance to gain a Power Charge on Critical Strike with Wands]";
+                            tooltip += "\n[Unnerve Enemies for 4 seconds on Hit with Wands]";
+                            tooltip += "\n[Wand Attacks fire an additional Projectile]";
+                            tooltip += "\n[Increases and Reductions to Spell Damage also apply to Attacks while wielding a Wand]";
+                            tooltip += "\n[0.5% of Attack Damage Leeched as Life/n0.5% of Attack Damage Leeched as Mana]";
+                            tooltip += "\n[Intelligence is added to Accuracy Rating with Wands]";
+                            break;
+                        case "Warcry Mastery":
+                            tooltip += "\n[Exerted Attacks deal 25% increased Damage/nWarcries cannot Exert Travel Skills]";
+                            tooltip += "\n[Remove an Ailment when you Warcry]";
+                            tooltip += "\n[Recover 15% of Life when you use a Warcry]";
+                            tooltip += "\n[20% increased Damage for each time you've Warcried Recently]";
+                            tooltip += "\n[Warcries Debilitate Enemies for 1 second]";
+                            tooltip += "\n[Warcries have a minimum of 10 Power]";
+                            break;
+                        case "Spell Suppression Mastery":
+                            tooltip += "\n[Prevent +2% of Suppressed Spell Damage]";
+                            tooltip += "\n[Debilitate Enemies for 1 second when you Suppress their Spell Damage]";
+                            tooltip += "\n[Critical Strike Chance is increased by chance to Suppress Spell Damage]";
+                            tooltip += "\n[You take 50% reduced Extra Damage from Suppressed Critical Strikes]";
+                            tooltip += "\n[+10% chance to Suppress Spell Damage if your Boots, Helmet and Gloves have Evasion]";
+                            break;
+                        case "Impale Mastery":
+                            tooltip += "\n[Dread Banner has 100% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[Impale Damage dealt to Enemies Impaled by you Overwhelms 20% Physical Damage Reduction]";
+                            tooltip += "\n[Call of Steel deals Reflected Damage with 40% increased Area of Effect/nCall of Steel has 40% increased Use Speed]";
+                            tooltip += "\n[Call of Steel has +4 to maximum Steel Shards/nCall of Steel causes 10% increased Reflected Damage]";
+                            tooltip += "\n[20% increased Effect of Impales you inflict on non-Impaled Enemies]";
+                            break;
+                        case "Block Mastery":
+                            tooltip += "\n[+2% to maximum Chance to Block Attack Damage]";
+                            tooltip += "\n[+2% to maximum Chance to Block Spell Damage]";
+                            tooltip += "\n[+20 Life and Mana gained when you Block]";
+                            tooltip += "\n[3% increased Spell Damage per 5% Chance to Block Spell Damage]";
+                            tooltip += "\n[3% increased Attack Damage per 5% Chance to Block Attack Damage]";
+                            break;
+                        case "Projectile Mastery":
+                            tooltip += "\n[Projectiles deal 20% increased Damage for each Enemy Pierced]";
+                            tooltip += "\n[Projectiles deal 20% increased Damage for each time they have Chained]";
+                            tooltip += "\n[1% increased Projectile Damage per 16 Dexterity]";
+                            tooltip += "\n[Knock Back Enemies if you get a Critical Strike with Projectile Damage]";
+                            tooltip += "\n[15% more Projectile Speed]";
+                            tooltip += "\n[15% less Projectile Speed]";
+                            break;
+                        case "Brand Mastery":
+                            tooltip += "\n[Recover 10% of Mana when a Brand expires while Attached]";
+                            tooltip += "\n[Brands have 30% increased Area of Effect if 50% of Attached Duration expired]";
+                            tooltip += "\n[Brands Attach to a new Enemy each time they Activate, no more than once every 0.3 seconds]";
+                            tooltip += "\n[Brand Recall has 50% increased Cooldown Recovery Rate]";
+                            tooltip += "\n[You can Cast 2 additional Brands]";
+                            tooltip += "\n[40% increased Brand Attachment range]";
+                            break;
+                        case "Chaos Mastery":
+                            tooltip += "\n[+1% to Chaos Damage over Time Multiplier per 4% Chaos Resistance]";
+                            tooltip += "\n[+1 to Level of all Chaos Skill Gems/nLose 10% of Life and Energy Shield when you use a Chaos Skill]";
+                            tooltip += "\n[20% increased Effect of Withered]";
+                            tooltip += "\n[0.5% of Chaos Damage Leeched as Energy Shield]";
+                            tooltip += "\n[+17% to Chaos Resistance]";
+                            tooltip += "\n[40% of Physical Damage Converted to Chaos Damage]";
+                            break;
+                        case "Dual Wielding Mastery":
+                            tooltip += "\n[+15% Chance to Block Spell Damage while Dual Wielding/nDual Wielding does not inherently grant chance to Block Attack Damage]";
+                            tooltip += "\n[+1% to Off Hand Critical Strike Chance while Dual Wielding]";
+                            tooltip += "\n[60% increased Damage while wielding two different Weapon Types]";
+                            tooltip += "\n[20% chance to gain Elusive when you Block while Dual Wielding]";
+                            tooltip += "\n[+15% Chance to Block Attack Damage if you have not Blocked Recently]";
+                            tooltip += "\n[20% chance to Maim Enemies with Main Hand Hits/n20% chance to Blind Enemies with Off Hand Hits]";
+                            break;
+                        case "Attributes Mastery":
+                            tooltip += "\n[5% increased Attributes]";
+                            tooltip += "\n[1% increased Damage per 5 of your lowest Attribute]";
+                            tooltip += "\n[+5 to Strength per Allocated Mastery Passive Skill]";
+                            tooltip += "\n[+5 to Intelligence per Allocated Mastery Passive Skill]";
+                            tooltip += "\n[+5 to Dexterity per Allocated Mastery Passive Skill]";
+                            break;
+                        case "Fortify Mastery":
+                            tooltip += "\n[Melee Hits Fortify/n-3 to maximum Fortification]";
+                            tooltip += "\n[+3 to maximum Fortification]";
+                            tooltip += "\n[100% increased Fortification Duration]";
+                            tooltip += "\n[10% reduced Damage over Time Taken while you have at least 20 Fortification]";
+                            break;
+                        case "Armour and Energy Shield Mastery":
+                            tooltip += "\n[+1 to Armour per 1 Maximum Energy Shield on Helmet]";
+                            tooltip += "\n[Defend with 120% of Armour while not on Low Energy Shield]";
+                            tooltip += "\n[Increases and Reductions to Armour also apply to Energy Shield Recharge rate at 20% of their value]";
+                            tooltip += "\n[20% reduced Effect of Curses on you]";
+                            break;
+                        case "Blind Mastery":
+                            tooltip += "\n[30% increased Blind Effect]";
+                            tooltip += "\n[100% increased Blind duration]";
+                            tooltip += "\n[60% increased Critical Strike Chance against Blinded Enemies]";
+                            tooltip += "\n[Cannot be Blinded]";
+                            break;
+                        case "Bleeding Mastery":
+                            tooltip += "\n[Moving while Bleeding doesn't cause you to take extra Damage]";
+                            tooltip += "\n[60% increased Damage with Bleeding inflicted on Poisoned Enemies]";
+                            tooltip += "\n[60% increased Bleeding Duration]";
+                            tooltip += "\n[80% increased Critical Strike Chance against Bleeding Enemies]";
+                            tooltip += "\n[+3% to Damage over Time Multiplier for Bleeding per Endurance Charge]";
+                            break;
+                        case "Mark Mastery":
+                            tooltip += "\n[25% increased Effect of your Marks]";
+                            tooltip += "\n[Enemies near your Marked Enemy are Blinded]";
+                            tooltip += "\n[10% increased Movement Speed if you've cast a Mark Spell Recently]";
+                            tooltip += "\n[Life Flasks gain a Charge when you hit your Marked Enemy, no more than once every 0.5 seconds]";
+                            break;
+                        case "Link Mastery":
+                            tooltip += "\n[Enemies inflict Elemental Ailments on you instead of Linked targets]";
+                            tooltip += "\n[20% increased Damage per Linked target]";
+                            tooltip += "\n[Your Linked Targets take 5% reduced Damage]";
+                            tooltip += "\n[Enemies near your Linked targets have Fire, Cold and Lightning Exposure]";
+                            break;
+                        case "Duration Mastery":
+                            tooltip += "\n[10% more Skill Effect Duration]";
+                            tooltip += "\n[10% less Skill Effect Duration]";
+                            tooltip += "\n[Debuffs on you expire 15% faster]";
+                            tooltip += "\n[20% reduced Elemental Ailment Duration on you]";
+                            break;
+                        case "Evasion and Energy Shield Mastery":
+                            tooltip += "\n[30% increased Evasion Rating while you have Energy Shield]";
+                            tooltip += "\n[20% increased Energy Shield Recovery Rate if you haven't been Hit Recently]";
+                            tooltip += "\n[30% of Chaos Damage does not bypass Energy Shield]";
+                            tooltip += "\n[+1 to Energy Shield per 8 Evasion on Boots]";
+                            break;
+                        case "Armour and Evasion Mastery":
+                            tooltip += "\n[Gain 5% of Evasion Rating as Extra Armour]";
+                            tooltip += "\n[8% increased Evasion Rating per Frenzy Charge/n8% increased Armour per Endurance Charge]";
+                            tooltip += "\n[Defiance Banner has 100% increased Mana Reservation Efficiency]";
+                            tooltip += "\n[+1 to Evasion Rating per 1 Armour on Gloves]";
                             break;
                         default:
                             tooltip += "\n(Not Listed Yet)";
                             break;
                     }
                 }
-                /*
-                                if (node.PassiveNodeType == PassiveNodeType.JewelSocket)
-                                {
-                                    ushort ID = node.Id;
-                                    sp.Children.Add(new Separator());
-
-                                    JewelNodeData JewelValue;
-                                    if(GlobalSettings.JewelInfo.TryGetValue(ID, out JewelValue))
-                                    {
-                                        JewelItem EquippedJewel = GlobalSettings.JewelInfo[ID].ItemModel.Item;
-                                        if (EquippedJewel != null)
-                                        {
-                                            sp.Children.Add(new TextBlock { Text = EquippedJewel.Name + " equipped inside slot." });
-                                            bool HasMods = false;
-                                            foreach (var attriStat in EquippedJewel.Mods)
-                                            {
-                                                if (HasMods == false)
-                                                {
-                                                    sp.Children.Add(new TextBlock { Text = "Jewel stats:" });
-                                                    HasMods = true;
-                                                }
-                                                sp.Children.Add(new TextBlock { Text = attriStat.CreateModString() });
-                                            }
-                                            if (!PersistentData.Options.ChangeSummaryEnabled)
-                                            {
-                                                sp.Children.Add(new Separator());
-                                            }
-                                        }
-                                    }
-                                }
-                */
                 _lasttooltip = tooltip;
             }
         }
