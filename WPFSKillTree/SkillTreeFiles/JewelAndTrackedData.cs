@@ -1150,6 +1150,184 @@ namespace PoESkillTree
 
     public static class GlobalSettings
     {
+        static string MasteryLabel = "+# Mastery Nodes";
+        static string LifeMStat = "+# Life Mastery Nodes";
+        static string ManaMStat = "+# Mana Mastery Nodes";
+        static string ResMStat = "+# Resistance Mastery Nodes";
+        static string FlaskMStat = "+# Flask Mastery Nodes";
+
+        static string MinionAttackMStat = "+# Minion Offensive Mastery Nodes";
+        static string MinionDefMStat = "+# Minion Defense Mastery Nodes";
+        static string BleedMStat = "+# Bleeding Mastery Nodes";
+        static string PoisonMStat = "+# Poison Mastery Nodes";
+        static string ProjMStat = "+# Projectile Mastery Nodes";
+        static string DOTMStat = "+# Damage Over Time Mastery Nodes";
+
+
+        static string ElemMStat = "+# Elemental Mastery Nodes";
+        static string FireMStat = "+# Fire Mastery Nodes";
+        static string ColdMStat = "+# Cold Mastery Nodes";
+        static string LightMStat = "+# Lightning Mastery Nodes";
+        static string ChaosMStat = "+# Chaos Mastery Nodes";
+        static string PhysicalMStat = "+# Physical Mastery Nodes";
+
+        static string WandMStat = "+# Wand Mastery Nodes";
+        static string StaffMStat = "+# Staff Mastery Nodes";
+        static string MaceMStat = "+# Mace Mastery Nodes";
+        static string DaggerMStat = "+# Dagger Mastery Nodes";
+        static string DualMStat = "+# Dual Mastery Nodes";
+        static string ShieldMStat = "+# Shield Mastery Nodes";
+        static string BowMStat = "+# Bow Mastery Nodes";
+        static string SwordMStat = "+# Sword Mastery Nodes";
+        static string AxeMStat = "+# Axe Mastery Nodes";
+        static string ClawMStat = "+# Claw Mastery Nodes";
+        static string TwoHMStat = "+# Two Hand Mastery Nodes";
+
+        static string BlockMStat = "+# Block Mastery Nodes";
+        static string CritMStat = "+# Critical Mastery Nodes";
+        static string LinkMStat = "+# Link Mastery Nodes";
+        static string AttackMStat = "+# Attack Mastery Nodes";
+        static string CasterMStat = "+# Caster Mastery Nodes";
+        static string MineMStat = "+# Mine Mastery Nodes";
+        static string TrapMStat = "+# Trap Mastery Nodes";
+        static string TotemMStat = "+# Totem Mastery Nodes";
+        static string BrandMStat = "+# Brand Mastery Nodes";
+        static string CurseMStat = "+# Curse Mastery Nodes";
+
+        static string LeechMStat = "+# Leech Mastery Nodes";
+        static string FortifyMStat = "+# Fortify Mastery Nodes";
+        static string WarcryMStat = "+# Warcry Mastery Nodes";
+        static string AuraMStat = "+# Reservation Mastery Nodes";
+        static string HitMStat = "+# Accuracy Mastery Nodes";
+        static string ImpaleMStat = "+# Impale Mastery Nodes";
+        static string MarkMStat = "+# Mark Mastery Nodes";
+        static string DurationMStat = "+# Duration Mastery Nodes";
+        static string SpellDefMStat = "+# Spell Suppression Mastery Nodes";
+        static string BlindMStat = "+# Blind Mastery Nodes";
+        static string ChargeMStat = "+# Charge Mastery Nodes";
+
+        static string ArmourMStat = "+# Armour Mastery Nodes";
+        static string ArmourESMStat = "+# Armour&Energy Shield Mastery Nodes";
+        static string ArmourEvasionMStat = "+# Armour&Evasion Mastery Nodes";
+        static string EvasionMStat = "+# Evasion Mastery Nodes";
+        static string ESMStat = "+# Energy Shield Mastery Nodes";
+        static string StatMStat = "+# Attribute Mastery Nodes";
+        static List<float> SingleVal = new List<float>(1) { 1 };
+        public static void ApplyMasteryLabel(PassiveNodeViewModel node)
+        {//To-Do Order by most to least used
+            if (!node.Attributes.ContainsKey(MasteryLabel))
+                node.Attributes.Add(MasteryLabel, SingleVal);
+            if (node.Name.Contains("Life") && !node.Attributes.ContainsKey(LifeMStat))
+                node.Attributes.Add(LifeMStat, SingleVal);
+            else if (node.Name.Contains("Mana") && !node.Attributes.ContainsKey(ManaMStat))
+                node.Attributes.Add(ManaMStat, SingleVal);
+            else if (node.Name.Contains("Minion Offence") && !node.Attributes.ContainsKey(MinionAttackMStat))
+                node.Attributes.Add(MinionAttackMStat, SingleVal);
+            else if (node.Name.Contains("Minion Defence") && !node.Attributes.ContainsKey(MinionDefMStat))
+                node.Attributes.Add(MinionDefMStat, SingleVal);
+            else if (node.Name.Contains("Shield") && !node.Attributes.ContainsKey(ShieldMStat))
+                node.Attributes.Add(ShieldMStat, SingleVal);
+            else if (node.Name.Contains("Bow") && !node.Attributes.ContainsKey(BowMStat))
+                node.Attributes.Add(BowMStat, SingleVal);
+            else if (node.Name.Contains("Two Hand") && !node.Attributes.ContainsKey(TwoHMStat))
+                node.Attributes.Add(TwoHMStat, SingleVal);
+            else if (node.Name.Contains("Wand") && !node.Attributes.ContainsKey(WandMStat))
+                node.Attributes.Add(WandMStat, SingleVal);
+            else if (node.Name.Contains("Staff") && !node.Attributes.ContainsKey(StaffMStat))
+                node.Attributes.Add(StaffMStat, SingleVal);
+            else if (node.Name.Contains("Dual") && !node.Attributes.ContainsKey(DualMStat))
+                node.Attributes.Add(DualMStat, SingleVal);
+            else if (node.Name.Contains("Mace") && !node.Attributes.ContainsKey(MaceMStat))
+                node.Attributes.Add(MaceMStat, SingleVal);
+            else if (node.Name.Contains("Dagger") && !node.Attributes.ContainsKey(DaggerMStat))
+                node.Attributes.Add(DaggerMStat, SingleVal);
+            else if (node.Name.Contains("Sword") && !node.Attributes.ContainsKey(SwordMStat))
+                node.Attributes.Add(SwordMStat, SingleVal);
+            else if (node.Name.Contains("Claw") && !node.Attributes.ContainsKey(ClawMStat))
+                node.Attributes.Add(ClawMStat, SingleVal);
+            else if (node.Name.Contains("Axe") && !node.Attributes.ContainsKey(AxeMStat))
+                node.Attributes.Add(AxeMStat, SingleVal);
+            else if (node.Name.Contains("Block") && !node.Attributes.ContainsKey(BlockMStat))
+                node.Attributes.Add(BlockMStat, SingleVal);
+            else if (node.Name.Contains("Attack") && !node.Attributes.ContainsKey(AttackMStat))
+                node.Attributes.Add(AttackMStat, SingleVal);
+            else if (node.Name.Contains("Elemental") && !node.Attributes.ContainsKey(ElemMStat))
+                node.Attributes.Add(ElemMStat, SingleVal);
+            else if (node.Name.Contains("Chaos") && !node.Attributes.ContainsKey(ChaosMStat))
+                node.Attributes.Add(ChaosMStat, SingleVal);
+            else if (node.Name.Contains("Fire") && !node.Attributes.ContainsKey(FireMStat))
+                node.Attributes.Add(FireMStat, SingleVal);
+            else if (node.Name.Contains("Cold") && !node.Attributes.ContainsKey(ColdMStat))
+                node.Attributes.Add(ColdMStat, SingleVal);
+            else if (node.Name.Contains("Lightning") && !node.Attributes.ContainsKey(LightMStat))
+                node.Attributes.Add(LightMStat, SingleVal);
+            else if (node.Name.Contains("Physical") && !node.Attributes.ContainsKey(PhysicalMStat))
+                node.Attributes.Add(PhysicalMStat, SingleVal);
+            else if (node.Name.Contains("Projectile") && !node.Attributes.ContainsKey(ProjMStat))
+                node.Attributes.Add(ProjMStat, SingleVal);
+            else if (node.Name.Contains("Poison") && !node.Attributes.ContainsKey(PoisonMStat))
+                node.Attributes.Add(PoisonMStat, SingleVal);
+            else if (node.Name.Contains("Damage Over Time") && !node.Attributes.ContainsKey(DOTMStat))
+                node.Attributes.Add(DOTMStat, SingleVal);
+            else if (node.Name.Contains("Armour and Energy Shield") && !node.Attributes.ContainsKey(ArmourESMStat))
+                node.Attributes.Add(ArmourESMStat, SingleVal);
+            else if (node.Name.Contains("Armour and Evasion") && !node.Attributes.ContainsKey(ArmourEvasionMStat))
+                node.Attributes.Add(ArmourEvasionMStat, SingleVal);
+            else if (node.Name.Contains("Armour") && !node.Attributes.ContainsKey(ArmourMStat))
+                node.Attributes.Add(ArmourMStat, SingleVal);
+            else if (node.Name.Contains("Evasion") && !node.Attributes.ContainsKey(EvasionMStat))
+                node.Attributes.Add(EvasionMStat, SingleVal);
+            else if (node.Name.Contains("Energy Shield") && !node.Attributes.ContainsKey(ESMStat))
+                node.Attributes.Add(ESMStat, SingleVal);
+            else if (node.Name.Contains("Flask") && !node.Attributes.ContainsKey(FlaskMStat))
+                node.Attributes.Add(FlaskMStat, SingleVal);
+            else if (node.Name.Contains("Accuracy") && !node.Attributes.ContainsKey(HitMStat))
+                node.Attributes.Add(HitMStat, SingleVal);
+            else if (node.Name.Contains("Critical") && !node.Attributes.ContainsKey(CritMStat))
+                node.Attributes.Add(CritMStat, SingleVal);
+            else if (node.Name.Contains("Caster") && !node.Attributes.ContainsKey(CasterMStat))
+                node.Attributes.Add(CasterMStat, SingleVal);
+            else if (node.Name.Contains("Curse") && !node.Attributes.ContainsKey(CurseMStat))
+                node.Attributes.Add(CurseMStat, SingleVal);
+            else if (node.Name.Contains("Mine") && !node.Attributes.ContainsKey(MineMStat))
+                node.Attributes.Add(MineMStat, SingleVal);
+            else if (node.Name.Contains("Trap") && !node.Attributes.ContainsKey(TrapMStat))
+                node.Attributes.Add(TrapMStat, SingleVal);
+            else if (node.Name.Contains("Totem") && !node.Attributes.ContainsKey(TotemMStat))
+                node.Attributes.Add(TotemMStat, SingleVal);
+            else if (node.Name.Contains("Brand") && !node.Attributes.ContainsKey(BrandMStat))
+                node.Attributes.Add(BrandMStat, SingleVal);
+            else if (node.Name.Contains("Leech") && !node.Attributes.ContainsKey(LeechMStat))
+                node.Attributes.Add(LeechMStat, SingleVal);
+            else if (node.Name.Contains("Spell Suppression") && !node.Attributes.ContainsKey(SpellDefMStat))
+                node.Attributes.Add(SpellDefMStat, SingleVal);
+            else if (node.Name.Contains("Mark") && !node.Attributes.ContainsKey(MarkMStat))
+                node.Attributes.Add(MarkMStat, SingleVal);
+            else if (node.Name.Contains("Charge") && !node.Attributes.ContainsKey(ChargeMStat))
+                node.Attributes.Add(ChargeMStat, SingleVal);
+            else if (node.Name.Contains("Blind") && !node.Attributes.ContainsKey(BlindMStat))
+                node.Attributes.Add(BlindMStat, SingleVal);
+            else if (node.Name.Contains("Duration") && !node.Attributes.ContainsKey(DurationMStat))
+                node.Attributes.Add(DurationMStat, SingleVal);
+            else if (node.Name.Contains("Fortify") && !node.Attributes.ContainsKey(FortifyMStat))
+                node.Attributes.Add(FortifyMStat, SingleVal);
+            else if (node.Name.Contains("Warcry") && !node.Attributes.ContainsKey(WarcryMStat))
+                node.Attributes.Add(WarcryMStat, SingleVal);
+            else if (node.Name.Contains("Reservation") && !node.Attributes.ContainsKey(AuraMStat))
+                node.Attributes.Add(AuraMStat, SingleVal);
+            else if (node.Name.Contains("Resistance") && !node.Attributes.ContainsKey(ResMStat))
+                node.Attributes.Add(ResMStat, SingleVal);
+            else if (node.Name.Contains("Bleeding") && !node.Attributes.ContainsKey(BleedMStat))
+                node.Attributes.Add(BleedMStat, SingleVal);
+            else if (node.Name.Contains("Impale") && !node.Attributes.ContainsKey(ImpaleMStat))
+                node.Attributes.Add(ImpaleMStat, SingleVal);
+            else if (node.Name.Contains("Attributes") && !node.Attributes.ContainsKey(StatMStat))
+                node.Attributes.Add(StatMStat, SingleVal);
+            else if (node.Name.Contains("Link") && !node.Attributes.ContainsKey(LinkMStat))
+                node.Attributes.Add(LinkMStat, SingleVal);
+            node.UpdateStatDescription();
+        }
+
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
