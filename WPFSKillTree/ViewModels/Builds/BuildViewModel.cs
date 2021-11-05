@@ -84,8 +84,12 @@ namespace PoESkillTree.ViewModels.Builds
         /// Gets a description of this build.
         /// </summary>
         public string Description =>
+#if PoESkillTree_PreventPointSharing
             string.Format(L10n.Plural("{0}, {1} point used", "{0}, {1} points used", PointsUsed),
                 ClassName, PointsUsed);
+#else//ClassName, NormalUsedPoints.Text/NormalTotalPoints.Text points used+AscendancyUsedPoints.Text/8 Ascendancy
+            ClassName +" "+ GlobalSettings.points["NormalUsed"]+"/"+ GlobalSettings.points["NormalTotal"]+" points used+"+ GlobalSettings.points["AscendancyUsed"]+"/8 Ascendancy points used";
+#endif
 
         /// <param name="poEBuild">The wrapped build.</param>
         /// <param name="filterPredicate">A predicate that returns whether the given <see cref="IBuildViewModel"/>

@@ -1,4 +1,4 @@
-﻿using EnumsNET;
+using EnumsNET;
 using PoESkillTree.Common;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Engine.GameModel;
@@ -375,6 +375,7 @@ namespace PoESkillTree.SkillTreeFiles
         /// <returns>A Dictionary with keys of "NormalUsed", "NormalTotal", "AscendancyUsed", "AscendancyTotal", and "ScionAscendancyChoices"</returns>
         public Dictionary<string, int> GetPointCount()
         {
+#if PoESkillTree_PreventPointSharing
             Dictionary<string, int> points = new Dictionary<string, int>()
             {
                 {"NormalUsed", 0},
@@ -382,11 +383,11 @@ namespace PoESkillTree.SkillTreeFiles
                 {"AscendancyUsed", 0},
                 {"AscendancyTotal", 8},
             };
+#endif
 
             var bandits = _persistentData.CurrentBuild.Bandits;
-            points["NormalTotal"] += _persistentData.CurrentBuild.Level - 1;
-            if (bandits.Choice == Bandit.None)
-                points["NormalTotal"] += 2;
+#if PoESkillTree_PreventPointSharing
+            points["NormalTotal"] += bandits.Choice == Bandit.None?_persistentData.CurrentBuild.Level + 1?_persistentData.CurrentBuild.Level - 1;
 
             foreach (var node in SkilledNodes)
             {
@@ -399,6 +400,23 @@ namespace PoESkillTree.SkillTreeFiles
                 }
             }
             return points;
+#else
+            GlobalSettings.points["NormalUsed"] = 0;
+            GlobalSettings.points["AscendancyUsed"] = 0;
+            GlobalSettings.points["NormalTotal"] = bandits.Choice == Bandit.None? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
+
+            foreach (var node in SkilledNodes)
+            {
+                if (!node.IsAscendancyNode && !node.IsRootNode)
+                    GlobalSettings.points["NormalUsed"] += 1;
+                else if (node.IsAscendancyNode && !node.IsAscendancyStart && !node.IsMultipleChoiceOption)
+                {
+                    GlobalSettings.points["AscendancyUsed"] += 1;
+                    GlobalSettings.points["NormalTotal"] += node.PassivePointsGranted;
+                }
+            }
+            return GlobalSettings.points;
+#endif
         }
 
         public bool UpdateAscendancyClasses = true;

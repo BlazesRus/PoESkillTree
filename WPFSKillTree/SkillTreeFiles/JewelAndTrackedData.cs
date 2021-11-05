@@ -1152,71 +1152,71 @@ namespace PoESkillTree
 
     public static class GlobalSettings
     {
-        static string MasteryLabel = "+# Mastery Nodes";
-        static string LifeMStat = "+# Life Mastery Nodes";
-        static string ManaMStat = "+# Mana Mastery Nodes";
-        static string ResMStat = "+# Resistance Mastery Nodes";
-        static string FlaskMStat = "+# Flask Mastery Nodes";
+        public static string MasteryLabel = "+# Mastery Nodes";
+        public static string LifeMStat = "+# Life Mastery Nodes";
+        public static string ManaMStat = "+# Mana Mastery Nodes";
+        public static string ResMStat = "+# Resistance Mastery Nodes";
+        public static string FlaskMStat = "+# Flask Mastery Nodes";
 
-        static string MinionAttackMStat = "+# Minion Offensive Mastery Nodes";
-        static string MinionDefMStat = "+# Minion Defense Mastery Nodes";
-        static string BleedMStat = "+# Bleeding Mastery Nodes";
-        static string PoisonMStat = "+# Poison Mastery Nodes";
-        static string ProjMStat = "+# Projectile Mastery Nodes";
-        static string DOTMStat = "+# Damage Over Time Mastery Nodes";
+        public static string MinionAttackMStat = "+# Minion Offensive Mastery Nodes";
+        public static string MinionDefMStat = "+# Minion Defense Mastery Nodes";
+        public static string BleedMStat = "+# Bleeding Mastery Nodes";
+        public static string PoisonMStat = "+# Poison Mastery Nodes";
+        public static string ProjMStat = "+# Projectile Mastery Nodes";
+        public static string DOTMStat = "+# Damage Over Time Mastery Nodes";
 
 
-        static string ElemMStat = "+# Elemental Mastery Nodes";
-        static string FireMStat = "+# Fire Mastery Nodes";
-        static string ColdMStat = "+# Cold Mastery Nodes";
-        static string LightMStat = "+# Lightning Mastery Nodes";
-        static string ChaosMStat = "+# Chaos Mastery Nodes";
-        static string PhysicalMStat = "+# Physical Mastery Nodes";
+        public static string ElemMStat = "+# Elemental Mastery Nodes";
+        public static string FireMStat = "+# Fire Mastery Nodes";
+        public static string ColdMStat = "+# Cold Mastery Nodes";
+        public static string LightMStat = "+# Lightning Mastery Nodes";
+        public static string ChaosMStat = "+# Chaos Mastery Nodes";
+        public static string PhysicalMStat = "+# Physical Mastery Nodes";
 
-        static string WandMStat = "+# Wand Mastery Nodes";
-        static string StaffMStat = "+# Staff Mastery Nodes";
-        static string MaceMStat = "+# Mace Mastery Nodes";
-        static string DaggerMStat = "+# Dagger Mastery Nodes";
-        static string DualMStat = "+# Dual Mastery Nodes";
-        static string ShieldMStat = "+# Shield Mastery Nodes";
-        static string BowMStat = "+# Bow Mastery Nodes";
-        static string SwordMStat = "+# Sword Mastery Nodes";
-        static string AxeMStat = "+# Axe Mastery Nodes";
-        static string ClawMStat = "+# Claw Mastery Nodes";
-        static string TwoHMStat = "+# Two Hand Mastery Nodes";
+        public static string WandMStat = "+# Wand Mastery Nodes";
+        public static string StaffMStat = "+# Staff Mastery Nodes";
+        public static string MaceMStat = "+# Mace Mastery Nodes";
+        public static string DaggerMStat = "+# Dagger Mastery Nodes";
+        public static string DualMStat = "+# Dual Mastery Nodes";
+        public static string ShieldMStat = "+# Shield Mastery Nodes";
+        public static string BowMStat = "+# Bow Mastery Nodes";
+        public static string SwordMStat = "+# Sword Mastery Nodes";
+        public static string AxeMStat = "+# Axe Mastery Nodes";
+        public static string ClawMStat = "+# Claw Mastery Nodes";
+        public static string TwoHMStat = "+# Two Hand Mastery Nodes";
 
-        static string BlockMStat = "+# Block Mastery Nodes";
-        static string CritMStat = "+# Critical Mastery Nodes";
-        static string LinkMStat = "+# Link Mastery Nodes";
-        static string AttackMStat = "+# Attack Mastery Nodes";
-        static string CasterMStat = "+# Caster Mastery Nodes";
-        static string MineMStat = "+# Mine Mastery Nodes";
-        static string TrapMStat = "+# Trap Mastery Nodes";
-        static string TotemMStat = "+# Totem Mastery Nodes";
-        static string BrandMStat = "+# Brand Mastery Nodes";
-        static string CurseMStat = "+# Curse Mastery Nodes";
+        public static string BlockMStat = "+# Block Mastery Nodes";
+        public static string CritMStat = "+# Critical Mastery Nodes";
+        public static string LinkMStat = "+# Link Mastery Nodes";
+        public static string AttackMStat = "+# Attack Mastery Nodes";
+        public static string CasterMStat = "+# Caster Mastery Nodes";
+        public static string MineMStat = "+# Mine Mastery Nodes";
+        public static string TrapMStat = "+# Trap Mastery Nodes";
+        public static string TotemMStat = "+# Totem Mastery Nodes";
+        public static string BrandMStat = "+# Brand Mastery Nodes";
+        public static string CurseMStat = "+# Curse Mastery Nodes";
 
-        static string LeechMStat = "+# Leech Mastery Nodes";
-        static string FortifyMStat = "+# Fortify Mastery Nodes";
-        static string WarcryMStat = "+# Warcry Mastery Nodes";
-        static string AuraMStat = "+# Reservation Mastery Nodes";
-        static string HitMStat = "+# Accuracy Mastery Nodes";
-        static string ImpaleMStat = "+# Impale Mastery Nodes";
-        static string MarkMStat = "+# Mark Mastery Nodes";
-        static string DurationMStat = "+# Duration Mastery Nodes";
-        static string SpellDefMStat = "+# Spell Suppression Mastery Nodes";
-        static string BlindMStat = "+# Blind Mastery Nodes";
-        static string ChargeMStat = "+# Charge Mastery Nodes";
+        public static string LeechMStat = "+# Leech Mastery Nodes";
+        public static string FortifyMStat = "+# Fortify Mastery Nodes";
+        public static string WarcryMStat = "+# Warcry Mastery Nodes";
+        public static string AuraMStat = "+# Reservation Mastery Nodes";
+        public static string HitMStat = "+# Accuracy Mastery Nodes";
+        public static string ImpaleMStat = "+# Impale Mastery Nodes";
+        public static string MarkMStat = "+# Mark Mastery Nodes";
+        public static string DurationMStat = "+# Duration Mastery Nodes";
+        public static string SpellDefMStat = "+# Spell Suppression Mastery Nodes";
+        public static string BlindMStat = "+# Blind Mastery Nodes";
+        public static string ChargeMStat = "+# Charge Mastery Nodes";
 
-        static string ArmourMStat = "+# Armour Mastery Nodes";
-        static string EvasionMStat = "+# Evasion Mastery Nodes";
-        static string ESMStat = "+# Energy Shield Mastery Nodes";
-        static string ArmourESMStat = "+# Armour&Energy Shield Mastery Nodes";
-        static string ArmourEvasionMStat = "+# Armour&Evasion Mastery Nodes";
-        static string EvasionESMStat = "+# Evasion&Energy Shield Mastery Nodes";
+        public static string ArmourMStat = "+# Armour Mastery Nodes";
+        public static string EvasionMStat = "+# Evasion Mastery Nodes";
+        public static string ESMStat = "+# Energy Shield Mastery Nodes";
+        public static string ArmourESMStat = "+# Armour&Energy Shield Mastery Nodes";
+        public static string ArmourEvasionMStat = "+# Armour&Evasion Mastery Nodes";
+        public static string EvasionESMStat = "+# Evasion&Energy Shield Mastery Nodes";
 
-        static string StatMStat = "+# Attribute Mastery Nodes";
-        static List<float> SingleVal = new List<float>(1) { 1 };
+        public static string StatMStat = "+# Attribute Mastery Nodes";
+        public static List<float> SingleVal = new List<float>(1) { 1 };
         public static void ApplyMasteryLabel(PassiveNodeViewModel node)
         {//Organized from largest count to least count on tree
             if (!node.Attributes.ContainsKey(MasteryLabel))
@@ -1343,131 +1343,15 @@ namespace PoESkillTree
             node.UpdateStatDescription();
         }
 
-        public static void RemoveMasteryLabel(PassiveNodeViewModel node)
-        {//Organized from largest count to least count on tree
-            if (!node.Attributes.ContainsKey(MasteryLabel))
-                node.Attributes.Remove(MasteryLabel);
-            //19 Count
-            if (node.Name.StartsWith("Life") && node.Attributes.ContainsKey(LifeMStat))
-                node.Attributes.Remove(LifeMStat);
-            //9 Count
-            else if (node.Name.StartsWith("Mana") && node.Attributes.ContainsKey(ManaMStat))
-                node.Attributes.Remove(ManaMStat);
-            //8 Count
-            else if (node.Name.StartsWith("Attack") && node.Attributes.ContainsKey(AttackMStat))
-                node.Attributes.Remove(AttackMStat);
-            else if (node.Name.StartsWith("Flask") && node.Attributes.ContainsKey(FlaskMStat))
-                node.Attributes.Remove(FlaskMStat);
-            else if (node.Name.StartsWith("Leech") && node.Attributes.ContainsKey(LeechMStat))
-                node.Attributes.Remove(LeechMStat);
-            else if (node.Name.StartsWith("Caster") && node.Attributes.ContainsKey(CasterMStat))
-                node.Attributes.Remove(CasterMStat);
-            else if (node.Name.StartsWith("Minion Offence") && node.Attributes.ContainsKey(MinionAttackMStat))
-                node.Attributes.Remove(MinionAttackMStat);
-            //7 Count
-            else if (node.Name.StartsWith("Critical") && node.Attributes.ContainsKey(CritMStat))
-                node.Attributes.Remove(CritMStat);
-            else if (node.Name.StartsWith("Fire") && node.Attributes.ContainsKey(FireMStat))
-                node.Attributes.Remove(FireMStat);
-            //6 Count
-            else if (node.Name.StartsWith("Elemental") && node.Attributes.ContainsKey(ElemMStat))
-                node.Attributes.Remove(ElemMStat);
-            else if (node.Name.StartsWith("Energy Shield") && node.Attributes.ContainsKey(ESMStat))
-                node.Attributes.Remove(ESMStat);
-            else if (node.Name.StartsWith("Physical") && node.Attributes.ContainsKey(PhysicalMStat))
-                node.Attributes.Remove(PhysicalMStat);
-            else if (node.Name.StartsWith("Mine") && node.Attributes.ContainsKey(MineMStat))
-                node.Attributes.Remove(MineMStat);
-            else if (node.Name.StartsWith("Reservation") && node.Attributes.ContainsKey(AuraMStat))
-                node.Attributes.Remove(AuraMStat);
-            else if (node.Name.StartsWith("Totem") && node.Attributes.ContainsKey(TotemMStat))
-                node.Attributes.Remove(TotemMStat);
-            else if (node.Name.StartsWith("Resistance") && node.Attributes.ContainsKey(ResMStat))
-                node.Attributes.Remove(ResMStat);
-            //5 Count
-            else if (node.Name.StartsWith("Armour") && node.Attributes.ContainsKey(ArmourMStat))
-                node.Attributes.Remove(ArmourMStat);
-            else if (node.Name.StartsWith("Minion Defence") && node.Attributes.ContainsKey(MinionDefMStat))
-                node.Attributes.Remove(MinionDefMStat);
-            else if (node.Name.StartsWith("Cold") && node.Attributes.ContainsKey(ColdMStat))
-                node.Attributes.Remove(ColdMStat);
-            else if (node.Name.StartsWith("Curse") && node.Attributes.ContainsKey(CurseMStat))
-                node.Attributes.Remove(CurseMStat);
-            else if (node.Name.StartsWith("Bow") && node.Attributes.ContainsKey(BowMStat))
-                node.Attributes.Remove(BowMStat);
-            else if (node.Name.StartsWith("Evasion") && node.Attributes.ContainsKey(EvasionMStat))
-                node.Attributes.Remove(EvasionMStat);
-            else if (node.Name.StartsWith("Mace") && node.Attributes.ContainsKey(MaceMStat))
-                node.Attributes.Remove(MaceMStat);
-            else if (node.Name.StartsWith("Shield") && node.Attributes.ContainsKey(ShieldMStat))
-                node.Attributes.Remove(ShieldMStat);
-            else if (node.Name.StartsWith("Staff") && node.Attributes.ContainsKey(StaffMStat))
-                node.Attributes.Remove(StaffMStat);
-            else if (node.Name.StartsWith("Trap") && node.Attributes.ContainsKey(TrapMStat))
-                node.Attributes.Remove(TrapMStat);
-            //4 Count
-            else if (node.Name.StartsWith("Accuracy") && node.Attributes.ContainsKey(HitMStat))
-                node.Attributes.Remove(HitMStat);
-            else if (node.Name.StartsWith("Wand") && node.Attributes.ContainsKey(WandMStat))
-                node.Attributes.Remove(WandMStat);
-            else if (node.Name.StartsWith("Dagger") && node.Attributes.ContainsKey(DaggerMStat))
-                node.Attributes.Remove(DaggerMStat);
-            else if (node.Name.StartsWith("Poison") && node.Attributes.ContainsKey(PoisonMStat))
-                node.Attributes.Remove(PoisonMStat);
-            else if (node.Name.StartsWith("Charge") && node.Attributes.ContainsKey(ChargeMStat))
-                node.Attributes.Remove(ChargeMStat);
-            else if (node.Name.StartsWith("Claw") && node.Attributes.ContainsKey(ClawMStat))
-                node.Attributes.Remove(ClawMStat);
-            else if (node.Name.StartsWith("Lightning") && node.Attributes.ContainsKey(LightMStat))
-                node.Attributes.Remove(LightMStat);
-            else if (node.Name.StartsWith("Warcry") && node.Attributes.ContainsKey(WarcryMStat))
-                node.Attributes.Remove(WarcryMStat);
-            else if (node.Name.StartsWith("Axe") && node.Attributes.ContainsKey(AxeMStat))
-                node.Attributes.Remove(AxeMStat);
-            else if (node.Name.StartsWith("Sword") && node.Attributes.ContainsKey(SwordMStat))
-                node.Attributes.Remove(SwordMStat);
-            else if (node.Name.StartsWith("Two Hand") && node.Attributes.ContainsKey(TwoHMStat))
-                node.Attributes.Remove(TwoHMStat);
-            else if (node.Name.StartsWith("Damage Over Time") && node.Attributes.ContainsKey(DOTMStat))
-                node.Attributes.Remove(DOTMStat);
-            //3 Count
-            else if (node.Name.StartsWith("Block") && node.Attributes.ContainsKey(BlockMStat))
-                node.Attributes.Remove(BlockMStat);
-            else if (node.Name.StartsWith("Chaos") && node.Attributes.ContainsKey(ChaosMStat))
-                node.Attributes.Remove(ChaosMStat);
-            else if (node.Name.StartsWith("Dual") && node.Attributes.ContainsKey(DualMStat))
-                node.Attributes.Remove(DualMStat);
-            else if (node.Name.StartsWith("Projectile") && node.Attributes.ContainsKey(ProjMStat))
-                node.Attributes.Remove(ProjMStat);
-            else if (node.Name.StartsWith("Attributes") && node.Attributes.ContainsKey(StatMStat))
-                node.Attributes.Remove(StatMStat);
-            else if (node.Name.StartsWith("Brand") && node.Attributes.ContainsKey(BrandMStat))
-                node.Attributes.Remove(BrandMStat);
-            else if (node.Name.StartsWith("Spell Suppression") && node.Attributes.ContainsKey(SpellDefMStat))
-                node.Attributes.Remove(SpellDefMStat);
-            else if (node.Name.StartsWith("Impale") && node.Attributes.ContainsKey(ImpaleMStat))
-                node.Attributes.Remove(ImpaleMStat);
-            //2 Count
-            else if (node.Name.StartsWith("Armour and Energy Shield") && node.Attributes.ContainsKey(ArmourESMStat))
-                node.Attributes.Remove(ArmourESMStat);
-            else if (node.Name.StartsWith("Armour and Evasion") && node.Attributes.ContainsKey(ArmourEvasionMStat))
-                node.Attributes.Remove(ArmourEvasionMStat);
-            else if (node.Name.StartsWith("Evasion and Energy Shield") && node.Attributes.ContainsKey(EvasionESMStat))
-                node.Attributes.Remove(EvasionESMStat);
-            else if (node.Name.StartsWith("Fortify") && node.Attributes.ContainsKey(FortifyMStat))
-                node.Attributes.Remove(FortifyMStat);
-            else if (node.Name.StartsWith("Bleeding") && node.Attributes.ContainsKey(BleedMStat))
-                node.Attributes.Remove(BleedMStat);
-            else if (node.Name.StartsWith("Mark") && node.Attributes.ContainsKey(MarkMStat))
-                node.Attributes.Remove(MarkMStat);
-            else if (node.Name.StartsWith("Duration") && node.Attributes.ContainsKey(DurationMStat))
-                node.Attributes.Remove(DurationMStat);
-            else if (node.Name.StartsWith("Link") && node.Attributes.ContainsKey(LinkMStat))
-                node.Attributes.Remove(LinkMStat);
-            else if (node.Name.StartsWith("Blind") && node.Attributes.ContainsKey(BlindMStat))
-                node.Attributes.Remove(BlindMStat);
-            node.UpdateStatDescription();
-        }
+#if PoESkillTree_PreventPointSharing==false
+        public static Dictionary<string, int> points = new Dictionary<string, int>()
+        {
+            {"NormalUsed", 0},
+            {"NormalTotal", 22},
+            {"AscendancyUsed", 0},
+            {"AscendancyTotal", 8},
+        };
+#endif
 
         /// <summary>
         /// Stored JewelInfo

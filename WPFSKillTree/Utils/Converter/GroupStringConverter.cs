@@ -253,7 +253,7 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Intelligence", CoreAttributes},
             new[] {"Dexterity", CoreAttributes},
             new[] {"Jewel", JewelTypes},
-			new[] {"JewelSlot", JewelTypes},
+            new[] {"JewelSlot", JewelTypes},
             new[] {"[Non-Tagged]", PseudoTotal},
             new[] {"[IntBoosted]", PseudoTotal},
             new[] {"MinionBoosted", PseudoTotal},
@@ -262,7 +262,7 @@ namespace PoESkillTree.Utils.Converter
             new[] {"SharedStrength", PseudoTotal},
             new[] {"maximum Base", PseudoTotal},
             new[] {"combined", PseudoTotal},
-			new[] {"Mastery Nodes", General},
+            new[] {"Mastery Nodes", General},
 /*
             new[] {"increased Total", PseudoTotal},
             new[] {"Skeletons", Minion},
@@ -289,7 +289,7 @@ namespace PoESkillTree.Utils.Converter
             new[] {"Radius:", Hidden },
             new[] {GlobalSettings.FakeIntuitiveLeapSupportAttribute, Hidden },
             new[] {"Intuitive Leaped", Hidden },
-			new[] {" (TrackedAttr)", PseudoTotal},
+            new[] {" (TrackedAttr)", PseudoTotal},
 */
         };
 
