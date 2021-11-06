@@ -1,4 +1,4 @@
-﻿<dialogs:CloseableBaseDialog x:Class="PoESkillTree.Views.PassiveTree.MasteryEffectSelectionView"
+<dialogs:CloseableBaseDialog x:Class="PoESkillTree.Views.PassiveTree.MasteryEffectSelectionView"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,6 +10,7 @@
                              xmlns:viewModels="clr-namespace:PoESkillTree.ViewModels.PassiveTree"
                              xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
                              xmlns:base="clr-namespace:PoESkillTree.Engine.GameModel.PassiveTree.Base;assembly=PoESkillTree.Engine.GameModel"
+                             xmlns:passViewModel="clr-namespace:PoESkillTree.ViewModels.PassiveTree"
                              xmlns:system="clr-namespace:System;assembly=mscorlib"
                              mc:Ignorable="d" 
                              d:DataContext="{d:DesignInstance viewModels:MasteryEffectSelectionViewModel}"
@@ -38,6 +39,44 @@
         <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding Node.MasterEffects}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type base:JsonPassiveNodeMasterEffect}">
+                    <RadioButton Margin="10,10,0,13" Name="masterSelector" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}" Checked="MasterButtonChecked">
+                        <RadioButton.CommandParameter>
+                            <Binding Path="Effect"></Binding>
+                        </RadioButton.CommandParameter>
+                        <RadioButton.IsEnabled>
+                            <MultiBinding Converter="{StaticResource MasteryEffectEnabledConverter}" Mode="OneWay">
+                                <Binding Path="Effect"></Binding>
+                                <Binding Path="DataContext" ElementName="view"/>
+                            </MultiBinding>
+                        </RadioButton.IsEnabled>
+                        <RadioButton.IsChecked>
+                            <MultiBinding Converter="{StaticResource MasteryEffectCheckedConverter}" Mode="OneWay">
+                                <Binding Path="Effect"></Binding>
+                                <Binding Path="DataContext" ElementName="view"/>
+                            </MultiBinding>
+                        </RadioButton.IsChecked>
+                        <RadioButton.GroupName>masterEffect</RadioButton.GroupName>
+                        <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding StatDescriptions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type system:String}">
+                                    <TextBlock Text="{Binding Path=.}" IsEnabled="{Binding Path=IsEnabled, ElementName=masterSelector}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource enabledText}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Foreground" Value="Gray"/>
+                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </RadioButton>
+
+                    <!--
                     <CheckBox x:Name="checkbox" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}">
                         <CheckBox.CommandParameter>
                             <Binding Path="Effect"></Binding>
@@ -73,6 +112,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </CheckBox>
+-->
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

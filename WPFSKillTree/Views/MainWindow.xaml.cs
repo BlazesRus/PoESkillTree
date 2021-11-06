@@ -1440,6 +1440,11 @@ namespace PoESkillTree.Views
         }
 #endif
 
+        /// <summary>
+        /// Zbs the skill tree background click.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private async void zbSkillTreeBackground_Click(object sender, RoutedEventArgs e)
         {
             var p = ((MouseEventArgs)e.OriginalSource).GetPosition(zbSkillTreeBackground.Child);
@@ -1534,17 +1539,60 @@ namespace PoESkillTree.Views
                             {
                                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
                                 {
-                                    //var SkillBefore = node.Skill;
+                                    ushort SkillBefore = node.Skill;
                                     var model = new MasteryEffectSelectionViewModel(node, Tree.SkilledNodes.Where(x => x.PassiveNodeType == PassiveNodeType.Mastery));
                                     await MasteryEffectSelectionAsync(model, new MasteryEffectSelectionView());
-                                    //var SkillAfter = node.Skill;
-                                    //if(SkillBefore!=SkillAfter)//Making sure remove(Needed when reapplying stat labels otherwise it fails to remove)
+                                    //Now remove an remnants of previous stat and add mastery label
+                                    //if (SkillBefore != node.Skill)//Making sure that previous Mastery Stat is removed from Node
                                     //{
+                                    //    string EffectStat;
+                                    //    for (int EffectIndex = 0; EffectIndex < node.MasterEffects.Length; ++EffectIndex)//Find matching stats from previous mastery setting
+                                    //    {
+                                    //        if(node.MasterEffects[EffectIndex].Effect== SkillBefore)//Make sure matches previous effect
+                                    //        {
+                                    //            for (int innerStatIndex = 0; innerStatIndex < node.MasterEffects[EffectIndex].StatDescriptions.Length; ++innerStatIndex)//Search all stats since can have multiple stats from mastery effect
+                                    //            {
+                                    //                EffectStat = node.MasterEffects[EffectIndex].StatDescriptions[innerStatIndex];
+                                    //                if (node.Attributes.ContainsKey(EffectStat))//Remove any matching attribute 
+                                    //                    node.Attributes.Remove(EffectStat);
+                                    //                else
+                                    //                    Console.WriteLine("Failed to remove Attribute with key name:"+ EffectStat);
+                                    //            }
+                                    //        }
+                                    //    }
+                                    //    if (node.Skill==node.Id)//Apply full master labels if returning Skill Effect back to matching it's id
+                                    //        GlobalSettings.ApplyMasteryLabel(node);
+                                    //    else if(!node.Attributes.ContainsKey(GlobalSettings.MasteryLabel))//Only make sure node counts for number of Masteries if just changing effect to another mastery choice
+                                    //        node.Attributes.Add(GlobalSettings.MasteryLabel, GlobalSettings.SingleVal);
+                                    //    node.UpdateStatDescription();
                                     //}
-                                    //GlobalSettings.ApplyMasteryLabel(node);//Reapplying Mastery Label attribute(So don't lose ability to have generator find Mastery Node based on type)
+
+
                                 }
-                                if (_prePath == null)
-                                    return;//Exception Prevention measure for if select no options
+                                if (_prePath == null)//Exception Prevention measure for if select no options(also occurs sometimes when switch options)
+                                {
+                                    //Forcing option back to default value so doesn't brick the ability to change the mastery node during session
+                                    if (node.Skill != node.Id)
+                                    {
+                                        string EffectStat;
+                                        for (int EffectIndex = 0; EffectIndex < node.MasterEffects.Length; ++EffectIndex)//Remove any matching mastery effects
+                                        {
+                                            for (int innerStatIndex = 0; innerStatIndex < node.MasterEffects[EffectIndex].StatDescriptions.Length; ++innerStatIndex)//Search all stats since can have multiple stats from mastery effect
+                                            {
+                                                EffectStat = node.MasterEffects[EffectIndex].StatDescriptions[innerStatIndex];
+                                                if (node.Attributes.ContainsKey(EffectStat))//Remove any matching attribute 
+                                                    node.Attributes.Remove(EffectStat);
+                                            }
+                                        }
+                                        node.Skill = node.Id;
+                                    }
+                                    //else
+                                    //    Console.WriteLine("node.Skill already equal to node Id:" + node.Id);
+                                    GlobalSettings.ApplyMasteryLabel(node);
+                                    node.UpdateStatDescription();
+                                    return;
+                                }
+                                    
                             }
 
                             Tree.AllocateSkillNodes(_prePath);
