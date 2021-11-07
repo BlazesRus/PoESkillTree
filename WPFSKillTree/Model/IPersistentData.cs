@@ -14,6 +14,7 @@ namespace PoESkillTree.Model
     public interface IPersistentData : INotifyPropertyChanged, INotifyPropertyChanging
     {
         Options Options { get; }
+        string StatTrackingSavePath { get; set; }
         PoEBuild CurrentBuild { get; set; }
         IBuild? SelectedBuild { get; set; }
         BuildFolder RootBuild { get; }

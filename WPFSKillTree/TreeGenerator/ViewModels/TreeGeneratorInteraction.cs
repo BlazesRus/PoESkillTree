@@ -25,7 +25,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         public ICommand RunTaggedNodesCommand { get; }
         public ICommand RunAdvancedCommand { get; }
 
-/*
+#if PoESkillTree_EnableItemInfluencedGenerator
         /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
@@ -37,7 +37,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 SetProperty(ref GlobalSettings.ItemInfoVal, value);
             }
         }
-*/
+#endif
 
         public SkillTree SkillTree
         {

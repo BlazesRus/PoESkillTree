@@ -38,38 +38,19 @@ namespace PoESkillTree.TreeGenerator.Model.PseudoAttributes
             Attributes = new List<Attribute>();
         }
 
-        public override string ToString() => Name;
-
-/*
         /// <summary>
-        /// Calculates updated value
+        /// Creates a new PseudoAttribute with the given name and group
+        /// and an empty list of Attributes.
         /// </summary>
-        /// <param name="attrlist">The attrlist.</param>
-        public float CalculateValue(Dictionary<string, List<float>> attrlist)
+        /// <param name="name">Name (not null)</param>
+        /// <param name="group">Group (not null)</param>
+        internal PseudoAttribute(string name, string group, List<Attribute> relatedAttributes)
         {
-            float TotalStat = 0.0f;
-            string AttributeName;
-            float Multiplier;
-            List<float> RetrievedVal;
-            foreach (var Attribute in Attributes)
-            {
-                AttributeName = Attribute.Name;
-                Multiplier = Attribute.ConversionMultiplier;
-                attrlist.TryGetValue(AttributeName, out RetrievedVal);
-                if (RetrievedVal != null && RetrievedVal.Count == 1)
-                {
-                    TotalStat += Multiplier * RetrievedVal[0];
-                }
-            }
-            return TotalStat;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Group = @group ?? throw new ArgumentNullException(nameof(@group));
+            Attributes = relatedAttributes ?? throw new ArgumentNullException(nameof(relatedAttributes));
         }
-*/
 
-        //public PseudoAttribute(PseudoAttribute Target, string name)
-        //{
-        //    Name = name;
-        //    Group = Target.Group;
-        //    Attributes = Target.Attributes;
-        //}
+        public override string ToString() => Name;
     }
 }

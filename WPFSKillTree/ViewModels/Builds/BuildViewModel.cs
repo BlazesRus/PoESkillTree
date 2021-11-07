@@ -3,6 +3,7 @@ using NLog;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.ViewModels.Builds
 {

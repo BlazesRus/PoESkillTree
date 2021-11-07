@@ -5,6 +5,7 @@ using PoESkillTree.Controls;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Model.Builds;
 using PoESkillTree.Model.Items;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.Model.Serialization
 {
@@ -40,7 +41,7 @@ namespace PoESkillTree.Model.Serialization
 
         public List<StashBookmark> StashBookmarks { get; } = new List<StashBookmark>();
 
-        public BuildFolder RootBuild { get; } = new BuildFolder {Name = "Root"};
+        public BuildFolder RootBuild { get; } = new BuildFolder { Name = "Root" };
 
         public List<Item> StashItems { get; } = new List<Item>();
 
@@ -68,5 +69,11 @@ namespace PoESkillTree.Model.Serialization
         public abstract Task<PoEBuild?> ImportBuildAsync(string buildXml);
 
         public abstract string ExportBuild(PoEBuild build);
+
+        public string StatTrackingSavePath
+        {
+            get { return GlobalSettings.StatTrackingSavePathVal; }
+            set { SetProperty(ref GlobalSettings.StatTrackingSavePathVal, value); }
+        }
     }
 }
