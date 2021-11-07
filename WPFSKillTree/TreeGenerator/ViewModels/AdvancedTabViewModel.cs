@@ -79,6 +79,8 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             private const string AttributeKey = "Attribute";
             private const string TargetValueKey = "TargetValue";
             private const string WeightKey = "Weight";
+            private const string TrackingKey = "IsTracked";
+            //private const string RequiredKey = "Required";
 
             private readonly AdvancedTabViewModel _vm;
 
@@ -100,7 +102,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                             continue;
                         if (!obj.TryGetValue(AttributeKey, out var attrToken)
                             || !obj.TryGetValue(TargetValueKey, out var targetToken)
-                            || !obj.TryGetValue(WeightKey, out var weightToken))
+                            || !obj.TryGetValue(WeightKey, out var weightToken)
+//                          || !obj.TryGetValue(RequiredKey, out var requiredToken)
+                            )
                             continue;
 
                         var attr = attrToken.ToObject<string>()!;
@@ -131,7 +135,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                             continue;
                         if (!obj.TryGetValue(AttributeKey, out var attrToken)
                             || !obj.TryGetValue(TargetValueKey, out var targetToken)
-                            || !obj.TryGetValue(WeightKey, out var weightToken))
+                            || !obj.TryGetValue(WeightKey, out var weightToken)
+                            //|| !obj.TryGetValue(RequiredKey, out var requiredToken)
+                            )
                             continue;
 
                         if (!pseudoDict.TryGetValue(attrToken.ToObject<string>()!, out var attr))
@@ -140,6 +146,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         {
                             TargetValue = targetToken.ToObject<float>(),
                             Weight = weightToken.ToObject<int>()
+                            //Required = requiredToken.ToObject<bool>()
                         });
                         _vm._addedPseudoAttributes.Add(attr);
                     }
@@ -155,7 +162,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             {
                 var changed = false;
                 var attrArray = new JArray();
-                _vm.AttributeConstraints.ForEach(c => AddTo(attrArray, c.Data, c.TargetValue, c.Weight));
+                _vm.AttributeConstraints.ForEach(c => AddTo(attrArray, c.Data, c.TargetValue, c.Weight));//, c.Required
                 if (jObject.TryGetValue(nameof(AttributeConstraints), out var oldToken))
                 {
                     changed = !JToken.DeepEquals(attrArray, oldToken);
@@ -163,7 +170,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 jObject[nameof(AttributeConstraints)] = attrArray;
 
                 var pseudoArray = new JArray();
-                _vm.PseudoAttributeConstraints.ForEach(c => AddTo(pseudoArray, c.Data.Name, c.TargetValue, c.Weight));
+                _vm.PseudoAttributeConstraints.ForEach(c => AddTo(pseudoArray, c.Data.Name, c.TargetValue, c.Weight));//, c.Required
                 if (!changed && jObject.TryGetValue(nameof(PseudoAttributeConstraints), out oldToken)
                     && !JToken.DeepEquals(pseudoArray, oldToken))
                 {
@@ -173,13 +180,15 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 return changed;
             }
 
-            private static void AddTo(JArray array, string attribute, float targetValue, int weight)
+            private static void AddTo(JArray array, string attribute, float targetValue, int weight)//, bool required
             {
                 array.Add(new JObject
                 {
                     {AttributeKey, new JValue(attribute)},
                     {TargetValueKey, new JValue(targetValue)},
-                    {WeightKey, new JValue(weight)}
+                    {WeightKey, new JValue(weight)
+                    //,{RequiredKey, new JValue(required)
+                    }
                 });
             }
 
@@ -373,19 +382,12 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             private set => SetProperty(ref _newPseudoAttributeConstraint, value);
         }
 
-/*
+#if PoESkillTree_EnableItemInfluencedGenerator
         /// <summary>
         /// The tree information (used for Searching areas around Jewels with TreePlusItemsMode on)
         /// </summary>
         public SkillTree TreeInfo;
-*/
 
-        /// <summary>
-        /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
-        /// </summary>
-        public LeafSetting<bool> TreePlusItemsMode { get; }
-
-/*
         /// <summary>
         /// The item information equipped in skilltree(Shared inside Static Instance)
         /// </summary>
@@ -397,7 +399,12 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 SetProperty(ref GlobalSettings.ItemInfoVal, value);
             }
         }
-*/
+#endif
+
+        /// <summary>
+        /// Whether the Tab should use 'Tree + Items' or 'Tree only' mode.
+        /// </summary>
+        public LeafSetting<bool> TreePlusItemsMode { get; }
 
         /// <summary>
         /// WeaponClass used for pseudo attribute calculations.
@@ -482,6 +489,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         NewAttributeConstraint.Data = oldConstraint.Data;
                         NewAttributeConstraint.TargetValue = oldConstraint.TargetValue;
                         NewAttributeConstraint.Weight = oldConstraint.Weight;
+                        //NewAttributeConstraint.Required = oldConstraint.Required;
                         AttributeConstraints.Remove(oldConstraint);
                     });
             }
@@ -535,6 +543,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                         NewPseudoAttributeConstraint.Data = oldConstraint.Data;
                         NewPseudoAttributeConstraint.TargetValue = oldConstraint.TargetValue;
                         NewPseudoAttributeConstraint.Weight = oldConstraint.Weight;
+                        //NewPseudoAttributeConstraint.Required = oldConstraint.Required;
                         PseudoAttributeConstraints.Remove(oldConstraint);
                     });
             }
@@ -586,7 +595,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 () => WeaponClassIsTwoHanded = WeaponClass!.Value.IsTwoHanded());
             OffHand = new LeafSetting<OffHand>(nameof(OffHand), Model.PseudoAttributes.OffHand.Shield);
             Tags = new LeafSetting<Tags>(nameof(Tags), Model.PseudoAttributes.Tags.None);
-            //TreeInfo = tree;
+#if PoESkillTree_EnableItemInfluencedGenerator
+            TreeInfo = tree;
+#endif
 
             PersistentData.PropertyChanging += (sender, args) =>
             {
@@ -849,9 +860,27 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             var pseudoConstraints = PseudoAttributeConstraints.ToDictionary(
                 constraint => constraint.Data,
                 constraint => new Tuple<float, double>(constraint.TargetValue, constraint.Weight / 100.0));
+#if PoESkillTree_EnableItemInfluencedGenerator
+           var StatLookup = new PseudoCalcStatLookup();
+            if (TreePlusItemsMode.Value)
+            {
+                var solver = new AdvancedSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);
+                
+                return Task.FromResult<ISolver>(solver);
+            }
+            else
+            {
+                var solver = new AdvancedSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);
+                //if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value); }
+                return Task.FromResult<ISolver>(solver);
+            }
+#else
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
                 pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));//, TreeInfo, TreePlusItemsMode.Value));
+#endif
             //if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo);}
             return Task.FromResult<ISolver?>(solver);
         }

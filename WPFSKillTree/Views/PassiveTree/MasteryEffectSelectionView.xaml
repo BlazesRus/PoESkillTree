@@ -75,44 +75,6 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </RadioButton>
-
-                    <!--
-                    <CheckBox x:Name="checkbox" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}">
-                        <CheckBox.CommandParameter>
-                            <Binding Path="Effect"></Binding>
-                        </CheckBox.CommandParameter>
-                        <CheckBox.IsEnabled>
-                            <MultiBinding Converter="{StaticResource MasteryEffectEnabledConverter}" Mode="OneWay">
-                                <Binding Path="Effect"></Binding>
-                                <Binding Path="DataContext" ElementName="view"/>
-                            </MultiBinding>
-                        </CheckBox.IsEnabled>
-                        <CheckBox.IsChecked>
-                            <MultiBinding Converter="{StaticResource MasteryEffectCheckedConverter}" Mode="OneWay">
-                                <Binding Path="Effect"></Binding>
-                                <Binding Path="DataContext" ElementName="view"/>
-                            </MultiBinding>
-                        </CheckBox.IsChecked>
-                        <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding StatDescriptions}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="{x:Type system:String}">
-                                    <TextBlock Text="{Binding Path=.}" IsEnabled="{Binding Path=IsEnabled, ElementName=checkbox}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock" BasedOn="{StaticResource enabledText}">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsEnabled" Value="False">
-                                                        <Setter Property="Foreground" Value="Gray"/>
-                                                        <Setter Property="TextDecorations" Value="Strikethrough"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </CheckBox>
--->
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

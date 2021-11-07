@@ -437,7 +437,6 @@ namespace PoESkillTree.Utils.Converter
                     AttributeGroups[key].GroupName = "Custom: "+key.Replace("#", groupTotals[key].ToString())+deltaString;
                 }
             }
-
         }
 
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
