@@ -20,12 +20,16 @@ namespace PoESkillTree.EnumToComboBox
     {
         public static string Description(this Enum value)
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             var attributes = value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(DescriptionAttribute), false);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
             if (attributes.Any())
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                 return (attributes.First() as DescriptionAttribute).Description;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
-            // If no description is found, the least we can do is replace underscores with spaces
-            // You can add your own custom default formatting logic here
+                // If no description is found, the least we can do is replace underscores with spaces
+                // You can add your own custom default formatting logic here
             TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
             return ti.ToTitleCase(ti.ToLower(value.ToString().Replace("_", " ")));
         }
@@ -52,7 +56,7 @@ namespace PoESkillTree.EnumToComboBox
         {
             return EnumHelper.GetAllValuesAndDescriptions(value.GetType());
         }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return null;
         }

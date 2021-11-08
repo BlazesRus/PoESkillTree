@@ -23,13 +23,13 @@ namespace PoESkillTree.ViewModels
 
             tb.Inlines.Add(txt);
 
-			if (attr.Total != 0)
-			{
-				tb.Inlines.Add(" ");
-				txt = new Run(attr.Total.ToString("+#;-#;0"));
-				txt.Foreground = (i < 0) ? Brushes.Red : Brushes.Green;
-				tb.Inlines.Add(txt);
-			}
+            if (attr.Total != 0)
+            {
+                tb.Inlines.Add(" ");
+                txt = new Run(attr.Total.ToString("+#;-#;0"));
+                txt.Foreground = (attr.Total < 0) ? Brushes.Red : Brushes.Green;
+                tb.Inlines.Add(txt);
+            }
 
             return tb;
         }
