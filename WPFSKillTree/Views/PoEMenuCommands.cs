@@ -37,7 +37,9 @@ namespace PoESkillTree.PoEMenuCommands
             using (var reader = new StreamReader(stream, encoding))
             {
                 string line;
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                 while ((line = await reader.ReadLineAsync()) != null)
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                 {
                     lines.Add(line);
                 }
