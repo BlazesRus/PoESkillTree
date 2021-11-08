@@ -145,7 +145,7 @@ namespace PoESkillTree.PoEMenuCommands
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var str = value as StringData;
-            return (string)str;
+            return str==null?"":str;
         }
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
