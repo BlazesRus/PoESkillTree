@@ -422,10 +422,7 @@ namespace PoESkillTree.SkillTreeFiles
         {
             //Name = name ?? throw new ArgumentNullException(nameof(name));
             RelatedAttributes = new List<TreeGenerator.Model.PseudoAttributes.Attribute>();
-            StatTotal = 0.0f;
         }
-
-        public float StatTotal;
 
         /// <summary>
         /// Calculates updated value
@@ -446,7 +443,6 @@ namespace PoESkillTree.SkillTreeFiles
                     TotalStat += Multiplier * attrlist[AttributeName][0];
                 }
             }
-            StatTotal = TotalStat;
             return TotalStat;
         }
 
@@ -457,7 +453,7 @@ namespace PoESkillTree.SkillTreeFiles
     }
 
     /// <summary>
-    /// Acts as a combination of List{PseudoAttribute} and Dictionary{string, float}
+    /// Stores Dictionary linked to PseudoStats (Stat Calculations stored inside Dictionary<string, float> values)
     /// </summary>
     public class TrackedAttributes : Dictionary<string, PseudoStat>
     {
@@ -484,12 +480,20 @@ namespace PoESkillTree.SkillTreeFiles
         /// Updates the value.
         /// </summary>
         /// <param name="selectedAttributes">The selected attributes.</param>
-        public void UpdateValue(Dictionary<string, List<float>> selectedAttributes)
+        public void UpdateValue(Dictionary<string, List<float>> selectedAttributes, Dictionary<string, float> statTotals)
         {
             foreach(var element in this.Keys)
             {
-                this[element].CalculateValue(selectedAttributes);
+                if(statTotals.ContainsKey(element))
+                    statTotals[element] = this[element].CalculateValue(selectedAttributes);
+                else
+                    statTotals.Add(element, this[element].CalculateValue(selectedAttributes));
             }
+        }
+
+        internal void Add(string name, PseudoAttribute item)
+        {
+            throw new NotImplementedException();
         }
     }
 #endif
@@ -542,7 +546,8 @@ namespace PoESkillTree.SkillTreeFiles
         private static float secondaryCrit = 6.50f;
         private static WeaponClass primaryWeapon = WeaponClass.Dagger;
         private static WeaponClass secondaryWeapon = WeaponClass.Dagger;
-        private static bool notUsingShield = true;
+        private static OffHand offHandType = OffHand.DualWield;
+        //private static bool notUsingShield = true;
 
         public enum SpellBehaviorTypes
         {
@@ -612,7 +617,31 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        public static bool NotUsingShield { get => notUsingShield; set { notUsingShield = value; NotifyStaticPropertyChanged("NotUsingShield"); } }
+        public static OffHand OffHandType
+        {
+            get => offHandType;
+            set
+            {
+                offHandType = value; NotifyStaticPropertyChanged("OffHandType");
+            }
+        }
+
+        private static Tags tags = Tags.None;
+
+        /// <summary>
+        /// Tags used for pseudo attribute calculations.
+        /// </summary>
+        public static Tags Tags
+        {
+            get => tags;
+            set
+            {
+                tags = value; NotifyStaticPropertyChanged("Tags");
+            }
+        }
+
+        //public static bool NotUsingShield { get => SecondaryWeapon == Model.PseudoAttributes.OffHand.Shield; }
+
         public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
         public static DamageScaling DMScaling { get => dMScaling; set { dMScaling = value; NotifyStaticPropertyChanged("DMScaling"); } }
         public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }

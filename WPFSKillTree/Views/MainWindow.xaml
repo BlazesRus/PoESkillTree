@@ -14,6 +14,8 @@
                       xmlns:dd="urn:gong-wpf-dragdrop"
                       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                       xmlns:skills="clr-namespace:PoESkillTree.Views.Skills"
+                      xmlns:pseudoAttributes="clr-namespace:PoESkillTree.TreeGenerator.Model.PseudoAttributes"
+					  xmlns:converter="clr-namespace:PoESkillTree.Utils.Converter"
                       mc:Ignorable="d"
                       x:Class="PoESkillTree.Views.MainWindow"
                       x:Name="window"
@@ -100,6 +102,12 @@
     </Window.InputBindings>
 
     <Grid Margin="0">
+<!--         <Grid.Resources>
+            <converter:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
+            <converter:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+            <converter:InvertBoolConverter x:Key="InvertBoolConverter" />
+            <converter:FlagsToBoolConverter x:Key="FlagsToBoolConverter" />
+        </Grid.Resources> -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -125,7 +133,11 @@
                 <Grid Margin="4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" /><!--Normal Attribute Display-->
+<!--                         <RowDefinition Height="*" />--><!--Primary Weapon+OffHandType Settings Displayed(For [Tagged] Tracked Stats)-->
+<!--						<RowDefinition Height="*" /> --><!--Secondary Weapon Settings Displayed(For [Tagged] Tracked Stats)-->
+<!--                         <RowDefinition Height="2*" /> --><!--Tracked Stat Display-->
+ <!--                       <RowDefinition Height="*" />--><!--Tag Settings Displayed(For [Tagged] Tracked Stats)-->
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -167,6 +179,113 @@
                             <GroupStyle ContainerStyle="{StaticResource ContainerStyleIsExpanded}" />
                         </ListBox.GroupStyle>
                     </ListBox>
+                    
+                    <!-- WeaponClass -->
+<!--                     <GroupBox Grid.Row="2" Grid.Column="0"
+                              VerticalAlignment="Stretch">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Primary Weapon class"/>
+                        </GroupBox.Header>
+                        <ComboBox HorizontalAlignment="Left" MinWidth="130" Margin="10 0" VerticalAlignment="Center"
+                                  SelectedValue="{Binding PrimaryWeapon.Value}" ItemsSource="{Binding WeaponClassValues}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </GroupBox>
+					
+                    <GroupBox Grid.Row="2" Grid.Column="1"
+                              VerticalAlignment="Stretch">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Secondary Weapon class"/>
+                        </GroupBox.Header>
+                        <ComboBox HorizontalAlignment="Left" MinWidth="130" Margin="10 0" VerticalAlignment="Center"
+                                  SelectedValue="{Binding SecondaryWeapon.Value}" ItemsSource="{Binding WeaponClassValues}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </GroupBox> -->
+
+                    <!-- OffHand -->
+<!--                     <GroupBox Grid.Row="3" Grid.Column="0">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Off hand"/>
+                        </GroupBox.Header>
+                        <Grid Margin="10 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <RadioButton Grid.Row="0" Content="Shield" GroupName="OffHand"
+                                 IsChecked="{Binding OffHand.Value, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.Shield}}" />
+                            <RadioButton Grid.Row="1" Content="Dual wield" GroupName="OffHand"
+                                 IsChecked="{Binding OffHand.Value, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.DualWield}}" />
+                            <RadioButton Grid.Row="2" Content="Two handed" GroupName="OffHand"
+                                 IsChecked="{Binding OffHand.Value, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.TwoHanded}}" />
+                        </Grid>
+                    </GroupBox> -->
+
+<!--                     <ListBox x:Name="trackedAttr"
+                             Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                             Width="410"
+                             Margin="0 4 0 0"
+                             ScrollViewer.VerticalScrollBarVisibility="Visible">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <ContentControl
+                                    Content="{Binding Converter={StaticResource TrackedStatToTextblockConverter}}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.GroupStyle>
+                            <GroupStyle ContainerStyle="{StaticResource ContainerStyleIsExpanded}" />
+                        </ListBox.GroupStyle>
+                    </ListBox> -->
+                    
+                    <!-- Tags -->
+<!--                     <GroupBox Grid.Row="4" Grid.Column="0">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Tags"/>
+                        </GroupBox.Header>
+                        <Grid Margin="10 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.Row="0" Grid.Column="0" Content="Attack"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Attack}}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="0" Content="Melee"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Melee}}"/>
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Duration"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Duration}}"/>
+                            <CheckBox Grid.Row="3" Grid.Column="0" Content="Projectile"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Projectile}}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" Content="Spell" Margin="10,0"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Spell}}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Content="Trap" Margin="10,0"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Trap}}"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Content="Mine" Margin="10,0"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Mine}}"/>
+                            <CheckBox Grid.Row="3" Grid.Column="1" Content="Totem" Margin="10,0"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Totem}}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="2" Content="Area"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Area}}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="2" Content="Cast"
+                              IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Cast}}"/>
+                        </Grid>
+                    </GroupBox> -->
                 </Grid>
             </Border>
 

@@ -1,4 +1,4 @@
-using EnumsNET;
+﻿using EnumsNET;
 using Fluent;
 using MahApps.Metro.Controls;
 using NLog;
@@ -50,11 +50,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ControlzEx.Theming;
 using Attribute = PoESkillTree.ViewModels.Attribute;
+using PseudoTotal = PoESkillTree.ViewModels.PseudoTotal;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using Item = PoESkillTree.Model.Items.Item;
 using MenuItem = System.Windows.Controls.MenuItem;
 using ThemeManager = ControlzEx.Theming.ThemeManager;
 using PoESkillTree.Views.PassiveTree;
+using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
+#if (PoESkillTree_DisableStatTracking == false)
+//Not sure which observable dictionary to use
+#if (PoESkillTree_UseSwordfishDictionary)
+using Swordfish.NET.Collections;//Swordfish.NET.CollectionsV3 package(https://github.com/stewienj/SwordfishCollections)
+#else
+using IX.Observable;//IX.Observable package(https://github.com/adimosh/IX.Framework/)
+#endif
+#endif
 
 namespace PoESkillTree.Views
 {
@@ -273,6 +283,158 @@ namespace PoESkillTree.Views
             private set => SetValue(TitleBarProperty, value);
         }
 
+#if (PoESkillTree_DisableStatTracking==false)
+        ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
+        private ContextMenu _trackingContextMenu;
+
+        /// <summary>
+        /// Gets all values of the WeaponClass Enum.
+        /// </summary>
+        public static IEnumerable<WeaponClass> WeaponClassValues => Enum.GetValues(typeof(WeaponClass)).Cast<WeaponClass>();
+
+        /// <summary>
+        /// WeaponClass used for pseudo attribute calculations.
+        /// </summary>
+        public WeaponClass PrimaryWeapon
+        {
+            get => PseudoCalcGlobals.PrimaryWeapon;
+        }
+
+        /// <summary>
+        /// WeaponClass used for pseudo attribute calculations.(Disable from view unless OffhandType==DualWield)
+        /// </summary>
+        public WeaponClass SecondaryWeapon
+        {
+            get => PseudoCalcGlobals.SecondaryWeapon;
+        }
+
+        /// <summary>
+        /// OffHand used for pseudo attribute calculations.
+        /// </summary>
+        public OffHand OffHandType
+        {
+            get => PseudoCalcGlobals.OffHandType;
+        }
+
+        /// <summary>
+        /// Tags used for pseudo attribute calculations.
+        /// </summary>
+        public TreeGenerator.Model.PseudoAttributes.Tags Tags
+        {
+            get => PseudoCalcGlobals.Tags;
+        }
+
+        public bool IsMelee
+        {
+            get => PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Melee);
+            set
+            {
+                if (value)
+                {
+                    if (PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Melee))
+                        return;
+                    else
+                        PseudoCalcGlobals.Tags.CombineFlags(TreeGenerator.Model.PseudoAttributes.Tags.Melee);
+                }
+                else
+                {
+                    if (Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Melee))
+                        PseudoCalcGlobals.Tags.RemoveFlags(TreeGenerator.Model.PseudoAttributes.Tags.Melee);
+                    else
+                        return;
+                }
+            }
+        }
+
+        public bool UsingAttackModifier
+        {
+            get => PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Attack);
+            set
+            {
+                if (value)
+                {
+                    if (PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Attack))
+                        return;
+                    else
+                        PseudoCalcGlobals.Tags.CombineFlags(TreeGenerator.Model.PseudoAttributes.Tags.Attack);
+                }
+                else
+                {
+                    if (Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Attack))
+                        PseudoCalcGlobals.Tags.RemoveFlags(TreeGenerator.Model.PseudoAttributes.Tags.Attack);
+                    else
+                        return;
+                }
+            }
+        }
+
+        public bool UsingSpellModifier
+        {
+            get => PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Spell);
+            set
+            {
+                if (value)
+                {
+                    if (PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Spell))
+                        return;
+                    else
+                        PseudoCalcGlobals.Tags.CombineFlags(TreeGenerator.Model.PseudoAttributes.Tags.Spell);
+                }
+                else
+                {
+                    if (Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Spell))
+                        PseudoCalcGlobals.Tags.RemoveFlags(TreeGenerator.Model.PseudoAttributes.Tags.Spell);
+                    else
+                        return;
+                }
+            }
+        }
+
+        public bool UsingProjectileModifier
+        {
+            get => PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Projectile);
+            set
+            {
+                if (value)
+                {
+                    if (PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Projectile))
+                        return;
+                    else
+                        PseudoCalcGlobals.Tags.CombineFlags(TreeGenerator.Model.PseudoAttributes.Tags.Projectile);
+                }
+                else
+                {
+                    if (Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Projectile))
+                        PseudoCalcGlobals.Tags.RemoveFlags(TreeGenerator.Model.PseudoAttributes.Tags.Projectile);
+                    else
+                        return;
+                }
+            }
+        }
+
+        public bool UsingAOEModifier
+        {
+            get => PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Area);
+            set
+            {
+                if (value)
+                {
+                    if (PseudoCalcGlobals.Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Area))
+                        return;
+                    else
+                        PseudoCalcGlobals.Tags.CombineFlags(TreeGenerator.Model.PseudoAttributes.Tags.Area);
+                }
+                else
+                {
+                    if (Tags.HasFlag(TreeGenerator.Model.PseudoAttributes.Tags.Area))
+                        PseudoCalcGlobals.Tags.RemoveFlags(TreeGenerator.Model.PseudoAttributes.Tags.Area);
+                    else
+                        return;
+                }
+            }
+        }
+#endif
+
 #pragma warning disable CS8618 // Initialized in Window_Loaded
         public MainWindow()
 #pragma warning restore
@@ -365,6 +527,11 @@ namespace PoESkillTree.Views
         {
             _attributeGroups.UpdateGroupNames(_attiblist);
             _attributeCollection.Refresh();
+#if (PoESkillTree_DisableStatTracking==false)
+#if (PoESkillTree_UseSwordfishDictionary==false)
+            trackedStatDisplay.RefreshViewers();
+#endif
+#endif
         }
 
         private void SetCustomGroups(IList<string[]> customgroups)
@@ -440,22 +607,8 @@ namespace PoESkillTree.Views
         private void RemoveFromGroup(object sender, RoutedEventArgs e)
         {
             var attributelist = new List<string>();
-            //string SelectedAttrName;
-            //int index;
             foreach (var o in lbAttr.SelectedItems.Cast<Attribute>())//lb.SelectedItems
             {
-/*
-                SelectedAttrName = o.ToString();
-                index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
-                if (index>-1)//Functionality of removing individual tracked stat
-                {
-                    GlobalSettings.TrackedStats.RemoveAt(index);
-                }
-                else
-                {
-                    attributelist.Add(SelectedAttrName);
-                }
-*/
                 attributelist.Add(o.ToString());
             }
             if (attributelist.Count > 0)
@@ -464,6 +617,31 @@ namespace PoESkillTree.Views
                 RefreshAttributeLists();
             }
         }
+
+#if (PoESkillTree_DisableStatTracking==false)
+        private void RemoveTrackedAttr(object sender, RoutedEventArgs e)
+        {
+            //string SelectedAttrName;
+            //int index;
+            ////var trackedAttrList = new List<string>();
+            //foreach (var o in trackedAttr.SelectedItems.Cast<Attribute>())
+            //{
+            //    SelectedAttrName = o.ToString();
+            //    index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
+            //    if (index>-1)//Functionality of removing individual tracked stat
+            //    {
+            //        GlobalSettings.TrackedStats.RemoveAt(index);
+            //    }
+            //    //else
+            //    //    trackedAttrList.Add(SelectedAttrName);
+            //}
+            //if (trackedAttrList.Count > 0)
+            //{
+            //    _trackedAttrGroups.RemoveFromGroup(trackedAttrList.ToArray());
+            //    RefreshAttributeLists();
+            //}
+        }
+#endif
 
         //Adds currently selected attributes to an existing custom group named by sender.Header
         private void AddToGroup(object sender, RoutedEventArgs e)
@@ -607,7 +785,19 @@ namespace PoESkillTree.Views
             lbAttr.ItemsSource = _attributeCollection;
             lbAttr.SelectionMode = SelectionMode.Extended;
             lbAttr.ContextMenu = _attributeContextMenu;
-
+#if (PoESkillTree_DisableStatTracking==false)
+            var cmRemoveTrackedAttr = new MenuItem { Header = L10n.Message("Remove PseudoAttribute from Tracking") };
+            cmRemoveTrackedAttr.Click += RemoveTrackedAttr;
+            _trackingContextMenu = new ContextMenu();
+            _trackingContextMenu.Items.Add(cmRemoveTrackedAttr);
+#if (PoESkillTree_UseSwordfishDictionary)
+            trackedAttr.ItemsSource = trackedStatDisplay.CollectionView;
+#else
+            trackedAttr.ItemsSource = trackedStatDisplay;
+#endif
+            trackedAttr.SelectionMode = SelectionMode.Extended;
+            trackedAttr.ContextMenu = _trackingContextMenu;
+#endif
             cbCharType.ItemsSource = Enums.GetValues<CharacterClass>();
             cbAscType.SelectedIndex = 0;
         }
@@ -1105,7 +1295,7 @@ namespace PoESkillTree.Views
         // Invoked when update download completes, aborts or fails.
         private async Task UpdateDownloadCompleted(AsyncCompletedEventArgs e)
         {
-            if (e.Cancelled) // Check whether download was canceled.
+            if (e.Cancelled) // Check whether download was cancelled.
             {
                 Updater.Dispose();
             }
@@ -1246,26 +1436,26 @@ namespace PoESkillTree.Views
                 _attiblist.Add(a);
             }
 
-/*  //#if (PoESkillTree_DisableStatTracking==false)
+#if (PoESkillTree_DisableStatTracking==false)
             if (GlobalSettings.TrackedStats.Count != 0)
             {
-                TreeGenerator.Model.PseudoAttributes.PseudoAttribute Element;
-                string AttrName;
-                for (int Index = 0; Index < GlobalSettings.TrackedStats.Count; ++Index)
+                GlobalSettings.TrackedStats.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
+                foreach (var item in Tree.SelectedPseudoTotal)
                 {
-                    Element = GlobalSettings.TrackedStats[Index];
-                    AttrName = Element.Name;
-                    if (Tree.SelectedAttributes.ContainsKey(AttrName))
+                    var a = new PseudoTotal(InsertNumbersInTrackedDisplay(item));
+                    if(GlobalSettings.TrackedStats.ContainsKey(item.Key))
                     {
-                        Tree.SelectedAttributes[AttrName] = new List<float> { Element.CalculateValue(Tree.SelectedAttributes) };
+                        if (trackedStatDisplay.ContainsKey(item.Key))//Update Tracked Value if already in Display
+                            trackedStatDisplay[item.Key] = a;
+                        else
+                            trackedStatDisplay.Add(item.Key, a);
                     }
-                    else
-                    {
-                        Tree.SelectedAttributes.Add(AttrName, new List<float> { Element.CalculateValue(Tree.SelectedAttributes) });
-                    }
+                    else if(trackedStatDisplay.ContainsKey(item.Key))//Remove from Displayed stats if not tracked
+                        trackedStatDisplay.Remove(item.Key);
+                    
                 }
             }
-*/  //#endif
+#endif
 
             if (copy != null)
             {
@@ -1317,6 +1507,13 @@ namespace PoESkillTree.Views
             {
                 s = _backreplace.Replace(s, f + "", 1);
             }
+            return s;
+        }
+
+        private string InsertNumbersInTrackedDisplay(KeyValuePair<string, float> trackedTotal)
+        {
+            var s = trackedTotal.Key;
+            s = _backreplace.Replace(s, trackedTotal.Value + "", 1);
             return s;
         }
 
@@ -2131,7 +2328,7 @@ namespace PoESkillTree.Views
                         tooltip += "\n   [+1 to Evasion Rating per 1 Armour on Gloves]";
                         break;
                     default:
-                        tooltip += "\n-||(Not Listed Yet)";
+                        tooltip += "\n    (Not Listed Yet)";
                         break;
                 }
             }

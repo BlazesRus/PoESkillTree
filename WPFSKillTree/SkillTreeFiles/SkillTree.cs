@@ -182,12 +182,20 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static bool _initialized;
 
+        public Dictionary<string, float> SelectedPseudoTotal;
+        //public Dictionary<string, float> TrackedStatTotal;
+        public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
+        //public Dictionary<string, float> SelectedPseudoTotalWithItems;
+        //public Dictionary<string, float> TrackedStatTotalWithItems;
+
         private SkillTree(IPersistentData persistentData)
 #pragma warning restore
         {
             _persistentData = persistentData;
 
             SkilledNodes.CollectionChanged += SkilledNodes_CollectionChanged;
+            SelectedPseudoTotal = new Dictionary<string, float>();
+            //TrackedStatTotal = new Dictionary<string, float>();
         }
 
         private void SkilledNodes_CollectionChanged(object sender, CollectionChangedEventArgs<PassiveNodeViewModel> args)
@@ -511,13 +519,14 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-/*
+#if (PoESkillTree_DisableStatTracking==false)
             //Perform PseudoCalc as needed
             if (GlobalSettings.TrackedStats.Count != 0)
             {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+
+                //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
-*/
+#endif
             return temp;
         }
 
@@ -552,12 +561,12 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-/*
+#if (PoESkillTree_DisableStatTracking==false)
             if (GlobalSettings.TrackedStats.Count != 0)
             {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+                //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
             }
-*/
+#endif
             return temp;
         }
 
@@ -583,12 +592,12 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-/*
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            }
-*/
+#if (PoESkillTree_DisableStatTracking==false)
+            //if (GlobalSettings.TrackedStats.Count != 0)
+            //{
+            //    //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
+            //}
+#endif
             return temp;
         }
 
