@@ -645,6 +645,17 @@ namespace PoESkillTree.SkillTreeFiles
         public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
         public static DamageScaling DMScaling { get => dMScaling; set { dMScaling = value; NotifyStaticPropertyChanged("DMScaling"); } }
         public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }
+
+        private static bool enableTrackedStatDisplay = false;
+
+        public static bool EnableTrackedStatDisplay
+        {
+            get => enableTrackedStatDisplay;
+            set
+            {
+                enableTrackedStatDisplay = value; NotifyStaticPropertyChanged("EnableTrackedStatDisplay");
+            }
+        }
     }
 
     public static class GlobalSettings

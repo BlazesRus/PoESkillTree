@@ -433,6 +433,15 @@ namespace PoESkillTree.Views
                 }
             }
         }
+
+        /// <summary>
+        /// Tags used for pseudo attribute calculations.
+        /// </summary>
+        public bool EnableTrackedStatDisplay
+        {
+            get => PseudoCalcGlobals.EnableTrackedStatDisplay;
+            set => PseudoCalcGlobals.EnableTrackedStatDisplay = value;
+        }
 #endif
 
 #pragma warning disable CS8618 // Initialized in Window_Loaded
@@ -522,16 +531,21 @@ namespace PoESkillTree.Views
         //This whole region, along with most of GroupStringConverter, makes up our user-defined attribute group functionality - Sectoidfodder 02/29/16
         #region Attribute grouping helpers
 
-        //Necessary to update the summed numbers in group names before every refresh
-        private void RefreshAttributeLists()
+        private void UpdateTrackedStatDisplay()
         {
-            _attributeGroups.UpdateGroupNames(_attiblist);
-            _attributeCollection.Refresh();
 #if (PoESkillTree_DisableStatTracking==false)
 #if (PoESkillTree_UseSwordfishDictionary==false)
             trackedStatDisplay.RefreshViewers();
 #endif
 #endif
+        }
+
+        //Necessary to update the summed numbers in group names before every refresh
+        private void RefreshAttributeLists()
+        {
+            _attributeGroups.UpdateGroupNames(_attiblist);
+            _attributeCollection.Refresh();
+            UpdateTrackedStatDisplay();
         }
 
         private void SetCustomGroups(IList<string[]> customgroups)
