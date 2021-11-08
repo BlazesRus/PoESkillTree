@@ -13,8 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using PoESkillTree.PoEMenuCommands;
+//using PoESkillTree.PoEMenuCommands;
 using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.PoEMenuCommands;
 
 namespace PoESkillTree.TrackedStatViews
 {
@@ -176,11 +177,11 @@ namespace PoESkillTree.TrackedStatViews
             {
                 if (StatsToSave == "")
                 {
-                    StatsToSave = stat.Name;
+                    StatsToSave = stat.Key;
                 }
                 else
                 {
-                    StatsToSave += "\n" + stat.Name;
+                    StatsToSave += "\n" + stat.Key;
                 }
             }
             if (!Directory.Exists(StatTrackingSavePath)) { Directory.CreateDirectory(StatTrackingSavePath); }
@@ -243,7 +244,7 @@ namespace PoESkillTree.TrackedStatViews
         /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private async void LoadTrackedStatFileNamesAsync(object sender, RoutedEventArgs e)
         {
-            //SLightly async version of Getting files from http://writeasync.net/?p=2621
+            //Slightly async version of Getting files from http://writeasync.net/?p=2621
             // Avoid blocking the caller for the initial enumerate call.
             await Task.Yield();
             SourceList.Clear();
@@ -310,11 +311,11 @@ namespace PoESkillTree.TrackedStatViews
                     List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
                     foreach (PseudoAttribute item in PsList)
                     {
-                        if (GlobalSettings.TrackedStats.GetIndexOfAttribute(item.Name) == -1)//Check if Attribute name already tracked first
+                        if (!GlobalSettings.TrackedStats.ContainsKey(item.Name))//Check if Attribute name already tracked first
                         {
                             if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
                             {
-                                GlobalSettings.TrackedStats.Add(item);
+                                GlobalSettings.TrackedStats.Add(item.Name, item);
                             }
                         }
                     }
