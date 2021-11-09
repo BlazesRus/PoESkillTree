@@ -287,6 +287,24 @@
                         </fluent:ScreenTip>
                     </fluent:MenuItem.ToolTip>
                 </fluent:MenuItem>
+                <fluent:MenuItem Click="OpenTrackedSettings">
+                    <fluent:MenuItem.Icon>
+                        <iconPacks:PackIconModern Kind="Settings" />
+                    </fluent:MenuItem.Icon>
+                    <fluent:MenuItem.Header>
+                        <l:Catalog Message="Tracked Stat Options(Not working at moment)" />
+                    </fluent:MenuItem.Header>
+                    <fluent:MenuItem.ToolTip>
+                        <fluent:ScreenTip>
+                            <fluent:ScreenTip.Title>
+                                <l:Catalog Message="Tracked Stat Options" />
+                            </fluent:ScreenTip.Title>
+                            <fluent:ScreenTip.Text>
+                                <l:Catalog Message="Open the Pseudostat Tracking options." />
+                            </fluent:ScreenTip.Text>
+                        </fluent:ScreenTip>
+                    </fluent:MenuItem.ToolTip>
+                </fluent:MenuItem>
                 <fluent:MenuItem Click="Exit"
                                  KeyTip="X">
                     <fluent:MenuItem.Icon>

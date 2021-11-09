@@ -25,6 +25,11 @@ namespace PoESkillTree.Views
                 new SettingsMenuViewModel(MainWindow.PersistentData, DialogCoordinator.Instance, MainWindow.BuildsControlViewModel),
                 new SettingsMenuWindow());
         }
+        
+        private async void OpenTrackedSettings(object sender, RoutedEventArgs e)
+        {
+            await MainWindow.ShowDialogAsync(new TrackedStatsMenuModel(MainWindow.PersistentData, DialogCoordinator.Instance, MainWindow.BuildsControlViewModel), new TrackedStatViews.TrackedStatsMenu());
+        }
 
         private void Exit(object sender, RoutedEventArgs e)
         {
