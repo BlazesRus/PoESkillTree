@@ -1,25 +1,57 @@
-﻿using PoESkillTree.Common.ViewModels;
+﻿using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using PoESkillTree.Common.ViewModels;
 using PoESkillTree.Controls.Dialogs;
 using PoESkillTree.Localization;
 using PoESkillTree.Model;
 using PoESkillTree.Model.Serialization;
-using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.ViewModels.Builds;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.ViewModels
 {
-    // Some aliases to make things clearer without the need of extra classes.
-
-    public class TrackedStatsMenuModel : CloseableViewModel, INotifyPropertyChanged, INotifyPropertyChanging
+    public class TrackedStatsMenuModel : CloseableViewModel//, INotifyPropertyChanged, INotifyPropertyChanging
     {
         private readonly IPersistentData _persistentData;
         private readonly IDialogCoordinator _dialogCoordinator;
-        private readonly BuildsControlViewModel _buildsControlViewModel;
 
         public Options Options { get; }
+
+        /// <summary>
+        /// Gets the change stat tracking path command.
+        /// </summary>
+        /// <value>
+        /// The change stat tracking path command.
+        /// </value>
+        public ICommand ChangeStatTrackingPathCommand { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackedStatsMenuModel"/> class.
+        /// </summary>
+        /// <param name="persistentData">The persistent data.</param>
+        /// <param name="dialogCoordinator">The dialog coordinator.</param>
+        public TrackedStatsMenuModel(IPersistentData persistentData, IDialogCoordinator dialogCoordinator)
+        {
+            _persistentData = persistentData;
+            _dialogCoordinator = dialogCoordinator;
+            Options = persistentData.Options;
+            StatTrackingSavePath = persistentData.StatTrackingSavePath;
+            DisplayName = L10n.Message("Tracked Stat Settings");
+
+            ChangeStatTrackingPathCommand = new AsyncRelayCommand(ChangeStatTrackingPath);
+
+            Options.PropertyChanged += OptionsOnPropertyChanged;
+        }
+
+        protected override void OnClose()
+        {
+            Options.PropertyChanged -= OptionsOnPropertyChanged;
+            _persistentData.StatTrackingSavePath = StatTrackingSavePath;
+            _persistentData.Save();
+        }
+
+        private async void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args) { }
 
         /// <summary>
         /// Gets or sets the stat tracking save path.
@@ -47,47 +79,6 @@ namespace PoESkillTree.ViewModels
                 GlobalSettings.StatTrackingSavePathVal = value;
             }
         }
-
-        #region ICommand Initialization
-
-        /// <summary>
-        /// Gets the change stat tracking path command.
-        /// </summary>
-        /// <value>
-        /// The change stat tracking path command.
-        /// </value>
-        public ICommand ChangeStatTrackingPathCommand { get; }
-
-        #endregion ICommand Initialization
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TrackedStatsMenuModel"/> class.
-        /// </summary>
-        /// <param name="persistentData">The persistent data.</param>
-        /// <param name="dialogCoordinator">The dialog coordinator.</param>
-        /// <param name="buildsControlViewModel">The builds control view model.</param>
-        public TrackedStatsMenuModel(IPersistentData persistentData, IDialogCoordinator dialogCoordinator, BuildsControlViewModel buildsControlViewModel)
-        {
-            _persistentData = persistentData;
-            _dialogCoordinator = dialogCoordinator;
-            _buildsControlViewModel = buildsControlViewModel;
-            Options = persistentData.Options;
-            StatTrackingSavePath = persistentData.StatTrackingSavePath;
-            DisplayName = L10n.Message("Tracked Stat Settings");
-
-            ChangeStatTrackingPathCommand = new AsyncRelayCommand(ChangeStatTrackingPath);
-
-            Options.PropertyChanged += OptionsOnPropertyChanged;
-        }
-
-        protected override void OnClose()
-        {
-            Options.PropertyChanged -= OptionsOnPropertyChanged;
-            _persistentData.StatTrackingSavePath = StatTrackingSavePath;
-            _persistentData.Save();
-        }
-
-        private void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args) { }
 
         #region TrackingCommand Code
 
