@@ -346,8 +346,7 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     else if(node.PassiveNodeType == PassiveNodeType.Mastery)
                     {
-                        GlobalSettings.ApplyMasteryLabel(node);
-                        node.UpdateStatDescription();
+                        MasteryDefinitions.SetMasteryLabel(node);
                     }
                 }
 

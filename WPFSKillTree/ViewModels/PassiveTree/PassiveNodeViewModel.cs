@@ -52,6 +52,12 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 InitializeAttributes();
             }
         }
+        
+        public void ForceChangeSkill(ushort swappedSkill)
+        {
+            _skill = swappedSkill;
+        }
+
         public string Name { get => JsonPassiveNode.Name; }
         public CharacterClass? StartingCharacterClass { get => JsonPassiveNode.StartingCharacterClass; }
         public string[]? Recipe { get => JsonPassiveNode.Recipe; }
@@ -67,6 +73,11 @@ namespace PoESkillTree.ViewModels.PassiveTree
 
         private string[] _statDescriptions = new string[0];
         public string[] StatDescriptions { get => _statDescriptions; private set => _statDescriptions = value; }
+
+        public void SetDescriptionWithStats(ref string[] descArray, ref Dictionary<string, IReadOnlyList<float>> statDictionary)
+        {
+            StatDescriptions = descArray; Attributes = statDictionary;
+        }
         public int PassivePointsGranted { get => JsonPassiveNode.PassivePointsGranted; }
         public string Icon
         {
@@ -114,7 +125,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
         public string EffectKey => $"{EffectKeyPrefix}_{ActiveEffectIcon}";
         private string EffectKeyPrefix => $"{PassiveNodeType.ToString().ToLowerInvariant()}Effect";
 
-        public Dictionary<string, IReadOnlyList<float>> Attributes { get; } = new Dictionary<string, IReadOnlyList<float>>();
+        public Dictionary<string, IReadOnlyList<float>> Attributes { get; private set; } = new Dictionary<string, IReadOnlyList<float>>();
         public Dictionary<ushort, PassiveNodeViewModel> NeighborPassiveNodes { get; } = new Dictionary<ushort, PassiveNodeViewModel>();
         public Dictionary<ushort, PassiveNodeViewModel> VisibleNeighborPassiveNodes { get; } = new Dictionary<ushort, PassiveNodeViewModel>();
 
@@ -205,7 +216,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 {//https://stackoverflow.com/questions/8809354/replace-first-occurrence-of-pattern-in-a-string
                     _statDescriptions[Statnumber] = numberCharacter.Replace(_statDescriptions[Statnumber], AttrVal.ToString(cultureSpecifier, CultureInfo.InvariantCulture), 1);
                 }
-                Statnumber++;
+                ++Statnumber;
             }
         }
     }

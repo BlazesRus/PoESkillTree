@@ -2,8 +2,6 @@
 <dialogs:CloseableBaseDialog
     x:Class="PoESkillTree.TrackedStatViews.TrackedStatsMenu"
     xmlns:local="clr-namespace:PoESkillTree.TrackedStatViews"
-    xmlns:MenuCmd="clr-namespace:PoESkillTree.PoEMenuCommands"
-    xmlns:Tree="clr-namespace:PoESkillTree"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:l="clr-namespace:PoESkillTree.Localization.XAML" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,6 +10,9 @@
     xmlns:dialogs="clr-namespace:PoESkillTree.Controls.Dialogs"
     xmlns:converter="clr-namespace:PoESkillTree.Utils.Converter"
     xmlns:metroControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:localization="clr-namespace:PoESkillTree.Localization"
+    xmlns:MenuCmd="clr-namespace:PoESkillTree.PoEMenuCommands"
+    xmlns:Tree="clr-namespace:PoESkillTree"
     xmlns:EnumCombo="clr-namespace:PoESkillTree.EnumToComboBox"
     d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
     MaxContentWidth="850">

@@ -17,15 +17,16 @@ namespace PoESkillTree.ViewModels.PassiveTree
     /// </summary>
     public class MasteryEffectSelectionViewModel : CloseableViewModel<bool>
     {
-        
-
         public PassiveNodeViewModel Node { get; }
         public IEnumerable<PassiveNodeViewModel> Masteries { get; }
+
+        private ushort InitialNodeSkill;
 
         public MasteryEffectSelectionViewModel(PassiveNodeViewModel node, IEnumerable<PassiveNodeViewModel> masteries)
         {
             Node = node;
             Masteries = masteries;
+            InitialNodeSkill = node.Skill;
         }
 
         public bool IsEffectEnabled(ushort effect) => !Masteries.Any(x => x.Skill == effect);
@@ -33,7 +34,23 @@ namespace PoESkillTree.ViewModels.PassiveTree
 
         public ICommand SetEffect => new RelayCommand<ushort>((effect) =>
         {
-            Node.Skill = effect;
+            if (effect != InitialNodeSkill)
+            {
+                if (effect == Node.Id)
+                    MasteryDefinitions.SetMasteryLabel(Node);
+                else
+                {
+                    for (int EffectIndex = 0; EffectIndex < Node.MasterEffects.Length; ++EffectIndex)//Find Matching 
+                    {
+                        if (effect == Node.MasterEffects[EffectIndex].Effect)
+                        {
+                            MasteryDefinitions.ApplyMasterySelectionStats(Node, Node.MasterEffects[EffectIndex].StatDescriptions, effect);
+                            break;
+                        }
+                    }
+                }
+            }
+            //
         });
 
     }
