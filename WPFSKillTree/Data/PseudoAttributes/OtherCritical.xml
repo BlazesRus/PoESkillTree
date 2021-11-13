@@ -39,12 +39,14 @@
         <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
 		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
 		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="5.0"/>
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Chance[DualWands+5PowerCharges]" Group="Critical Strike">
         <Attribute Name="#% increased Critical Strike Chance" />
 		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
 		<Attribute Name="#% increased Critical Strike Chance with Wands"/>
 		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Chance[RangedDualDaggers+4PowerCharges]" Group="Critical Strike">
         <Attribute Name="#% increased Critical Strike Chance" />
@@ -52,6 +54,7 @@
         <Attribute Name="#% increased Critical Strike Chance with Daggers"/>
 		<Attribute Name="#% increased Weapon Critical Strike Chance while Dual Wielding"/>
 		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Critical Strike Chance with Spells[Non-Tagged]" Group="Critical Strike">
         <Attribute Name="#% increased Critical Strike Chance" />
@@ -65,6 +68,7 @@
         <Attribute Name="#% increased Critical Strike Chance" />
         <Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
         <Attribute Name="#% increased Critical Strike Chance with Swords" />
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
     </PseudoAttribute>
     <PseudoAttribute Name="#% increased Total Melee Critical Strike Chance with Sword and Mace[Non-Tagged]" Group="Critical Strike">
         <Attribute Name="#% increased Melee Critical Strike Chance" />
@@ -72,5 +76,19 @@
         <Attribute Name="#% increased Critical Strike Chance with One Handed Melee Weapons" />
         <Attribute Name="#% increased Critical Strike Chance with Swords"  ConversionMultiplier="0.5"/>
         <Attribute Name="#% increased Critical Strike Chance with Maces"  ConversionMultiplier="0.5"/>
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Critical Strike Chance[SingleWand][WhileBlinded][4PowerCharges]" Group="Critical Strike">
+        <Attribute Name="#% increased Critical Strike Chance" />
+        <Attribute Name="#% increased Critical Strike Chance against Blinded Enemies" />
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
+		<Attribute Name="#% increased Critical Strike Chance with Wands"/>
+		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Critical Strike Chance[Attacks][WhileBlinded][4PowerCharges]" Group="Critical Strike">
+        <Attribute Name="#% increased Critical Strike Chance" />
+        <Attribute Name="#% increased Critical Strike Chance against Blinded Enemies" />
+		<Attribute Name="#% increased Critical Strike Chance for Attacks" />
+		<Attribute Name="#% increased Critical Strike Chance per Power Charge" ConversionMultiplier="4.0"/>
     </PseudoAttribute>
 </PseudoAttributes>

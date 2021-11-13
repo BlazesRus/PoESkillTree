@@ -20,4 +20,16 @@
 		<Attribute Name="#% increased Physical Damage with Wands"/>
 		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
     </PseudoAttribute>
+    <PseudoAttribute Name="+# MasteryBoosted Intelligence" Group="General">
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="1.4" />
+		<Attribute Name="+# Mastery Nodes" ConversionMultiplier="5" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# MasteryBoosted Dexterity" Group="General">
+		<Attribute Name="+# to Dexterity" ConversionMultiplier="1.4" />
+		<Attribute Name="+# Mastery Nodes" ConversionMultiplier="5" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="+# MasteryBoosted Strength" Group="General">
+		<Attribute Name="+# to Strength" ConversionMultiplier="1.4" />
+		<Attribute Name="+# Mastery Nodes" ConversionMultiplier="5" />
+    </PseudoAttribute>
 </PseudoAttributes>
