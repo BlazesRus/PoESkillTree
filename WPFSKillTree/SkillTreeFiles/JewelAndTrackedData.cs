@@ -466,9 +466,11 @@ namespace PoESkillTree.SkillTreeFiles
         /// Starts the tracking of Pseudo-attributes(to display in stat calculations).
         /// </summary>
         /// <param name="pseudoAttributeConstraints">The pseudo attribute constraints.</param>
-        public void StartTracking(Dictionary<string, Tuple<float, double>> attributeConstraints, Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints, WeaponClass value, OffHand value1, SkillTree treeInfo)
+        public void StartTracking(Dictionary<string, Tuple<float, double>> attributeConstraints, Dictionary<PseudoAttribute, Tuple<float, double>> pseudoAttributeConstraints, WeaponClass primaryWeapon, OffHand offHandType, Tags tags)
         {
-            Dictionary<string, List<float>> attrlist = treeInfo.SelectedAttributes;
+            PseudoCalcGlobals.PrimaryWeapon = primaryWeapon;
+            PseudoCalcGlobals.OffHandType = offHandType;
+            PseudoCalcGlobals.Tags = tags;
             foreach (PseudoAttribute Attribute in pseudoAttributeConstraints.Keys)//Don't need target value and weight
             {
                 Add(Attribute.Name, new PseudoStat(Attribute.Attributes));
@@ -502,12 +504,11 @@ namespace PoESkillTree.SkillTreeFiles
     /// </summary>
     public static class PseudoCalcGlobals
     {
-        //public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanging;
 
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
-        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        public static event EventHandler<PropertyChangedEventArgs>? StaticPropertyChanged;
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
@@ -517,6 +518,7 @@ namespace PoESkillTree.SkillTreeFiles
                 StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
         }
 
+#if PoESkillTree_EnableSubtotalFeatures
         public const string HybridHPKey = "# HybridHP Subtotal(PseudoCalc)";
         public const string AccKey = "# Accuracy Subtotal(PseudoCalc)";
         public const string HPTotalKey = "# HP Subtotal(PseudoCalc)";
@@ -539,24 +541,55 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static int levelPrecisionActive = 0;
 
+        /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
+        /// <value>
+        ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
+        public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
+
+        /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
+        public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
+
+        public static bool CalculateAcc { get => calculateAcc; set { calculateAcc = value; NotifyStaticPropertyChanged("CalculateAcc"); } }
+        public static bool CalculateHP { get => calculateHP; set { calculateHP = value; NotifyStaticPropertyChanged("CalculateHP"); } }
+        public static bool CalculateHybridHP { get => calculateHybridHP; set { calculateHybridHP = value; NotifyStaticPropertyChanged("CalculateHybridHP"); } }
+        public static bool CalculateCritsPerSec { get => calculateCritsPerSec; set { calculateCritsPerSec = value; NotifyStaticPropertyChanged("CalculateCritsPerSec"); } }
+        public static bool CalculateCritSpellMult { get => calculateCritSpellMult; set { calculateCritSpellMult = value; NotifyStaticPropertyChanged("CalculateCritSpellMult"); } }
+        public static bool LuckyCrits { get => luckyCrits; set { luckyCrits = value; NotifyStaticPropertyChanged("LuckyCrits"); } }
+        public static bool IncreasedCritActive { get => increasedCritActive; set { increasedCritActive = value; NotifyStaticPropertyChanged("IncreasedCritActive"); } }
+        public static int LevelPrecisionActive { get => levelPrecisionActive; set { levelPrecisionActive = value; NotifyStaticPropertyChanged("LevelPrecisionActive"); } }
+#endif
+
+#if PoESkillTree_EnableCritsPerSecondFeatures
         private static float primaryATKSpeed = 1.20f;
         private static float primaryCrit = 6.50f;
         private static float secondaryATKSpeed = 1.20f;
         private static float secondaryCrit = 6.50f;
+
+        public static float PrimaryATKSpeed { get => primaryATKSpeed; set { primaryATKSpeed = value; NotifyStaticPropertyChanged("PrimaryATKSpeed"); } }
+        public static float PrimaryCrit { get => primaryCrit; set { primaryCrit = value; NotifyStaticPropertyChanged("PrimaryCrit"); } }
+        public static float SecondaryATKSpeed { get => secondaryATKSpeed; set { secondaryATKSpeed = value; NotifyStaticPropertyChanged("SecondaryATKSpeed"); } }
+        public static float SecondaryCrit { get => secondaryCrit; set { secondaryCrit = value; NotifyStaticPropertyChanged("SecondaryCrit"); } }
+#endif
+        /*
+                public enum SpellBehaviorTypes
+                {
+                    [Description("ProjectileSpell")]
+                    ProjectileSpell,
+                    [Description("AreaSpell")]
+                    AreaSpell,
+                    [Description("ChannelledAreaSpell")]
+                    ChannelledAreaSpell
+                }
+
+                private static SpellBehaviorTypes spellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
+
+
+                public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
+        */
+
         private static WeaponClass primaryWeapon = WeaponClass.Dagger;
         private static WeaponClass secondaryWeapon = WeaponClass.Dagger;
         private static OffHand offHandType = OffHand.DualWield;
-        //private static bool notUsingShield = true;
-
-        public enum SpellBehaviorTypes
-        {
-            [Description("ProjectileSpell")]
-            ProjectileSpell,
-            [Description("AreaSpell")]
-            AreaSpell,
-            [Description("AreaSpell")]
-            ChannelledAreaSpell
-        }
 
         /// <summary>Damage Scaling of Spell</summary>
         public enum DamageScaling
@@ -575,30 +608,9 @@ namespace PoESkillTree.SkillTreeFiles
             FullConversionGLCas,
         }
 
-        private static SpellBehaviorTypes spellBehaviorType = SpellBehaviorTypes.ProjectileSpell;
         private static DamageScaling dMScaling = DamageScaling.Ice;
         private static int numberOfPoisonStacks = 0;
 
-        /// <summary>Add Whispering Ice based calculations(only for Staff Primary)</summary>
-        /// <value>
-        ///   <c>true</c> if [applying whispering ice stats]; otherwise, <c>false</c>.</value>
-        public static bool ApplyWhisperingIceStats { get => applyWhisperingIceStats; set => applyWhisperingIceStats = value; }
-
-        /// <summary>  Quality 20 Level 20 Nightblade active for attack critical chance (Only for claws and daggers) </summary>
-        public static bool NightbladeActive { get => nightbladeActive; set => nightbladeActive = value; }
-
-        public static bool CalculateAcc { get => calculateAcc; set { calculateAcc = value; NotifyStaticPropertyChanged("CalculateAcc"); } }
-        public static bool CalculateHP { get => calculateHP; set { calculateHP = value; NotifyStaticPropertyChanged("CalculateHP"); } }
-        public static bool CalculateHybridHP { get => calculateHybridHP; set { calculateHybridHP = value; NotifyStaticPropertyChanged("CalculateHybridHP"); } }
-        public static bool CalculateCritsPerSec { get => calculateCritsPerSec; set { calculateCritsPerSec = value; NotifyStaticPropertyChanged("CalculateCritsPerSec"); } }
-        public static bool CalculateCritSpellMult { get => calculateCritSpellMult; set { calculateCritSpellMult = value; NotifyStaticPropertyChanged("CalculateCritSpellMult"); } }
-        public static bool LuckyCrits { get => luckyCrits; set { luckyCrits = value; NotifyStaticPropertyChanged("LuckyCrits"); } }
-        public static bool IncreasedCritActive { get => increasedCritActive; set { increasedCritActive = value; NotifyStaticPropertyChanged("IncreasedCritActive"); } }
-        public static int LevelPrecisionActive { get => levelPrecisionActive; set { levelPrecisionActive = value; NotifyStaticPropertyChanged("LevelPrecisionActive"); } }
-        public static float PrimaryATKSpeed { get => primaryATKSpeed; set { primaryATKSpeed = value; NotifyStaticPropertyChanged("PrimaryATKSpeed"); } }
-        public static float PrimaryCrit { get => primaryCrit; set { primaryCrit = value; NotifyStaticPropertyChanged("PrimaryCrit"); } }
-        public static float SecondaryATKSpeed { get => secondaryATKSpeed; set { secondaryATKSpeed = value; NotifyStaticPropertyChanged("SecondaryATKSpeed"); } }
-        public static float SecondaryCrit { get => secondaryCrit; set { secondaryCrit = value; NotifyStaticPropertyChanged("SecondaryCrit"); } }
         public static WeaponClass PrimaryWeapon
         {
             get => primaryWeapon;
@@ -640,8 +652,6 @@ namespace PoESkillTree.SkillTreeFiles
         }
 
         //public static bool NotUsingShield { get => SecondaryWeapon == Model.PseudoAttributes.OffHand.Shield; }
-
-        public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
         public static DamageScaling DMScaling { get => dMScaling; set { dMScaling = value; NotifyStaticPropertyChanged("DMScaling"); } }
         public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }
 
@@ -672,7 +682,7 @@ namespace PoESkillTree.SkillTreeFiles
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
-        public static JewelData JewelStorage;
+        public static JewelData JewelStorage = new JewelData();
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
@@ -745,12 +755,25 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        /*
-                /// <summary>
-                /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
-                /// </summary>
-                public static bool AutoTrackStats = true;
-        */
+
+        /// <summary>
+        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:true)
+        /// </summary>
+        private static bool autoTrackStats = true;
+
+        /// <summary>
+        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:true)
+        /// </summary>
+        public static bool AutoTrackStats
+        {
+            get { return autoTrackStats; }
+            set
+            {
+                autoTrackStats = value;
+                NotifyStaticPropertyChanged("AutoTrackStats");
+            }
+        }
+
 
 #if PoESkillTree_EnableItemInfluencedGenerator
         public static InventoryViewModel ItemInfoVal;
@@ -774,12 +797,12 @@ namespace PoESkillTree.SkillTreeFiles
         /// <summary>
         /// The dialog coordinator
         /// </summary>
-        private static IExtendedDialogCoordinator _dialogCoordinatorVal;
+        private static IExtendedDialogCoordinator? _dialogCoordinatorVal;
 
         /// <summary>
         /// The dialog coordinator
         /// </summary>
-        public static IExtendedDialogCoordinator SharedDialogCoordinator
+        public static IExtendedDialogCoordinator? SharedDialogCoordinator
         {
             get { return _dialogCoordinatorVal; }
             set

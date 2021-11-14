@@ -865,23 +865,27 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             if (TreePlusItemsMode.Value)
             {
                 var solver = new AdvancedSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
-                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);//, TreeInfo, TreePlusItemsMode.Value));
                 
                 return Task.FromResult<ISolver>(solver);
             }
             else
             {
                 var solver = new AdvancedSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
-                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);
-                //if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value); }
+                attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);//, TreeInfo, TreePlusItemsMode.Value));
+#if (PoESkillTree_DisableStatTracking == false)
+                if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value); }
+#endif
                 return Task.FromResult<ISolver>(solver);
             }
 #else
             var solver = new AdvancedSolver(Tree, new AdvancedSolverSettings(settings, TotalPoints,
                 CreateInitialAttributes(), attributeConstraints,
-                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));//, TreeInfo, TreePlusItemsMode.Value));
+                pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
 #endif
-            //if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, TreeInfo);}
+#if (PoESkillTree_DisableStatTracking == false)
+            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);}
+#endif
             return Task.FromResult<ISolver?>(solver);
         }
 
