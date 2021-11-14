@@ -134,18 +134,7 @@
         <Attribute Name="Minions deal #% increased Damage" />
         <Attribute Name="#% increased Damage"/>
     </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Total Chaos Spell Area of Effect Damage[Non-Tagged]" Group="Damage">
-        <Attribute Name="#% increased Chaos Damage" />
-        <Attribute Name="#% increased Area Damage" />
-        <Attribute Name="#% increased Spell Damage" />
-        <Attribute Name="#% increased Damage"/>
-    </PseudoAttribute>
-    <PseudoAttribute Name="#% increased Chaos Projectile Spell Damage[Non-Tagged]" Group="Damage">
-        <Attribute Name="#% increased Chaos Damage"/>
-        <Attribute Name="#% increased Damage"/>
-        <Attribute Name="#% increased Spell Damage" />
-        <Attribute Name="#% increased Projectile Damage" />
-    </PseudoAttribute>
+
     <PseudoAttribute Name="#% increased Fire Projectile Spell Damage[Non-Tagged]" Group="Damage">
         <Attribute Name="#% increased Fire Damage"/>
         <Attribute Name="#% increased Damage"/>
