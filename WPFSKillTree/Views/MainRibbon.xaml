@@ -292,7 +292,7 @@
                         <iconPacks:PackIconModern Kind="Settings" />
                     </fluent:MenuItem.Icon>
                     <fluent:MenuItem.Header>
-                        <l:Catalog Message="Tracked Stat Options(Not working at moment)" />
+                        <l:Catalog Message="Tracked Stat Options" />
                     </fluent:MenuItem.Header>
                     <fluent:MenuItem.ToolTip>
                         <fluent:ScreenTip>
@@ -300,7 +300,7 @@
                                 <l:Catalog Message="Tracked Stat Options" />
                             </fluent:ScreenTip.Title>
                             <fluent:ScreenTip.Text>
-                                <l:Catalog Message="Open the Pseudostat Tracking options." />
+                                <l:Catalog Message="Open the PseudoStat Tracking options." />
                             </fluent:ScreenTip.Text>
                         </fluent:ScreenTip>
                     </fluent:MenuItem.ToolTip>

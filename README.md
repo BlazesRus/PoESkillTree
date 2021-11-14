@@ -1,7 +1,7 @@
 # Fork of PoESkillTree [![Discord](https://b.thumbs.redditmedia.com/YzI6TxCJcacCZw1sx1Z5tyy6YskyNiA84hn4WfPXaRM.png)](https://discord.gg/sC7cUHV)
 from https://github.com/PoESkillTree/PoESkillTree
 
-A Passive Skill Tree and Character Planner for Path of Exile
+A Passive Skill Tree and Character Planner for Path of Exile(This product isn't affiliated with or endorsed by Grinding Gear Games in any way.)
 
 ![](https://github.com/EmmittJ/PoESkillTree/wiki/images/tree.png)
 

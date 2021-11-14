@@ -117,7 +117,7 @@ namespace PoESkillTree.TrackedStatViews
         /// <summary>
         /// INotifyPropertyChanged event that is called right after a property is changed.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Clears file, then Writes the text asynchronous into file (Based from https://stackoverflow.com/questions/11774827/writing-to-a-file-asynchronously)

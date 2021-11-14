@@ -8,6 +8,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UpdateDB", "UpdateDB\Update
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFSKillTree.Tests", "WPFSKillTree.Tests\WPFSKillTree.Tests.csproj", "{172BA462-EB78-47C4-A85A-677FBD1A6A89}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoESkillTree.Engine", "..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\PoESkillTree.Engine.csproj", "{955C501B-5B9E-41DE-AFD3-DEA490B44E58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,14 @@ Global
 		{172BA462-EB78-47C4-A85A-677FBD1A6A89}.Release|Any CPU.Build.0 = Release|Any CPU
 		{172BA462-EB78-47C4-A85A-677FBD1A6A89}.Release|x86.ActiveCfg = Release|Any CPU
 		{172BA462-EB78-47C4-A85A-677FBD1A6A89}.Release|x86.Build.0 = Release|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Debug|x86.Build.0 = Debug|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Release|x86.ActiveCfg = Release|Any CPU
+		{955C501B-5B9E-41DE-AFD3-DEA490B44E58}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

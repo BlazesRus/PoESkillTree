@@ -35,7 +35,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.7.2" />
     <PackageReference Include="ParallelExtensionsExtras" Version="1.2.0" />
-    <PackageReference Include="PoESkillTree.Engine" Version="0.3.5" />
     <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.8" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="System.Reactive" Version="4.4.1" />
@@ -53,12 +52,21 @@
     <None Update="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Computation.Builders.dll" Link="PoESkillTree.Engine.Computation.Builders.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Computation.Common.dll" Link="PoESkillTree.Engine.Computation.Common.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Computation.Core.dll" Link="PoESkillTree.Engine.Computation.Core.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Computation.Data.dll" Link="PoESkillTree.Engine.Computation.Data.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Computation.Parsing.dll" Link="PoESkillTree.Engine.Computation.Parsing.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.dll" Link="PoESkillTree.Engine.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.GameModel.dll" Link="PoESkillTree.Engine.GameModel.dll" />
+    <None Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\bin\Release\netstandard2.1\PoESkillTree.Engine.Utils.dll" Link="PoESkillTree.Engine.Utils.dll" />
     <None Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\**" />
+    <ProjectReference Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\PoESkillTree.Engine.csproj" />
     <Resource Include="logo.ico" />
   </ItemGroup>
 </Project>
