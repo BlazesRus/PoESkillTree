@@ -55,7 +55,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// Creates a new GraphNode representing the given skill tree nodes.
         /// </summary>
         public GraphNode(IEnumerable<ushort> nodes)
-        {
+        {//Seems to cause exception if mastery nodes are included in generator
             DistancesIndex = -1;
             _nodes = new List<ushort>(nodes);
             if (!_nodes.Any()) throw new ArgumentException("Node enumerable must not be empty", "nodes");

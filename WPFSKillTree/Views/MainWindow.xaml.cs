@@ -1761,6 +1761,10 @@ namespace PoESkillTree.Views
                                     ushort SkillBefore = node.Skill;
                                     var model = new MasteryEffectSelectionViewModel(node, Tree.SkilledNodes.Where(x => x.PassiveNodeType == PassiveNodeType.Mastery));
                                     await MasteryEffectSelectionAsync(model, new MasteryEffectSelectionView());
+#if DEBUG
+                                    if(node.Attributes.Count!=node.StatDescriptions.Length)
+                                        Console.WriteLine("Failed to Correct StatDescriptions to match Attributes.");
+#endif
                                 }
                                 //if (_prePath == null)//Exception Prevention measure for if select no options(also occurs sometimes when switch options)
                                 //{
