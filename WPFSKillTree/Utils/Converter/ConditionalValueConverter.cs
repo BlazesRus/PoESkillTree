@@ -1,3 +1,7 @@
+using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
 namespace PoESkillTree.Utils.Converter
 {
@@ -12,8 +16,8 @@ namespace PoESkillTree.Utils.Converter
 	  public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 	  {
 		bool isEnabled = (bool)values[0];
-		string valueIfEnabled = (string)values[1];
-		return if(isEnabled=="true")?valueIfEnabled:0;
+		double valueIfEnabled = (double)values[1];
+		return isEnabled==true?valueIfEnabled:0.0;
 	  }
 
 	  public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture) {
