@@ -7,14 +7,20 @@ namespace PoESkillTree.ViewModels
     /// </summary>
     public class PseudoTotal
     {
-        public string Text { get; }
-        public float Total { get; set; }
-        public bool Missing { get; set; }
+        //Stores the Display of the PseudoTotal
 
-        public PseudoTotal(string text)
+        private string text = "Not Calculated Yet";
+        public string Text
+        {
+            get => text;
+            set => text = value;
+        }
+        public float Total { get; set; }
+
+        public PseudoTotal(string text, float total)
         {
             Text = text;
-            Total = 0.0f;
+            Total = total;
         }
 
         public override string ToString()

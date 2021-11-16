@@ -9,8 +9,8 @@ namespace PoESkillTree.Utils.Converter
 	//Based https://newbedev.com/converter-with-multiple-parameters (for multiple parameters)
 	//Use
 	//<MultiBinding Converter="{StaticResource converter:ConditionalPercentageConverter}">
-	//  <Binding Path="isEnabledValueVariable" ElementName="ThisWindow"/>
-	//  <Binding Path="valueIfEnabledVariable" ElementName="ThisWindow"/>
+	//  <Binding Path="isEnabledValueVariable"/>
+	//  <Binding Path="valueIfEnabledVariable"/>
 	//</MultiBinding>
 	public class ConditionalValueConverter : IMultiValueConverter {
 	  public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)

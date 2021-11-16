@@ -18,8 +18,6 @@ namespace PoESkillTree.ViewModels
 
             var tb = new TextBlock { TextWrapping = TextWrapping.Wrap };
             var txt = new Run(attr.Text);
-            if (attr.Missing)
-                txt.Foreground = Brushes.Red;
 
             tb.Inlines.Add(txt);
 

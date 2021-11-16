@@ -402,7 +402,7 @@ namespace PoESkillTree.SkillTreeFiles
 
 #if (PoESkillTree_DisableStatTracking == false)
     /// <summary>
-    /// Derived from PseudoAttribute but without group info and with additional Total Value information(of only first stat)
+    /// Derived from PseudoAttribute with only the Attributes(Values and display stored separately)
     /// </summary>
     public class PseudoStat//Referring to as Stat instead of Attribute to reduce class conflicts
     {
@@ -477,24 +477,25 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        /// <summary>
-        /// Updates the value.
-        /// </summary>
-        /// <param name="selectedAttributes">The selected attributes.</param>
-        public void UpdateValue(Dictionary<string, List<float>> selectedAttributes, Dictionary<string, float> statTotals)
-        {
-            foreach(var element in this.Keys)
-            {
-                if(statTotals.ContainsKey(element))
-                    statTotals[element] = this[element].CalculateValue(selectedAttributes);
-                else
-                    statTotals.Add(element, this[element].CalculateValue(selectedAttributes));
-            }
-        }
+        ///// <summary>
+        ///// Updates the value.
+        ///// </summary>
+        ///// <param name="selectedAttributes">The selected attributes.</param>
+        //public void UpdateValue(Dictionary<string, List<float>> selectedAttributes, Dictionary<string, float> statTotals)
+        //{
+        //    foreach(var element in this.Keys)
+        //    {
+        //        if(statTotals.ContainsKey(element))
+        //            statTotals[element] = this[element].CalculateValue(selectedAttributes);
+        //        else
+        //            statTotals.Add(element, this[element].CalculateValue(selectedAttributes));
+        //    }
+        //}
 
         internal void Add(string name, PseudoAttribute item)
         {
-            throw new NotImplementedException();
+            PseudoStat newStat = new PseudoStat(item);
+            Add(name, newStat);
         }
     }
 #endif
@@ -686,7 +687,7 @@ namespace PoESkillTree.SkillTreeFiles
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
-        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        public static event EventHandler<PropertyChangedEventArgs>? StaticPropertyChanged;
         /// <summary>
         /// Static Property Event(http://10rem.net/blog/2011/11/29/wpf-45-binding-and-change-notification-for-static-properties)
         /// </summary>
