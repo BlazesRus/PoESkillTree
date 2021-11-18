@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Code Created by James Michael Armstrong (https://github.com/BlazesRus)
 // ***********************************************************************
 using PoESkillTree.Engine.GameModel;
@@ -670,14 +670,14 @@ namespace PoESkillTree.SkillTreeFiles
 
     public static class GlobalSettings
     {
-#if PoESkillTree_PreventPointSharing==false
-        public static Dictionary<string, int> points = new Dictionary<string, int>()
-        {
-            {"NormalUsed", 0},
-            {"NormalTotal", 22},
-            {"AscendancyUsed", 0},
-            {"AscendancyTotal", 8},
-        };
+#if PoESkillTree_UseStaticPointSharing
+//        public static Dictionary<string, int> points = new Dictionary<string, int>()
+//        {
+//            {"NormalUsed", 0},
+//            {"NormalTotal", 22},
+//            {"AscendancyUsed", 0},
+//            {"AscendancyTotal", 8},
+//        };
 #endif
 
         /// <summary>
@@ -814,5 +814,7 @@ namespace PoESkillTree.SkillTreeFiles
                 NotifyStaticPropertyChanged("SharedDialogCoordinator");
             }
         }
+
+        //To-Do Store Ascendancy ids inside dictionary or list and use for displaying build skill point total without including ascendancy node points
     }
 }

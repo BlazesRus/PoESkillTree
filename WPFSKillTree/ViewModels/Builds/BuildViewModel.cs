@@ -85,11 +85,10 @@ namespace PoESkillTree.ViewModels.Builds
         /// Gets a description of this build.
         /// </summary>
         public string Description =>
-#if PoESkillTree_PreventPointSharing
-            string.Format(L10n.Plural("{0}, {1} point used", "{0}, {1} points used", PointsUsed),
-                ClassName, PointsUsed);
+#if PoESkillTree_UseStaticPointSharing
+    ClassName +" "+ GlobalSettings.points["NormalUsed"]+"/"+ GlobalSettings.points["NormalTotal"]+" points used.";//+ GlobalSettings.points["AscendancyUsed"]+"/8 Ascendancy points used";
 #else//ClassName, NormalUsedPoints.Text/NormalTotalPoints.Text points used+AscendancyUsedPoints.Text/8 Ascendancy
-            ClassName +" "+ GlobalSettings.points["NormalUsed"]+"/"+ GlobalSettings.points["NormalTotal"]+" points used+"+ GlobalSettings.points["AscendancyUsed"]+"/8 Ascendancy points used";
+            string.Format(L10n.Plural("{0}, {1} point(including ascendancy points) used.", "{0}, {1} points(including ascendancy points) used", PointsUsed), ClassName, PointsUsed);
 #endif
 
         /// <param name="poEBuild">The wrapped build.</param>
@@ -141,7 +140,7 @@ namespace PoESkillTree.ViewModels.Builds
 
             if (data.IsValid)
             {
-                PointsUsed = (uint)data.SkilledNodesIds.Count;
+                PointsUsed = (uint)data.SkilledNodesIds.Count;//To-Do: switch to only count NonAscendancy points
                 CharacterClass = data.CharacterClass;
                 AscendancyClass = SkillTree.AscendancyClasses.GetAscendancyClassName(data.CharacterClass, data.AscendancyClassId);
             }
