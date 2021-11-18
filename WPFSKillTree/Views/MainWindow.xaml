@@ -118,23 +118,29 @@
                     BorderThickness="1 0 0 0"
                     Visibility="{Binding PersistentData.Options.BuildsBarOpened, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
+                    <Grid.Resources>
+                        <converter:BooleanToStringConverter x:Key="BooleanToStringConverter" />
+                        <converter:ConditionalValueConverter x:Key="ConditionalValueConverter" />
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" MinHeight="440"/><!--Build Directory-->
                         <RowDefinition Height="Auto" MinHeight="1"/><!--Label for Tracked PseudoStats-->
-                        <RowDefinition Height="Auto" MinHeight="50" /><!--Tracked PseudoStats Display-->
+                        <!--Tracked PseudoStats Display-->
+                        <RowDefinition Height="Auto">
+                            <RowDefinition.MinHeight>
+                                <MultiBinding Converter="{StaticResource ConditionalValueConverter}">
+                                  <Binding Path="EnableTrackedStatDisplay"/>
+                                  <Binding Path="PseudoStatRowMinHeight"/>
+                                </MultiBinding>
+                            </RowDefinition.MinHeight>
+                        </RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Grid.Resources>
-                        <converter:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
-                        <converter:EnumToBoolConverter x:Key="EnumToBoolConverter" />
-                        <converter:InvertBoolConverter x:Key="InvertBoolConverter" />
-                        <converter:FlagsToBoolConverter x:Key="FlagsToBoolConverter" />
-                    </Grid.Resources>
-                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0"/><!--Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
-                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left"/>
-                    <ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
+                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/>
+                    <ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="{Binding EnableTrackedStatDisplay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ContentControl

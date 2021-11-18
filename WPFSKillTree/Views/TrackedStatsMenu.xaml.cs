@@ -315,7 +315,7 @@ namespace PoESkillTree.TrackedStatViews
                         {
                             if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
                             {
-                                GlobalSettings.TrackedStats.Add(item.Name, item);
+                                GlobalSettings.TrackedStats.Add(item.Name, new PseudoStat(item));
                             }
                         }
                     }

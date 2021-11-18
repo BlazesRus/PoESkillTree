@@ -284,7 +284,12 @@ namespace PoESkillTree.Views
         }
 
 #if (PoESkillTree_DisableStatTracking==false)
-        ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
+        public ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
+        public List<PseudoTotal> TrackedStatDisplayList
+        {
+            get => trackedStatDisplay.Values.ToList();
+        }
+
         private ContextMenu _trackingContextMenu;
 
         /// <summary>
@@ -441,6 +446,16 @@ namespace PoESkillTree.Views
         {
             get => PseudoCalcGlobals.EnableTrackedStatDisplay;
             set => PseudoCalcGlobals.EnableTrackedStatDisplay = value;
+        }
+        
+        
+        private double pseudoStatRowMinHeight = 150.0;
+        /// <summary>
+        /// Row MinHeight for PseudoStat if enabled
+        /// </summary>
+        public double PseudoStatRowMinHeight
+        {
+            get => pseudoStatRowMinHeight;
         }
 #endif
 
@@ -635,25 +650,19 @@ namespace PoESkillTree.Views
 #if (PoESkillTree_DisableStatTracking==false)
         private void RemoveTrackedAttr(object sender, RoutedEventArgs e)
         {
-            //string SelectedAttrName;
-            //int index;
-            ////var trackedAttrList = new List<string>();
-            //foreach (var o in trackedAttr.SelectedItems.Cast<Attribute>())
-            //{
-            //    SelectedAttrName = o.ToString();
-            //    index = GlobalSettings.TrackedStats.IndexOf(SelectedAttrName);
-            //    if (index>-1)//Functionality of removing individual tracked stat
-            //    {
-            //        GlobalSettings.TrackedStats.RemoveAt(index);
-            //    }
-            //    //else
-            //    //    trackedAttrList.Add(SelectedAttrName);
-            //}
-            //if (trackedAttrList.Count > 0)
-            //{
-            //    _trackedAttrGroups.RemoveFromGroup(trackedAttrList.ToArray());
-            //    RefreshAttributeLists();
-            //}
+            for (var i = 0; i < cmDeleteGroup.Items.Count; i++)
+            {
+                if (((MenuItem)cmDeleteGroup.Items[i]).Header.ToString()!.ToLower().Equals(((MenuItem)sender).Header.ToString()!))
+                {
+                    cmDeleteGroup.Items.RemoveAt(i);
+                    if (cmDeleteGroup.Items.Count == 0)
+                        cmDeleteGroup.IsEnabled = false;
+                    break;
+                }
+            }
+
+            _attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString()!);
+            RefreshAttributeLists();
         }
 #endif
 
@@ -802,13 +811,10 @@ namespace PoESkillTree.Views
 #if (PoESkillTree_DisableStatTracking==false)
             var cmRemoveTrackedAttr = new MenuItem { Header = L10n.Message("Remove PseudoAttribute from Tracking") };
             cmRemoveTrackedAttr.Click += RemoveTrackedAttr;
+
             _trackingContextMenu = new ContextMenu();
             _trackingContextMenu.Items.Add(cmRemoveTrackedAttr);
-#if (PoESkillTree_UseSwordfishDictionary)
-            trackedAttr.ItemsSource = trackedStatDisplay.CollectionView;
-#else
-            trackedAttr.ItemsSource = trackedStatDisplay;
-#endif
+            trackedAttr.ItemsSource = TrackedStatDisplayList;
             trackedAttr.SelectionMode = SelectionMode.Extended;
             trackedAttr.ContextMenu = _trackingContextMenu;
 #endif
@@ -1450,24 +1456,24 @@ namespace PoESkillTree.Views
                 _attiblist.Add(a);
             }
 
-#if (PoESkillTree_DisableStatTracking==false)
-            if (GlobalSettings.TrackedStats.Count != 0)
+#if (PoESkillTree_DisableStatTracking == false)
+            float statTotal;
+            string displayTotal;
+            foreach (var item in GlobalSettings.TrackedStats)
             {
-                GlobalSettings.TrackedStats.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
-                foreach (var item in Tree.SelectedPseudoTotal)
+                statTotal = item.Value.CalculateValue(Tree.SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
+                if (Tree.SelectedPseudoTotal.ContainsKey(item.Key))
+                    Tree.SelectedPseudoTotal[item.Key] = statTotal;
+                else
+                    Tree.SelectedPseudoTotal.Add(item.Key, statTotal);
+                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statTotal);
+                if (trackedStatDisplay.ContainsKey(item.Key))//Update Tracked Value if already in Display
                 {
-                    var a = new PseudoTotal(InsertNumbersInTrackedDisplay(item));
-                    if(GlobalSettings.TrackedStats.ContainsKey(item.Key))
-                    {
-                        if (trackedStatDisplay.ContainsKey(item.Key))//Update Tracked Value if already in Display
-                            trackedStatDisplay[item.Key] = a;
-                        else
-                            trackedStatDisplay.Add(item.Key, a);
-                    }
-                    else if(trackedStatDisplay.ContainsKey(item.Key))//Remove from Displayed stats if not tracked
-                        trackedStatDisplay.Remove(item.Key);
-                    
+                    trackedStatDisplay[item.Key].Text = displayTotal;
+                    trackedStatDisplay[item.Key].Total = statTotal;
                 }
+                else
+                    trackedStatDisplay.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
             }
 #endif
 
@@ -1499,19 +1505,19 @@ namespace PoESkillTree.Views
 
         public void UpdatePoints()
         {
-#if PoESkillTree_PreventPointSharing
+//#if PoESkillTree_PreventPointSharing
             var points = Tree.GetPointCount();
             NormalUsedPoints.Text = points["NormalUsed"].ToString();
             NormalTotalPoints.Text = points["NormalTotal"].ToString();
             AscendancyUsedPoints.Text = points["AscendancyUsed"].ToString();
             AscendancyTotalPoints.Text = points["AscendancyTotal"].ToString();
-#else
-            GlobalSettings.points = Tree.GetPointCount();//Storing inside Static Settings to share with BuildView Model for more accurate build description
-            NormalUsedPoints.Text = GlobalSettings.points["NormalUsed"].ToString();
-            NormalTotalPoints.Text = GlobalSettings.points["NormalTotal"].ToString();
-            AscendancyUsedPoints.Text = GlobalSettings.points["AscendancyUsed"].ToString();
-            AscendancyTotalPoints.Text = GlobalSettings.points["AscendancyTotal"].ToString();
-#endif
+//#else
+//            GlobalSettings.points = Tree.GetPointCount();//Storing inside Static Settings to share with BuildView Model for more accurate build description
+//            NormalUsedPoints.Text = GlobalSettings.points["NormalUsed"].ToString();
+//            NormalTotalPoints.Text = GlobalSettings.points["NormalTotal"].ToString();
+//            AscendancyUsedPoints.Text = GlobalSettings.points["AscendancyUsed"].ToString();
+//            AscendancyTotalPoints.Text = GlobalSettings.points["AscendancyTotal"].ToString();
+//#endif
         }
 
         private string InsertNumbersInAttributes(KeyValuePair<string, List<float>> attrib)
@@ -1524,11 +1530,17 @@ namespace PoESkillTree.Views
             return s;
         }
 
-        private string InsertNumbersInTrackedDisplay(KeyValuePair<string, float> trackedTotal)
+        //private string InsertNumbersInTrackedDisplay(KeyValuePair<string, float> trackedTotal)
+        //{
+        //    var s = trackedTotal.Key;
+        //    s = _backreplace.Replace(s, trackedTotal.Value + "", 1);
+        //    return s;
+        //}
+
+        private string InsertNumbersInTrackedDisplay(string statDisplay, float statTotal)
         {
-            var s = trackedTotal.Key;
-            s = _backreplace.Replace(s, trackedTotal.Value + "", 1);
-            return s;
+            statDisplay = _backreplace.Replace(statDisplay, statTotal + "", 1);
+            return statDisplay;
         }
 
         private bool CheckIfAttributeMatchesFilter(Attribute a)
@@ -1758,7 +1770,6 @@ namespace PoESkillTree.Views
                             {
                                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
                                 {
-                                    ushort SkillBefore = node.Skill;
                                     var model = new MasteryEffectSelectionViewModel(node, Tree.SkilledNodes.Where(x => x.PassiveNodeType == PassiveNodeType.Mastery));
                                     await MasteryEffectSelectionAsync(model, new MasteryEffectSelectionView());
 #if DEBUG

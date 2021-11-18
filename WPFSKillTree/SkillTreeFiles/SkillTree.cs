@@ -183,7 +183,6 @@ namespace PoESkillTree.SkillTreeFiles
         private static bool _initialized;
 
         public Dictionary<string, float> SelectedPseudoTotal;
-        //public Dictionary<string, float> TrackedStatTotal;
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
         //public Dictionary<string, float> SelectedPseudoTotalWithItems;
         //public Dictionary<string, float> TrackedStatTotalWithItems;
@@ -195,7 +194,6 @@ namespace PoESkillTree.SkillTreeFiles
 
             SkilledNodes.CollectionChanged += SkilledNodes_CollectionChanged;
             SelectedPseudoTotal = new Dictionary<string, float>();
-            //TrackedStatTotal = new Dictionary<string, float>();
         }
 
         private void SkilledNodes_CollectionChanged(object sender, CollectionChangedEventArgs<PassiveNodeViewModel> args)
@@ -386,6 +384,7 @@ namespace PoESkillTree.SkillTreeFiles
             {"AscendancyTotal", 8},
         };
 #endif
+
         /// <summary>
         /// This will get all skill points related to the tree both Normal and Ascendancy
         /// </summary>
