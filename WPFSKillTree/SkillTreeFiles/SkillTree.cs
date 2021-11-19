@@ -408,7 +408,7 @@ namespace PoESkillTree.SkillTreeFiles
                         GlobalSettings.points["NormalTotal"] = bandits.Choice == Bandit.None? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
 
 #else
-#if PoESkillTree_DontUseTreePointSharing==false
+#if PoESkillTree_DontUseTreePointSharing == false
             points["NormalUsed"] = 0;
             points["AscendancyUsed"] = 0;
             points["NormalTotal"] = bandits.Choice == Bandit.None ? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <RootNamespace>PoESkillTree</RootNamespace>
@@ -17,6 +17,8 @@
     <Product>PoESkillTree - BlazesRus Varient</Product>
     <ProductUrl>https://github.com/BlazesRus/PoESkillTree</ProductUrl>
     <VersionPrefix>3.0.3</VersionPrefix>
+    <PackageId>PoESkillTree_BlazesRus</PackageId>
+    <PackageProjectUrl>https://github.com/BlazesRus/PoESkillTree</PackageProjectUrl>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
     <Exec Command="$(ProjectDir)build-locale.bat" />

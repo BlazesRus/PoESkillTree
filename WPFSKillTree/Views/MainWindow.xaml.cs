@@ -1,4 +1,4 @@
-﻿using EnumsNET;
+using EnumsNET;
 using Fluent;
 using MahApps.Metro.Controls;
 using NLog;
@@ -1490,19 +1490,6 @@ namespace PoESkillTree.Views
             }
         }
 
-#if PoESkillTree_EnableIntuitiveLeapJumping
-        /// <summary>
-        /// Apply removal of Intuitive Leap supported jewels
-        /// </summary>
-        public void IntuitiveLeapCheckup()
-        {
-            if(GlobalSettings.RemovingIntLeapJewels!=0)
-            {
-
-            }
-        }
-#endif
-
         public void UpdatePoints()
         {
 //#if PoESkillTree_PreventPointSharing
@@ -1625,44 +1612,6 @@ namespace PoESkillTree.Views
             _lastMouseButton = e.ChangedButton;
         }
 
-#if PoESkillTree_EnableIntuitiveLeapJumping
-        static private void AddLeapTagToNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-        {
-            List<float> BlankList = new List<float>();
-            int attributeSize = CurrentNode.Attributes.Count;
-            if (!CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode) && attributeSize != 0)
-            {
-                CurrentNode.Attributes.Add(GlobalSettings.LeapedNode, BlankList);
-            }
-        }
-
-        static private void RemoveLeapTagFromNode(PoESkillTree.SkillTreeFiles.SkillNode CurrentNode)
-        {
-            if (CurrentNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-            {
-                CurrentNode.Attributes.Remove(GlobalSettings.LeapedNode);
-            }
-        }
-
-        private void NormalRefund(PoESkillTree.SkillTreeFiles.SkillNode node)
-        {
-            Tree.ForceRefundNode(node);
-            _prePath = Tree.GetShortestPathTo(node, Tree.SkilledNodes);
-            Tree.DrawPath(_prePath);
-        }
-
-        private void NormalNodeClick(PoESkillTree.SkillTreeFiles.SkillNode node)
-        {
-            if (_prePath != null)
-            {
-                Tree.AllocateSkillNodes(_prePath);
-                _toRemove = Tree.ForceRefundNodePreview(node);
-                if (_toRemove != null)
-                    Tree.DrawRefundPreview(_toRemove);
-            }
-        }
-#endif
-
         /// <summary>
         /// Zbs the skill tree background click.
         /// </summary>
@@ -1709,47 +1658,12 @@ namespace PoESkillTree.Views
                                 MasteryDefinitions.SetMasteryLabel(node);
                                 node.ForceChangeSkill(node.Id);
                             }
-#if PoESkillTree_EnableIntuitiveLeapJumping
-                            else if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                            {
-                                if (NonLeapedNeighborIsConnected)
-                                {
-                                    NormalRefund(node);
-                                }
-                                else
-                                {
-                                    Tree.SkilledNodes.Remove(node);
-                                }
-                                RemoveLeapTagFromNode(node);
-                            }
-                            else
-                            {
-                                NormalRefund(node);
-                            }
-#else
-                            //else
-                            //{
                             Tree.ForceRefundNode(node);
                             _prePath = Tree.GetShortestPathTo(node);
                             Tree.DrawPath(_prePath);
-                            //}
-#endif
                         }
                         else if (_prePath != null)
                         {
-#if PoESkillTree_EnableIntuitiveLeapJumping
-                            if (NonLeapedNeighborIsConnected)
-                            {
-                                NormalNodeClick(node);
-                                //Remove Leaping Tag from node if now connected in to tree
-                                if (node.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                                {
-                                    foreach (var skillNode in node.Neighbor)//Checking for tree connection
-                                    {
-                                        if (Tree.SkilledNodes.Contains(skillNode) && skillNode.Attributes.ContainsKey(GlobalSettings.LeapedNode))
-                                        {
-                                            RemoveLeapTagFromNode(skillNode);
-                                        }
                                     }
                                 }
                             }
@@ -1764,8 +1678,6 @@ namespace PoESkillTree.Views
                                 {
                                     NormalNodeClick(node);
                                 }
-                            }
-#endif
                             if (node.PassiveNodeType == PassiveNodeType.Mastery)
                             {
                                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
