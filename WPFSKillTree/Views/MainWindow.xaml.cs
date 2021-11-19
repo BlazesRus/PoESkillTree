@@ -1,4 +1,4 @@
-using EnumsNET;
+﻿using EnumsNET;
 using Fluent;
 using MahApps.Metro.Controls;
 using NLog;
@@ -61,10 +61,11 @@ using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 //Not sure which observable dictionary to use
 #if (PoESkillTree_UseSwordfishDictionary)
 using Swordfish.NET.Collections;//Swordfish.NET.CollectionsV3 package(https://github.com/stewienj/SwordfishCollections)
-#else
+#elif (PoESkillTree_UseIXDictionary)
 using IX.Observable;//IX.Observable package(https://github.com/adimosh/IX.Framework/)
 #endif
 #endif
+
 
 namespace PoESkillTree.Views
 {
@@ -177,6 +178,7 @@ namespace PoESkillTree.Views
                 SetProperty(ref _tree!, value);
             }
         }
+
         private async Task<SkillTree> CreateSkillTreeAsync(ProgressDialogController controller,
             AssetLoader? assetLoader = null)
         {
@@ -283,11 +285,16 @@ namespace PoESkillTree.Views
             private set => SetValue(TitleBarProperty, value);
         }
 
-#if (PoESkillTree_DisableStatTracking==false)
-        public ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
-        public List<PseudoTotal> TrackedStatDisplayList
+#if (PoESkillTree_DisableStatTracking == false)
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+        public ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+        public ObservableKeyedPseudoStat trackedStatDisplay
+#else
+        public ObservableDictionary<string, PseudoTotal> trackedStatDisplay
+#endif
         {
-            get => trackedStatDisplay.Values.ToList();
+            get => Tree.SelectedPseudoTotal;
         }
 
         private ContextMenu _trackingContextMenu;
@@ -548,8 +555,8 @@ namespace PoESkillTree.Views
 
         private void UpdateTrackedStatDisplay()
         {
-#if (PoESkillTree_DisableStatTracking==false)
-#if (PoESkillTree_UseSwordfishDictionary==false)
+#if PoESkillTree_DisableStatTracking==false
+#if PoESkillTree_UseIXDictionary
             trackedStatDisplay.RefreshViewers();
 #endif
 #endif
@@ -738,6 +745,12 @@ namespace PoESkillTree.Views
             Tree = await CreateSkillTreeAsync(controller);
             InitializeTreeDependentUI();
             Log.Info($"Tree UI initialized after {stopwatch.ElapsedMilliseconds} ms");
+#if (PoESkillTree_DisableStatTracking==false)
+            trackedAttr.ItemsSource = trackedStatDisplay;
+            trackedAttr.SelectionMode = SelectionMode.Extended;
+            trackedAttr.ContextMenu = _trackingContextMenu;
+            Log.Info($"TrackedStats initialized after {stopwatch.ElapsedMilliseconds} ms");
+#endif
 
             controller.SetMessage(L10n.Message("Initializing window ..."));
             controller.SetIndeterminate();
@@ -814,9 +827,7 @@ namespace PoESkillTree.Views
 
             _trackingContextMenu = new ContextMenu();
             _trackingContextMenu.Items.Add(cmRemoveTrackedAttr);
-            trackedAttr.ItemsSource = TrackedStatDisplayList;
-            trackedAttr.SelectionMode = SelectionMode.Extended;
-            trackedAttr.ContextMenu = _trackingContextMenu;
+            //Wait until initialize Tree to Set TrackedStats
 #endif
             cbCharType.ItemsSource = Enums.GetValues<CharacterClass>();
             cbAscType.SelectedIndex = 0;
@@ -1411,10 +1422,11 @@ namespace PoESkillTree.Views
         public void UpdateUI()
         {
             UpdateAttributeList();
+            if(Tree!=null)
+                Tree.UpdateTrackedStatCalculation();
             RefreshAttributeLists();
             UpdateClass();
             UpdatePoints();
-            //IntuitiveLeapCheckup();
         }
 
         public void UpdateClass()
@@ -1456,27 +1468,6 @@ namespace PoESkillTree.Views
                 _attiblist.Add(a);
             }
 
-#if (PoESkillTree_DisableStatTracking == false)
-            float statTotal;
-            string displayTotal;
-            foreach (var item in GlobalSettings.TrackedStats)
-            {
-                statTotal = item.Value.CalculateValue(Tree.SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
-                if (Tree.SelectedPseudoTotal.ContainsKey(item.Key))
-                    Tree.SelectedPseudoTotal[item.Key] = statTotal;
-                else
-                    Tree.SelectedPseudoTotal.Add(item.Key, statTotal);
-                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statTotal);
-                if (trackedStatDisplay.ContainsKey(item.Key))//Update Tracked Value if already in Display
-                {
-                    trackedStatDisplay[item.Key].Text = displayTotal;
-                    trackedStatDisplay[item.Key].Total = statTotal;
-                }
-                else
-                    trackedStatDisplay.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
-            }
-#endif
-
             if (copy != null)
             {
                 foreach (var item in copy)
@@ -1515,19 +1506,6 @@ namespace PoESkillTree.Views
                 s = _backreplace.Replace(s, f + "", 1);
             }
             return s;
-        }
-
-        //private string InsertNumbersInTrackedDisplay(KeyValuePair<string, float> trackedTotal)
-        //{
-        //    var s = trackedTotal.Key;
-        //    s = _backreplace.Replace(s, trackedTotal.Value + "", 1);
-        //    return s;
-        //}
-
-        private string InsertNumbersInTrackedDisplay(string statDisplay, float statTotal)
-        {
-            statDisplay = _backreplace.Replace(statDisplay, statTotal + "", 1);
-            return statDisplay;
         }
 
         private bool CheckIfAttributeMatchesFilter(Attribute a)
@@ -1664,20 +1642,6 @@ namespace PoESkillTree.Views
                         }
                         else if (_prePath != null)
                         {
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (node.Attributes.ContainsKey(GlobalSettings.FakeIntuitiveLeapSupportAttribute))
-                                {
-                                    Tree.SkilledNodes.Add(node);
-                                    AddLeapTagToNode(node);
-                                }
-                                else
-                                {
-                                    NormalNodeClick(node);
-                                }
                             if (node.PassiveNodeType == PassiveNodeType.Mastery)
                             {
                                 if (Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))

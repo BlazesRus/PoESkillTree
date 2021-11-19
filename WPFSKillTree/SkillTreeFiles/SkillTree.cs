@@ -12,6 +12,7 @@ using PoESkillTree.Utils.UrlProcessing;
 using PoESkillTree.Utils.UrlProcessing.Decoders;
 using PoESkillTree.Utils.UrlProcessing.Encoders;
 using PoESkillTree.Utils.Wpf;
+using PoESkillTree.ViewModels;
 using PoESkillTree.ViewModels.PassiveTree;
 using System;
 using System.Collections.Generic;
@@ -182,7 +183,13 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static bool _initialized;
 
-        public Dictionary<string, float> SelectedPseudoTotal;
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+        public ConcurrentObservableDictionary<string, PseudoTotal> SelectedPseudoTotal;
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+        public ObservableKeyedPseudoStat SelectedPseudoTotal;
+#else
+        public ObservableDictionary<string, PseudoTotal> SelectedPseudoTotal;
+#endif
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
         //public Dictionary<string, float> SelectedPseudoTotalWithItems;
         //public Dictionary<string, float> TrackedStatTotalWithItems;
@@ -193,7 +200,11 @@ namespace PoESkillTree.SkillTreeFiles
             _persistentData = persistentData;
 
             SkilledNodes.CollectionChanged += SkilledNodes_CollectionChanged;
-            SelectedPseudoTotal = new Dictionary<string, float>();
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+            SelectedPseudoTotal = = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+            SelectedPseudoTotal = new ObservableKeyedPseudoStat();
+#endif
         }
 
         private void SkilledNodes_CollectionChanged(object sender, CollectionChangedEventArgs<PassiveNodeViewModel> args)
@@ -543,6 +554,39 @@ namespace PoESkillTree.SkillTreeFiles
             }
 #endif
             return temp;
+        }
+
+        private string InsertNumbersInTrackedDisplay(string statDisplay, float statTotal)
+        {
+            statDisplay = GlobalSettings._backreplace.Replace(statDisplay, statTotal + "", 1);
+            return statDisplay;
+        }
+        public void UpdateTrackedStatCalculation()
+        {
+#if PoESkillTree_DisableStatTracking == false
+            float statTotal;
+            string displayTotal;
+            foreach (var item in GlobalSettings.TrackedStats)
+            {
+                statTotal = item.Value.CalculateValue(SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
+                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statTotal);
+#if PoeSkillTree_DontUseKeyedTrackedStats==false
+                if (SelectedPseudoTotal.Contains(item.Key))//Update Tracked Value if already in Display
+#else
+                if (SelectedPseudoTotal.ContainsKey(item.Key))//Update Tracked Value if already in Display
+#endif
+                {
+                    SelectedPseudoTotal[item.Key].Text = displayTotal;
+                    SelectedPseudoTotal[item.Key].Total = statTotal;
+                }
+                else
+#if PoeSkillTree_DontUseKeyedTrackedStats == false
+                    SelectedPseudoTotal.Add(new PseudoTotal(displayTotal, statTotal, item.Key));
+#else
+                    SelectedPseudoTotal.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
+#endif
+            }
+#endif
         }
 
         private static Dictionary<string, List<float>> GetAttributesWithoutImplicit(

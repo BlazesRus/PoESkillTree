@@ -775,6 +775,7 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
+        public static readonly Regex _backreplace = new Regex("#");
 
 #if PoESkillTree_EnableItemInfluencedGenerator
         public static InventoryViewModel ItemInfoVal;

@@ -7,8 +7,10 @@ namespace PoESkillTree.ViewModels
     /// </summary>
     public class PseudoTotal
     {
+#if PoESkillTree_UseSwordfishDictionary==false && PoESkillTree_UseIXDictionary == false && PoeSkillTree_DontUseKeyedTrackedStats==false
+        public string Key;
+#endif
         //Stores the Display of the PseudoTotal
-
         private string text = "Not Calculated Yet";
         public string Text
         {
@@ -17,8 +19,14 @@ namespace PoESkillTree.ViewModels
         }
         public float Total { get; set; }
 
+#if PoESkillTree_UseSwordfishDictionary==false && PoESkillTree_UseIXDictionary == false && PoeSkillTree_DontUseKeyedTrackedStats==false
+        public PseudoTotal(string text, float total, string keyVal)
+        {
+            Key = keyVal;
+#else
         public PseudoTotal(string text, float total)
         {
+#endif
             Text = text;
             Total = total;
         }
