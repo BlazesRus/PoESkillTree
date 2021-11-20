@@ -143,18 +143,15 @@
                     <!--<ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="{Binding EnableTrackedStatDisplay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <ContentControl
-                                    Content="{Binding Converter={StaticResource trackedStatToTextblockConverter}}" />
+                                <ContentControl Content="{Binding Converter={StaticResource trackedStatToTextblockConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-                        <ListBox.GroupStyle>
-                            <GroupStyle ContainerStyle="{StaticResource ContainerStyleIsExpanded}" />
-                        </ListBox.GroupStyle>
                     </ListBox>-->
-                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"  Visibility="{Binding EnableTrackedStatDisplay}" IsEnabled="{Binding EnableTrackedStatDisplay}" SelectionMode="Extended">
+                    <!--GroupStyle Breaks the display of TrackedAttributes-->
+                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"  IsEnabled="{Binding EnableTrackedStatDisplay}" SelectionMode="Extended">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0" Visibility="{Binding EnableTrackedStatDisplay}"/>
+                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0"/>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

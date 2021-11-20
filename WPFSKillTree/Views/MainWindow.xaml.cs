@@ -1,4 +1,4 @@
-﻿using EnumsNET;
+using EnumsNET;
 using Fluent;
 using MahApps.Metro.Controls;
 using NLog;
