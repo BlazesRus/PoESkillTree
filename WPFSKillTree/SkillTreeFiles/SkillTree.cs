@@ -184,12 +184,26 @@ namespace PoESkillTree.SkillTreeFiles
         private static bool _initialized;
 
 #if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
-        public ConcurrentObservableDictionary<string, PseudoTotal> SelectedPseudoTotal;
+        public ConcurrentObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
 #elif PoeSkillTree_DontUseKeyedTrackedStats==false
-        public ObservableKeyedPseudoStat SelectedPseudoTotal;
+        public ObservableKeyedPseudoStat selectedPseudoTotal;
 #else
-        public ObservableDictionary<string, PseudoTotal> SelectedPseudoTotal;
+        public ObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
 #endif
+
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+        public ConcurrentObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+        public ObservableKeyedPseudoStat SelectedPseudoTotal
+#else
+        public ObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
+#endif
+        {
+            get => selectedPseudoTotal;
+            set => SetProperty(ref selectedPseudoTotal, value);
+        }
+
+
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
         //public Dictionary<string, float> SelectedPseudoTotalWithItems;
         //public Dictionary<string, float> TrackedStatTotalWithItems;
@@ -545,14 +559,6 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-#if (PoESkillTree_DisableStatTracking == false)
-            //Perform PseudoCalc as needed
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-
-                //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            }
-#endif
             return temp;
         }
 

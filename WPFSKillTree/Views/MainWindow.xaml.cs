@@ -286,16 +286,23 @@ namespace PoESkillTree.Views
         }
 
 #if (PoESkillTree_DisableStatTracking == false)
-#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
-        public ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay
-#elif PoeSkillTree_DontUseKeyedTrackedStats==false
-        public ObservableKeyedPseudoStat trackedStatDisplay
-#else
-        public ObservableDictionary<string, PseudoTotal> trackedStatDisplay
-#endif
-        {
-            get => Tree.SelectedPseudoTotal;
-        }
+//#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+//        public ConcurrentObservableDictionary<string, PseudoTotal> trackedStatDisplay
+//#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+//        public ObservableKeyedPseudoStat trackedStatDisplay
+//#else
+//        public ObservableDictionary<string, PseudoTotal> trackedStatDisplay
+//#endif
+//        {
+//            get => Tree.SelectedPseudoTotal;
+//            set
+//            {
+//                if (Tree.SelectedPseudoTotal != value)
+//                {
+//                    SetProperty(ref Tree.selectedPseudoTotal, value);
+//                }
+//            }
+//        }
 
         private ContextMenu _trackingContextMenu;
 
@@ -746,8 +753,8 @@ namespace PoESkillTree.Views
             InitializeTreeDependentUI();
             Log.Info($"Tree UI initialized after {stopwatch.ElapsedMilliseconds} ms");
 #if (PoESkillTree_DisableStatTracking==false)
-            trackedAttr.ItemsSource = trackedStatDisplay;
-            trackedAttr.SelectionMode = SelectionMode.Extended;
+            //trackedAttr.ItemsSource = trackedStatDisplay;//Binding inside the xml instead
+            //trackedAttr.SelectionMode = SelectionMode.Extended;//Selected inside xml
             trackedAttr.ContextMenu = _trackingContextMenu;
             Log.Info($"TrackedStats initialized after {stopwatch.ElapsedMilliseconds} ms");
 #endif
@@ -1422,8 +1429,7 @@ namespace PoESkillTree.Views
         public void UpdateUI()
         {
             UpdateAttributeList();
-            if(Tree!=null)
-                Tree.UpdateTrackedStatCalculation();
+            Tree.UpdateTrackedStatCalculation();
             RefreshAttributeLists();
             UpdateClass();
             UpdatePoints();
@@ -1578,6 +1584,7 @@ namespace PoESkillTree.Views
         {
             if (cbAttributesFilterRegEx.IsChecked == true && !RegexTools.IsValidRegex(tbAttributesFilter.Text)) return;
             UpdateAttributeList();
+            Tree.UpdateTrackedStatCalculation();
             RefreshAttributeLists();
         }
 

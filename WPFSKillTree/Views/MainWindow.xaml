@@ -140,7 +140,7 @@
                     </Grid.ColumnDefinitions>
                     <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
                     <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/>
-                    <ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="{Binding EnableTrackedStatDisplay}">
+                    <!--<ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="{Binding EnableTrackedStatDisplay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ContentControl
@@ -150,7 +150,15 @@
                         <ListBox.GroupStyle>
                             <GroupStyle ContainerStyle="{StaticResource ContainerStyleIsExpanded}" />
                         </ListBox.GroupStyle>
+                    </ListBox>-->
+                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"  Visibility="{Binding EnableTrackedStatDisplay}" IsEnabled="{Binding EnableTrackedStatDisplay}" SelectionMode="Extended">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0" Visibility="{Binding EnableTrackedStatDisplay}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
+
                 </Grid>
             </Border>
 
