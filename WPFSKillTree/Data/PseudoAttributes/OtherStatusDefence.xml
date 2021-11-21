@@ -24,7 +24,7 @@
         <Attribute Name="#% chance to Freeze, Shock, and Ignite" />
         <Attribute Name="#% chance to Freeze" />
     </PseudoAttribute>
-    <PseudoAttribute Name="+#% to Combined Elemental Resistances" Group="Defense">
+    <PseudoAttribute Name="#% to Combined Elemental Resistances" Group="Defense">
         <Attribute Name="+#% to Fire Resistance" />
         <Attribute Name="+#% to Cold Resistance" />
         <Attribute Name="+#% to Lightning Resistance" />
