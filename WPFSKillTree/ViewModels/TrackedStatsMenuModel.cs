@@ -8,6 +8,7 @@ using PoESkillTree.Model;
 using PoESkillTree.Model.Serialization;
 using PoESkillTree.ViewModels.Builds;
 using PoESkillTree.SkillTreeFiles;
+using PoESkillTree.Utils;
 
 namespace PoESkillTree.ViewModels
 {
@@ -51,7 +52,7 @@ namespace PoESkillTree.ViewModels
             _persistentData.Save();
         }
 
-        private async void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args) { }
+        private void OptionsOnPropertyChanged(object sender, PropertyChangedEventArgs args) { }
 
         /// <summary>
         /// Gets or sets the stat tracking save path.
@@ -63,20 +64,19 @@ namespace PoESkillTree.ViewModels
         {
             get
             {
-                if (GlobalSettings.StatTrackingSavePathVal == null)
-                {
-                    return GlobalSettings.DefaultTrackingDir;
-                }
-                else
-                {
-                    return GlobalSettings.StatTrackingSavePathVal;
-                }
+                if (GlobalSettings.StatTrackingSavePathVal == null || GlobalSettings.StatTrackingSavePathVal == "")
+                    GlobalSettings.SetTrackedPathFolder(AppData.ProgramDirectory);
+#pragma warning disable CS8603 // Possible null reference return.(Handled in previous line)
+                return GlobalSettings.StatTrackingSavePathVal;
+#pragma warning restore CS8603 // Possible null reference return.
             }
             set
             {
-                if (GlobalSettings.StatTrackingSavePathVal == value)
-                    return;
-                GlobalSettings.StatTrackingSavePathVal = value;
+                if (value != null && value != "" && GlobalSettings.StatTrackingSavePathVal != value)
+                {
+                    GlobalSettings.StatTrackingSavePathVal = value;
+                    GlobalSettings.NotifyStaticPropertyChanged("StatTrackingSavePath");
+                }
             }
         }
 

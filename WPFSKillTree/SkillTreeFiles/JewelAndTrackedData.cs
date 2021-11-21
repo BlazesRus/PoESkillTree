@@ -737,14 +737,11 @@ namespace PoESkillTree.SkillTreeFiles
         {
             get
             {
-                if (StatTrackingSavePathVal == null)
-                {
-                    return DefaultTrackingDir;
-                }
-                else
-                {
-                    return StatTrackingSavePathVal;
-                }
+                if (StatTrackingSavePathVal == null|| StatTrackingSavePathVal == "")
+                    SetTrackedPathFolder(AppData.ProgramDirectory);
+#pragma warning disable CS8603 // Possible null reference return.(Handled in previous line)
+                return StatTrackingSavePathVal;
+#pragma warning restore CS8603 // Possible null reference return.
             }
             set
             {
@@ -753,6 +750,15 @@ namespace PoESkillTree.SkillTreeFiles
                     StatTrackingSavePathVal = value;
                     NotifyStaticPropertyChanged("StatTrackingSavePath");
                 }
+            }
+        }
+
+        public static void SetTrackedPathFolder(string currentPath)
+        {
+            if (currentPath != null && currentPath != "" && StatTrackingSavePathVal != currentPath)
+            {
+                StatTrackingSavePathVal = currentPath;
+                NotifyStaticPropertyChanged("StatTrackingSavePath");
             }
         }
 
