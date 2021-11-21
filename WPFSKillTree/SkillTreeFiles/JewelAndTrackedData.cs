@@ -588,9 +588,9 @@ namespace PoESkillTree.SkillTreeFiles
                 public static SpellBehaviorTypes SpellBehaviorType { get => spellBehaviorType; set { spellBehaviorType = value; NotifyStaticPropertyChanged("SpellBehaviorType"); } }
         */
 
-        private static WeaponClass primaryWeapon = WeaponClass.Dagger;
-        private static WeaponClass secondaryWeapon = WeaponClass.Dagger;
-        private static OffHand offHandType = OffHand.DualWield;
+        public static WeaponClass primaryWeapon = WeaponClass.Dagger;
+        public static WeaponClass secondaryWeapon = WeaponClass.Dagger;
+        public static OffHand offHandType = OffHand.DualWield;
 
         /// <summary>Damage Scaling of Spell</summary>
         public enum DamageScaling
@@ -638,7 +638,7 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        private static Tags tags = Tags.None;
+        public static Tags tags = Tags.None;
 
         /// <summary>
         /// Tags used for pseudo attribute calculations.
@@ -656,7 +656,7 @@ namespace PoESkillTree.SkillTreeFiles
         public static DamageScaling DMScaling { get => dMScaling; set { dMScaling = value; NotifyStaticPropertyChanged("DMScaling"); } }
         public static int NumberOfPoisonStacks { get => numberOfPoisonStacks; set { numberOfPoisonStacks = value; NotifyStaticPropertyChanged("NumberOfPoisonStacks"); } }
 
-        private static bool enableTrackedStatDisplay = false;
+        public static bool enableTrackedStatDisplay = true;
 
         public static bool EnableTrackedStatDisplay
         {

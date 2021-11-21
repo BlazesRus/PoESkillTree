@@ -23,6 +23,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using static PoESkillTree.SkillTreeFiles.Constants;
 using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
@@ -183,6 +184,9 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static bool _initialized;
 
+#if (PoESkillTree_DisableStatTracking == false)
+        public ContextMenu trackingContextMenu;
+
 #if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
         public ConcurrentObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
 #elif PoeSkillTree_DontUseKeyedTrackedStats==false
@@ -205,6 +209,26 @@ namespace PoESkillTree.SkillTreeFiles
 
 
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
+
+        public void RemoveTrackedAttr(object sender, RoutedEventArgs e)
+        {
+            MenuItem CurrentMenuItem = (MenuItem)sender;
+            //for (var i = 0; i < cmDeleteGroup.Items.Count; i++)
+            //{
+            //    if (((MenuItem)cmDeleteGroup.Items[i]).Header.ToString()!.ToLower().Equals(((MenuItem)sender).Header.ToString()!))
+            //    {
+            //        cmDeleteGroup.Items.RemoveAt(i);
+            //        if (cmDeleteGroup.Items.Count == 0)
+            //            cmDeleteGroup.IsEnabled = false;
+            //        break;
+            //    }
+            //}
+
+            //_attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString()!);
+            //RefreshAttributeLists();
+        }
+#endif
+
         //public Dictionary<string, float> SelectedPseudoTotalWithItems;
         //public Dictionary<string, float> TrackedStatTotalWithItems;
 
@@ -219,6 +243,10 @@ namespace PoESkillTree.SkillTreeFiles
 #elif PoeSkillTree_DontUseKeyedTrackedStats==false
             SelectedPseudoTotal = new ObservableKeyedPseudoStat();
 #endif
+            trackingContextMenu = new ContextMenu();
+            var cmRemoveTrackedAttr = new MenuItem { Header = L10n.Message("Remove PseudoAttribute from Tracking") };
+            cmRemoveTrackedAttr.Click += RemoveTrackedAttr;
+            trackingContextMenu.Items.Add(cmRemoveTrackedAttr);
         }
 
         private void SkilledNodes_CollectionChanged(object sender, CollectionChangedEventArgs<PassiveNodeViewModel> args)

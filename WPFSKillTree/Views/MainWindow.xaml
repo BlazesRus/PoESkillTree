@@ -19,7 +19,7 @@
                       mc:Ignorable="d"
                       x:Class="PoESkillTree.Views.MainWindow"
                       x:Name="window"
-                      Height="667" Width="1200"
+                      Height="770" Width="1200"
                       SizeChanged="Window_SizeChanged" 
                       Closing="Window_Closing"
                       Icon="/PoESkillTree;component/logo.ico"
@@ -120,26 +120,37 @@
                 <Grid>
                     <Grid.Resources>
                         <converter:BooleanToStringConverter x:Key="BooleanToStringConverter" />
-                        <converter:ConditionalValueConverter x:Key="ConditionalValueConverter" />
+                        <!--<converter:ConditionalValueConverter x:Key="ConditionalValueConverter" />-->
+                        <converter:EnumToDescriptionConverter x:Key="EnumToDescriptionConverter" />
+                        <converter:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+                        <converter:FlagsToBoolConverter x:Key="FlagsToBoolConverter" />
                     </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" MinHeight="440"/><!--Build Directory-->
                         <RowDefinition Height="Auto" MinHeight="1"/><!--Label for Tracked PseudoStats-->
                         <!--Tracked PseudoStats Display-->
-                        <RowDefinition Height="Auto">
-                            <RowDefinition.MinHeight>
+                        <RowDefinition Height="Auto" MinHeight="189">
+                            <!--Disabling ConditionalValueConverter Feature for now until can fix the unset value binding problem-->
+                            <!--<RowDefinition.MinHeight>
                                 <MultiBinding Converter="{StaticResource ConditionalValueConverter}">
-                                  <Binding Path="EnableTrackedStatDisplay"/>
-                                  <Binding Path="PseudoStatRowMinHeight"/>
+                                    <Binding Path="EnableTrackedStatDisplay" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}"/>
+                                    <Binding Path="PseudoStatRowMinHeight" RelativeSource="{RelativeSource AncestorType=UserControl, Mode=FindAncestor}"/>
                                 </MultiBinding>
-                            </RowDefinition.MinHeight>
+                            </RowDefinition.MinHeight>-->
                         </RowDefinition>
+                        <!--Primary Weapon+OffHandType+Secondary Weapon Settings Displayed(For [Tagged] Tracked Stats)-->
+                        <RowDefinition Height="Auto" MinHeight="60"/>
+                        <!--Tags-->
+                        <RowDefinition Height="Auto" MinHeight="110"/>
+
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
-                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/>
+                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/><!--Might add checkbox here for enabling/disabling TrackedStat Display-->
                     <!--<ListBox x:Name="trackedAttr" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible" IsEnabled="{Binding EnableTrackedStatDisplay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -148,14 +159,94 @@
                         </ListBox.ItemTemplate>
                     </ListBox>-->
                     <!--GroupStyle Breaks the display of TrackedAttributes-->
-                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"  IsEnabled="{Binding EnableTrackedStatDisplay}" SelectionMode="Extended">
+                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" Width="410" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    IsEnabled="{Binding EnableTrackedStatDisplay}" SelectionMode="Extended" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0"/>
+                                <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0"/><!--
+                                    <TextBlock.ContextMenu>
+                                         <ContextMenu>
+                                            <MenuItem Header="Remove PseudoAttribute from Tracking" Click="RemoveTrackedAttr"/>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock> -->
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    <!-- WeaponClass -->
+                    <GroupBox Grid.Row="3" Grid.Column="0" VerticalAlignment="Stretch"  Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Primary Weapon"/>
+                        </GroupBox.Header>
+                        <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedValue="{Binding PrimaryWeapon.Value}" ItemsSource="{Binding WeaponClassValues}" FontSize="10">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </GroupBox>
+                    
+                    <!-- OffHand -->
+                    <GroupBox Grid.Row="3" Grid.Column="1"  VerticalAlignment="Stretch"  Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Offhand Type"/>
+                        </GroupBox.Header>
+                        <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding OffHand.Value}" ItemsSource="{Binding OffhandValues}" FontSize="10">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </GroupBox>
+                    
+                    <!--Secondary Weapon:Disable if DualWield is not selected-->
+                    <GroupBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Stretch" IsEnabled="{Binding OffHand.Value, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.DualWield}}"
+                     Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Secondary Weapon"/>
+                        </GroupBox.Header>
+                        <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding SecondaryWeapon.Value}" ItemsSource="{Binding WeaponClassValues}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </GroupBox>
+                    
+                    <!-- Tags -->
+                     <GroupBox Grid.Row="4" Grid.Column="0" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox.Header>
+                            <l:Catalog Message="Tags"/>
+                        </GroupBox.Header>
+                        <Grid Margin="4 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <CheckBox Grid.Row="0" Grid.Column="0" Content="Attack" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Attack}}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="1" Content="Melee" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Melee}}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="2" Content="Spell" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Spell}}"/>
+                            <CheckBox Grid.Row="0" Grid.Column="3" Content="Cast"  Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Cast}}"/>
 
+                            <CheckBox Grid.Row="1" Grid.Column="0" Content="Projectile" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Projectile}}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="1" Content="Area" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Area}}"/>
+                            <CheckBox Grid.Row="1" Grid.Column="2" Content="Totem" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Totem}}"/>
+                            
+                            <CheckBox Grid.Row="2" Grid.Column="0" Content="Trap" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Trap}}"/>
+                            <CheckBox Grid.Row="2" Grid.Column="1" Content="Mine" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Mine}}"/>
+                            <CheckBox Grid.Row="2" Grid.Column="2" Content="Duration" Margin="2,0" IsChecked="{Binding Tags.Value, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Duration}}"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </Border>
 
