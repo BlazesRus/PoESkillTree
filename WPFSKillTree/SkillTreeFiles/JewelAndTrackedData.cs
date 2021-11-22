@@ -629,12 +629,34 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
+        public static void SetSecondaryType(WeaponClass value)
+        {
+            if(secondaryWeapon != value)
+            {
+                secondaryWeapon = value; NotifyStaticPropertyChanged("SecondaryWeapon");
+            }
+        }
+
         public static OffHand OffHandType
         {
-            get => offHandType;
-            set
+            //get => offHandType;
+            get
             {
-                offHandType = value; NotifyStaticPropertyChanged("OffHandType");
+                if (SecondaryWeapon != WeaponClass.Unarmed)
+                    SetOffHandType(OffHand.DualWield);
+                return offHandType;
+            }
+            set => SetOffHandType(value);
+        }
+
+        public static void SetOffHandType(OffHand value)
+        {
+            if(offHandType!= value)
+            {
+                if (value == OffHand.TwoHanded || value == OffHand.Shield)
+                    SetSecondaryType(WeaponClass.Unarmed);
+                offHandType = value;
+                NotifyStaticPropertyChanged("OffHandType");
             }
         }
 

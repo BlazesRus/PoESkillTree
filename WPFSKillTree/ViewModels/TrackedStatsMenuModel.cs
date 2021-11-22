@@ -60,7 +60,7 @@ namespace PoESkillTree.ViewModels
         /// <value>
         /// The stat tracking save path.
         /// </value>
-        string StatTrackingSavePath
+        public string StatTrackingSavePath
         {
             get
             {

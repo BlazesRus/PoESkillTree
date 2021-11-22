@@ -77,7 +77,7 @@ namespace PoESkillTree.TrackedStatViews
             }
         }
 
-        public static string FallbackValue = GlobalSettings.StatTrackingSavePath == null ? Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt") : Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
+        public static string FallbackValue =  Path.Combine(GlobalSettings.StatTrackingSavePath, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt");
 
         private string _CurrentTrackedFile = FallbackValue;
 
@@ -109,9 +109,22 @@ namespace PoESkillTree.TrackedStatViews
         private void OnLoad(object sender, RoutedEventArgs e)
         {
             this.TrackingList.DataContext = this.DataContext;
+            //SourceList.Clear();
+            if (Directory.Exists(StatTrackingSavePath))
+            {
+                foreach (string file in Directory.EnumerateFiles(StatTrackingSavePath))
+                {
+                    SourceList.Add(file);
+                }
+            }
+            else
+            {//Create Directory if doesn't exist
+                Directory.CreateDirectory(StatTrackingSavePath);
+            }
             this.TrackingList.ItemsSource = SourceList;
             this.TrackedFileText.DataContext = this.DataContext;
-            if (this.TrackedFileText.Text == "" || this.TrackedFileText.Text == null) { this.TrackedFileText.Text = CurrentTrackedFile; }//Force Text to have value if fails to bind properly
+            if (this.TrackedFileText.Text == "" || this.TrackedFileText.Text == null)
+                this.TrackedFileText.Text = CurrentTrackedFile;//Force Text to have value if fails to bind properly
         }
 
         /// <summary>
@@ -275,36 +288,51 @@ namespace PoESkillTree.TrackedStatViews
                 if (File.Exists(TargetFile))
                 {
                     string[] LoadedFileData = await AsyncFileCommands.ReadAllLinesAsync(TargetFile);
-                    string[] TrackedAttributeNames = new string[LoadedFileData.Length];
-                    int index = 0;
+                    List<string> TrackedAttributeNames = new List<string>(LoadedFileData.Length) { };
                     string TempString;
-                    bool PotentialLineComment = false;
-                    foreach (var Line in LoadedFileData)//Filter out unneeded info from lines in file(enables to have C#/C++ style line comments and attributes inside parenthesis
+                    bool PotentialLineComment;
+                    bool IsComment;
+                    foreach (var Line in LoadedFileData)//Filter out unneeded info from lines in file(enables to have C#/C++ style line comments and attributes inside parenthesis)
                     {
                         TempString = "";
                         PotentialLineComment = false;
+                        IsComment = false;
                         foreach (var Elem in Line)
                         {
-                            if (PotentialLineComment == false && Elem == '/')
+                            if (Elem == '/' && PotentialLineComment == false)
                             {
                                 PotentialLineComment = true;
                             }
-                            else if (PotentialLineComment && Elem == '/')
+                            else if (PotentialLineComment)
                             {
-                                PotentialLineComment = false;
-                                return;
+                                if (Elem == '/')
+                                {
+                                    IsComment = true;
+                                    continue;
+                                }
+                                else
+                                {
+                                    TempString += "/";
+                                    PotentialLineComment = false;
+                                }
                             }
                             if (Elem != '"')
                             {
                                 TempString += Elem;
                             }
                         }
-                        if (PotentialLineComment)
+                        if (IsComment)
+                            continue;
+                        if (TempString.StartsWith('['))
                         {
-                            TempString += "/";
+                            //To-Do:Add loading of WeaponTypes and Tags later
+                            //[MainWeaponType:
+                            //[OffhandType:
+                            //[SecondaryWeaponType:
+                            //[TagFields:
                         }
-                        TrackedAttributeNames[index] = TempString;
-                        ++index;
+                        else
+                            TrackedAttributeNames.Add(TempString);
                     }
 
                     PseudoAttributeLoader Loader = new PseudoAttributeLoader();

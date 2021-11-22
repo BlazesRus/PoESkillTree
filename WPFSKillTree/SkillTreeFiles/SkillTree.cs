@@ -590,6 +590,7 @@ namespace PoESkillTree.SkillTreeFiles
             return temp;
         }
 
+#if PoESkillTree_DisableStatTracking == false
         private string InsertNumbersInTrackedDisplay(string statDisplay, float statTotal)
         {
             statDisplay = GlobalSettings._backreplace.Replace(statDisplay, statTotal + "", 1);
@@ -597,7 +598,14 @@ namespace PoESkillTree.SkillTreeFiles
         }
         public void UpdateTrackedStatCalculation()
         {
-#if PoESkillTree_DisableStatTracking == false
+            if(GlobalSettings.TrackedStats.Count==0)
+            {
+                if(!SelectedPseudoTotal.IsEmpty())
+                    SelectedPseudoTotal.Clear();
+                if(HighlightedPseudoTotal!=null&& !HighlightedPseudoTotal.IsEmpty())
+                    HighlightedPseudoTotal.Clear();
+                return;
+            }
             float statTotal;
             string displayTotal;
             foreach (var item in GlobalSettings.TrackedStats)
@@ -620,8 +628,8 @@ namespace PoESkillTree.SkillTreeFiles
                     SelectedPseudoTotal.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
 #endif
             }
-#endif
         }
+#endif
 
         private static Dictionary<string, List<float>> GetAttributesWithoutImplicit(
             IEnumerable<PassiveNodeViewModel> skilledNodes, CharacterClass charClass, BanditSettings banditSettings)

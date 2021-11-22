@@ -452,7 +452,7 @@ namespace PoESkillTree.Views
 #if PoESkillTree_DisableStatTracking==false
         private void UpdateTrackedStatDisplay()
         {
-
+            Tree.UpdateTrackedStatCalculation();
 #if PoESkillTree_UseIXDictionary
             trackedStatDisplay.RefreshViewers();
 #endif
@@ -464,8 +464,8 @@ namespace PoESkillTree.Views
         }
 #endif
 
-            //Necessary to update the summed numbers in group names before every refresh
-            private void RefreshAttributeLists()
+        //Necessary to update the summed numbers in group names before every refresh
+        private void RefreshAttributeLists()
         {
             _attributeGroups.UpdateGroupNames(_attiblist);
             _attributeCollection.Refresh();
@@ -628,11 +628,83 @@ namespace PoESkillTree.Views
             Tree = await CreateSkillTreeAsync(controller);
             InitializeTreeDependentUI();
             Log.Info($"Tree UI initialized after {stopwatch.ElapsedMilliseconds} ms");
-//#if (PoESkillTree_DisableStatTracking==false)
+#if (PoESkillTree_DisableStatTracking == false)
             //trackedAttr.ItemsSource = trackedStatDisplay;//Binding inside the xml instead
             //trackedAttr.SelectionMode = SelectionMode.Extended;//Selected inside xml
-            //Log.Info($"TrackedStats initialized after {stopwatch.ElapsedMilliseconds} ms");
-//#endif
+
+            if (!Directory.Exists(GlobalSettings.StatTrackingSavePath))//Create Directory if doesn't exist
+                Directory.CreateDirectory(GlobalSettings.StatTrackingSavePath);
+            string CurrentTrackedFile = Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
+            if (File.Exists(CurrentTrackedFile))
+            {
+                string[] LoadedFileData = await PoEMenuCommands.AsyncFileCommands.ReadAllLinesAsync(CurrentTrackedFile);
+                List<string> TrackedAttributeNames = new List<string>(LoadedFileData.Length) { };
+                string TempString;
+                bool PotentialLineComment;
+                bool IsComment;
+                foreach (var Line in LoadedFileData)//Filter out unneeded info from lines in file(enables to have C#/C++ style line comments and attributes inside parenthesis)
+                {
+                    TempString = "";
+                    PotentialLineComment = false;
+                    IsComment = false;
+                    foreach (var Elem in Line)
+                    {
+                        if (Elem == '/' && PotentialLineComment == false)
+                        {
+                            PotentialLineComment = true;
+                        }
+                        else if (PotentialLineComment)
+                        {
+                            if(Elem == '/')
+                            {
+                                IsComment = true;
+                                continue;
+                            }
+                            else
+                            {
+                                TempString += "/";
+                                PotentialLineComment = false;
+                            }
+                        }
+                        if (Elem != '"')
+                        {
+                            TempString += Elem;
+                        }
+                    }
+                    if (IsComment)
+                        continue;
+                    if(TempString.StartsWith('['))
+                    {
+                        //To-Do:Add loading of WeaponTypes and Tags later
+                        //[MainWeaponType:
+                        //[OffhandType:
+                        //[SecondaryWeaponType:
+                        //[TagFields:
+                    }
+                    else
+                        TrackedAttributeNames.Add(TempString);
+                }
+
+                PseudoAttributeLoader Loader = new PseudoAttributeLoader();
+                List<PseudoAttribute> PsList = Loader.LoadPseudoAttributes();
+                foreach (PseudoAttribute item in PsList)
+                {
+                    if (!GlobalSettings.TrackedStats.ContainsKey(item.Name))//Check if Attribute name already tracked first
+                    {
+                        if (TrackedAttributeNames.Any(s => item.Name.Contains(s)))
+                        {
+                            GlobalSettings.TrackedStats.Add(item.Name, new PseudoStat(item));
+                        }
+                    }
+                }
+            }
+            else
+            {//Create Blank file if doesn't exist yet
+                using (var myFile = File.Create(CurrentTrackedFile)) { }//Creating new file and auto-disposing of FileStream
+            }
+            UpdateTrackedStatDisplay();
+            Log.Info($"Current Tracked Stats initialized after {stopwatch.ElapsedMilliseconds} ms");
+#endif
 
             controller.SetMessage(L10n.Message("Initializing window ..."));
             controller.SetIndeterminate();
