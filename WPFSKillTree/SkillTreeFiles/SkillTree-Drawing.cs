@@ -39,7 +39,15 @@ namespace PoESkillTree.SkillTreeFiles
 
         private readonly NodeHighlighter _nodeHighlighter = new NodeHighlighter();
         private readonly IPersistentData _persistentData;
+#if PoESkillTree_DisableStaticAscendancy==false
+        public bool DrawAscendancy
+        {
+            get => GlobalSettings.DrawAscendancy;
+            set => GlobalSettings.SetDrawAscendancy(value);
+        }
+#else
         public bool DrawAscendancy;
+#endif
 
         public DrawingVisual SkillTreeVisual { get; private set; }
         private DrawingVisual _background;

@@ -127,8 +127,10 @@
                     </Grid.Resources>
                     <Grid.RowDefinitions>
                         <!--Optimized for 1020 and greater screen height-->
-                        <RowDefinition Height="Auto" MinHeight="430"/><!--Build Directory-->
-                        <RowDefinition Height="Auto" MinHeight="1"/><!--Label for Tracked PseudoStats-->
+                        <RowDefinition Height="Auto" MinHeight="430"/>
+                        <!--Build Directory-->
+                        <RowDefinition Height="Auto" MinHeight="1"/>
+                        <!--Label for Tracked PseudoStats-->
                         <!--Tracked PseudoStats Display-->
                         <RowDefinition Height="Auto" MinHeight="249">
                             <!--Disabling ConditionalValueConverter Feature for now until can fix the unset value binding problem-->
@@ -145,10 +147,13 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"  MinWidth="450"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
-                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/><!--Might add checkbox here for enabling/disabling TrackedStat Display-->
+                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"  MinWidth="450"/>
+                    <!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
+                    <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/>
+                    <!--Might add checkbox here for enabling/disabling TrackedStat Display-->
                     <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" MinWidth="500" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"
-                     HorizontalAlignment="Left" SelectionMode="Extended"><!--IsEnabled="{Binding EnableTrackedStatDisplay}" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}"> -->
+                     HorizontalAlignment="Left" SelectionMode="Extended">
+                        <!--IsEnabled="{Binding EnableTrackedStatDisplay}" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}"> -->
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Padding="5,0"/>
@@ -180,7 +185,7 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </GroupBox>
-                        
+
                         <!-- OffHand -->
                         <GroupBox Grid.Row="0" Grid.Column="1"  VerticalAlignment="Stretch"  Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <GroupBox.Header>
@@ -194,7 +199,7 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </GroupBox>
-                        
+
                         <!--Secondary Weapon:Disable if DualWield is not selected-->
                         <GroupBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" IsEnabled="{Binding OffHandType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.DualWield}, UpdateSourceTrigger=PropertyChanged}"
                          Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -209,9 +214,9 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </GroupBox>
-                        
+
                         <!-- Tags -->
-                         <GroupBox Grid.Row="1" Grid.Column="0" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <GroupBox Grid.Row="1" Grid.Column="0" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <GroupBox.Header>
                                 <l:Catalog Message="Tags"/>
                             </GroupBox.Header>
@@ -223,6 +228,7 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
                                     <RowDefinition />
@@ -242,6 +248,7 @@
                             </Grid>
                         </GroupBox>
                     </Grid>
+                    <CheckBox Grid.Row="4" Grid.Column="0" Content="Draw Ascendancy(Debug Check)" Margin="2,0"  FontSize="10" IsChecked="{Binding DrawAscendancy, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Border>
 

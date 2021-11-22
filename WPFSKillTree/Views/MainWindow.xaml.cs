@@ -357,6 +357,14 @@ namespace PoESkillTree.Views
         }
 #endif
 
+#if PoESkillTree_DisableStaticAscendancy==false
+        public bool DrawAscendancy
+        {
+            get => GlobalSettings.DrawAscendancy;
+            set => GlobalSettings.SetDrawAscendancy(value);
+        }
+#endif
+
 #pragma warning disable CS8618 // Initialized in Window_Loaded
         public MainWindow()
 #pragma warning restore
