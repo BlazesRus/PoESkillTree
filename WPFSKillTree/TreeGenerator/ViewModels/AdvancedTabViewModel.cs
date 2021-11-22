@@ -874,7 +874,8 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 var solver = new AdvancedSolver(Tree, new PseudoCalcSolverSettings(settings, TotalPoints, CreateInitialAttributes(),
                 attributeConstraints, pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value), PseudoCalcStatLookup);//, TreeInfo, TreePlusItemsMode.Value));
 #if (PoESkillTree_DisableStatTracking == false)
-                if (GlobalSettings.AutoTrackStats) { GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value); }
+                if (GlobalSettings.AutoTrackStats) 
+                    GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);
 #endif
                 return Task.FromResult<ISolver>(solver);
             }
@@ -884,7 +885,8 @@ namespace PoESkillTree.TreeGenerator.ViewModels
                 pseudoConstraints, WeaponClass.Value, Tags.Value, OffHand.Value));
 #endif
 #if (PoESkillTree_DisableStatTracking == false)
-            if(GlobalSettings.AutoTrackStats) {GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);}
+            if(GlobalSettings.AutoTrackStats)
+                GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);
 #endif
             return Task.FromResult<ISolver?>(solver);
         }

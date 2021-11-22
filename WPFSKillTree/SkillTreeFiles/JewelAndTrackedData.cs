@@ -802,20 +802,30 @@ namespace PoESkillTree.SkillTreeFiles
 
 
         /// <summary>
-        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:true)
+        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
-        private static bool autoTrackStats = true;
+        private static bool autoTrackStats = false;
 
         /// <summary>
-        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:true)
+        /// If true, automatically adds skill-tree pseudo attributes to stat tracking (Use menu to turn on)(Default:false)
         /// </summary>
         public static bool AutoTrackStats
         {
             get { return autoTrackStats; }
             set
             {
-                autoTrackStats = value;
-                NotifyStaticPropertyChanged("AutoTrackStats");
+                if (AutoTrackStats != value)
+                {
+                    AutoTrackStats = value; NotifyStaticPropertyChanged("AutoTrackStats");
+                }
+            }
+        }
+
+        public static void SetAutoTrackStats(bool value)
+        {
+            if (AutoTrackStats != value)
+            {
+                AutoTrackStats = value; NotifyStaticPropertyChanged("AutoTrackStats");
             }
         }
 

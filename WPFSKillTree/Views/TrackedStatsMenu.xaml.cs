@@ -39,7 +39,7 @@ namespace PoESkillTree.TrackedStatViews
             //{
             //    return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
             //}
-            StringData ReturnVal = (str ?? (GlobalSettings.StatTrackingSavePath != null ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : Path.Combine(Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar), "CurrentTrackedAttributes.txt")));
+            StringData ReturnVal = str ?? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
             return ReturnVal;
         }
 
@@ -368,6 +368,15 @@ namespace PoESkillTree.TrackedStatViews
         {
             TextBox self = (TextBox)sender;
             if (self.Text != null && self.Text != "") { CurrentTrackedFile = self.Text; }
+        }
+
+        /// <summary>
+        /// OffHand used for pseudo attribute calculations.
+        /// </summary>
+        public bool AutoTrackStats
+        {
+            get => GlobalSettings.AutoTrackStats;
+            set => GlobalSettings.SetAutoTrackStats(value);
         }
     }
 }

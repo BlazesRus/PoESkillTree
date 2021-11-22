@@ -65,10 +65,11 @@
         </Grid>
         <Grid Margin="20 0 5 0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="50" />
-                <ColumnDefinition MinWidth="50" />
+                <ColumnDefinition MinWidth="100" />
+                <ColumnDefinition MinWidth="100" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
@@ -84,9 +85,14 @@
             DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue" SelectionChanged="TrackingList_SelectionChanged"
             SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Button Grid.Row="2" Click="LoadTrackedStats">
+            <Button Grid.Row="2" Grid.Column="0" Click="LoadTrackedStats">
                 <Button.Content>
                     <l:Catalog Message="Load Tracked Stats from Target File" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Click="SaveTrackedStats">
+                <Button.Content>
+                    <l:Catalog Message="Save Tracked Stats to Target File" />
                 </Button.Content>
             </Button>
             <Button Grid.Row="3" Click="ResetTracking">
@@ -94,11 +100,8 @@
                     <l:Catalog Message="Reset Tracking" />
                 </Button.Content>
             </Button>
-            <Button Grid.Row="4" Click="SaveTrackedStats">
-                <Button.Content>
-                    <l:Catalog Message="Save Tracked Stats to Target File" />
-                </Button.Content>
-            </Button>
+
+            <CheckBox Grid.Row="4" Grid.Column="0" Content="Auto-Track Generator Stats" Margin="2,0"  FontSize="10" IsChecked="{Binding AutoTrackStats, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Label Style="{StaticResource SectionLabel}">
             <Label.Content>
@@ -173,7 +176,7 @@
                 </Label.Content>
             </Label>
             <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon)}"
-	        Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
             SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="4" Grid.Column="2">
@@ -205,8 +208,8 @@
                     <l:Catalog Message="Secondary Weapon" />
                 </Label.Content>
             </Label>
-	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon)}"
-	        Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon)}"
+            Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
             SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="6" Grid.Column="2" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
@@ -272,16 +275,16 @@
                     <l:Catalog Message="Spell Behavior" />
                 </Label.Content>
             </Label>
-	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType)}"
-	        Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center" Height="26" Width="133"
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType)}"
+            Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center" Height="26" Width="133"
             SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="2">
                 <Label.Content>
                     <l:Catalog Message="Damage Scaling" />
                 </Label.Content>
             </Label>
-	        <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling)}"
-	        Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="200"
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling)}"
+            Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="200"
             SelectedValuePath="Value" DisplayMemberPath="Description"/>
             <Label Style="{StaticResource SettingLabel}"
                    Grid.Row="1" Grid.Column="0">
