@@ -143,11 +143,11 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"  MinWidth="410"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
+                    <builds:BuildsControl DataContext="{Binding BuildsControlViewModel}" Margin="3 4 4 4" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"  MinWidth="450"/><!--To-Do:Character Builds Directory(Set to have full maximum height when Tracked PseudoStat Display is disabled-->
                     <TextBlock x:Name="TrackedStatTxtBlock" Text="Tracked PseudoStats:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" IsEnabled="{Binding EnableTrackedStatDisplay}"/><!--Might add checkbox here for enabling/disabling TrackedStat Display-->
-                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" MinWidth="450" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    <ListBox x:Name="trackedAttr" ItemsSource="{Binding Tree.SelectedPseudoTotal}" Grid.Row="2" Grid.Column="0" MinWidth="500" Margin="0 4 0 0" ScrollViewer.VerticalScrollBarVisibility="Visible"
                      HorizontalAlignment="Left" SelectionMode="Extended"><!--IsEnabled="{Binding EnableTrackedStatDisplay}" Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}"> -->
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -172,7 +172,7 @@
                             <GroupBox.Header>
                                 <l:Catalog Message="Primary Weapon"/>
                             </GroupBox.Header>
-                            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedValue="{Binding PrimaryWeapon}" ItemsSource="{Binding WeaponClassValues}" FontSize="10">
+                            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Center" SelectedValue="{Binding PrimaryWeapon, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding WeaponClassValues}" FontSize="10">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -186,7 +186,7 @@
                             <GroupBox.Header>
                                 <l:Catalog Message="Offhand Type"/>
                             </GroupBox.Header>
-                            <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding OffHandType}" ItemsSource="{Binding OffhandValues}" FontSize="10">
+                            <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding OffHandType, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding OffhandValues}" FontSize="10">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -196,12 +196,12 @@
                         </GroupBox>
                         
                         <!--Secondary Weapon:Disable if DualWield is not selected-->
-                        <GroupBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" IsEnabled="{Binding OffHandType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.DualWield}}"
+                        <GroupBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch" IsEnabled="{Binding OffHandType, Converter={StaticResource EnumToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:OffHand.DualWield}, UpdateSourceTrigger=PropertyChanged}"
                          Visibility="{Binding EnableTrackedStatDisplay, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <GroupBox.Header>
                                 <l:Catalog Message="Secondary Weapon"/>
                             </GroupBox.Header>
-                            <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding SecondaryWeapon}" ItemsSource="{Binding WeaponClassValues}">
+                            <ComboBox HorizontalAlignment="Left" MinWidth="100" Margin="10 0" VerticalAlignment="Center" SelectedValue="{Binding SecondaryWeapon}" ItemsSource="{Binding WeaponClassValues}" FontSize="10">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Converter={StaticResource EnumToDescriptionConverter}}"/>
@@ -227,18 +227,18 @@
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <CheckBox Grid.Row="0" Grid.Column="0" Content="Attack" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Attack}}"/>
-                                <CheckBox Grid.Row="0" Grid.Column="1" Content="Melee" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Melee}}"/>
-                                <CheckBox Grid.Row="0" Grid.Column="2" Content="Spell" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Spell}}"/>
-                                <CheckBox Grid.Row="0" Grid.Column="3" Content="Cast"  Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Cast}}"/>
+                                <CheckBox Grid.Row="0" Grid.Column="0" Content="Attack" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Attack}}"/>
+                                <CheckBox Grid.Row="0" Grid.Column="1" Content="Melee" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Melee}}"/>
+                                <CheckBox Grid.Row="0" Grid.Column="2" Content="Spell" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Spell}}"/>
+                                <CheckBox Grid.Row="0" Grid.Column="3" Content="Cast"  Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Cast}}"/>
 
-                                <CheckBox Grid.Row="1" Grid.Column="0" Content="Projectile" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Projectile}}"/>
-                                <CheckBox Grid.Row="1" Grid.Column="1" Content="Area" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Area}}"/>
-                                <CheckBox Grid.Row="1" Grid.Column="2" Content="Totem" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Totem}}"/>
-                                
-                                <CheckBox Grid.Row="2" Grid.Column="0" Content="Trap" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Trap}}"/>
-                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Mine" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Mine}}"/>
-                                <CheckBox Grid.Row="2" Grid.Column="2" Content="Duration" Margin="2,0" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Duration}}"/>
+                                <CheckBox Grid.Row="1" Grid.Column="0" Content="Projectile" Margin="2,0" FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Projectile}}"/>
+                                <CheckBox Grid.Row="1" Grid.Column="1" Content="Area" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Area}}"/>
+                                <CheckBox Grid.Row="1" Grid.Column="2" Content="Totem" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Totem}}"/>
+
+                                <CheckBox Grid.Row="2" Grid.Column="0" Content="Trap" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Trap}}"/>
+                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Mine" Margin="2,0"  FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Mine}}"/>
+                                <CheckBox Grid.Row="2" Grid.Column="2" Content="Duration" Margin="2,0" FontSize="10" IsChecked="{Binding Tags, Converter={StaticResource FlagsToBoolConverter}, ConverterParameter={x:Static pseudoAttributes:Tags.Duration}}"/>
                             </Grid>
                         </GroupBox>
                     </Grid>

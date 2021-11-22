@@ -302,10 +302,7 @@ namespace PoESkillTree.Views
         public WeaponClass PrimaryWeapon
         {
             get => PseudoCalcGlobals.PrimaryWeapon;
-            set
-            {
-                if (PseudoCalcGlobals.primaryWeapon != value) { PseudoCalcGlobals.primaryWeapon = value; PseudoCalcGlobals.NotifyStaticPropertyChanged("PrimaryWeapon"); }
-            }
+            set => PseudoCalcGlobals.SetPrimaryType(value);
         }
 
         /// <summary>
@@ -314,10 +311,7 @@ namespace PoESkillTree.Views
         public WeaponClass SecondaryWeapon
         {
             get => PseudoCalcGlobals.SecondaryWeapon;
-            set
-            {
-                if (PseudoCalcGlobals.secondaryWeapon != value) { PseudoCalcGlobals.primaryWeapon = value; PseudoCalcGlobals.NotifyStaticPropertyChanged("SecondaryWeapon"); }
-            }
+            set => PseudoCalcGlobals.SetSecondaryType(value);
         }
 
         /// <summary>
@@ -326,10 +320,7 @@ namespace PoESkillTree.Views
         public OffHand OffHandType
         {
             get => PseudoCalcGlobals.OffHandType;
-            set
-            {
-                if (PseudoCalcGlobals.OffHandType != value) { PseudoCalcGlobals.OffHandType = value; PseudoCalcGlobals.NotifyStaticPropertyChanged("OffHandType"); }
-            }
+            set => PseudoCalcGlobals.SetOffHandType(value);
         }
 
         /// <summary>
@@ -338,10 +329,7 @@ namespace PoESkillTree.Views
         public TreeGenerator.Model.PseudoAttributes.Tags Tags
         {
             get => PseudoCalcGlobals.Tags;
-            set
-            {
-                if (PseudoCalcGlobals.tags != value) { PseudoCalcGlobals.tags = value; PseudoCalcGlobals.NotifyStaticPropertyChanged("Tags"); }
-            }
+            set => PseudoCalcGlobals.SetTags(value);
         }
 
         /// <summary>
@@ -359,6 +347,13 @@ namespace PoESkillTree.Views
             Tree.selectedPseudoTotal.Clear();
             if(Tree.HighlightedPseudoTotal!=null)
                 Tree.HighlightedPseudoTotal.Clear();
+        }
+
+        private void ForceBindingUpdate(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Controls.ComboBox CurrentBox = (System.Windows.Controls.ComboBox)sender;
+            BindingExpression binding = CurrentBox.GetBindingExpression(System.Windows.Controls.ComboBox.SelectedValueProperty);
+            binding.UpdateSource();
         }
 #endif
 

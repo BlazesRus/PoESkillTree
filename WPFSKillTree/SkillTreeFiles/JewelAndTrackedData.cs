@@ -620,6 +620,14 @@ namespace PoESkillTree.SkillTreeFiles
                 primaryWeapon = value; NotifyStaticPropertyChanged("PrimaryWeapon");
             }
         }
+
+        public static void SetPrimaryType(WeaponClass value)
+        {
+            if (primaryWeapon != value)
+            {
+                primaryWeapon = value; NotifyStaticPropertyChanged("PrimaryWeapon");
+            }
+        }
         public static WeaponClass SecondaryWeapon
         {
             get => secondaryWeapon;
@@ -654,7 +662,7 @@ namespace PoESkillTree.SkillTreeFiles
             if(offHandType!= value)
             {
                 if (value == OffHand.TwoHanded || value == OffHand.Shield)
-                    SetSecondaryType(WeaponClass.Unarmed);
+                    SetSecondaryType(WeaponClass.Unarmed);//Updates on Change but UI will not display at current implimentation of code
                 offHandType = value;
                 NotifyStaticPropertyChanged("OffHandType");
             }
@@ -669,6 +677,14 @@ namespace PoESkillTree.SkillTreeFiles
         {
             get => tags;
             set
+            {
+                tags = value; NotifyStaticPropertyChanged("Tags");
+            }
+        }
+
+        public static void SetTags(Tags value)
+        {
+            if (tags != value)
             {
                 tags = value; NotifyStaticPropertyChanged("Tags");
             }
