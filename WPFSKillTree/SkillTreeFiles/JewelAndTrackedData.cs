@@ -662,7 +662,7 @@ namespace PoESkillTree.SkillTreeFiles
             if(offHandType!= value)
             {
                 if (value == OffHand.TwoHanded || value == OffHand.Shield)
-                    SetSecondaryType(WeaponClass.Unarmed);//Updates on Change but UI will not display at current implimentation of code
+                    SetSecondaryType(WeaponClass.Unarmed);//Updates on Change but UI will not display at current implementation of code
                 offHandType = value;
                 NotifyStaticPropertyChanged("OffHandType");
             }
