@@ -39,7 +39,7 @@
         <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding Node.MasterEffects}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type base:JsonPassiveNodeMasterEffect}">
-                    <RadioButton Margin="10,10,0,13" Name="masterSelector" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}" Checked="MasterButtonChecked">
+                    <RadioButton Margin="10,10,0,13" Name="masterSelector" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}">
                         <RadioButton.CommandParameter>
                             <Binding Path="Effect"></Binding>
                         </RadioButton.CommandParameter>
@@ -78,6 +78,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <!--To-Do:Add Remove Mastery Selection option-->
         <StackPanel Style="{StaticResource DialogPanel}">
             <Button Style="{StaticResource DynamicDialogPanelButton}"
                     Command="{Binding CloseCommand}" CommandParameter="{StaticResource True}"

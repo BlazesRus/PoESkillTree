@@ -45,7 +45,7 @@ namespace PoESkillTree.TrackedStatViews
 
         public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new System.NotImplementedException();
+            return value;
         }
     }
 
@@ -62,9 +62,6 @@ namespace PoESkillTree.TrackedStatViews
         /// <summary>
         /// The tracking list
         /// </summary>
-        /// <value>
-        /// The tracking list
-        /// </value>
         public ObservableCollection<StringData> SourceList
         {
             get { return _TrackingList; }
@@ -73,23 +70,6 @@ namespace PoESkillTree.TrackedStatViews
                 if (value != null && value != SourceList)
                 {
                     _TrackingList = value; NotifyPropertyChanged("SourceList");
-                }
-            }
-        }
-
-        public static string FallbackValue =  Path.Combine(GlobalSettings.StatTrackingSavePath, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt");
-
-        private string _CurrentTrackedFile = FallbackValue;
-
-        public string CurrentTrackedFile
-        {
-            get { return _CurrentTrackedFile; }
-            set
-            {
-                if (value != "" && value != null && value != CurrentTrackedFile)
-                {
-                    _CurrentTrackedFile = value;
-                    NotifyPropertyChanged("CurrentTrackedFile");
                 }
             }
         }
@@ -250,6 +230,17 @@ namespace PoESkillTree.TrackedStatViews
             }
         }
 
+        public bool FallbackValue
+        {
+            get => GlobalSettings.AutoTrackStats;
+        }
+
+        public string CurrentTrackedFile
+        {
+            get => GlobalSettings.CurrentTrackedFile;
+            set => GlobalSettings.SetCurrentTrackedFile(value);
+        }
+
         /// <summary>
         /// Loads the tracked stat file names.
         /// </summary>
@@ -368,15 +359,6 @@ namespace PoESkillTree.TrackedStatViews
         {
             TextBox self = (TextBox)sender;
             if (self.Text != null && self.Text != "") { CurrentTrackedFile = self.Text; }
-        }
-
-        /// <summary>
-        /// OffHand used for pseudo attribute calculations.
-        /// </summary>
-        public bool AutoTrackStats
-        {
-            get => GlobalSettings.AutoTrackStats;
-            set => GlobalSettings.SetAutoTrackStats(value);
         }
     }
 }

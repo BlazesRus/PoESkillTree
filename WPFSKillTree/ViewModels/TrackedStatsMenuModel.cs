@@ -9,6 +9,7 @@ using PoESkillTree.Model.Serialization;
 using PoESkillTree.ViewModels.Builds;
 using PoESkillTree.SkillTreeFiles;
 using PoESkillTree.Utils;
+using System.IO;
 
 namespace PoESkillTree.ViewModels
 {
@@ -106,5 +107,22 @@ namespace PoESkillTree.ViewModels
         }
 
         #endregion TrackingCommand Code
+
+        public bool AutoTrackStats
+        {
+            get => GlobalSettings.AutoTrackStats;
+            set => GlobalSettings.SetAutoTrackStats(value);
+        }
+
+        public bool FallbackValue
+        {
+            get => GlobalSettings.AutoTrackStats;
+        }
+
+        public string CurrentTrackedFile
+        {
+            get => GlobalSettings.CurrentTrackedFile;
+            set => GlobalSettings.SetCurrentTrackedFile(value);
+        }
     }
 }

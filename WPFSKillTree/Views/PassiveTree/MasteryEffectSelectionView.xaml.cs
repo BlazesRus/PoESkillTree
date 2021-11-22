@@ -9,11 +9,5 @@
         {
             InitializeComponent();
         }
-        private void MasterButtonChecked(object sender, System.Windows.RoutedEventArgs e)
-        {
-//#if DEBUG
-//            var radio = sender as System.Windows.Controls.RadioButton;
-//#endif
-        }
     }
 }

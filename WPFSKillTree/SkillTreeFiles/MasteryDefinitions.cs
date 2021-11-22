@@ -341,7 +341,7 @@ public static class MasteryDefinitions
 
     /// <summary>Adds +1 Mastery Nodes to end of Selected Mastery stats before applying to node</summary>
     /// <param name="node">The node.</param>
-    /// <param name="selectedStats">The selected stats.</param>
+    /// <param name="selectedStats">The array of Displayed Stats</param>
     /// <param name="EffectId">The effect identifier.</param>
     public static void ApplyMasterySelectionStats(PassiveNodeViewModel node, string[] selectedStats, ushort EffectId)
     {
@@ -349,23 +349,9 @@ public static class MasteryDefinitions
         int FinalSize = LastIndex + 1;
         System.Array.Resize(ref selectedStats, FinalSize);
         selectedStats[LastIndex] = "+1 Mastery Nodes";
-        Dictionary<string, IReadOnlyList<float>> statDictionary = new Dictionary<string, IReadOnlyList<float>>(FinalSize);
-        var regexAttrib = new Regex("[0-9]*\\.?[0-9]+");
-        var values = new List<float>();
-        foreach (string statName in selectedStats)
-        {
-            foreach (var m in regexAttrib.Matches(statName).WhereNotNull())
-            {
-                if (m.Value == "")
-                    values.Add(float.NaN);
-                else
-                    values.Add(float.Parse(m.Value, System.Globalization.CultureInfo.InvariantCulture));
-            }
-            string cs = (regexAttrib.Replace(statName, "#"));
-            statDictionary.Add(cs, values);
-            values.Clear();
-        }
-        node.SetDescriptionWithStats(ref selectedStats, ref statDictionary);
+        node.SetDescription(ref selectedStats);
+        node.Attributes.Clear();
+        node.InitializeAttributes();
         node.ForceChangeSkill(EffectId);
     }
 }

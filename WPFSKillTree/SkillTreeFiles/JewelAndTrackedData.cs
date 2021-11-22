@@ -829,6 +829,31 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
+        public static string TrackedFileFallbackValue = Path.Combine(GlobalSettings.StatTrackingSavePath, "StatTracking" + Path.DirectorySeparatorChar + "CurrentTrackedAttributes.txt");
+
+        private static string _CurrentTrackedFile = TrackedFileFallbackValue;
+
+        public static string CurrentTrackedFile
+        {
+            get { return _CurrentTrackedFile; }
+            set
+            {
+                if (value != "" && value != null && value != CurrentTrackedFile)
+                {
+                    _CurrentTrackedFile = value;
+                    NotifyStaticPropertyChanged("CurrentTrackedFile");
+                }
+            }
+        }
+
+        public static void SetCurrentTrackedFile(string value)
+        {
+            if (value != "" && value != null && _CurrentTrackedFile != value)
+            {
+                _CurrentTrackedFile = value; NotifyStaticPropertyChanged("CurrentTrackedFile");
+            }
+        }
+
         public static readonly Regex _backreplace = new Regex("#");
 
 #if PoESkillTree_EnableItemInfluencedGenerator

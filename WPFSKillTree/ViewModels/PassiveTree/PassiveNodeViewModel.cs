@@ -52,7 +52,11 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 InitializeAttributes();
             }
         }
-        
+
+        /// <summary>
+        /// Forces the change skill id change without applying effect or JSON based changes(Mainly for alternative mastery selection code)
+        /// </summary>
+        /// <param name="swappedSkill">The swapped skill.</param>
         public void ForceChangeSkill(ushort swappedSkill)
         {
             _skill = swappedSkill;
@@ -78,6 +82,12 @@ namespace PoESkillTree.ViewModels.PassiveTree
         {
             StatDescriptions = descArray; Attributes = statDictionary;
         }
+
+        public void SetDescription(ref string[] descArray)
+        {
+            StatDescriptions = descArray;
+        }
+
         public int PassivePointsGranted { get => JsonPassiveNode.PassivePointsGranted; }
         public string Icon
         {
@@ -179,7 +189,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
             JsonPassiveNode.ClearPositionCache();
         }
 
-        private void InitializeAttributes()
+        public void InitializeAttributes()
         {
             if (PassiveNodeType == PassiveNodeType.JewelSocket || PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)
             {

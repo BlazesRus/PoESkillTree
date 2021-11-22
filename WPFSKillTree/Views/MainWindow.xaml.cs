@@ -1595,16 +1595,17 @@ namespace PoESkillTree.Views
                                         Console.WriteLine("Failed to Correct StatDescriptions to match Attributes.");
 #endif
                                 }
-                                //if (_prePath == null)//Exception Prevention measure for if select no options(also occurs sometimes when switch options)
-                                //{
-                                //    if (node.Skill != node.Id)
-                                //    {
-                                //        MasteryDefinitions.SetMasteryLabel(node);
-                                //        node.ForceChangeSkill(node.Id);
-                                //    }
-                                //    return;
-                                //}
-                                    
+                                if(_prePath == null)//Exception Prevention measure for if select no options(also occurs sometimes when switch options)
+                                {
+                                    _prePath = Tree.GetShortestPathTo(node);
+                                    if(_prePath == null)//If somehow fails to correct path, force it to just update UI
+                                    {
+                                        SetCurrentBuildUrlFromTree();
+                                        UpdateUI();
+                                        return;
+                                    }
+
+                                }
                             }
 
                             Tree.AllocateSkillNodes(_prePath);
@@ -1727,7 +1728,7 @@ namespace PoESkillTree.Views
 
             if (node.PassiveNodeType == PassiveNodeType.Mastery)//Add extra Details for Potential Mastery Choices
             {
-                tooltip += "\n\nMastery Node Options are(Ctrl+Alt+LClick to choose):";
+                tooltip += "\n\nMastery Node Options are(Ctrl+LClick to choose):";
                 switch (node.Name)
                 {//Description and number of counts listed on https://poedb.tw/us/Passive_mastery
                     case "Life Mastery":

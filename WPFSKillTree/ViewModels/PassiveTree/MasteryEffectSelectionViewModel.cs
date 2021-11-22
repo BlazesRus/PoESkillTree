@@ -49,8 +49,8 @@ namespace PoESkillTree.ViewModels.PassiveTree
                         }
                     }
                 }
+                InitialNodeSkill = effect;//Just in case switch between different effects
             }
-            //
         });
 
     }
