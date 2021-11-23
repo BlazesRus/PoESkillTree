@@ -48,6 +48,8 @@ namespace PoESkillTree.SkillTreeFiles
         {
             if (ascOrder > 0)
                 ascOrder -= 1;
+            else
+                return null;
             var classes = _classes[characterClass];
             if (ascOrder < classes.Count)
                 return classes[ascOrder].Name;
