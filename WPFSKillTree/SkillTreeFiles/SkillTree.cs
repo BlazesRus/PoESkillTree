@@ -406,11 +406,14 @@ namespace PoESkillTree.SkillTreeFiles
                     new Vector2D(PoESkillTree.MaxX * PoESkillTree.MaxImageZoomLevel * 1.25, PoESkillTree.MaxY * PoESkillTree.MaxImageZoomLevel * 1.25));
             }
 
-            if (_persistentData.Options.ShowAllAscendancyClasses)
+            if (_persistentData.Options.ShowAllAscendancyClasses|| AscType!=0)
                 DrawAscendancy = true;
 
             InitialSkillTreeDrawing();
             controller?.SetProgress(1);
+
+            if(DrawAscendancy)
+                DrawAscendancyLayers();
 
             _initialized = true;
         }
@@ -460,15 +463,12 @@ namespace PoESkillTree.SkillTreeFiles
                         GlobalSettings.points["AscendancyUsed"] = 0;
                         GlobalSettings.points["NormalTotal"] = bandits.Choice == Bandit.None? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
 
-#else
-#if PoESkillTree_DontUseTreePointSharing == false
+#elif PoESkillTree_DontUseTreePointSharing == false
             points["NormalUsed"] = 0;
             points["AscendancyUsed"] = 0;
             points["NormalTotal"] = bandits.Choice == Bandit.None ? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
 #else
             points["NormalTotal"] += bandits.Choice == Bandit.None ? _persistentData.CurrentBuild.Level + 1 : _persistentData.CurrentBuild.Level - 1;
-#endif
-
 #endif
             foreach (var node in SkilledNodes)
             {
@@ -509,8 +509,12 @@ namespace PoESkillTree.SkillTreeFiles
             get => _asctype;
             set
             {
-                if (value < 0 || value > 3) return;
-                ChangeAscClass(value);
+                //If AscendancyClassName is not equal to character class name, then _asctype should not be zero
+                if (_asctype!=value)
+                {
+                    if (value < 0 || value > 3) return;
+                    ChangeAscClass(value);
+                }
             }
         }
 
