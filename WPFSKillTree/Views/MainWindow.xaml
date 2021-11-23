@@ -143,6 +143,8 @@
                         </RowDefinition>
                         <!--Row with Grid of Setting Fields here to try to keep columns of Tracked Attributes at fullsize-->
                         <RowDefinition Height="Auto"/>
+                        <!--Debug Tester Row-->
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -165,7 +167,7 @@
                             <!--Primary Weapon+OffHandType+Secondary Weapon Settings Displayed(For [Tagged] Tracked Stats)-->
                             <RowDefinition Height="Auto" MinHeight="60"/>
                             <!--Tags-->
-                            <RowDefinition Height="Auto" MinHeight="110"/>
+                            <RowDefinition Height="Auto" MinHeight="100"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -248,7 +250,15 @@
                             </Grid>
                         </GroupBox>
                     </Grid>
-                    <CheckBox Grid.Row="4" Grid.Column="0" Content="Draw Ascendancy(Debug Check)" Margin="2,0"  FontSize="10" IsChecked="{Binding DrawAscendancy, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Grid Grid.Row="4" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="25"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <!--<CheckBox Grid.Row="4" Grid.Column="0" Content="Draw Ascendancy(Debug Check)" Margin="2,0"  FontSize="10" IsChecked="{Binding DrawAscendancy, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False"/>-->
+                    </Grid>
                 </Grid>
             </Border>
 

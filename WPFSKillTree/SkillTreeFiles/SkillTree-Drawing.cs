@@ -39,15 +39,20 @@ namespace PoESkillTree.SkillTreeFiles
 
         private readonly NodeHighlighter _nodeHighlighter = new NodeHighlighter();
         private readonly IPersistentData _persistentData;
-#if PoESkillTree_DisableStaticAscendancy==false
+
+#if DEBUG
+        public bool drawAscendancy;
+
         public bool DrawAscendancy
         {
-            get => GlobalSettings.DrawAscendancy;
-            set => GlobalSettings.SetDrawAscendancy(value);
+            get => drawAscendancy;
+            set => SetProperty(ref drawAscendancy, value);
         }
 #else
         public bool DrawAscendancy;
 #endif
+
+
 
         public DrawingVisual SkillTreeVisual { get; private set; }
         private DrawingVisual _background;
@@ -91,7 +96,7 @@ namespace PoESkillTree.SkillTreeFiles
                 _jewelRadiusDrawer.JewelViewModels = value;
             }
         }
-        #endregion
+#endregion
 
         private void InitialSkillTreeDrawing()
         {
@@ -424,16 +429,16 @@ namespace PoESkillTree.SkillTreeFiles
                     groupOrbitBrush[5].TileMode = TileMode.FlipXY;
                     groupOrbitBrush[5].Viewport = new Rect(0, 0, 1, .5f);
                 }
-                #region Background Drawing
+#region Background Drawing
                 var backgroundAsset = Assets.ContainsKey("Background1") ? Assets["Background1"] : Assets["Background2"];
                 var backgroundBrush = new ImageBrush(backgroundAsset) { TileMode = TileMode.Tile };
                 backgroundBrush.Viewport = new Rect(0, 0,
                     3 * backgroundBrush.ImageSource.Width / SkillTreeRect.Width,
                     3 * backgroundBrush.ImageSource.Height / SkillTreeRect.Height);
                 dc.DrawRectangle(backgroundBrush, null, SkillTreeRect);
-                #endregion
+#endregion
 
-                #region SkillNodeGroup Background Drawing
+#region SkillNodeGroup Background Drawing
 
                 foreach (var skillNodeGroup in PoESkillTree.PassiveNodeGroups.Values)
                 {
@@ -454,7 +459,7 @@ namespace PoESkillTree.SkillTreeFiles
                     var offset = new Vector2D(size.Width, size.Height) / 2;
                     dc.DrawRectangle(groupOrbitBrush[groupType], null, new Rect(skillNodeGroup.Position - offset, size));
                 }
-                #endregion
+#endregion
             }
         }
 

@@ -896,28 +896,5 @@ namespace PoESkillTree.SkillTreeFiles
         }
 
         //To-Do Store Ascendancy ids inside dictionary or list and use for displaying build skill point total without including ascendancy node points
-#if PoESkillTree_DisableStaticAscendancy==false
-        private static bool drawAscendancy = true;
-
-        public static bool DrawAscendancy
-        {
-            get { return drawAscendancy; }
-            set
-            {
-                if (drawAscendancy != value)
-                {
-                    drawAscendancy = value; NotifyStaticPropertyChanged("DrawAscendancy");
-                }
-            }
-        }
-
-        public static void SetDrawAscendancy(bool value)
-        {
-            if (drawAscendancy != value)
-            {
-                drawAscendancy = value; NotifyStaticPropertyChanged("DrawAscendancy");
-            }
-        }
-#endif
     }
 }
