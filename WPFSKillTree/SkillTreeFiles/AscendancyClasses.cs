@@ -45,7 +45,9 @@ namespace PoESkillTree.SkillTreeFiles
             => GetClasses(characterClass).Select(c => c.DisplayName);
 
         public string? GetAscendancyClassName(CharacterClass characterClass, int ascOrder)
-        {
+        {//ascOrder 0 is not None
+            if (ascOrder == -1)//Count -1 as null since 0 is used for first ascendancy class
+                return null;
             if (ascOrder > 0)
                 ascOrder -= 1;
             var classes = _classes[characterClass];
