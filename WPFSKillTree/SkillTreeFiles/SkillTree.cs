@@ -675,7 +675,6 @@ namespace PoESkillTree.SkillTreeFiles
             return temp;
         }
 
-
         public static Dictionary<string, List<float>> GetAttributesWithoutImplicitNodesOnly(IEnumerable<PassiveNodeViewModel> skilledNodes)
         {
             var temp = new Dictionary<string, List<float>>();
@@ -697,15 +696,22 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-#if (PoESkillTree_DisableStatTracking == false)
-            //if (GlobalSettings.TrackedStats.Count != 0)
-            //{
-            //    //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            //}
-#endif
             return temp;
         }
 
+#if (PoESkillTree_DisableStatTracking == false)
+        public static Dictionary<string, float> GetTrackedAttributesWithoutImplicitNodesOnly(Dictionary<string, List<float>> NonTrackedTotal)
+        {
+            float totalStat;
+            var statTotals = new Dictionary<string, float>(GlobalSettings.TrackedStats.Count);
+            foreach (var element in GlobalSettings.TrackedStats)
+            {
+                totalStat = element.Value.CalculateValue(NonTrackedTotal);
+                statTotals.Add(element.Key, totalStat);
+            }
+            return statTotals;
+        }
+#endif
 
         /// <summary>
         /// Returns a task that finishes with a SkillTree object once it has been initialized.

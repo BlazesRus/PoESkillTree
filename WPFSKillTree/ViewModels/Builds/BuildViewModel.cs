@@ -140,7 +140,7 @@ namespace PoESkillTree.ViewModels.Builds
 
             if (data.IsValid)
             {
-                PointsUsed = (uint)data.SkilledNodesIds.Count;//To-Do: switch to only count NonAscendancy points
+                PointsUsed = (uint)data.SkilledNodesIds.Count;//To-Do: switch to only count NonAscendancy points for display
                 CharacterClass = data.CharacterClass;
                 AscendancyClass = SkillTree.AscendancyClasses.GetAscendancyClassName(data.CharacterClass, data.AscendancyClassId);
             }

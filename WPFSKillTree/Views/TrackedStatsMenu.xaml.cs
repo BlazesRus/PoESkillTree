@@ -29,16 +29,6 @@ namespace PoESkillTree.TrackedStatViews
         public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var str = value as string;
-            //if (GlobalSettings.StatTrackingSavePath == null)
-            //{
-            //    string DefaultTrackingDir = Path.Combine(AppData.ProgramDirectory, "StatTracking" + Path.DirectorySeparatorChar);
-            //    GlobalSettings.DefaultTrackingDir = DefaultTrackingDir;
-            //    return string.IsNullOrEmpty(str) ? Path.Combine(DefaultTrackingDir, "CurrentTrackedAttributes.txt") : str;
-            //}
-            //else
-            //{
-            //    return string.IsNullOrEmpty(str) ? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt") : str;
-            //}
             StringData ReturnVal = str ?? Path.Combine(GlobalSettings.StatTrackingSavePath, "CurrentTrackedAttributes.txt");
             return ReturnVal;
         }

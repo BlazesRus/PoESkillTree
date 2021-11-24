@@ -886,7 +886,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
 #endif
 #if (PoESkillTree_DisableStatTracking == false)
             if(GlobalSettings.AutoTrackStats)
-                GlobalSettings.TrackedStats.StartTracking(attributeConstraints,pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);
+                GlobalSettings.TrackedStats.StartTracking(attributeConstraints, pseudoConstraints, WeaponClass.Value, OffHand.Value, Tags.Value);
 #endif
             return Task.FromResult<ISolver?>(solver);
         }

@@ -2182,7 +2182,10 @@ namespace PoESkillTree.Views
                 {
 
                     var attributechanges = new Dictionary<string, List<float>>();
-
+#if (PoESkillTree_DisableStatTracking == false)
+                    var trackedAttributeChanges = new Dictionary<string, float>();
+                    bool IsAddingNodes = true;
+#endif
                     int changedNodes;
 
                     if (_prePath != null)
@@ -2197,6 +2200,9 @@ namespace PoESkillTree.Views
                         attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_toRemove);
                         tooltip = "Total loss:";
                         changedNodes = _toRemove.Count;
+#if (PoESkillTree_DisableStatTracking == false)
+                        IsAddingNodes = false;
+#endif
                     }
                     else
                     {
@@ -2218,6 +2224,25 @@ namespace PoESkillTree.Views
                         }
 
                         sp.Children.Add(new Separator());
+#if (PoESkillTree_DisableStatTracking == false)
+                        if (GlobalSettings.TrackedStats.Count > 0)
+                        {
+                            trackedAttributeChanges = SkillTree.GetTrackedAttributesWithoutImplicitNodesOnly(attributechanges);
+                            tooltip += "\n Total ";
+                            if (IsAddingNodes)
+                                tooltip += "Tracked Stat gain:";
+                            else
+                                tooltip += "Tracked Stat loss:";
+                            foreach (var attrchange in trackedAttributeChanges)
+                            {
+                                var regex = new Regex(Regex.Escape("#"));
+                                var attr = attrchange.Key;
+                                attr = regex.Replace(attr, attrchange.Value.ToString(), 1);
+                                tooltip += "\n" + attr;
+                            }
+                        }
+#endif
+
                         sp.Children.Add(new TextBlock { Text = tooltip });
                     }
                 }
