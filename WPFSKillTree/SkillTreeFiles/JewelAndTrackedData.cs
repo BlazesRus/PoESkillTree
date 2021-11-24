@@ -477,26 +477,11 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
-        ///// <summary>
-        ///// Updates the value.
-        ///// </summary>
-        ///// <param name="selectedAttributes">The selected attributes.</param>
-        //public void UpdateValue(Dictionary<string, List<float>> selectedAttributes, Dictionary<string, float> statTotals)
+        //internal void Add(string name, PseudoAttribute item)
         //{
-        //    foreach(var element in this.Keys)
-        //    {
-        //        if(statTotals.ContainsKey(element))
-        //            statTotals[element] = this[element].CalculateValue(selectedAttributes);
-        //        else
-        //            statTotals.Add(element, this[element].CalculateValue(selectedAttributes));
-        //    }
+        //    PseudoStat newStat = new PseudoStat(item);
+        //    Add(name, newStat);
         //}
-
-        internal void Add(string name, PseudoAttribute item)
-        {
-            PseudoStat newStat = new PseudoStat(item);
-            Add(name, newStat);
-        }
     }
 #endif
 

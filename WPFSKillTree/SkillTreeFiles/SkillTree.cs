@@ -195,9 +195,12 @@ namespace PoESkillTree.SkillTreeFiles
         public ObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
 #endif
 
+        /// <summary>
+        /// Tracked Stat Totals for Current Skill-Tree(Attribute Keys with Tracked Attribute values)
+        /// </summary>
 #if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
         public ConcurrentObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
-#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+#elif PoeSkillTree_DontUseKeyedTrackedStats == false
         public ObservableKeyedPseudoStat SelectedPseudoTotal
 #else
         public ObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
@@ -207,9 +210,16 @@ namespace PoESkillTree.SkillTreeFiles
             set => SetProperty(ref selectedPseudoTotal, value);
         }
 
-
+        /// <summary>
+        /// Tracked Stat Totals for highlighted build (Attribute Keys with Tracked Attribute values)
+        /// </summary>
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
 
+        /// <summary>
+        /// Unfinished(Still need current implementation to first display the context menu)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void RemoveTrackedAttr(object sender, RoutedEventArgs e)
         {
             MenuItem CurrentMenuItem = (MenuItem)sender;
@@ -610,12 +620,12 @@ namespace PoESkillTree.SkillTreeFiles
                     HighlightedPseudoTotal.Clear();
                 return;
             }
-            float statTotal;
+            float statCalc;
             string displayTotal;
             foreach (var item in GlobalSettings.TrackedStats)
             {
-                statTotal = item.Value.CalculateValue(SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
-                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statTotal);
+                statCalc = item.Value.CalculateValue(SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
+                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statCalc);
 #if PoeSkillTree_DontUseKeyedTrackedStats==false
                 if (SelectedPseudoTotal.Contains(item.Key))//Update Tracked Value if already in Display
 #else
@@ -623,14 +633,28 @@ namespace PoESkillTree.SkillTreeFiles
 #endif
                 {
                     SelectedPseudoTotal[item.Key].Text = displayTotal;
-                    SelectedPseudoTotal[item.Key].Total = statTotal;
+                    SelectedPseudoTotal[item.Key].Total = statCalc;
                 }
                 else
 #if PoeSkillTree_DontUseKeyedTrackedStats == false
-                    SelectedPseudoTotal.Add(new PseudoTotal(displayTotal, statTotal, item.Key));
+                    SelectedPseudoTotal.Add(new PseudoTotal(displayTotal, statCalc, item.Key));
 #else
                     SelectedPseudoTotal.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
 #endif
+            }
+            //Updating Display to show attribute comparison
+            if (HighlightedPseudoTotal != null)
+            {
+                //Reusing statCalc for Stat difference(how much additional compared to selected build)
+                foreach (var item in HighlightedPseudoTotal)
+                {
+                    statCalc = SelectedPseudoTotal[item.Key].Total - item.Value;
+                    if (statCalc >= 0)
+                        SelectedPseudoTotal[item.Key].Text += " (+";
+                    else
+                        SelectedPseudoTotal[item.Key].Text += " (";
+                    SelectedPseudoTotal[item.Key].Text += statCalc+")";
+                }
             }
         }
 #endif
@@ -700,7 +724,7 @@ namespace PoESkillTree.SkillTreeFiles
         }
 
 #if (PoESkillTree_DisableStatTracking == false)
-        public static Dictionary<string, float> GetTrackedAttributesWithoutImplicitNodesOnly(Dictionary<string, List<float>> NonTrackedTotal)
+        public static Dictionary<string, float> GetCalculatedTrackedAttributesFromStatDictionary(Dictionary<string, List<float>> NonTrackedTotal)
         {
             float totalStat;
             var statTotals = new Dictionary<string, float>(GlobalSettings.TrackedStats.Count);

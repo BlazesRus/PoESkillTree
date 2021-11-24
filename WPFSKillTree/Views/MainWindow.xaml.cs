@@ -2227,8 +2227,8 @@ namespace PoESkillTree.Views
 #if (PoESkillTree_DisableStatTracking == false)
                         if (GlobalSettings.TrackedStats.Count > 0)
                         {
-                            trackedAttributeChanges = SkillTree.GetTrackedAttributesWithoutImplicitNodesOnly(attributechanges);
-                            tooltip += "\n Total ";
+                            trackedAttributeChanges = SkillTree.GetCalculatedTrackedAttributesFromStatDictionary(attributechanges);
+                            tooltip += "\n\n Total ";
                             if (IsAddingNodes)
                                 tooltip += "Tracked Stat gain:";
                             else
@@ -2609,11 +2609,18 @@ namespace PoESkillTree.Views
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedNodes.UnionWith(nodes);
                 Tree.HighlightedAttributes = SkillTree.GetAttributes(nodes, charClass, build.Level, build.Bandits);
+#if (PoESkillTree_DisableStatTracking == false)
+                Tree.HighlightedPseudoTotal = SkillTree.GetCalculatedTrackedAttributesFromStatDictionary(Tree.HighlightedAttributes);
+#endif
             }
             else
             {
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedAttributes = null;
+#if (PoESkillTree_DisableStatTracking == false)
+                if (Tree.HighlightedPseudoTotal != null)
+                    Tree.HighlightedPseudoTotal = null;
+#endif
             }
             UpdateUI();
         }
