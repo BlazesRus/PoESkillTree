@@ -176,6 +176,7 @@ namespace PoESkillTree.Views
                 if (_tree != null)
                     _tree.PropertyChanged -= Tree_PropertyChanged;
                 SetProperty(ref _tree!, value);
+                _tree.IsLoadedTree = true;
             }
         }
 

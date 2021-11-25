@@ -882,5 +882,10 @@ namespace PoESkillTree.SkillTreeFiles
 
         //To-Do Store Ascendancy ids inside dictionary or list and use for displaying build skill point total without including ascendancy node points
         //Tree.AscRootNodeList holds current ascendancy root nodes
+
+        /// <summary>
+        /// Storing Id from data.AscendancyClassId during Tree update to auto-correct incorrect Ascendancy Id in SkillTree code
+        /// </summary>
+        public static int AscendancyId = 0;
     }
 }

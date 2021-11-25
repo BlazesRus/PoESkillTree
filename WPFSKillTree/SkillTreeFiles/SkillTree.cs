@@ -514,9 +514,23 @@ namespace PoESkillTree.SkillTreeFiles
             private set => SetProperty(ref _charClass, value);
         }
 
+#if PoESkillTree_DisableAscendancyCorrections == false
+        public bool IsLoadedTree;
+#endif
         public int AscType
         {
+#if PoESkillTree_DisableAscendancyCorrections == false
+            get
+            {
+                if(_asctype==0&&IsLoadedTree&& GlobalSettings.AscendancyId!=0)
+                {
+                    _asctype = GlobalSettings.AscendancyId;//ChangeAscClassFromNone(GlobalSettings.AscendancyId);
+                }
+                return _asctype;
+            }
+#else
             get => _asctype;
+#endif
             set
             {
                 //If AscendancyClassName is not equal to character class name, then _asctype should not be zero
@@ -555,6 +569,26 @@ namespace PoESkillTree.SkillTreeFiles
                     SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
                 }
             }
+
+            DrawAscendancyLayers();
+        }
+
+        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
+            Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
+        private void ChangeAscClassFromNone(int toType)
+        {
+            //var remove = new List<PassiveNodeViewModel>();
+            SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
+            //var sn = GetAscNode();
+            //if (sn != null)
+            //{
+            //    foreach (var n in SkilledNodes)
+            //    {
+            //        if (sn.AscendancyName != n.AscendancyName && n.IsAscendancyNode)
+            //            remove.Add(n);
+            //    }
+            //    SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
+            //}
 
             DrawAscendancyLayers();
         }
@@ -626,7 +660,7 @@ namespace PoESkillTree.SkillTreeFiles
             {
                 statCalc = item.Value.CalculateValue(SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
                 displayTotal = InsertNumbersInTrackedDisplay(item.Key, statCalc);
-#if PoeSkillTree_DontUseKeyedTrackedStats==false
+#if PoeSkillTree_DontUseKeyedTrackedStats == false
                 if (SelectedPseudoTotal.Contains(item.Key))//Update Tracked Value if already in Display
 #else
                 if (SelectedPseudoTotal.ContainsKey(item.Key))//Update Tracked Value if already in Display

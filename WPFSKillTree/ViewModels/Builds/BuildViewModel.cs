@@ -18,6 +18,14 @@ namespace PoESkillTree.ViewModels.Builds
         private bool _isVisible;
         private CharacterClass _characterClass;
         private string? _ascendancyClass;
+
+//#if PoESkillTree_DisableAscendancyCorrections==false
+//        /// <summary>
+//        /// Storing Id from data.AscendancyClassId during Tree update to auto-correct incorrect Ascendancy Id in SkillTree code
+//        /// </summary>
+//        public int AscendancyId;
+//#endif
+
         private uint _pointsUsed;
 
         /// <summary>
@@ -143,6 +151,10 @@ namespace PoESkillTree.ViewModels.Builds
                 PointsUsed = (uint)data.SkilledNodesIds.Count;//To-Do: switch to only count NonAscendancy points for display
                 CharacterClass = data.CharacterClass;
                 AscendancyClass = SkillTree.AscendancyClasses.GetAscendancyClassName(data.CharacterClass, data.AscendancyClassId);
+#if PoESkillTree_DisableAscendancyCorrections==false
+                if(CurrentlyOpen)
+                    GlobalSettings.AscendancyId = data.AscendancyClassId;
+#endif
             }
             else
             {
