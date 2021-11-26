@@ -19,13 +19,6 @@ namespace PoESkillTree.ViewModels.Builds
         private CharacterClass _characterClass;
         private string? _ascendancyClass;
 
-//#if PoESkillTree_DisableAscendancyCorrections==false
-//        /// <summary>
-//        /// Storing Id from data.AscendancyClassId during Tree update to auto-correct incorrect Ascendancy Id in SkillTree code
-//        /// </summary>
-//        public int AscendancyId;
-//#endif
-
         private uint _pointsUsed;
 
         /// <summary>
@@ -92,12 +85,7 @@ namespace PoESkillTree.ViewModels.Builds
         /// <summary>
         /// Gets a description of this build.
         /// </summary>
-        public string Description =>
-#if PoESkillTree_UseStaticPointSharing
-    ClassName +" "+ GlobalSettings.points["NormalUsed"]+"/"+ GlobalSettings.points["NormalTotal"]+" points used.";//+ GlobalSettings.points["AscendancyUsed"]+"/8 Ascendancy points used";
-#else//ClassName, NormalUsedPoints.Text/NormalTotalPoints.Text points used+AscendancyUsedPoints.Text/8 Ascendancy
-            string.Format(L10n.Plural("{0}, {1} point(including ascendancy points) used.", "{0}, {1} points(including ascendancy points) used", PointsUsed), ClassName, PointsUsed);
-#endif
+        public string Description => string.Format(L10n.Plural("{0}, {1} skill points used.", "{0}, {1} skill points used", PointsUsed), ClassName, PointsUsed);
 
         /// <param name="poEBuild">The wrapped build.</param>
         /// <param name="filterPredicate">A predicate that returns whether the given <see cref="IBuildViewModel"/>
@@ -139,6 +127,12 @@ namespace PoESkillTree.ViewModels.Builds
             };
         }
 
+        // Explicit predicate delegate.
+        private static bool IsAscendancy(ushort NodeId)
+        {
+            return GlobalSettings.KnownAscendancyNodes.Contains(NodeId);
+        }
+
         private void UpdateTreeDependingProperties()
         {
             if (SkillTree == null || string.IsNullOrEmpty(Build.TreeUrl))
@@ -148,13 +142,9 @@ namespace PoESkillTree.ViewModels.Builds
 
             if (data.IsValid)
             {
-                PointsUsed = (uint)data.SkilledNodesIds.Count;//To-Do: switch to only count NonAscendancy points for display
+                PointsUsed = (uint)data.SkilledNodesIds.Count - (uint)data.SkilledNodesIds.FindAll(IsAscendancy).Count; //Only count NonAscendancy points for display
                 CharacterClass = data.CharacterClass;
                 AscendancyClass = SkillTree.AscendancyClasses.GetAscendancyClassName(data.CharacterClass, data.AscendancyClassId);
-#if PoESkillTree_DisableAscendancyCorrections==false
-                if(CurrentlyOpen)
-                    GlobalSettings.AscendancyId = data.AscendancyClassId;
-#endif
             }
             else
             {

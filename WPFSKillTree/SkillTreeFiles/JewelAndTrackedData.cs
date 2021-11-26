@@ -693,16 +693,6 @@ namespace PoESkillTree.SkillTreeFiles
 
     public static class GlobalSettings
     {
-#if PoESkillTree_UseStaticPointSharing
-//        public static Dictionary<string, int> points = new Dictionary<string, int>()
-//        {
-//            {"NormalUsed", 0},
-//            {"NormalTotal", 22},
-//            {"AscendancyUsed", 0},
-//            {"AscendancyTotal", 8},
-//        };
-#endif
-
         /// <summary>
         /// Stored JewelInfo
         /// </summary>
@@ -881,11 +871,12 @@ namespace PoESkillTree.SkillTreeFiles
         }
 
         //To-Do Store Ascendancy ids inside dictionary or list and use for displaying build skill point total without including ascendancy node points
+
         //Tree.AscRootNodeList holds current ascendancy root nodes
 
         /// <summary>
-        /// Storing Id from data.AscendancyClassId during Tree update to auto-correct incorrect Ascendancy Id in SkillTree code
+        /// The list of known ascendancy node ids
         /// </summary>
-        public static int AscendancyId = 0;
+        public static List<ushort> KnownAscendancyNodes = new List<ushort>(150) { };
     }
 }

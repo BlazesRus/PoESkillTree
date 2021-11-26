@@ -409,6 +409,10 @@ namespace PoESkillTree.SkillTreeFiles
                     {
                         MasteryDefinitions.SetMasteryLabel(node);
                     }
+                    else if(node.IsAscendancyNode)
+                    {
+                        GlobalSettings.KnownAscendancyNodes.Add(node.Id);
+                    }
                 }
 
                 SkillTreeRect = new Rect2D(
@@ -468,12 +472,7 @@ namespace PoESkillTree.SkillTreeFiles
 #endif
 
             var bandits = _persistentData.CurrentBuild.Bandits;
-#if PoESkillTree_UseStaticPointSharing
-                        GlobalSettings.points["NormalUsed"] = 0;
-                        GlobalSettings.points["AscendancyUsed"] = 0;
-                        GlobalSettings.points["NormalTotal"] = bandits.Choice == Bandit.None? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
-
-#elif PoESkillTree_DontUseTreePointSharing == false
+#if PoESkillTree_DontUseTreePointSharing == false
             points["NormalUsed"] = 0;
             points["AscendancyUsed"] = 0;
             points["NormalTotal"] = bandits.Choice == Bandit.None ? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
@@ -483,26 +482,14 @@ namespace PoESkillTree.SkillTreeFiles
             foreach (var node in SkilledNodes)
             {
                 if (!node.IsAscendancyNode && !node.IsRootNode)
-#if PoESkillTree_UseStaticPointSharing
-                    GlobalSettings.points["NormalUsed"] += 1;
-#else
                     points["NormalUsed"] += 1;
-#endif
                 else if (node.IsAscendancyNode && !node.IsAscendancyStart && !node.IsMultipleChoiceOption)
                 {
-#if PoESkillTree_UseStaticPointSharing
-
-#else
                     points["AscendancyUsed"] += 1;
                     points["NormalTotal"] += node.PassivePointsGranted;
-#endif
                 }
             }
-#if PoESkillTree_UseStaticPointSharing
-            return GlobalSettings.points;
-#else
             return points;
-#endif
 
         }
 
@@ -604,6 +591,18 @@ namespace PoESkillTree.SkillTreeFiles
             var add = Skillnodes[RootNodeClassDictionary[charClass]];
             SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
             _asctype = 0;
+        }
+
+        public void SetClass(CharacterClass charClass)
+        {
+            if (charClass == CharClass)
+                return;
+            var canSwitch = CanSwitchClass(charClass);
+            CharClass = charClass;
+
+            var remove = canSwitch ? SkilledNodes.Where(n => n.IsRootNode) : SkilledNodes;//Only Remove Swap RootNodes
+            var add = Skillnodes[RootNodeClassDictionary[charClass]];
+            SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
         }
 
         public string? AscendancyClassName
@@ -724,12 +723,6 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
             }
-#if (PoESkillTree_DisableStatTracking == false)
-            if (GlobalSettings.TrackedStats.Count != 0)
-            {
-                //temp = GlobalSettings.TrackedStats.PlaceIntoAttributeDic(temp);
-            }
-#endif
             return temp;
         }
 
