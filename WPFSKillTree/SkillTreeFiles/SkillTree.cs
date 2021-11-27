@@ -1327,11 +1327,10 @@ namespace PoESkillTree.SkillTreeFiles
 
         public void LoadFromUrl(string url)
         {
-            var CurrentClass = CharClass;
             var data = DecodeUrl(url);
+            SetClass(data.CharacterClass);
             var skillNodes = Skillnodes.Values.Where(x => data.SkilledNodesIds.Contains(x.Id));
             ResetSkilledNodesTo(skillNodes);
-            SetClass(data.CharacterClass);//SwitchClass(data.CharacterClass);
             AscType = data.AscendancyClassId;
             foreach (var pair in data.MasteryEffectPairs)
             {
