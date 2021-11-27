@@ -501,23 +501,9 @@ namespace PoESkillTree.SkillTreeFiles
             private set => SetProperty(ref _charClass, value);
         }
 
-#if PoESkillTree_DisableAscendancyCorrections == false
-        public bool IsLoadedTree;
-#endif
         public int AscType
         {
-#if PoESkillTree_DisableAscendancyCorrections == false
-            get
-            {
-                if(_asctype==0&&IsLoadedTree&& GlobalSettings.AscendancyId!=0)
-                {
-                    _asctype = GlobalSettings.AscendancyId;//ChangeAscClassFromNone(GlobalSettings.AscendancyId);
-                }
-                return _asctype;
-            }
-#else
             get => _asctype;
-#endif
             set
             {
                 //If AscendancyClassName is not equal to character class name, then _asctype should not be zero
@@ -542,7 +528,7 @@ namespace PoESkillTree.SkillTreeFiles
                 SkilledNodes.ExceptWith(remove);
             }
             else
-            {
+            {//Cause of Removed Ascendancy nodes likely from here
                 var remove = new List<PassiveNodeViewModel>();
                 SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
                 var sn = GetAscNode();
@@ -551,7 +537,7 @@ namespace PoESkillTree.SkillTreeFiles
                     foreach (var n in SkilledNodes)
                     {
                         if (sn.AscendancyName != n.AscendancyName && n.IsAscendancyNode)
-                            remove.Add(n);
+                            remove.Add(n);//Remove all Ascendancy nodes that do not match name of the ascendancy type
                     }
                     SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
                 }
@@ -560,25 +546,25 @@ namespace PoESkillTree.SkillTreeFiles
             DrawAscendancyLayers();
         }
 
-        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
-            Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
-        private void ChangeAscClassFromNone(int toType)
-        {
-            //var remove = new List<PassiveNodeViewModel>();
-            SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
-            //var sn = GetAscNode();
-            //if (sn != null)
-            //{
-            //    foreach (var n in SkilledNodes)
-            //    {
-            //        if (sn.AscendancyName != n.AscendancyName && n.IsAscendancyNode)
-            //            remove.Add(n);
-            //    }
-            //    SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
-            //}
+        //[SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
+        //    Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
+        //private void ChangeAscClassFromNone(int toType)
+        //{
+        //    //var remove = new List<PassiveNodeViewModel>();
+        //    SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
+        //    //var sn = GetAscNode();
+        //    //if (sn != null)
+        //    //{
+        //    //    foreach (var n in SkilledNodes)
+        //    //    {
+        //    //        if (sn.AscendancyName != n.AscendancyName && n.IsAscendancyNode)
+        //    //            remove.Add(n);
+        //    //    }
+        //    //    SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
+        //    //}
 
-            DrawAscendancyLayers();
-        }
+        //    DrawAscendancyLayers();
+        //}
 
         public void SwitchClass(CharacterClass charClass)
         {
@@ -858,21 +844,58 @@ namespace PoESkillTree.SkillTreeFiles
             AscType = SelectAscendancyFromNodes(nodes) ?? 0;
         }
 
+        public void AllocateSkillNodesWithAscendancyReassignment(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
+        {
+            toAdd = toAdd.Where(n => !SkilledNodes.Contains(n)).ToList();
+            //var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
+            SkilledNodes.UnionWith(toAdd);//SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
+            string? newAscendancyName = "";
+            //if (SelectAscendancyFromNodes(toAdd) is int ascType)
+            //    AscType = ascType;
+            foreach (var node in toAdd)
+            {
+                if (node.IsAscendancyStart|| node.IsAscendancyNode)
+                {
+                    //ascendancy = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName!);
+                    AscType = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName!);
+                    newAscendancyName = node.AscendancyName;
+                    break;//Exit loop after retrieve ascendancy info
+                }
+            }
+            //Remove all Ascendancy nodes not matching the new Ascendancy Type
+            var nodesToRemove = SkilledNodes.Where(x => x.IsAscendancyNode && x.AscendancyName != newAscendancyName);
+            SkilledNodes.ExceptWith(nodesToRemove);
+        }
+
         public void AllocateSkillNodes(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
         {
             toAdd = toAdd.Where(n => !SkilledNodes.Contains(n)).ToList();
-            var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
-            SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
-            if (SelectAscendancyFromNodes(toAdd) is int ascType)
-                AscType = ascType;
+            SkilledNodes.UnionWith(toAdd);
+            foreach (var node in toAdd)
+            {
+                if (node.IsAscendancyStart || node.IsAscendancyNode)
+                {
+                    AscType = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName!);
+                    break;//Exit loop after retrieve ascendancy info
+                }
+            }
         }
+
+        //public void AllocateSkillNodesWithAscendancyRemoval(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
+        //{
+        //    toAdd = toAdd.Where(n => !SkilledNodes.Contains(n)).ToList();
+        //    var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
+        //    SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
+        //    if (SelectAscendancyFromNodes(toAdd) is int ascType)
+        //        AscType = ascType;
+        //}
 
         private int? SelectAscendancyFromNodes(IEnumerable<PassiveNodeViewModel> nodes)
         {
             int? ascendancy = null;
             foreach (var node in nodes)
             {
-                if (node.IsAscendancyStart)
+                if (node.IsAscendancyStart || node.IsAscendancyNode)
                 {
                     ascendancy = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName!);
                     break;//Exit loop after retrieve ascendancy info
@@ -1304,10 +1327,12 @@ namespace PoESkillTree.SkillTreeFiles
 
         public void LoadFromUrl(string url)
         {
+            var CurrentClass = CharClass;
             var data = DecodeUrl(url);
             var skillNodes = Skillnodes.Values.Where(x => data.SkilledNodesIds.Contains(x.Id));
             ResetSkilledNodesTo(skillNodes);
-            SwitchClass(data.CharacterClass);
+            SetClass(data.CharacterClass);//SwitchClass(data.CharacterClass);
+            AscType = data.AscendancyClassId;
             foreach (var pair in data.MasteryEffectPairs)
             {
                 if (SkilledNodes.FirstOrDefault(x => x.Id == pair.Id) is PassiveNodeViewModel mastery)
