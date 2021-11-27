@@ -1857,7 +1857,7 @@ msgid "This will delete the build folder \"{0}\" and all its contents.\n"
 msgstr ""
 
 #: ViewModels\Builds\BuildsControlViewModel.cs:424
-#: Views\MainWindow.xaml.cs:992
+#: Views\MainWindow.xaml.cs:993
 msgid "Do you want to continue?"
 msgstr ""
 
@@ -2115,111 +2115,111 @@ msgid ""
 "Canceling stops the program from closing and does not save any builds."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:936
+#: Views\MainWindow.xaml.cs:937
 #, csharp-format
 msgid "{0} point"
 msgid_plural "{0} points"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Views\MainWindow.xaml.cs:970
+#: Views\MainWindow.xaml.cs:971
 msgid "Your build must use at least one node to generate a screenshot"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:971
+#: Views\MainWindow.xaml.cs:972
 msgid "Screenshot Generator"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:989
+#: Views\MainWindow.xaml.cs:990
 msgid "The existing skill tree data will be deleted. The data will be downloaded from the official online skill tree and is from the latest released version of the game."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:998
+#: Views\MainWindow.xaml.cs:999
 msgid "Downloading skill tree assets ..."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1019
+#: Views\MainWindow.xaml.cs:1020
 msgid "An error occurred while downloading assets."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1036
+#: Views\MainWindow.xaml.cs:1037
 msgid "Checking for updates"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1041
+#: Views\MainWindow.xaml.cs:1042
 msgid "You have the latest version!"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1046
+#: Views\MainWindow.xaml.cs:1047
 #, csharp-format
 msgid "An update for {0} ({1}) is available!"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1049
+#: Views\MainWindow.xaml.cs:1050
 msgid "The application will be closed when download completes to proceed with the update."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1050
+#: Views\MainWindow.xaml.cs:1051
 #, csharp-format
 msgid "A new version {0} is available!"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1053
+#: Views\MainWindow.xaml.cs:1054
 msgid "The new version of application will be installed side-by-side with earlier versions."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1057
+#: Views\MainWindow.xaml.cs:1058
 msgid "Warning: This is a pre-release, meaning there could be some bugs!"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1061
+#: Views\MainWindow.xaml.cs:1062
 msgid "Do you want to download and install the update?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1062
+#: Views\MainWindow.xaml.cs:1063
 msgid "Do you want to download and install the new version?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1064
+#: Views\MainWindow.xaml.cs:1065
 msgid "Continue installation?"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1075
+#: Views\MainWindow.xaml.cs:1076
 msgid "An error occurred while attempting to contact the update location."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1083
+#: Views\MainWindow.xaml.cs:1084
 msgid "Downloading latest version"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1098 Views\MainWindow.xaml.cs:1113
+#: Views\MainWindow.xaml.cs:1099 Views\MainWindow.xaml.cs:1114
 msgid "An error occurred during the download operation."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1126
+#: Views\MainWindow.xaml.cs:1127
 msgid "An error occurred while attempting to start the installation."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1833
+#: Views\MainWindow.xaml.cs:2217
 msgid "An error occurred while attempting to load item data."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:1929 Views\MainWindow.xaml.cs:1953
+#: Views\MainWindow.xaml.cs:2313 Views\MainWindow.xaml.cs:2337
 msgid "An error occurred while attempting to load Skill tree from URL."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2045
+#: Views\MainWindow.xaml.cs:2429
 msgid "Generating PoEUrl of Skill tree"
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2051
+#: Views\MainWindow.xaml.cs:2435
 msgid "An error occurred while attempting to contact the PoEUrl location."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2061
+#: Views\MainWindow.xaml.cs:2445
 msgid "The PoEUrl link has been copied to Clipboard."
 msgstr ""
 
-#: Views\MainWindow.xaml.cs:2065
+#: Views\MainWindow.xaml.cs:2449
 msgid "An error occurred while copying to Clipboard."
 msgstr ""
