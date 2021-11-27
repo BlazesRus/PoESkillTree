@@ -269,10 +269,9 @@ namespace PoESkillTree.ViewModels.Import
                 var (characterClass, ascendancyClass) = GetCharacterAndAscendancyClass(passiveNodes);
 
                 _skillTree.ResetSkilledNodesTo(Array.Empty<PassiveNodeViewModel>());
-                _skillTree.SetClass(characterClass);//_skillTree.SwitchClass(characterClass);
+                _skillTree.SetClass(characterClass);
+                _skillTree.AscType = ascendancyClass;
                 _skillTree.AllocateSkillNodesWithAscendancyReassignment(passiveNodes);
-                if(_skillTree.AscType==0)
-                    _skillTree.AscType = ascendancyClass;//Should not be needed with WithAscendancyReassignment code
             }
 
             if (importJewels)
