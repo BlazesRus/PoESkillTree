@@ -431,14 +431,14 @@ namespace PoESkillTree.ViewModels.Builds
             await DeleteBuildFile(build);
         }
 
-        private async Task OpenBuild(BuildViewModel build)
+        private async Task OpenBuild(BuildViewModel curBuild)
         {
-            if (build != CurrentBuild)
+            if (curBuild != CurrentBuild)
             {
-                CurrentBuild = build;
+                CurrentBuild = curBuild;
                 return;
             }
-            if (!build.Build.IsDirty || !build.Build.CanRevert)
+            if (!curBuild.Build.IsDirty || !curBuild.Build.CanRevert)
                 return;
 
             var result = await _dialogCoordinator.ShowQuestionAsync(this,
@@ -451,9 +451,11 @@ namespace PoESkillTree.ViewModels.Builds
             }
         }
 
-        private async Task SaveBuild(BuildViewModel build)
+        /// <summary>Saves the current build changes to the build based file</summary>
+        /// <param name="curBuild">The currently selected build.</param>
+        private async Task SaveBuild(BuildViewModel curBuild)
         {
-            var poeBuild = build.Build;
+            var poeBuild = curBuild.Build;
             if (!poeBuild.CanRevert && poeBuild.IsDirty)
             {
                 // Build was created in this program run and was not yet saved.
@@ -462,40 +464,41 @@ namespace PoESkillTree.ViewModels.Builds
                     L10n.Message("Saving new Build"),
                     L10n.Message("Enter the name of the build."),
                     poeBuild.Name,
-                    s => _buildValidator.ValidateExistingFileName(s, build));
+                    s => _buildValidator.ValidateExistingFileName(s, curBuild));
                 if (string.IsNullOrEmpty(name))
                     return;
                 poeBuild.Name = name;
             }
             poeBuild.LastUpdated = DateTime.Now;
-            await SaveBuildToFile(build);
+            await SaveBuildToFile(curBuild);
             // Save parent folder to retain ordering information when renaming
-            await SaveBuildToFile(build.Parent!);
+            await SaveBuildToFile(curBuild.Parent!);
         }
-
-        private async Task SaveBuildAs(BuildViewModel vm)
+        /// <summary>Saves the current build as another buildname.</summary>
+        /// <param name="curBuild">The currently selected build.</param>
+        private async Task SaveBuildAs(BuildViewModel curBuild)
         {
-            var build = vm.Build;
+            var build = curBuild.Build;
             var name = await _dialogCoordinator.ShowValidatingInputDialogAsync(this, L10n.Message("Save as"),
-                L10n.Message("Enter the new name of the build"), build.Name, s => _buildValidator.ValidateNewBuildName(s, vm.Parent!));
+                L10n.Message("Enter the new name of the build"), build.Name, s => _buildValidator.ValidateNewBuildName(s, curBuild.Parent!));
             if (string.IsNullOrWhiteSpace(name))
                 return;
             var newBuild = build.DeepClone();
             newBuild.Name = name;
             var newVm = new BuildViewModel(newBuild, Filter);
 
-            var builds = vm.Parent!.Children;
+            var builds = curBuild.Parent!.Children;
             if (build.CanRevert)
             {
                 // The original build exists in the file system.
                 build.RevertChanges();
-                builds.Insert(builds.IndexOf(vm), newVm);
+                builds.Insert(builds.IndexOf(curBuild), newVm);
             }
             else
             {
                 // The original build does not exist in the file system
                 // It will be replaced by the new one.
-                var i = builds.IndexOf(vm);
+                var i = builds.IndexOf(curBuild);
                 builds.RemoveAt(i);
                 builds.Insert(i, newVm);
             }
