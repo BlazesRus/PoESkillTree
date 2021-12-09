@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using PoESkillTree.SkillTreeFiles;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
