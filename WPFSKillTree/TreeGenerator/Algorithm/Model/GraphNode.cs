@@ -11,7 +11,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
     ///  simplified skill tree.
     /// </summary>
     [DebuggerDisplay("{Name}")]
-    public class GraphNode
+    public class GraphNode: IComparable<GraphNode>
     {
         private readonly ushort _id;
         /// <summary>
@@ -23,12 +23,32 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         private string Name { get { return SkillTree.Skillnodes[_id].Name; } }
 #endif
 
+#if DEBUG
+        private int distancesIndex = -1;
+
+        /// <summary>
+        /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
+        /// and other classes.
+        /// </summary>
+        public int DistancesIndex 
+        { 
+            get=>distancesIndex;
+            set
+            {
+                if (value != distancesIndex)
+                {
+                    distancesIndex = value;
+                }
+            }
+        }
+#else
         /// <summary>
         /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
         /// and other classes.
         /// </summary>
         public int DistancesIndex { get; set; }
-        
+#endif
+
         private List<GraphNode> _adjacent = new List<GraphNode>();
         /// <summary>
         /// Gets the nodes adjacent to this node.
@@ -85,6 +105,16 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _nodes.AddRange(path);
             other._adjacent.Clear();
             other._nodes.Clear();
+        }
+
+        public int CompareTo([AllowNull] GraphNode other)
+        {//https://docs.microsoft.com/en-us/dotnet/api/system.nullable.compare?redirectedfrom=MSDN&view=net-6.0#System_Nullable_Compare__1_System_Nullable___0__System_Nullable___0__
+            if (this == null)
+                return other==null?0: Id*-1;
+            else if (other == null)
+                return Id;
+            else
+                return Id.CompareTo(other.Id);
         }
     }
 }

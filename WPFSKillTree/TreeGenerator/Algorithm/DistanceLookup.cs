@@ -284,8 +284,8 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         }
 
         /// <summary>
-        /// Adds the distance and shortest path between from and to to the respectives
-        /// dictionarys if not already present.
+        /// Adds the distance and shortest path between from and to to the
+        /// respective dictionaries if not already present.
         /// </summary>
         private void AddEdge(GraphNode from, GraphNode to, int distFromStart, IDictionary<ushort, ushort> predecessors)
         {
