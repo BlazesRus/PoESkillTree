@@ -137,7 +137,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             var path = new HashSet<ushort>(GetShortestPath(x, into));
             this[x, into] = 0;
             SetShortestPath(x, into, new ushort[0]);
-            for (var i = 0; i < CacheSize; i++)
+            for (var i = 0; i < CacheSize; ++i)
             {
                 if (i == into || i == x) continue;
 

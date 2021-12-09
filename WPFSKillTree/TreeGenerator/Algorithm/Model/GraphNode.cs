@@ -25,7 +25,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
 #endif
 
 #if DEBUG
-        private int distancesIndex = -1;
+        private int distancesIndex;
 
         /// <summary>
         /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
