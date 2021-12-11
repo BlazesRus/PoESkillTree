@@ -138,7 +138,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _fixedTargetNodes = new HashSet<GraphNode>(fixedTargetNodes);
             _variableTargetNodes = new HashSet<GraphNode>(variableTargetNodes);
             _allTargetNodes = new HashSet<GraphNode>(_variableTargetNodes.Union(_fixedTargetNodes));
-            ComputeInitialFields();
+            ComputeInitialFields();//Wait until ReduceSearchSpace() to update Indices since otherwise will return {-1} which is useless for distance calculation purposes
         }
 
         /// <summary>

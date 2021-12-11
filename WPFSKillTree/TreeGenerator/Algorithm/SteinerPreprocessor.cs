@@ -75,7 +75,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             Debug.WriteLine("First basic degree reduction:\n" +
                             "   removed nodes: " + (nodeCountBefore - _nodeStates.SearchSpaceSize) + " (of " + nodeCountBefore +
                             " initial nodes)");
-            // Initialise the distance lookup.
+            // Initialize the distance lookup.
             _data.DistanceCalculator = new DistanceCalculator(_nodeStates.SearchSpace);
             var distanceLookup = _data.DistanceCalculator;
             // Distance indices were not set before.
