@@ -95,9 +95,9 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public IEnumerable<GraphNode> FixedTargetNodes => _fixedTargetNodes;
 
-        private HashSet<int> _fixedTargetNodeIndexIndices;
+        private HashSet<int> _fixedTargetNodeIndices;
         
-        public IReadOnlyCollection<int> FixedTargetNodeIndices => _fixedTargetNodeIndexIndices;
+        public IReadOnlyCollection<int> FixedTargetNodeIndices => _fixedTargetNodeIndices;
 
         public int FixedTargetNodeCount => _fixedTargetNodes.Count;
 
@@ -138,7 +138,26 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _fixedTargetNodes = new HashSet<GraphNode>(fixedTargetNodes);
             _variableTargetNodes = new HashSet<GraphNode>(variableTargetNodes);
             _allTargetNodes = new HashSet<GraphNode>(_variableTargetNodes.Union(_fixedTargetNodes));
-            ComputeFields();
+            ComputeInitialFields();
+        }
+
+        /// <summary>
+        /// Recomputes the fields that rely on distance indices. Is called each time the search space is set.
+        /// 
+        /// Has to be called if there are changes to the distance indices without the search space being set.
+        /// For example, if the distances were not calculated on object creation, this has to be called after
+        /// the distances were calculated.
+        /// </summary>
+        public void ComputeInitialFields()
+        {
+            var searchSpaceIndexes = Enumerable.Range(0, _searchSpace.Count).ToList();
+
+            _isFixedTarget =
+                searchSpaceIndexes.Select(i => _fixedTargetNodes.Contains(_searchSpace[i])).ToArray();
+            _isVariableTarget =
+                searchSpaceIndexes.Select(i => _variableTargetNodes.Contains(_searchSpace[i])).ToArray();
+            _isTarget = searchSpaceIndexes.Select(i => _isFixedTarget[i] || _isVariableTarget[i]).ToArray();
+            _isRemoved = new bool[_searchSpace.Count];
         }
 
         /// <summary>
@@ -157,7 +176,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
                 searchSpaceIndexes.Select(i => _variableTargetNodes.Contains(_searchSpace[i])).ToArray();
             _isTarget = searchSpaceIndexes.Select(i => _isFixedTarget[i] || _isVariableTarget[i]).ToArray();
             _isRemoved = new bool[_searchSpace.Count];
-            _fixedTargetNodeIndexIndices = new HashSet<int>(_fixedTargetNodes.Select(n => n.DistancesIndex));
+            _fixedTargetNodeIndices = new HashSet<int>(_fixedTargetNodes.Select(n => n.DistancesIndex));
         }
 
         public bool IsFixedTarget(int i)
@@ -198,7 +217,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
                 {
                     _isFixedTarget[i] = false;
                     _fixedTargetNodes.Remove(node);
-                    _fixedTargetNodeIndexIndices.Remove(i);
+                    _fixedTargetNodeIndices.Remove(i);
                 }
                 else
                 {

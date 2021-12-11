@@ -24,31 +24,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         private string Name { get { return SkillTree.Skillnodes[_id].Name; } }
 #endif
 
-#if DEBUG
-        private int distancesIndex;
-
-        /// <summary>
-        /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
-        /// and other classes.
-        /// </summary>
-        public int DistancesIndex 
-        { 
-            get=>distancesIndex;
-            set
-            {
-                if (value != distancesIndex)
-                {
-                    distancesIndex = value;
-                }
-            }
-        }
-#else
         /// <summary>
         /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
         /// and other classes.
         /// </summary>
         public int DistancesIndex { get; set; }
-#endif
 
         private List<GraphNode> _adjacent = new List<GraphNode>();
         /// <summary>
