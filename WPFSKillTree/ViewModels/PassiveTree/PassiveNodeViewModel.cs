@@ -52,6 +52,16 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 InitializeAttributes();
             }
         }
+
+        /// <summary>
+        /// Forces the change skill id change without applying effect or JSON based changes(Mainly for alternative mastery selection code)
+        /// </summary>
+        /// <param name="swappedSkill">The swapped skill.</param>
+        public void ForceChangeSkill(ushort swappedSkill)
+        {
+            _skill = swappedSkill;
+        }
+
         public string Name { get => JsonPassiveNode.Name; }
         public CharacterClass? StartingCharacterClass { get => JsonPassiveNode.StartingCharacterClass; }
         public string[]? Recipe { get => JsonPassiveNode.Recipe; }
@@ -67,6 +77,17 @@ namespace PoESkillTree.ViewModels.PassiveTree
 
         private string[] _statDescriptions = new string[0];
         public string[] StatDescriptions { get => _statDescriptions; private set => _statDescriptions = value; }
+
+        public void SetDescriptionWithStats(ref string[] descArray, ref Dictionary<string, IReadOnlyList<float>> statDictionary)
+        {
+            StatDescriptions = descArray; Attributes = statDictionary;
+        }
+
+        public void SetDescription(ref string[] descArray)
+        {
+            StatDescriptions = descArray;
+        }
+
         public int PassivePointsGranted { get => JsonPassiveNode.PassivePointsGranted; }
         public string Icon
         {
@@ -114,7 +135,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
         public string EffectKey => $"{EffectKeyPrefix}_{ActiveEffectIcon}";
         private string EffectKeyPrefix => $"{PassiveNodeType.ToString().ToLowerInvariant()}Effect";
 
-        public Dictionary<string, IReadOnlyList<float>> Attributes { get; } = new Dictionary<string, IReadOnlyList<float>>();
+        public Dictionary<string, IReadOnlyList<float>> Attributes { get; private set; } = new Dictionary<string, IReadOnlyList<float>>();
         public Dictionary<ushort, PassiveNodeViewModel> NeighborPassiveNodes { get; } = new Dictionary<ushort, PassiveNodeViewModel>();
         public Dictionary<ushort, PassiveNodeViewModel> VisibleNeighborPassiveNodes { get; } = new Dictionary<ushort, PassiveNodeViewModel>();
 
@@ -168,7 +189,7 @@ namespace PoESkillTree.ViewModels.PassiveTree
             JsonPassiveNode.ClearPositionCache();
         }
 
-        private void InitializeAttributes()
+        public void InitializeAttributes()
         {
             if (PassiveNodeType == PassiveNodeType.JewelSocket || PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)
             {
@@ -189,6 +210,23 @@ namespace PoESkillTree.ViewModels.PassiveTree
                 }
                 string cs = (regexAttrib.Replace(s, "#"));
                 Attributes[cs] = values;
+            }
+        }
+
+        public void UpdateStatDescription()
+        {
+            int Statnumber = 0;
+            System.Array.Resize(ref _statDescriptions, Attributes.Count);
+            var numberCharacter = new Regex(Regex.Escape("#"));
+            string cultureSpecifier = "G";//https://docs.microsoft.com/en-us/dotnet/api/system.single.tostring?view=net-5.0
+            foreach (var Attr in Attributes)
+            {
+                _statDescriptions[Statnumber] = Attr.Key;
+                foreach(var AttrVal in Attr.Value)
+                {//https://stackoverflow.com/questions/8809354/replace-first-occurrence-of-pattern-in-a-string
+                    _statDescriptions[Statnumber] = numberCharacter.Replace(_statDescriptions[Statnumber], AttrVal.ToString(cultureSpecifier, CultureInfo.InvariantCulture), 1);
+                }
+                ++Statnumber;
             }
         }
     }

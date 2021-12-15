@@ -237,7 +237,7 @@ namespace PoESkillTree.ViewModels.Equipment
                 i.FlavourText,
                 i.Name
             }.Union(i.Properties.Select(p => p.Attribute)).Union(i.Mods.Select(m => m.Attribute));
-            
+
             return modstrings.Any(s => s != null && s.ToLower().Contains(SearchText!));
         }
 
@@ -256,7 +256,7 @@ namespace PoESkillTree.ViewModels.Equipment
             _inBatchUpdate = true;
             _smallestAddedItemY = int.MaxValue;
         }
-        
+
         /// <summary>
         /// Ends a batch update. Call this after adding multiple items to the stash.
         /// </summary>

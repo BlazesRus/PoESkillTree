@@ -226,7 +226,9 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             {L10n.Message("Trap"), 13},
             {L10n.Message("Totem"), 14},
             {L10n.Message("Flasks"), 15 },
-            {L10n.Message("Everything Else"), 16}
+            {L10n.Message("Jewel Types"), 16},
+            {L10n.Message("Mastery Node Types"), 17},
+            {L10n.Message("Everything Else"), 18}
         };
 
         /// <summary>
@@ -238,7 +240,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             "#% increased Movement Speed", "#% increased maximum Life", "#% of Life Regenerated per Second",
             "#% of Physical Attack Damage Leeched as Mana",
             "#% increased effect of Auras you Cast", "#% reduced Mana Reserved",
-            "+# to Jewel Socket"
+            "+# to Jewel Socket", "#% to maximum Chaos Resistance"
         };
 
         /// <summary>

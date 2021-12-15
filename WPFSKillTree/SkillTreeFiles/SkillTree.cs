@@ -25,6 +25,8 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using static PoESkillTree.SkillTreeFiles.Constants;
 using HighlightState = PoESkillTree.SkillTreeFiles.NodeHighlighter.HighlightState;
+using PoESkillTree.ViewModels;
+using System.Windows.Controls;
 
 namespace PoESkillTree.SkillTreeFiles
 {
@@ -182,6 +184,63 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static bool _initialized;
 
+/*#if (PoESkillTree_DisableStatTracking == false)
+        //public ContextMenu trackingContextMenu;
+
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+        public ConcurrentObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+        public ObservableKeyedPseudoStat selectedPseudoTotal;
+#else
+        public ObservableDictionary<string, PseudoTotal> selectedPseudoTotal;
+#endif
+
+        /// <summary>
+        /// Tracked Stat Totals for Current Skill-Tree(Attribute Keys with Tracked Attribute values)
+        /// </summary>
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+        public ConcurrentObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
+#elif PoeSkillTree_DontUseKeyedTrackedStats == false
+        public ObservableKeyedPseudoStat SelectedPseudoTotal
+#else
+        public ObservableDictionary<string, PseudoTotal> SelectedPseudoTotal
+#endif
+        {
+            get => selectedPseudoTotal;
+            set => SetProperty(ref selectedPseudoTotal, value);
+        }
+
+        /// <summary>
+        /// Tracked Stat Totals for highlighted build (Attribute Keys with Tracked Attribute values)
+        /// </summary>
+        public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
+
+*//*
+        /// <summary>
+        /// Unfinished(Still need current implementation to first display the context menu)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void RemoveTrackedAttr(object sender, RoutedEventArgs e)
+        {
+            MenuItem CurrentMenuItem = (MenuItem)sender;
+            //for (var i = 0; i < cmDeleteGroup.Items.Count; i++)
+            //{
+            //    if (((MenuItem)cmDeleteGroup.Items[i]).Header.ToString()!.ToLower().Equals(((MenuItem)sender).Header.ToString()!))
+            //    {
+            //        cmDeleteGroup.Items.RemoveAt(i);
+            //        if (cmDeleteGroup.Items.Count == 0)
+            //            cmDeleteGroup.IsEnabled = false;
+            //        break;
+            //    }
+            //}
+
+            //_attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString()!);
+            //RefreshAttributeLists();
+        }
+*//*
+#endif*/
+
         private SkillTree(IPersistentData persistentData)
 #pragma warning restore
         {
@@ -273,6 +332,7 @@ namespace PoESkillTree.SkillTreeFiles
                     };
                 }
 
+                GlobalSettings.JewelStorage = new JewelData();
                 if (PoESkillTree.Root != null)
                 {
                     foreach (var i in PoESkillTree.Root.OutPassiveNodeIds)
@@ -299,11 +359,49 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                 }
 
+                string ClusterLabel = "+# Expansion JewelSlot";
+                string LClusterLabel = "+# Large JewelSlot";
+                string MClusterLabel = "+# Medium JewelSlot";
+                string SClusterLabel = "+# Small JewelSlot";
+                string JewelSocketLabel = "+# NonCluster JewelSocket";
+
+                List<float> SingleVal = new List<float>(1);
+                SingleVal.Add(1);
                 foreach (var (_, node) in PoESkillTree.PassiveNodes)
                 {
                     if (node.IsAscendancyStart && !AscRootNodeList.Contains(node))
                     {
                         AscRootNodeList.Add(node);
+                    }
+                    else if(node.PassiveNodeType == PassiveNodeType.JewelSocket)
+                    {
+                        if (!node.Attributes.ContainsKey(JewelSocketLabel))
+                            node.Attributes.Add(JewelSocketLabel, SingleVal);
+                        GlobalSettings.JewelInfo.AddJewelSlot(node.Id);
+                    }
+                    else if(node.PassiveNodeType == PassiveNodeType.ExpansionJewelSocket)//Cluster Jewel
+                    {
+                        if (!node.Attributes.ContainsKey(ClusterLabel))
+                            node.Attributes.Add(ClusterLabel, SingleVal);
+                        if(node.Name.Contains("Large Jewel Socket")&&!node.Attributes.ContainsKey(LClusterLabel))
+                        {
+                            node.Attributes.Add(LClusterLabel, SingleVal);
+                            //Including Large Cluster Jewels as potential Threshold Jewel Slots(since at least one Dex Threshold jewel slot exists that is a cluster Jewel Slot)
+                            GlobalSettings.JewelInfo.AddJewelSlot(node.Id);
+                        }
+                        else if(node.Name.Contains("Medium Jewel Socket")&&!node.Attributes.ContainsKey(MClusterLabel))
+                            node.Attributes.Add(MClusterLabel, SingleVal);
+                        else if(!node.Attributes.ContainsKey(SClusterLabel))
+                            node.Attributes.Add(SClusterLabel, SingleVal);
+                        node.UpdateStatDescription();
+                    }
+                    /*else if(node.PassiveNodeType == PassiveNodeType.Mastery)
+                    {
+                        MasteryDefinitions.SetMasteryLabel(node);
+                    }*/
+                    else if(node.IsAscendancyNode)
+                    {
+                        GlobalSettings.KnownAscendancyNodes.Add(node.Id);
                     }
                 }
 
@@ -349,9 +447,7 @@ namespace PoESkillTree.SkillTreeFiles
             };
 
             var bandits = _persistentData.CurrentBuild.Bandits;
-            points["NormalTotal"] += _persistentData.CurrentBuild.Level - 1;
-            if (bandits.Choice == Bandit.None)
-                points["NormalTotal"] += 2;
+            points["NormalTotal"] += _persistentData.CurrentBuild.Level + bandits.Choice == Bandit.None ? 1 : -1;
 
             foreach (var node in SkilledNodes)
             {
@@ -415,10 +511,10 @@ namespace PoESkillTree.SkillTreeFiles
             DrawAscendancyLayers();
         }
 
-        public void SwitchClass(CharacterClass charClass)
+        public bool SwitchClass(CharacterClass charClass)
         {
             if (charClass == CharClass)
-                return;
+                return false;
             var canSwitch = CanSwitchClass(charClass);
             CharClass = charClass;
 
@@ -426,6 +522,7 @@ namespace PoESkillTree.SkillTreeFiles
             var add = Skillnodes[RootNodeClassDictionary[charClass]];
             SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
             _asctype = 0;
+            return true;
         }
 
         public string? AscendancyClassName
@@ -494,7 +591,6 @@ namespace PoESkillTree.SkillTreeFiles
 
             return temp;
         }
-
 
         public static Dictionary<string, List<float>> GetAttributesWithoutImplicitNodesOnly(IEnumerable<PassiveNodeViewModel> skilledNodes)
         {
@@ -623,6 +719,21 @@ namespace PoESkillTree.SkillTreeFiles
             SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
             if (SelectAscendancyFromNodes(toAdd) is int ascType)
                 AscType = ascType;
+        }
+
+        public void AllocateNormalSkillNodes(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
+        {
+            toAdd = toAdd.Where(n => !SkilledNodes.Contains(n)).ToList();
+            SkilledNodes.UnionWith(toAdd);
+        }
+
+        public void AllocateAscSkillNodes(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
+        {
+            toAdd = toAdd.Where(n => !SkilledNodes.Contains(n)).ToList();
+            if (SelectAscendancyFromNodes(toAdd) is int ascType)
+                AscType = ascType;
+            var toRemove = toAdd.SelectMany(SelectAscendancyNodesToRemove).ToList();
+            SkilledNodes.ExceptAndUnionWith(toRemove, toAdd);
         }
 
         private int? SelectAscendancyFromNodes(IEnumerable<PassiveNodeViewModel> nodes)
@@ -1058,6 +1169,35 @@ namespace PoESkillTree.SkillTreeFiles
             }
 
             return buildData;
+        }
+
+        public void SwitchAscendancy(int ascClassID)
+        {
+            string? newAscClassName = AscendancyClasses.GetAscendancyClassName(CharClass, ascClassID);
+            ushort ascNodeId = AscRootNodeList.FirstOrDefault(x => x.AscendancyName == newAscClassName)?.Id ?? 0;
+            var sn = ascNodeId != 0 ?Skillnodes[ascNodeId]:null;
+            //Remove all Ascendancy nodes not matching the new Ascendancy Type
+            IEnumerable<PassiveNodeViewModel>? nodesToRemove = SkilledNodes.Where(x => x.IsAscendancyNode && x.AscendancyName != newAscClassName);
+            
+            SkilledNodes.Except(nodesToRemove);
+            if(sn!=null&& !SkilledNodes.Contains(sn))
+                SkilledNodes.Add(sn);
+            _asctype = ascClassID;
+        }
+
+        public void RemoveAllAscendancyNodes()
+        {
+            //Remove all Ascendancy nodes
+            IEnumerable<PassiveNodeViewModel>? nodesToRemove = SkilledNodes.Where(x => x.IsAscendancyNode || x.IsAscendancyStart);// || x.IsAscendantClassStartNode);
+            SkilledNodes.Except(nodesToRemove);
+            _asctype = 0;
+        }
+
+        public void RemoveAllAscendancySkillNodes()
+        {
+            //Remove all ascendancy point nodes
+            IEnumerable<PassiveNodeViewModel>? nodesToRemove = SkilledNodes.Where(x => x.IsAscendancyNode && x.IsAscendancyStart==false && x.IsAscendantClassStartNode==false);
+            SkilledNodes.Except(nodesToRemove);
         }
 
         public void LoadFromUrl(string url)

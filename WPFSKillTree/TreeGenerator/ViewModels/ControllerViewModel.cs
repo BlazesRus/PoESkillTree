@@ -225,6 +225,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
             }
             catch (GraphNotConnectedException)
             {
+                CancelCloseEnabled = true;
                 // Show a dialog and close this if the omitted nodes disconnect the tree.
                 await _dialogCoordinator.ShowWarningAsync(this,
                     L10n.Message("The optimizer was unable to find a conforming tree.\nPlease change skill node tagging and try again.\n\n" +

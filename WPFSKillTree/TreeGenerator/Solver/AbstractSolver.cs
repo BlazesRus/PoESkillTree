@@ -75,7 +75,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// <summary>
         /// Nodes may be merged by the Preprocessor. This Pseudo-Dictionary contains the node-ids that are represented
         /// by a single node-id. If the node is unmerged, it only contains itself.
-        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
+        /// Fits all possible unsigned short integers (node ids) and is pretty sparse. Not contained ids have null as value.
         /// </summary>
         protected IReadOnlyList<IReadOnlyCollection<ushort>> NodeExpansionDictionary { get; private set; }
 
@@ -270,10 +270,9 @@ namespace PoESkillTree.TreeGenerator.Solver
                             || searchGraph.NodeDict.ContainsKey(node)
                             // Don't add nodes that should not be skilled.
                             || Settings.Crossed.Contains(node)
-                            //TODO: Mastery Nodes are useful as of 3.16.0
-                            // Mastery nodes are obviously not useful.
-                            || node.PassiveNodeType == PassiveNodeType.Mastery
-                            // Ignore ascendencies for now
+                            // Mastery nodes are useful as of 3.16.0
+                            //|| node.PassiveNodeType == PassiveNodeType.Mastery
+                            // Ignore ascendancies for now
                             || node.IsAscendancyNode)
                             continue;
 
@@ -298,7 +297,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// Override to exclude node from the search graph with additional conditions.
         /// </summary>
         /// <param name="node">The node in question (not null)</param>
-        /// <returns>false if not overriden</returns>
+        /// <returns>false if not overridden</returns>
         protected virtual bool IncludeNodeInSearchGraph(PassiveNodeViewModel node)
         {
             return true;

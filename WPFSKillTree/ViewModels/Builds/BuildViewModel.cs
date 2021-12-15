@@ -3,6 +3,7 @@ using NLog;
 using PoESkillTree.Engine.GameModel;
 using PoESkillTree.Localization;
 using PoESkillTree.Model.Builds;
+using PoESkillTree.SkillTreeFiles;
 
 namespace PoESkillTree.ViewModels.Builds
 {
@@ -84,7 +85,7 @@ namespace PoESkillTree.ViewModels.Builds
         /// Gets a description of this build.
         /// </summary>
         public string Description =>
-            string.Format(L10n.Plural("{0}, {1} point used", "{0}, {1} points used", PointsUsed),
+            string.Format(L10n.Plural("{0}, {1} skill point used", "{0}, {1} skill points used", PointsUsed),
                 ClassName, PointsUsed);
 
         /// <param name="poEBuild">The wrapped build.</param>
@@ -127,6 +128,12 @@ namespace PoESkillTree.ViewModels.Builds
             };
         }
 
+        // Explicit predicate delegate.
+        private static bool IsAscendancy(ushort NodeId)
+        {
+            return GlobalSettings.KnownAscendancyNodes.Contains(NodeId);
+        }
+
         private void UpdateTreeDependingProperties()
         {
             if (SkillTree == null || string.IsNullOrEmpty(Build.TreeUrl))
@@ -136,7 +143,7 @@ namespace PoESkillTree.ViewModels.Builds
 
             if (data.IsValid)
             {
-                PointsUsed = (uint)data.SkilledNodesIds.Count;
+                PointsUsed = (uint)data.SkilledNodesIds.Count - (uint)data.SkilledNodesIds.FindAll(IsAscendancy).Count; //Only count NonAscendancy points for display
                 CharacterClass = data.CharacterClass;
                 AscendancyClass = SkillTree.AscendancyClasses.GetAscendancyClassName(data.CharacterClass, data.AscendancyClassId);
             }

@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<dialogs:CloseableBaseDialog
+    x:Class="PoESkillTree.TrackedStatViews.TrackedStatsMenu"
+    xmlns:local="clr-namespace:PoESkillTree.TrackedStatViews"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:l="clr-namespace:PoESkillTree.Localization.XAML" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:viewModels="clr-namespace:PoESkillTree.ViewModels"
+    xmlns:dialogs="clr-namespace:PoESkillTree.Controls.Dialogs"
+    xmlns:converter="clr-namespace:PoESkillTree.Utils.Converter"
+    xmlns:metroControls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:localization="clr-namespace:PoESkillTree.Localization"
+    xmlns:MenuCmd="clr-namespace:PoESkillTree.PoEMenuCommands"
+    xmlns:Tree="clr-namespace:PoESkillTree"
+    xmlns:EnumCombo="clr-namespace:PoESkillTree.EnumToComboBox"
+    d:DataContext="{d:DesignInstance viewModels:TrackedStatsMenuModel}"
+    MaxContentWidth="1850">
+    <ContentControl.Resources>
+        <Style x:Key="SectionLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="FontSize" Value="{DynamicResource DialogMessageFontSize}"></Setter>
+        </Style>
+        <Style x:Key="SettingLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <local:EmptyStringToFallbackvalue x:Key="EmptyStringToFallbackvalue"/>
+        <MenuCmd:StringDataAsString x:Key="StringDataAsString"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToHiddenConverter" FalseValue="Hidden"/>
+    </ContentControl.Resources>
+    <StackPanel Orientation="Vertical">
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition MinWidth="440" />
+                <ColumnDefinition MinWidth="200" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TrackedStats Path:" />
+                </Label.Content>
+            </Label>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StatTrackingSavePath}"
+                           VerticalAlignment="Center"
+                           ToolTip="{Binding StatTrackingSavePath}" />
+            <Button Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
+                        Command="{Binding ChangeStatTrackingPathCommand}">
+                <Button.Content>
+                    <l:Catalog Message="Change..." />
+                </Button.Content>
+            </Button>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="TargetFile:" />
+                </Label.Content>
+            </Label>
+            <TextBox Name="TrackedFileText" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2" HorizontalAlignment="Left"
+            Text="{Binding CurrentTrackedFile, BindsDirectlyToSource=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TrackedFileText_TextChanged"/>
+        </Grid>
+        <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" />
+                <ColumnDefinition MinWidth="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Click="LoadTrackedStatFileNamesAsync">
+                <Button.Content>
+                    <l:Catalog Message="Load File Names From TrackedStats Directory" />
+                </Button.Content>
+            </Button>
+
+            <ComboBox x:Name="TrackingList" Grid.Row="1" VerticalAlignment="Center" Grid.ColumnSpan="2" ToolTip="Select Target TrackedStats file"
+            DisplayMemberPath="CurrentValue" SelectedValuePath="CurrentValue" SelectionChanged="TrackingList_SelectionChanged"
+            SelectedValue="{Binding CurrentTrackedFile, BindsDirectlyToSource=True,Mode=TwoWay, Converter={StaticResource EmptyStringToFallbackvalue}, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Grid.Row="2" Grid.Column="0" Click="LoadTrackedStats">
+                <Button.Content>
+                    <l:Catalog Message="Load Tracked Stats from Target File" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Click="SaveTrackedStats">
+                <Button.Content>
+                    <l:Catalog Message="Save Tracked Stats to Target File" />
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="3" Click="ResetTracking">
+                <Button.Content>
+                    <l:Catalog Message="Reset Tracking" />
+                </Button.Content>
+            </Button>
+
+            <CheckBox Grid.Row="4" Grid.Column="0" Content="Auto-Track Generator Stats" Margin="2,0"  FontSize="10" IsChecked="{Binding AutoTrackStats, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <Label Style="{StaticResource SectionLabel}">
+            <Label.Content>
+                <l:Catalog Message="PseudoCalc preferences:" />
+            </Label.Content>
+        </Label>
+<!--         <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="133"/>
+                <ColumnDefinition Width="87"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Calculate accuracy" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.CalculateAcc)}" Height="18" Margin="0,6" />
+
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Calculate health" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.CalculateHP)}" Height="18" Margin="0,6" />
+
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="2" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Calculate combined health+energy shield" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.CalculateHybridHP)}" Height="18" Margin="0,6" />
+
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="3" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Calculate CritsPerSec(Q20 CoC)" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.CalculateCritsPerSec)}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="3" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Precision Lvl" />
+                </Label.Content>
+            </Label>
+
+            <Slider Grid.Column="3" Grid.Row="3" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.LevelPrecisionActive)}" Minimum="0" Maximum="30" />
+
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="4" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Primary Weapon" />
+                </Label.Content>
+            </Label>
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryWeapon)}"
+            Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="4" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="ATK Speed" />
+                </Label.Content>
+            </Label>
+            <metroControls:NumericUpDown Grid.Row="4" Grid.Column="3" Minimum="0.01" Margin="2,4" StringFormat="{}{0:#0.##}"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryATKSpeed)}" Interval="0.01"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="4" Grid.Column="4">
+                <Label.Content>
+                    <l:Catalog Message="Critical Chance" />
+                </Label.Content>
+            </Label>
+            <metroControls:NumericUpDown Grid.Row="4" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.PrimaryCrit)}" Interval="0.01"/>
+
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="5" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Not Using Shield" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield)}" Height="18" Margin="0,6" />
+
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="6" Grid.Column="0" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
+                <Label.Content>
+                    <l:Catalog Message="Secondary Weapon" />
+                </Label.Content>
+            </Label>
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryWeapon)}"
+            Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="130"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="6" Grid.Column="2" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
+                <Label.Content>
+                    <l:Catalog Message="ATK Speed" />
+                </Label.Content>
+            </Label>
+            <metroControls:NumericUpDown Grid.Row="6" Grid.Column="3" Minimum="0.01" Margin="2,4" StringFormat="{}{0:#0.##}"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryATKSpeed)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}" Interval="0.01"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="6" Grid.Column="4" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}">
+                <Label.Content>
+                    <l:Catalog Message="Critical Chance" />
+                </Label.Content>
+            </Label>
+            <metroControls:NumericUpDown Grid.Row="6" Grid.Column="5" Minimum="0.00" Margin="2,4" StringFormat="{}{0:#0.##}"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.SecondaryCrit)}" Visibility="{Binding Path=(Tree:PseudoCalcGlobals.NotUsingShield), Converter={StaticResource BoolToHiddenConverter}}"  Interval="0.01"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Enable Critical Spell DamageMultiplier" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.CalculateCritSpellMult)}" Height="18" Margin="0,6" />
+            
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Poison Stacks" />
+                </Label.Content>
+            </Label>
+            
+            <Slider Grid.Column="3" Grid.Row="7" TickFrequency="1" IsSnapToTickEnabled="True" Margin="2,6"
+            Value="{Binding Path=(Tree:PseudoCalcGlobals.NumberOfPoisonStacks)}" Minimum="0" Maximum="20" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="7" Grid.Column="4">
+                <Label.Content>
+                    <l:Catalog Message="Lucky Crits" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="7" Grid.Column="5" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.LuckyCrits)}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="8" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Apply Whispering Ice Calculations" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="8" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.ApplyWhisperingIceStats)}" Height="18" Margin="0,6" />
+        </Grid> -->
+<!--         <Grid Margin="20 0 5 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="133"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Spell Behavior" />
+                </Label.Content>
+            </Label>
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.SpellBehaviorType)}"
+            Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" MinWidth="133" VerticalAlignment="Center" Height="26" Width="133"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
+            <Label Style="{StaticResource SettingLabel}" Grid.Row="0" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Damage Scaling" />
+                </Label.Content>
+            </Label>
+            <ComboBox ItemsSource="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling), Converter={EnumCombo:EnumToCollectionConverter}, Mode=OneTime}" SelectedValue="{Binding Path=(Tree:PseudoCalcGlobals.DMScaling)}"
+            Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" MinWidth="130" VerticalAlignment="Center" Height="26" Width="200"
+            SelectedValuePath="Value" DisplayMemberPath="Description"/>
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="1" Grid.Column="0">
+                <Label.Content>
+                    <l:Catalog Message="Q20 Lvl 20 Increased Critical Chance" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.IncreasedCritActive)}" Height="18" Margin="0,6" />
+            <Label Style="{StaticResource SettingLabel}"
+                   Grid.Row="1" Grid.Column="2">
+                <Label.Content>
+                    <l:Catalog Message="Q20 Lvl 20 Nightblade" />
+                </Label.Content>
+            </Label>
+            <CheckBox Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" IsChecked="{Binding Path=(Tree:PseudoCalcGlobals.NightbladeActive)}" Height="18" Margin="0,6" />
+        </Grid>
+ -->
+    </StackPanel>
+</dialogs:CloseableBaseDialog>

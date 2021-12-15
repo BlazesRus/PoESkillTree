@@ -93,7 +93,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         private Dictionary<Tuple<string, int>, float> _attrConversionMultipliers;
         /// <summary>
         /// Pseudo-Dictionary that maps node ids to a list of their attributes as a pair of the constraint number and the value.
-        /// Fits all possible ushorts (node ids) and is pretty sparse. Not contained ids have null as value.
+        /// Fits all possible unsigned short integers (node ids) and is pretty sparse. Not contained ids have null as value.
         /// </summary>
         private List<Tuple<int, float>>[] _nodeAttributes;
         /// <summary>
@@ -250,7 +250,7 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             var resolvedWildcardNames = new Dictionary<string, List<Tuple<string, string[]>>>();
             var convertedPseudos = new List<ConvertedPseudoAttributeConstraint>(Settings.PseudoAttributeConstraints.Count);
-            
+
             foreach (var pair in Settings.PseudoAttributeConstraints)
             {
                 var convAttrs = new List<Tuple<string, float>>(pair.Key.Attributes.Count);
