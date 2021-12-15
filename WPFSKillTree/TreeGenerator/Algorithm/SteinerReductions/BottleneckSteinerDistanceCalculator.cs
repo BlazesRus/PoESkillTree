@@ -42,7 +42,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
         /// to the given target nodes.
         /// </summary>
         /// <returns>Lookup for the calculated distances between all nodes.</returns>
-        public DistanceLookup CalcBottleneckSteinerDistances(IReadOnlyCollection<int> fixedTargetNodes)
+        public DistanceLookup CalcBottleneckSteinerDistances(
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+        IReadOnlyCollection<int>
+#else
+        MCollections.IndexedDictionary<int, int>.ValueCollection
+#endif
+        fixedTargetNodes)
         {
             var nodeCount = _distances.CacheSize;
             var smatrix = new uint[nodeCount][];
@@ -58,7 +64,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
         private uint[] CalcBottleneckSteinerDistancesTo(int i, IEnumerable<int> searchSpaceIndices, IEnumerable<int> fixedTargetNodes)
         {
             // Dijkstra like algorithm that uses the fully connected distance graph but only
-            // pathes through target nodes (only paths over target nodes are relevant by definition).
+            // paths through target nodes (only paths over target nodes are relevant by definition).
             // We are also not calculating distances over paths but selecting the weight of a single edge:
             // the minimum bottleneck length over all considered paths.
 

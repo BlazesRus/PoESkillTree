@@ -631,7 +631,10 @@ namespace PoESkillTree.SkillTreeFiles
             foreach (var node in nodes)
             {
                 if (node.IsAscendancyStart)
+                {
                     ascendancy = AscendancyClasses.GetAscendancyClassNumber(node.AscendancyName!);
+                    break;//Exit loop after retrieve ascendancy info
+                }
             }
             return ascendancy;
         }

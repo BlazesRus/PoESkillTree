@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Other pseudo attributes -->
+<PseudoAttributes>
+    <PseudoAttribute Name="#% increased QuarterLightningAndFireConverted Physical Spell[Non-Tagged]" Group="Damage"><!--Wave of Conviction Type spell-->
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.25"/>
+		<Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.25"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Ethereal Knives Damage with Herald of Ash[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.15"/>
+        <Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.15"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Projectile Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Dark Pact Poison Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Damage over Time" />
+        <Attribute Name="#% increased Damage with Poison"/>
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased maximum Life"/>
+        <Attribute Name="#% increased Area Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Righteous Fire Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Fire Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Burning Damage"/>
+        <Attribute Name="#% increased Damage over Time"/>
+    </PseudoAttribute>
+        <PseudoAttribute Name="#% increased Dark Pact Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Chaos Damage" />
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased maximum Life" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Conversion Glacial Cascade Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Cold Damage"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Conversion Phys AOE Spell Damage(Lightning+Some Fire)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.77"/>
+	    <Attribute Name="#% increased Fire Damage" ConversionMultiplier="0.23"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Full Elemental Conversion Phys AOE Spell Damage(HalfLightning)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Full Elemental Conversion Phys AOE Attack Damage(HalfLightning)[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Physical Damage"/>
+		<Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.5"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Attack Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Total Glacial Cascade Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+	<PseudoAttribute Name="#% increased Physical Area Spell with 60% converted to Lightning[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.6"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <!-- Physical to Lightning Conversion based on https://www.reddit.com/r/pathofexile/comments/6rjnwe/glacial_cascade_dmg_conversion_to_lightning/-->
+    <PseudoAttribute Name="#% increased Glacial Cascade Damage with Physical to Lightning Gem[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.45"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Glacial Cascade Damage with Level 20 Physical to Lightning Gem with gains[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Cold Damage" ConversionMultiplier="0.54"/>
+        <Attribute Name="#% increased Lightning Damage" ConversionMultiplier="0.74"/>
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Whispering Ice Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Cold Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Area Damage" />
+        <Attribute Name="+# to Intelligence" ConversionMultiplier="0.1" />
+		 <Attribute Name="#% increased Intelligence" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Void Harnessed Lightning Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <!-- Damage focused around Harness the Void Trickster Node-->
+        <Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.1875" />
+        <!--Your Hits have 5% chance to gain 100% of Non-Chaos Damage as Extra Chaos Damage contributes 0.05
+        Your Hits have 25% chance to gain 25% of Non-Chaos Damage as Extra Chaos Damage contributes .0625
+        Your Hits have 15% chance to gain 50% of Non-Chaos Damage as Extra Chaos Damage contributes .075
+        -->
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Spirit Shared Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+
+    <PseudoAttribute Name="#% increased Fire Projectile Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Fire Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Projectile Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Ice Projectile Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Cold Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Projectile Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Physical Projectile Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Projectile Damage" />
+    </PseudoAttribute>
+    <!--
+412 - 602 Phys Damage before Damage effectiveness
+144 - 211 After 35% damage effectiveness
+(Disintegrater staff with one siphon charge)
+22 - 420 Lightning Damage
+(Level 20 Ball Lightning)
+19 - 76 Lightning Damage before Damage effectiveness
+7 - 27 Lightning Damage after Damage effectiveness
+(Level 20 Herald of Lightning - For damage plus curse on hit)
+Total  173 - 658 Non-Chaos Damage
+83.24% of Non-chaos minimum is Physical
+32.07% of Non-chaos maximum is Physical
+Average of 57.65% of Non-chaos is Physical
+4% as chaos
+    -->
+<PseudoAttribute Name="#% increased Spirit Infused  Lightning Disintegrater Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage" />
+        <Attribute Name="#% increased Lightning Damage" />
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="#% increased Physical Damage"  ConversionMultiplier="0.576519318"/>
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Chaos Damage" ConversionMultiplier="0.04"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Elemental Area Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Physical Area Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Physical Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Lightning Projectile Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Projectile Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Elemental Projectile Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Projectile Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Lightning Area Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased Minimum Wave of Convection Range[Non-Tagged]" Group="Damage"><!-- More than this value if have both in most cases since both are multiplicative(Toggles additional PseudoCalc Attribute)-->
+	    <Attribute Name="#% Spell Skills have increased Area of Effect"/>
+        <Attribute Name="#% increased Area of Effect"/>
+        <Attribute Name="#% increased Skill Effect Duration"/>
+    </PseudoAttribute>
+</PseudoAttributes>

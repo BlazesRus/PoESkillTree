@@ -18,7 +18,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// <summary>
         /// Gets the node indices currently marked as fixed target nodes.
         /// </summary>
+#if PoESkillTree_DisableAlternativefixedTargetNodeIndices
         IReadOnlyCollection<int> FixedTargetNodeIndices { get; }
+#else
+        MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices { get; }
+#endif
 
         /// <summary>
         /// Gets the number of nodes currently marked as fixed target nodes.
@@ -95,9 +99,17 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public IEnumerable<GraphNode> FixedTargetNodes => _fixedTargetNodes;
 
+#if PoESkillTree_DisableAlternativefixedTargetNodeIndices
         private HashSet<int> _fixedTargetNodeIndices;
-        
+
         public IReadOnlyCollection<int> FixedTargetNodeIndices => _fixedTargetNodeIndices;
+#else//Fork of MCollections instead store Indices as NodeId keyed Dictionary with values being equal to the indices
+        public MCollections.IndexedDictionary<int, int> FixedTargetKeyedIndices;
+        public MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices => FixedTargetKeyedIndices.Values;
+
+        //public ushort[] TargetIds;
+        public HashSet<ushort> TargetIds;
+#endif
 
         public int FixedTargetNodeCount => _fixedTargetNodes.Count;
 
@@ -138,6 +150,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _fixedTargetNodes = new HashSet<GraphNode>(fixedTargetNodes);
             _variableTargetNodes = new HashSet<GraphNode>(variableTargetNodes);
             _allTargetNodes = new HashSet<GraphNode>(_variableTargetNodes.Union(_fixedTargetNodes));
+#if PoESkillTree_DisableAlternativefixedTargetNodeIndices==false
+            TargetIds = new HashSet<ushort>(_fixedTargetNodes.Select(n => n.Id));
+            FixedTargetKeyedIndices = new MCollections.IndexedDictionary<int, int>();
+#endif
             ComputeInitialFields();//Wait until ReduceSearchSpace() to update Indices since otherwise will return {-1} which is useless for distance calculation purposes
         }
 
@@ -176,7 +192,9 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
                 searchSpaceIndexes.Select(i => _variableTargetNodes.Contains(_searchSpace[i])).ToArray();
             _isTarget = searchSpaceIndexes.Select(i => _isFixedTarget[i] || _isVariableTarget[i]).ToArray();
             _isRemoved = new bool[_searchSpace.Count];
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
             _fixedTargetNodeIndices = new HashSet<int>(_fixedTargetNodes.Select(n => n.DistancesIndex));
+#endif//Update Distance Indices during DistanceCalculator lookup instead of constantly re-creating if PoESkillTree_DisableAlternativeFixedTargetNodeIndices not set
         }
 
         public bool IsFixedTarget(int i)
@@ -217,7 +235,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
                 {
                     _isFixedTarget[i] = false;
                     _fixedTargetNodes.Remove(node);
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
                     _fixedTargetNodeIndices.Remove(i);
+#else
+                    FixedTargetKeyedIndices.Remove(node.Id);
+#endif
                 }
                 else
                 {

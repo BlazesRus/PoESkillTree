@@ -55,7 +55,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// The GraphNodes of which distances and paths are cached.
         /// The index in the Array equals their <see cref="GraphNode.DistancesIndex"/>.
         /// </summary>
-        private GraphNode[] _nodes;
+        public GraphNode[] _nodes;
 
         public int CacheSize { get; private set; }
 
@@ -168,7 +168,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _nodes = new GraphNode[CacheSize];
             _distances = new uint[CacheSize][];
             _paths = new ushort[CacheSize][][];
-            for (var i = 0; i < CacheSize; i++)
+            for (var i = 0; i < CacheSize; ++i)
             {
                 nodes[i].DistancesIndex = i;
                 _nodes[i] = nodes[i];
@@ -200,7 +200,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 node.DistancesIndex = -1;
             }
             var remainingNodes = new List<GraphNode>();
-            for (var i = 0; i < CacheSize; i++)
+            for (var i = 0; i < CacheSize; ++i)
             {
                 if (!removed[i])
                     remainingNodes.Add(IndexToNode(i));
@@ -212,7 +212,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _distances = new uint[CacheSize][];
             _paths = new ushort[CacheSize][][];
 
-            for (var i = 0; i < CacheSize; i++)
+            for (var i = 0; i < CacheSize; ++i)
             {
                 _distances[i] = new uint[CacheSize];
                 _paths[i] = new ushort[CacheSize][];
@@ -226,7 +226,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             }
 
             _nodes = new GraphNode[CacheSize];
-            for (var i = 0; i < CacheSize; i++)
+            for (var i = 0; i < CacheSize; ++i)
             {
                 remainingNodes[i].DistancesIndex = i;
                 _nodes[i] = remainingNodes[i];
@@ -279,7 +279,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 }
 
                 front = newFront;
-                distFromStart++;
+                ++distFromStart;
             }
         }
 

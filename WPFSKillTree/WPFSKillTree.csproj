@@ -12,11 +12,13 @@
   <PropertyGroup>
     <AssemblyName>PoESkillTree</AssemblyName>
     <Company>PoESkillTree Team</Company>
-    <Copyright>Copyright © 2012-20121 PoESkillTree Team</Copyright>
+    <Copyright>Copyright © 2012-2021 PoESkillTree Team</Copyright>
     <Description>Passive skill tree planner for Path of Exile®</Description>
-    <Product>PoESkillTree - Conquerors of the Atlas</Product>
-    <ProductUrl>https://github.com/PoESkillTree/PoESkillTree/</ProductUrl>
+    <Product>PoESkillTree - BlazesRus Varient</Product>
+    <ProductUrl>https://github.com/BlazesRus/PoESkillTree</ProductUrl>
     <VersionPrefix>3.0.3</VersionPrefix>
+    <PackageId>PoESkillTree_BlazesRus</PackageId>
+    <PackageProjectUrl>https://github.com/BlazesRus/PoESkillTree</PackageProjectUrl>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
     <Exec Command="$(ProjectDir)build-locale.bat" />
@@ -33,7 +35,7 @@
     <PackageReference Include="morelinq" Version="3.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NLog" Version="4.7.2" />
-    <PackageReference Include="PoESkillTree.Engine" Version="0.3.4" />
+    <PackageReference Include="PoESkillTree.Engine" Version="0.3.5" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="System.Reactive" Version="4.4.1" />
     <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.11.1" />
@@ -56,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\**" />
+    <ProjectReference Include="..\..\MCollections\MCollections\MCollections.csproj" />
     <Resource Include="logo.ico" />
   </ItemGroup>
 </Project>

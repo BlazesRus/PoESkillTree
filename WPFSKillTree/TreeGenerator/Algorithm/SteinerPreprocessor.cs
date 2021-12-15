@@ -17,7 +17,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
          * - Nodes that are not fixed target nodes must only be merged into fixed target nodes.
          *   Because of this, a GraphNode only has nodes.Count > 1 if it is a fixed target node.
          * - Adjacency information (edges) between GraphNode are stored in _edgeSet. The information
-         *   stored in the GraphNode must not be used once _edgeSet is initialised.
+         *   stored in the GraphNode must not be used once _edgeSet is initialized.
          */
 
         /// <summary>
@@ -78,7 +78,23 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             // Initialize the distance lookup.
             _data.DistanceCalculator = new DistanceCalculator(_nodeStates.SearchSpace);
             var distanceLookup = _data.DistanceCalculator;
-            // Distance indices were not set before.
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices == false
+            foreach (var node in distanceLookup._nodes.Where(n => _nodeStates.TargetIds.Contains(n.Id)))//Update NodeIndexes
+            {
+                if (node.DistancesIndex == -1)
+#if DEBUG
+                {
+                    Debug.WriteLine("Failed to index distance calculations for node:" + node.Id);
+#endif
+                    _nodeStates.FixedTargetKeyedIndices.Remove(node.Id);//Remove from Dictionary if node has invalid index
+#if DEBUG
+                }
+#endif
+                else
+                    _nodeStates.FixedTargetKeyedIndices.AddOrUpdate(node.Id, node.DistancesIndex);
+            }
+#endif
+            // Distance indices are set in ComputeFields() if PoESkillTree_DisableAlternativeFixedTargetNodeIndices is enabled.(old variation of the code otherwise Distance indice is updated in ReduceSearchSpace())
             _nodeStates.ComputeFields();
 
             // If a fixed target node is not connected to the start node, there obviously is no solution at all.
@@ -101,7 +117,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 return CreateResult();
             }
 
-            // Initialise node states and edges. Edges are calculated from the information in the
+            // Initialize node states and edges. Edges are calculated from the information in the
             // GraphNode. Adjacency information from GraphNode instances must not be used after this.
             _data.EdgeSet = ComputeEdges();
             var initialNodeCount = _nodeStates.SearchSpaceSize;
@@ -199,7 +215,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         private GraphEdgeSet ComputeEdges()
         {
             var edgeSet = new GraphEdgeSet(_nodeStates.SearchSpaceSize);
-            // Go through all nodes and their neigbors ...
+            // Go through all nodes and their neighbors ...
             foreach (var node in _nodeStates.SearchSpace)
             {
                 foreach (var neighbor in node.Adjacent)

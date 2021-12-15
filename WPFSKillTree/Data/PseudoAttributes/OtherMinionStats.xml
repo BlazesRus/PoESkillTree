@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PseudoAttributes>
+	<!--[IntBoosted] 1% spell damage per 16 Intelligence from Caster Mastery-->
+	<!--ScourgeBoosted With Scourge Claw Unique equipped-->
+    <PseudoAttribute Name="#% increased MinionBoosted Attack Speed[Non-Tagged]" Group="Damage">
+        <Attribute Name="Minions have #% increased Attack Speed" />
+        <Attribute Name="#% increased Attack Speed"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased SharedStrength Minion Melee Damage" Group="Damage">
+        <Attribute Name="+# to Strength" ConversionMultiplier="0.1" /><!-- Half of Strength Given to minions-->
+        <Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Lightning Spell Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Generic Chaos Damage" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Generic Chaos Damage" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Generic Chaos Damage[IntBoosted]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Chaos Spell Damage" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Chaos Spell Damage[IntBoosted]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage" />
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Chaos Spell Damage[IntBoosted]" Group="Damage">
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="+# to Intelligence" ConversionMultiplier="0.0625" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Lightning AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Lightning Spell-AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Lightning AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Lightning Spell-AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Elemental Damage"/>
+        <Attribute Name="#% increased Lightning Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased MinionBoosted Chaos Spell-AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+		<Attribute Name="Minions deal #% increased Damage" />
+    </PseudoAttribute>
+    <PseudoAttribute Name="#% increased ScourgeBoosted Chaos Spell-AOE Damage[Non-Tagged]" Group="Damage">
+        <Attribute Name="#% increased Chaos Damage"/>
+        <Attribute Name="#% increased Area Damage"/>
+        <Attribute Name="#% increased Damage"/>
+		<Attribute Name="#% increased Spell Damage" />
+        <Attribute Name="Minions deal #% increased Damage"  ConversionMultiplier="2.0"/>
+    </PseudoAttribute>
+</PseudoAttributes>
