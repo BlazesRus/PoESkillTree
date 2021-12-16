@@ -58,6 +58,12 @@ using PoESkillTree.Views.PassiveTree;
 using PseudoTotal = PoESkillTree.ViewModels.PseudoTotal;
 using PoESkillTree.TreeGenerator.Model.PseudoAttributes;
 
+#if (PoESkillTree_UseSwordfishDictionary)
+using Swordfish.NET.Collections;//Swordfish.NET.CollectionsV3 package(https://github.com/stewienj/SwordfishCollections)
+#elif (PoESkillTree_UseIXDictionary)
+using IX.Observable;//IX.Observable package(https://github.com/adimosh/IX.Framework/)
+#endif
+
 namespace PoESkillTree.Views
 {
     /// <summary>
@@ -101,12 +107,23 @@ namespace PoESkillTree.Views
             set => SetProperty(ref _itemAttributes, value);
         }
 
+/*#if PoESkillTree_EnableItemInfluencedGenerator
+        /// <summary>
+        /// The item information equipped in SkillTree(Shared inside Static Instance)
+        /// </summary>
+        public InventoryViewModel InventoryViewModel
+        {
+            get => GlobalSettings.ItemInfoVal;
+            private set => SetProperty(ref GlobalSettings.ItemInfoVal, value);
+        }
+#else*/
         private InventoryViewModel _inventoryViewModel;
         public InventoryViewModel InventoryViewModel
         {
             get => _inventoryViewModel;
             private set => SetProperty(ref _inventoryViewModel, value);
         }
+//#endif
 
         private SkillTreeAreaViewModel _skillTreeAreaViewModel;
         public SkillTreeAreaViewModel SkillTreeAreaViewModel
@@ -207,6 +224,7 @@ namespace PoESkillTree.Views
 
         private MouseButton _lastMouseButton;
         private bool _userInteraction;
+
         /// <summary>
         /// The node of the SkillTree that currently has the mouse over it.
         /// Null if no node is under the mouse.
@@ -1552,7 +1570,6 @@ namespace PoESkillTree.Views
                         // Toggle whether the node is included in the tree
                         if (Tree.SkilledNodes.Contains(node))
                         {
-#if PoESkillTree_EnableExtraUnskillFeatures
                             if(node.PassiveNodeType == PassiveNodeType.Mastery && Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))//Undo Mastery Option Via Alt+Click
                             {
                                 MasteryDefinitions.SetMasteryLabel(node);
@@ -1565,7 +1582,6 @@ namespace PoESkillTree.Views
                             {
                                 Tree.RemoveAllAscendancySkillNodes(); return;
                             }
-#endif
                             Tree.ForceRefundNode(node);
                             _prePath = Tree.GetShortestPathTo(node);
                             Tree.DrawPath(_prePath);

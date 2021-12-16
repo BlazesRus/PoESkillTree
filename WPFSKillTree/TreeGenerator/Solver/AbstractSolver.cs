@@ -87,7 +87,7 @@ namespace PoESkillTree.TreeGenerator.Solver
         /// </summary>
         /// <param name="tree">The (not null) skill tree in which to optimize.</param>
         /// <param name="settings">The (not null) settings that describe what the solver should do.</param>
-#pragma warning disable CS8618 // Initialized in Inittialize
+#pragma warning disable CS8618 // Initialized in Initialize
         protected AbstractSolver(SkillTree tree, TS settings)
 #pragma warning restore
         {

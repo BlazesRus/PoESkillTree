@@ -396,6 +396,85 @@ namespace PoESkillTree.TreeGenerator.Solver
 
             // Calculate constraint value for each stat and multiply them.
             var csvs = 1.0;
+/*
+            if (Settings.TreePlusItemsMode||GlobalSettings.AdvancedTreeSearch)
+            {
+                string StatName;
+                Dictionary<string, ConstraintValues> ConstraintDictionary = new Dictionary<string, ConstraintValues>(_attrConstraints.Length);
+                Dictionary<string, float> StatTotals = new Dictionary<string, float>();
+                int attrIndex;
+                foreach(var ConversionKey in _attrConversionMultipliers.Keys)
+                {
+                    attrIndex = ConversionKey.Item2;
+                    StatName = ConversionKey.Item1;
+                    var stat = _attrConstraints[attrIndex];
+                    ConstraintDictionary.Add(StatName, new ConstraintValues(stat.Item1, stat.Item2));
+                    var currentValue = totalStats[attrIndex];
+                    StatTotals.Add(StatName, currentValue);
+                }
+                ConstraintValues StatConstraint;
+                if (Settings.TreePlusItemsMode)
+                {
+                    StatTotals = GlobalSettings.JewelInfo.StatUpdater(StatTotals, Settings.TreeInfo, Settings.ItemInfo);
+                    //Subtotals should have been dealt with during StatUpdater
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    {
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatTotals.ContainsKey(StatName))
+                        {
+                            csvs *= CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
+                        else
+                        {
+                            csvs *= CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                        }
+                    }
+                }
+                else
+                {
+                    double ScoreMultiplier;
+                    Dictionary<string, float> SubTotals = GlobalSettings.CalculateSubtotalAttributes(Settings.TreeInfo);
+                    foreach (KeyValuePair<string, ConstraintValues> Element in ConstraintDictionary)
+                    {
+                        StatName = Element.Key;
+                        StatConstraint = Element.Value;
+                        if (StatName == GlobalSettings.DualWandAccKey || StatName == GlobalSettings.HPTotalKey || StatName == GlobalSettings.HybridHPKey || StatName == GlobalSettings.PseudoAccKey)
+                        {
+                            if (SubTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(SubTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        else
+                        {
+                            if (StatTotals.ContainsKey(StatName))
+                            {
+                                ScoreMultiplier = CalcCsv(StatTotals[StatName], StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                            else
+                            {
+                                ScoreMultiplier = CalcCsv(0.0f, StatConstraint.Weight, StatConstraint.TargetValue);
+                            }
+                        }
+                        csvs *= ScoreMultiplier;
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 0; i < _attrConstraints.Length; i++)
+                {
+                    var stat = _attrConstraints[i];
+                    var currentValue = totalStats[i];
+                    csvs *= CalcCsv(currentValue, stat.Item2, stat.Item1);
+                }
+            }
+*/
             for (var i = 0; i < _attrConstraints.Length; i++)
             {
                 var stat = _attrConstraints[i];
@@ -405,7 +484,7 @@ namespace PoESkillTree.TreeGenerator.Solver
             // Total points spent is another csv.
             if (usedNodeCount > totalPoints)
             {
-                // If UsedNodeCount is higher than Settings.TotalPoints, it is 
+                // If UsedNodeCount is higher than Settings.TotalPoints, it is
                 // calculated as a csv with a weight of 5. (and lower = better)
                 csvs *= CalcCsv(2 * totalPoints - usedNodeCount, UsedNodeCountWeight, totalPoints);
             }

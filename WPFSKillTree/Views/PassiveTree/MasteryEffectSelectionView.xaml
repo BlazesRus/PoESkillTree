@@ -10,6 +10,7 @@
                              xmlns:viewModels="clr-namespace:PoESkillTree.ViewModels.PassiveTree"
                              xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
                              xmlns:base="clr-namespace:PoESkillTree.Engine.GameModel.PassiveTree.Base;assembly=PoESkillTree.Engine.GameModel"
+                             xmlns:passViewModel="clr-namespace:PoESkillTree.ViewModels.PassiveTree"
                              xmlns:system="clr-namespace:System;assembly=mscorlib"
                              mc:Ignorable="d" 
                              d:DataContext="{d:DesignInstance viewModels:MasteryEffectSelectionViewModel}"
@@ -38,26 +39,27 @@
         <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding Node.MasterEffects}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type base:JsonPassiveNodeMasterEffect}">
-                    <CheckBox x:Name="checkbox" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}">
-                        <CheckBox.CommandParameter>
+                    <RadioButton Margin="10,10,0,13" Name="masterSelector" VerticalAlignment="Center" Command="{Binding DataContext.SetEffect, ElementName=view}">
+                        <RadioButton.CommandParameter>
                             <Binding Path="Effect"></Binding>
-                        </CheckBox.CommandParameter>
-                        <CheckBox.IsEnabled>
+                        </RadioButton.CommandParameter>
+                        <RadioButton.IsEnabled>
                             <MultiBinding Converter="{StaticResource MasteryEffectEnabledConverter}" Mode="OneWay">
                                 <Binding Path="Effect"></Binding>
                                 <Binding Path="DataContext" ElementName="view"/>
                             </MultiBinding>
-                        </CheckBox.IsEnabled>
-                        <CheckBox.IsChecked>
+                        </RadioButton.IsEnabled>
+                        <RadioButton.IsChecked>
                             <MultiBinding Converter="{StaticResource MasteryEffectCheckedConverter}" Mode="OneWay">
                                 <Binding Path="Effect"></Binding>
                                 <Binding Path="DataContext" ElementName="view"/>
                             </MultiBinding>
-                        </CheckBox.IsChecked>
+                        </RadioButton.IsChecked>
+                        <RadioButton.GroupName>masterEffect</RadioButton.GroupName>
                         <ItemsControl Margin="3,0" Grid.Row="3" ItemsSource="{Binding StatDescriptions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type system:String}">
-                                    <TextBlock Text="{Binding Path=.}" IsEnabled="{Binding Path=IsEnabled, ElementName=checkbox}">
+                                    <TextBlock Text="{Binding Path=.}" IsEnabled="{Binding Path=IsEnabled, ElementName=masterSelector}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock" BasedOn="{StaticResource enabledText}">
                                                 <Style.Triggers>
@@ -72,10 +74,11 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </CheckBox>
+                    </RadioButton>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <!--To-Do:Add Remove Mastery Selection option-->
         <StackPanel Style="{StaticResource DialogPanel}">
             <Button Style="{StaticResource DynamicDialogPanelButton}"
                     Command="{Binding CloseCommand}" CommandParameter="{StaticResource True}"
