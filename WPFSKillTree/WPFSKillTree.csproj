@@ -59,6 +59,7 @@
   <ItemGroup>
     <Resource Include="Images\**" />
     <ProjectReference Include="..\..\MCollections\MCollections\MCollections.csproj" />
+    <!--<ProjectReference Include="..\..\PoESkillTree_BlazesRus.Engine\PoESkillTree.Engine\PoESkillTree.Engine.csproj" />-->
     <Resource Include="logo.ico" />
   </ItemGroup>
 </Project>

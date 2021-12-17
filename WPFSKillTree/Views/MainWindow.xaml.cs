@@ -283,7 +283,7 @@ namespace PoESkillTree.Views
             private set => SetValue(TitleBarProperty, value);
         }
 
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
         /// <summary>
         /// Gets all values of the WeaponClass Enum.
         /// </summary>
@@ -353,7 +353,7 @@ namespace PoESkillTree.Views
         //    BindingExpression binding = CurrentBox.GetBindingExpression(System.Windows.Controls.ComboBox.SelectedValueProperty);
         //    binding.UpdateSource();
         //}
-#endif*/
+#endif
 
 #pragma warning disable CS8618 // Initialized in Window_Loaded
         public MainWindow()
@@ -442,14 +442,14 @@ namespace PoESkillTree.Views
         //This whole region, along with most of GroupStringConverter, makes up our user-defined attribute group functionality - Sectoidfodder 02/29/16
         #region Attribute grouping helpers
 
-/*#if PoESkillTree_DisableStatTracking==false
+#if PoESkillTree_DisableStatTracking==false
         private void UpdateTrackedStatDisplay()
         {
             Tree.UpdateTrackedStatCalculation();
 #if PoESkillTree_UseIXDictionary
             trackedStatDisplay.RefreshViewers();
 #endif
-        }*/
+        }
 
         /*
         public void RemoveTrackedAttr(object sender, RoutedEventArgs e)
@@ -457,16 +457,16 @@ namespace PoESkillTree.Views
             Tree.RemoveTrackedAttr(sender, e);
         }
         */
-/*#endif*/
+#endif
 
         //Necessary to update the summed numbers in group names before every refresh
         private void RefreshAttributeLists()
         {
             _attributeGroups.UpdateGroupNames(_attiblist);
             _attributeCollection.Refresh();
-/*#if PoESkillTree_DisableStatTracking==false
+#if PoESkillTree_DisableStatTracking==false
             UpdateTrackedStatDisplay();
-#endif*/
+#endif
         }
 
         private void SetCustomGroups(IList<string[]> customgroups)
@@ -625,7 +625,7 @@ namespace PoESkillTree.Views
             Tree = await CreateSkillTreeAsync(controller);
             InitializeTreeDependentUI();
             Log.Info($"Tree UI initialized after {stopwatch.ElapsedMilliseconds} ms");
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
             //trackedAttr.ItemsSource = trackedStatDisplay;//Binding inside the xml instead
             //trackedAttr.SelectionMode = SelectionMode.Extended;//Selected inside xml
 
@@ -701,7 +701,7 @@ namespace PoESkillTree.Views
             }
             UpdateTrackedStatDisplay();
             Log.Info($"Current Tracked Stats initialized after {stopwatch.ElapsedMilliseconds} ms");
-#endif*/
+#endif
 
             controller.SetMessage(L10n.Message("Initializing window ..."));
             controller.SetIndeterminate();
@@ -1366,9 +1366,9 @@ namespace PoESkillTree.Views
         {
             UpdateAttributeList();
             RefreshAttributeLists();
-/*#if PoESkillTree_DisableStatTracking==false
+#if PoESkillTree_DisableStatTracking==false
             Tree.UpdateTrackedStatCalculation();
-#endif*/
+#endif
             UpdateClass();
             UpdatePoints();
         }
@@ -1514,9 +1514,9 @@ namespace PoESkillTree.Views
         {
             if (cbAttributesFilterRegEx.IsChecked == true && !RegexTools.IsValidRegex(tbAttributesFilter.Text)) return;
             UpdateAttributeList();
-/*#if PoESkillTree_DisableStatTracking==false
+#if PoESkillTree_DisableStatTracking==false
             Tree.UpdateTrackedStatCalculation();
-#endif*/
+#endif
             RefreshAttributeLists();
         }
 
@@ -1582,6 +1582,7 @@ namespace PoESkillTree.Views
                             {
                                 Tree.RemoveAllAscendancySkillNodes(); return;
                             }
+                            //To-Do add jewel socketing removal feature here
                             Tree.ForceRefundNode(node);
                             _prePath = Tree.GetShortestPathTo(node);
                             Tree.DrawPath(_prePath);
@@ -1595,6 +1596,7 @@ namespace PoESkillTree.Views
                                     var model = new MasteryEffectSelectionViewModel(node, Tree.SkilledNodes.Where(x => x.PassiveNodeType == PassiveNodeType.Mastery));
                                     await MasteryEffectSelectionAsync(model, new MasteryEffectSelectionView());
                                 }
+                                //To-Do add jewel socketing feature here
                                 SetCurrentBuildUrlFromTree();
                                 UpdateUI();
                                 return;//Enables to switch mastery selection without skilling the node
@@ -1605,7 +1607,7 @@ namespace PoESkillTree.Views
                             }
                             else
                             {
-                                Tree.AllocateNormalSkillNodes(_prePath);
+                                Tree.AllocateNormalSkillNodes(_prePath);//Don't need to switch ascendancy for normal nodes
                             }
                             //Tree.AllocateSkillNodes(_prePath);
                             _toRemove = Tree.ForceRefundNodePreview(node);
@@ -1728,8 +1730,8 @@ namespace PoESkillTree.Views
             if (node.PassiveNodeType == PassiveNodeType.Mastery)//Add extra Details for Potential Mastery Choices
             {
                 tooltip += "\n\nMastery Node Options are(Ctrl+LClick to choose):";
-#if PoESkillTree_StoreMasteryDescriptionsDynamically
-#else//Might instead store a dictionary of StringLists later for dynamic update of mastery descriptions but this will do for now
+//#if PoESkillTree_StoreMasteryDescriptionsDynamically
+//#else//Might instead store a dictionary of StringLists later for dynamic update of mastery descriptions but this will do for now
                 switch (node.Name)
                 {//Description and number of counts listed on https://poedb.tw/us/Passive_mastery
                     case "Life Mastery":
@@ -2148,7 +2150,7 @@ namespace PoESkillTree.Views
                         tooltip += "\n    (Not Listed Yet)";
                         break;
                 }
-#endif
+//#endif
             }
 
             if (socketedJewel is null)
@@ -2183,10 +2185,10 @@ namespace PoESkillTree.Views
                 if (_prePath != null | _toRemove != null)
                 {
                     var attributechanges = new Dictionary<string, List<float>>();
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
                     var trackedAttributeChanges = new Dictionary<string, float>();
                     bool IsAddingNodes = true;
-#endif*/
+#endif
                     int changedNodes;
 
                     if (_prePath != null)
@@ -2201,9 +2203,9 @@ namespace PoESkillTree.Views
                         attributechanges = SkillTree.GetAttributesWithoutImplicitNodesOnly(_toRemove);
                         tooltip = "Total loss:";
                         changedNodes = _toRemove.Count;
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
                         IsAddingNodes = false;
-#endif*/
+#endif
                     }
                     else
                     {
@@ -2225,7 +2227,7 @@ namespace PoESkillTree.Views
                         }
 
                         sp.Children.Add(new Separator());
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
                         if (GlobalSettings.TrackedStats.Count > 0)
                         {
                             trackedAttributeChanges = SkillTree.GetCalculatedTrackedAttributesFromStatDictionary(attributechanges);
@@ -2242,7 +2244,7 @@ namespace PoESkillTree.Views
                                 tooltip += "\n" + attr;
                             }
                         }
-#endif*/
+#endif
                         sp.Children.Add(new TextBlock { Text = tooltip });
                     }
                 }
@@ -2609,18 +2611,18 @@ namespace PoESkillTree.Views
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedNodes.UnionWith(nodes);
                 Tree.HighlightedAttributes = SkillTree.GetAttributes(nodes, charClass, build.Level, build.Bandits);
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
                 Tree.HighlightedPseudoTotal = SkillTree.GetCalculatedTrackedAttributesFromStatDictionary(Tree.HighlightedAttributes);
-#endif*/
+#endif
             }
             else
             {
                 Tree.HighlightedNodes.Clear();
                 Tree.HighlightedAttributes = null;
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
                 if (Tree.HighlightedPseudoTotal != null)
                     Tree.HighlightedPseudoTotal = null;
-#endif*/
+#endif
             }
             UpdateUI();
         }

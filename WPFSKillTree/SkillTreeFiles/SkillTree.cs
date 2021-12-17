@@ -184,7 +184,7 @@ namespace PoESkillTree.SkillTreeFiles
 
         private static bool _initialized;
 
-/*#if (PoESkillTree_DisableStatTracking == false)
+#if (PoESkillTree_DisableStatTracking == false)
         //public ContextMenu trackingContextMenu;
 
 #if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
@@ -215,7 +215,7 @@ namespace PoESkillTree.SkillTreeFiles
         /// </summary>
         public Dictionary<string, float>? HighlightedPseudoTotal { get; set; }
 
-*//*
+/*
         /// <summary>
         /// Unfinished(Still need current implementation to first display the context menu)
         /// </summary>
@@ -238,8 +238,11 @@ namespace PoESkillTree.SkillTreeFiles
             //_attributeGroups.DeleteGroup(((MenuItem)sender).Header.ToString()!);
             //RefreshAttributeLists();
         }
-*//*
-#endif*/
+*/
+#endif
+
+        //public Dictionary<string, float> SelectedPseudoTotalWithItems;
+        //public Dictionary<string, float> TrackedStatTotalWithItems;
 
         private SkillTree(IPersistentData persistentData)
 #pragma warning restore
@@ -247,6 +250,17 @@ namespace PoESkillTree.SkillTreeFiles
             _persistentData = persistentData;
 
             SkilledNodes.CollectionChanged += SkilledNodes_CollectionChanged;
+#if PoESkillTree_UseSwordfishDictionary || PoESkillTree_UseIXDictionary
+            SelectedPseudoTotal = = new ConcurrentObservableDictionary<string, PseudoTotal>() { };
+#elif PoeSkillTree_DontUseKeyedTrackedStats==false
+            SelectedPseudoTotal = new ObservableKeyedPseudoStat();
+#endif
+/*
+            trackingContextMenu = new ContextMenu();
+            var cmRemoveTrackedAttr = new MenuItem { Header = L10n.Message("Remove PseudoAttribute from Tracking") };
+            cmRemoveTrackedAttr.Click += RemoveTrackedAttr;
+            trackingContextMenu.Items.Add(cmRemoveTrackedAttr);
+*/
         }
 
         private void SkilledNodes_CollectionChanged(object sender, CollectionChangedEventArgs<PassiveNodeViewModel> args)
@@ -395,10 +409,10 @@ namespace PoESkillTree.SkillTreeFiles
                             node.Attributes.Add(SClusterLabel, SingleVal);
                         node.UpdateStatDescription();
                     }
-                    /*else if(node.PassiveNodeType == PassiveNodeType.Mastery)
+                    else if(node.PassiveNodeType == PassiveNodeType.Mastery)
                     {
                         MasteryDefinitions.SetMasteryLabel(node);
-                    }*/
+                    }
                     else if(node.IsAscendancyNode)
                     {
                         GlobalSettings.KnownAscendancyNodes.Add(node.Id);
@@ -432,12 +446,23 @@ namespace PoESkillTree.SkillTreeFiles
             }
         }
 
+#if PoESkillTree_UseTreePointSharing
+        Dictionary<string, int> points = new Dictionary<string, int>()
+        {
+            {"NormalUsed", 0},
+            {"NormalTotal", 22},
+            {"AscendancyUsed", 0},
+            {"AscendancyTotal", 8},
+        };
+#endif
+
         /// <summary>
         /// This will get all skill points related to the tree both Normal and Ascendancy
         /// </summary>
         /// <returns>A Dictionary with keys of "NormalUsed", "NormalTotal", "AscendancyUsed", "AscendancyTotal", and "ScionAscendancyChoices"</returns>
         public Dictionary<string, int> GetPointCount()
         {
+#if PoESkillTree_UseTreePointSharing == false
             Dictionary<string, int> points = new Dictionary<string, int>()
             {
                 {"NormalUsed", 0},
@@ -445,10 +470,16 @@ namespace PoESkillTree.SkillTreeFiles
                 {"AscendancyUsed", 0},
                 {"AscendancyTotal", 8},
             };
+#endif
 
             var bandits = _persistentData.CurrentBuild.Bandits;
+#if PoESkillTree_UseTreePointSharing
+            points["NormalUsed"] = 0;
+            points["AscendancyUsed"] = 0;
+            points["NormalTotal"] = bandits.Choice == Bandit.None ? _persistentData.CurrentBuild.Level + 23 : _persistentData.CurrentBuild.Level + 21;
+#else
             points["NormalTotal"] += _persistentData.CurrentBuild.Level + bandits.Choice == Bandit.None ? 1 : -1;
-
+#endif
             foreach (var node in SkilledNodes)
             {
                 if (!node.IsAscendancyNode && !node.IsRootNode)
@@ -464,6 +495,7 @@ namespace PoESkillTree.SkillTreeFiles
 
         public bool UpdateAscendancyClasses = true;
 
+//#if PoESkillTree_UseLegacyClassStorage || PoESkillTree_UseOtherBranchClassCode
         public CharacterClass CharClass
         {
             get => _charClass;
@@ -479,6 +511,8 @@ namespace PoESkillTree.SkillTreeFiles
                 ChangeAscClass(value);
             }
         }
+//#else
+//#endif
 
         [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
             Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
@@ -494,6 +528,24 @@ namespace PoESkillTree.SkillTreeFiles
             }
             else
             {
+#if PoESkillTree_UseOtherBranchClassCode
+                SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
+                var remove = new List<PassiveNodeViewModel>();
+                var sn = GetAscNode();
+                if (sn != null)
+                {
+                    foreach (var n in SkilledNodes)
+                    {
+                        if (n.IsAscendancyNode && sn.AscendancyName != n.AscendancyName)
+                            remove.Add(n);
+                    }
+                    SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Error:Ascendancy Node returned null while having an ascendancy class!");
+                }
+#else
                 var remove = new List<PassiveNodeViewModel>();
                 SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
                 var sn = GetAscNode();
@@ -506,6 +558,7 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
                 }
+#endif
             }
 
             DrawAscendancyLayers();
@@ -556,6 +609,61 @@ namespace PoESkillTree.SkillTreeFiles
             }
             return temp;
         }
+
+#if PoESkillTree_DisableStatTracking == false
+        private string InsertNumbersInTrackedDisplay(string statDisplay, float statTotal)
+        {
+            statDisplay = GlobalSettings._backreplace.Replace(statDisplay, statTotal + "", 1);
+            return statDisplay;
+        }
+        public void UpdateTrackedStatCalculation()
+        {
+            if(GlobalSettings.TrackedStats.Count==0)
+            {
+                if(!SelectedPseudoTotal.IsEmpty())
+                    SelectedPseudoTotal.Clear();
+                if(HighlightedPseudoTotal!=null&& !HighlightedPseudoTotal.IsEmpty())
+                    HighlightedPseudoTotal.Clear();
+                return;
+            }
+            float statCalc;
+            string displayTotal;
+            foreach (var item in GlobalSettings.TrackedStats)
+            {
+                statCalc = item.Value.CalculateValue(SelectedAttributes);//trackedStat.Value.UpdateValue(Tree.SelectedAttributes, Tree.SelectedPseudoTotal);
+                displayTotal = InsertNumbersInTrackedDisplay(item.Key, statCalc);
+#if PoeSkillTree_DontUseKeyedTrackedStats == false
+                if (SelectedPseudoTotal.Contains(item.Key))//Update Tracked Value if already in Display
+#else
+                if (SelectedPseudoTotal.ContainsKey(item.Key))//Update Tracked Value if already in Display
+#endif
+                {
+                    SelectedPseudoTotal[item.Key].Text = displayTotal;
+                    SelectedPseudoTotal[item.Key].Total = statCalc;
+                }
+                else
+#if PoeSkillTree_DontUseKeyedTrackedStats == false
+                    SelectedPseudoTotal.Add(new PseudoTotal(displayTotal, statCalc, item.Key));
+#else
+                    SelectedPseudoTotal.Add(item.Key, new PseudoTotal(displayTotal, statTotal));
+#endif
+            }
+            //Updating Display to show attribute comparison
+            if (HighlightedPseudoTotal != null)
+            {
+                //Reusing statCalc for Stat difference(how much additional compared to selected build)
+                foreach (var item in HighlightedPseudoTotal)
+                {
+                    statCalc = SelectedPseudoTotal[item.Key].Total - item.Value;
+                    if (statCalc >= 0)
+                        SelectedPseudoTotal[item.Key].Text += " (+";
+                    else
+                        SelectedPseudoTotal[item.Key].Text += " (";
+                    SelectedPseudoTotal[item.Key].Text += statCalc+")";
+                }
+            }
+        }
+#endif
 
         private static Dictionary<string, List<float>> GetAttributesWithoutImplicit(
             IEnumerable<PassiveNodeViewModel> skilledNodes, CharacterClass charClass, BanditSettings banditSettings)
@@ -617,6 +725,19 @@ namespace PoESkillTree.SkillTreeFiles
             return temp;
         }
 
+#if (PoESkillTree_DisableStatTracking == false)
+        public static Dictionary<string, float> GetCalculatedTrackedAttributesFromStatDictionary(Dictionary<string, List<float>> NonTrackedTotal)
+        {
+            float totalStat;
+            var statTotals = new Dictionary<string, float>(GlobalSettings.TrackedStats.Count);
+            foreach (var element in GlobalSettings.TrackedStats)
+            {
+                totalStat = element.Value.CalculateValue(NonTrackedTotal);
+                statTotals.Add(element.Key, totalStat);
+            }
+            return statTotals;
+        }
+#endif
 
         /// <summary>
         /// Returns a task that finishes with a SkillTree object once it has been initialized.
@@ -1204,8 +1325,33 @@ namespace PoESkillTree.SkillTreeFiles
         {
             var data = DecodeUrl(url);
             var skillNodes = Skillnodes.Values.Where(x => data.SkilledNodesIds.Contains(x.Id));
+#if PoESkillTree_UseOtherBranchClassCode
+            //SkilledNodes.ResetTo(skillNodes);
+            //SwitchClass(data.CharacterClass);
+            bool SwitchingClass = SwitchClass(data.CharacterClass);
+            SkilledNodes.ResetTo(skillNodes);
+            //Fix Ascendancy Start nodes and switch to new ascendancy as needed
+            if (SwitchingClass)//AscType = data.AscendancyClassId;
+            {
+                if (data.AscendancyClassId==0)
+                    RemoveAllAscendancyNodes();
+                else
+                    SwitchAscendancy(data.AscendancyClassId);
+            }
+            else
+            {
+                if (AscType!=data.AscendancyClassId)
+                {
+                    if (data.AscendancyClassId==0)
+                        RemoveAllAscendancyNodes();
+                    else
+                        SwitchAscendancy(data.AscendancyClassId);
+                }
+            }
+#else
             ResetSkilledNodesTo(skillNodes);
             SwitchClass(data.CharacterClass);
+#endif
             foreach (var pair in data.MasteryEffectPairs)
             {
                 if (SkilledNodes.FirstOrDefault(x => x.Id == pair.Id) is PassiveNodeViewModel mastery)
