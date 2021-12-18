@@ -90,6 +90,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 #if DEBUG
                 }
 #endif
+#if DEBUG
+                else if(node.DistancesIndex> distanceLookup._nodes.Length)
+                    Debug.WriteLine("Distance index for node is out of range:" + node.DistancesIndex);
+#endif
                 else
                     _nodeStates.FixedTargetKeyedIndices.AddOrUpdate(node.Id, node.DistancesIndex);
             }

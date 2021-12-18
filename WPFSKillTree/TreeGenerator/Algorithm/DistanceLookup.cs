@@ -55,7 +55,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// The GraphNodes of which distances and paths are cached.
         /// The index in the Array equals their <see cref="GraphNode.DistancesIndex"/>.
         /// </summary>
-        public GraphNode[] _nodes;
+#if PoESkillTree_LinkDistancesByID
+#else
+        public GraphNode[]
+#endif
+        _nodes;
 
         public int CacheSize { get; private set; }
 
@@ -163,8 +167,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         public DistanceCalculator(IReadOnlyList<GraphNode> nodes)
         {
             if (nodes == null) throw new ArgumentNullException("nodes");
-
             CacheSize = nodes.Count;
+#if PoESkillTree_LinkDistancesByID//Potential fix for index breaking on node removal
+
+#else
             _nodes = new GraphNode[CacheSize];
             _distances = new uint[CacheSize][];
             _paths = new ushort[CacheSize][][];
@@ -175,6 +181,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 _distances[i] = new uint[CacheSize];
                 _paths[i] = new ushort[CacheSize][];
             }
+#endif
 
             foreach (var node in nodes)
             {

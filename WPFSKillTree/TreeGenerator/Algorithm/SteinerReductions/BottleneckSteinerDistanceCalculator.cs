@@ -45,6 +45,8 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
         public DistanceLookup CalcBottleneckSteinerDistances(
 #if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
         IReadOnlyCollection<int>
+#elif PoESkillTree_UseDictionaryForTargets
+        Dictionary<int, int>
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection
 #endif
@@ -61,7 +63,15 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
             return new DistanceLookup(nodeCount, smatrix);
         }
 
-        private uint[] CalcBottleneckSteinerDistancesTo(int i, IEnumerable<int> searchSpaceIndices, IEnumerable<int> fixedTargetNodes)
+        private uint[] CalcBottleneckSteinerDistancesTo(int i, IEnumerable<int> searchSpaceIndices,
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+        IEnumerable<int>
+#elif PoESkillTree_UseDictionaryForTargets
+        Dictionary<int, int>
+#else
+        MCollections.IndexedDictionary<int, int>.ValueCollection
+#endif
+        fixedTargetNodes)
         {
             // Dijkstra like algorithm that uses the fully connected distance graph but only
             // paths through target nodes (only paths over target nodes are relevant by definition).

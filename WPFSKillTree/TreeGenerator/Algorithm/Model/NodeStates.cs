@@ -18,7 +18,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// <summary>
         /// Gets the node indices currently marked as fixed target nodes.
         /// </summary>
-#if PoESkillTree_DisableAlternativefixedTargetNodeIndices
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
         IReadOnlyCollection<int> FixedTargetNodeIndices { get; }
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices { get; }
@@ -99,7 +99,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public IEnumerable<GraphNode> FixedTargetNodes => _fixedTargetNodes;
 
-#if PoESkillTree_DisableAlternativefixedTargetNodeIndices
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
         private HashSet<int> _fixedTargetNodeIndices;
 
         public IReadOnlyCollection<int> FixedTargetNodeIndices => _fixedTargetNodeIndices;
@@ -150,7 +150,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _fixedTargetNodes = new HashSet<GraphNode>(fixedTargetNodes);
             _variableTargetNodes = new HashSet<GraphNode>(variableTargetNodes);
             _allTargetNodes = new HashSet<GraphNode>(_variableTargetNodes.Union(_fixedTargetNodes));
-#if PoESkillTree_DisableAlternativefixedTargetNodeIndices==false
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices==false
             TargetIds = new HashSet<ushort>(_fixedTargetNodes.Select(n => n.Id));
             FixedTargetKeyedIndices = new MCollections.IndexedDictionary<int, int>();
 #endif
