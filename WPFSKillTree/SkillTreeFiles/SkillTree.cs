@@ -495,7 +495,6 @@ namespace PoESkillTree.SkillTreeFiles
 
         public bool UpdateAscendancyClasses = true;
 
-//#if PoESkillTree_UseLegacyClassStorage || PoESkillTree_UseOtherBranchClassCode
         public CharacterClass CharClass
         {
             get => _charClass;
@@ -511,8 +510,6 @@ namespace PoESkillTree.SkillTreeFiles
                 ChangeAscClass(value);
             }
         }
-//#else
-//#endif
 
         [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument",
             Justification = "Would notify changes for the not existing property 'ChangeAscClass'")]
@@ -528,24 +525,6 @@ namespace PoESkillTree.SkillTreeFiles
             }
             else
             {
-#if PoESkillTree_UseOtherBranchClassCode
-                SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
-                var remove = new List<PassiveNodeViewModel>();
-                var sn = GetAscNode();
-                if (sn != null)
-                {
-                    foreach (var n in SkilledNodes)
-                    {
-                        if (n.IsAscendancyNode && sn.AscendancyName != n.AscendancyName)
-                            remove.Add(n);
-                    }
-                    SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
-                }
-                else
-                {
-                    System.Windows.MessageBox.Show("Error:Ascendancy Node returned null while having an ascendancy class!");
-                }
-#else
                 var remove = new List<PassiveNodeViewModel>();
                 SetProperty(ref _asctype, toType, propertyName: nameof(AscType));
                 var sn = GetAscNode();
@@ -558,7 +537,6 @@ namespace PoESkillTree.SkillTreeFiles
                     }
                     SkilledNodes.ExceptAndUnionWith(remove, new[] { sn });
                 }
-#endif
             }
 
             DrawAscendancyLayers();
@@ -831,6 +809,24 @@ namespace PoESkillTree.SkillTreeFiles
         {
             SkilledNodes.ResetTo(nodes);
             AscType = SelectAscendancyFromNodes(nodes) ?? 0;
+        }
+
+        public void ResetSkilledNodesWithClassInfo(IEnumerable<PassiveNodeViewModel> nodes, CharacterClass charClass, int ascendancyType)
+        {
+            SkilledNodes.ResetTo(nodes);
+            if (charClass != CharClass)
+            {
+                var canSwitch = CanSwitchClass(charClass);
+                CharClass = charClass;
+
+                //Only remove Ascendancy nodes that do not match the Ascendancy of loaded url
+                string? ascendancyName = AscendancyClasses.GetAscendancyClassName(charClass, ascendancyType); 
+                IEnumerable<PassiveNodeViewModel>? remove = canSwitch ? SkilledNodes.Where(n => (n.IsAscendancyNode&&n.AscendancyName!= ascendancyName) || n.IsRootNode) : SkilledNodes;
+                var add = Skillnodes[RootNodeClassDictionary[charClass]];
+                SkilledNodes.ExceptAndUnionWith(remove.ToList(), new[] { add });
+                _asctype = 0;
+            }
+            AscType = ascendancyType;//AscType = SelectAscendancyFromNodes(nodes) ?? 0;
         }
 
         public void AllocateSkillNodes(IReadOnlyCollection<PassiveNodeViewModel> toAdd)
@@ -1325,32 +1321,11 @@ namespace PoESkillTree.SkillTreeFiles
         {
             var data = DecodeUrl(url);
             var skillNodes = Skillnodes.Values.Where(x => data.SkilledNodesIds.Contains(x.Id));
-#if PoESkillTree_UseOtherBranchClassCode
-            //SkilledNodes.ResetTo(skillNodes);
-            //SwitchClass(data.CharacterClass);
-            bool SwitchingClass = SwitchClass(data.CharacterClass);
-            SkilledNodes.ResetTo(skillNodes);
-            //Fix Ascendancy Start nodes and switch to new ascendancy as needed
-            if (SwitchingClass)//AscType = data.AscendancyClassId;
-            {
-                if (data.AscendancyClassId==0)
-                    RemoveAllAscendancyNodes();
-                else
-                    SwitchAscendancy(data.AscendancyClassId);
-            }
-            else
-            {
-                if (AscType!=data.AscendancyClassId)
-                {
-                    if (data.AscendancyClassId==0)
-                        RemoveAllAscendancyNodes();
-                    else
-                        SwitchAscendancy(data.AscendancyClassId);
-                }
-            }
-#else
+#if PoESkillTree_UseLegacyClassCode
             ResetSkilledNodesTo(skillNodes);
             SwitchClass(data.CharacterClass);
+#else
+            ResetSkilledNodesWithClassInfo(skillNodes, data.CharacterClass, data.AscendancyClassId);
 #endif
             foreach (var pair in data.MasteryEffectPairs)
             {
