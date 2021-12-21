@@ -21,10 +21,10 @@
     <PackageProjectUrl>https://github.com/BlazesRus/PoESkillTree</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;PoESkillTree_DisableAlternativeFixedTargetNodeIndices</DefineConstants>
+    <DefineConstants>TRACE;PoESkillTree_LinkDistancesByID</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;PoESkillTree_DisableAlternativeFixedTargetNodeIndices</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
     <Exec Command="$(ProjectDir)build-locale.bat" />

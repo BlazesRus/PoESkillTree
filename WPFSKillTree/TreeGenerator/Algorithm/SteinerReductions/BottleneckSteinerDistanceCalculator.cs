@@ -43,10 +43,8 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
         /// </summary>
         /// <returns>Lookup for the calculated distances between all nodes.</returns>
         public DistanceLookup CalcBottleneckSteinerDistances(
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices||PoESkillTree_UseDictionaryForTargets
         IReadOnlyCollection<int>
-#elif PoESkillTree_UseDictionaryForTargets
-        Dictionary<int, int>
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection
 #endif
@@ -64,10 +62,8 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
         }
 
         private uint[] CalcBottleneckSteinerDistancesTo(int i, IEnumerable<int> searchSpaceIndices,
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices||PoESkillTree_UseDictionaryForTargets
         IEnumerable<int>
-#elif PoESkillTree_UseDictionaryForTargets
-        Dictionary<int, int>
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection
 #endif

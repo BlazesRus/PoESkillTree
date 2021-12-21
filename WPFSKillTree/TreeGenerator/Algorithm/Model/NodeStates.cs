@@ -150,7 +150,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _fixedTargetNodes = new HashSet<GraphNode>(fixedTargetNodes);
             _variableTargetNodes = new HashSet<GraphNode>(variableTargetNodes);
             _allTargetNodes = new HashSet<GraphNode>(_variableTargetNodes.Union(_fixedTargetNodes));
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices==false
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices
             TargetIds = new HashSet<ushort>(_fixedTargetNodes.Select(n => n.Id));
             FixedTargetKeyedIndices = new MCollections.IndexedDictionary<int, int>();
 #endif

@@ -5,15 +5,61 @@ using PoESkillTree.TreeGenerator.Algorithm.Model;
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
+#if PoESkillTree_LinkDistancesByID
+    //public class TwoDUInt
+    //{
+    //    public uint X;
+    //    public uint Y;
+    //    TwoDUInt(uint x, uint y)
+    //    {
+    //        X = x;
+    //        Y = y;
+    //    }
+    //}
+
+    public class TwoDInt
+    {
+        public int X;
+        public int Y;
+        public TwoDInt(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public TwoDInt()
+        {
+            X = -1; Y = -1;
+        }
+    }
+#endif
+
     public readonly struct DistanceLookup
     {
-        private readonly uint[][] _distances;
+        private
+        readonly
+#if PoESkillTree_LinkDistancesByID
+        Dictionary<TwoDInt, uint>
+#else
+        uint[][]
+#endif
+        _distances;
 
         public readonly int CacheSize;
 
+#if PoESkillTree_LinkDistancesByID
+        public uint this[TwoDInt a] => _distances[a] = _distances[new TwoDInt(a.Y, a.X)];
+#else
         public uint this[int a, int b] => _distances[a][b];
+#endif
 
-        public DistanceLookup(int cacheSize, uint[][] distances)
+        public DistanceLookup(int cacheSize,
+#if PoESkillTree_LinkDistancesByID
+        Dictionary<TwoDInt, uint>
+#else
+        uint[][]
+#endif
+        distances)
         {
             CacheSize = cacheSize;
             _distances = distances;
@@ -47,7 +93,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm
     /// </summary>
     public class DistanceCalculator
     {
-        private uint[][] _distances;
+        private
+#if PoESkillTree_LinkDistancesByID
+        Dictionary<TwoDInt, uint>
+#else
+        uint[][]
+#endif
+        _distances;
 
         private ushort[][][] _paths;
 
@@ -56,6 +108,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// The index in the Array equals their <see cref="GraphNode.DistancesIndex"/>.
         /// </summary>
 #if PoESkillTree_LinkDistancesByID
+        Dictionary<uint, GraphNode>
 #else
         public GraphNode[]
 #endif
@@ -63,6 +116,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
         public int CacheSize { get; private set; }
 
+#if PoESkillTree_LinkDistancesByID==false
         /// <summary>
         /// Retrieves the path distance from one node to another.
         /// CalculateFully must have been called or an exception will be thrown.
@@ -75,9 +129,33 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </remarks>
         public uint this[int a, int b]
         {
+//#if PoESkillTree_LinkDistancesByID
+//            get => _distances[new TwoDInt(a, b)];
+//            private set => _distances[a][b] = _distances[b][a] = value;
+//#else
             get => _distances[a][b];
             private set => _distances[a][b] = _distances[b][a] = value;
+//#endif
         }
+#endif
+
+#if PoESkillTree_LinkDistancesByID
+        /// <summary>
+        /// Retrieves the path distance from one node to another.
+        /// CalculateFully must have been called or an exception will be thrown.
+        /// </summary>
+        /// <returns>The length of the path from a to b (equals the amount of edges
+        /// traversed).</returns>
+        /// <remarks>
+        ///  If the nodes are not connected, 0 will be returned.
+        ///  If at least one of the nodes is greater or equals CacheSize, a IndexOutOfRangeException will be thrown.
+        /// </remarks>
+        public uint this[TwoDInt a]
+        {
+            get => _distances[a];
+            private set => _distances[a] = _distances[new TwoDInt(a.Y, a.X)] = value;
+        }
+#endif
 
         public DistanceLookup DistanceLookup
             => new DistanceLookup(CacheSize, _distances);
@@ -198,6 +276,8 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <returns>List of the remaining node. Ordered by their distance index.</returns>
         public List<GraphNode> RemoveNodes(IEnumerable<GraphNode> removedNodes)
         {
+#if PoESkillTree_LinkDistancesByID
+#else
             if (removedNodes == null) throw new ArgumentNullException("removedNodes");
 
             var removed = new bool[CacheSize];
@@ -238,6 +318,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 remainingNodes[i].DistancesIndex = i;
                 _nodes[i] = remainingNodes[i];
             }
+#endif
 
             return remainingNodes;
         }

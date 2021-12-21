@@ -78,7 +78,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             // Initialize the distance lookup.
             _data.DistanceCalculator = new DistanceCalculator(_nodeStates.SearchSpace);
             var distanceLookup = _data.DistanceCalculator;
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices == false
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices
             foreach (var node in distanceLookup._nodes.Where(n => _nodeStates.TargetIds.Contains(n.Id)))//Update NodeIndexes
             {
                 if (node.DistancesIndex == -1)
@@ -139,7 +139,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             degreeTest.RunTest(ref dummy, ref dummy);
 
             // Update _searchSpace, _edgeSet and _distanceLookup
-            ContractSearchSpace();
+            ContractSearchSpace();//Potential bug here as Cache size decreases if distance indices not updated
             // These values may become lower by merging nodes. Since the reductions based on these distance
             // don't help if there are many variable target nodes, it is not really worth it to always recalculate them.
             // It would either slow the preprocessing by like 30% or would need an approximation algorithm.
@@ -219,6 +219,9 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         private GraphEdgeSet ComputeEdges()
         {
             var edgeSet = new GraphEdgeSet(_nodeStates.SearchSpaceSize);
+#if PoESkillTree_LinkDistancesByID
+            TwoDInt XYIndex = new TwoDInt();
+#endif
             // Go through all nodes and their neighbors ...
             foreach (var node in _nodeStates.SearchSpace)
             {
@@ -236,15 +239,28 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                         current = current.Adjacent.First(n => n != previous);
                         previous = tmp;
                     }
+#if PoESkillTree_LinkDistancesByID
+                    XYIndex = new TwoDInt(node.DistancesIndex, current.DistancesIndex);
+#endif
                     // Now create an edge if
                     // - current is in the search space
                     // - the edge is not reflexive
                     // - the edge is the shortest path between both nodes
+#if PoESkillTree_LinkDistancesByID
                     if (current.DistancesIndex >= 0 && node != current &&
                         path.SetEquals(_data.DistanceCalculator.GetShortestPath(node.DistancesIndex, current.DistancesIndex)))
+#else
+                    if (current.DistancesIndex >= 0 && node != current &&
+                        path.SetEquals(_data.DistanceCalculator.GetShortestPath(node.DistancesIndex, current.DistancesIndex)))
+#endif
                     {
+#if PoESkillTree_LinkDistancesByID
+                        edgeSet.Add(node.DistancesIndex, current.DistancesIndex,
+                            _data.DistanceCalculator[XYIndex]);
+#else
                         edgeSet.Add(node.DistancesIndex, current.DistancesIndex,
                             _data.DistanceCalculator[node.DistancesIndex, current.DistancesIndex]);
+#endif
                     }
                 }
             }
