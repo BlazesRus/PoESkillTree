@@ -5,61 +5,15 @@ using PoESkillTree.TreeGenerator.Algorithm.Model;
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
-#if PoESkillTree_LinkDistancesByID
-    //public class TwoDUInt
-    //{
-    //    public uint X;
-    //    public uint Y;
-    //    TwoDUInt(uint x, uint y)
-    //    {
-    //        X = x;
-    //        Y = y;
-    //    }
-    //}
-
-    public class TwoDInt
-    {
-        public int X;
-        public int Y;
-        public TwoDInt(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public TwoDInt()
-        {
-            X = -1; Y = -1;
-        }
-    }
-#endif
-
     public readonly struct DistanceLookup
     {
-        private
-        readonly
-#if PoESkillTree_LinkDistancesByID
-        Dictionary<TwoDInt, uint>
-#else
-        uint[][]
-#endif
-        _distances;
+        private readonly ushort[][] _distances;
 
-        public readonly int CacheSize;
+        public readonly ushort CacheSize;
 
-#if PoESkillTree_LinkDistancesByID
-        public uint this[TwoDInt a] => _distances[a] = _distances[new TwoDInt(a.Y, a.X)];
-#else
-        public uint this[int a, int b] => _distances[a][b];
-#endif
+        public ushort this[ushort a, ushort b] => _distances[a][b];
 
-        public DistanceLookup(int cacheSize,
-#if PoESkillTree_LinkDistancesByID
-        Dictionary<TwoDInt, uint>
-#else
-        uint[][]
-#endif
-        distances)
+        public DistanceLookup(ushort cacheSize, ushort[][] distances)
         {
             CacheSize = cacheSize;
             _distances = distances;
@@ -68,12 +22,34 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
     public readonly struct ShortestPathLookup
     {
-        private readonly ushort[][][] _paths;
+        private readonly
+#if PoESkillTree_LinkDistancesByID
+        Dictionary<ushort, Dictionary<ushort,
+#if PoESkillTree_EnableExtraGeneratorPath
+#else
+        List<ushort>
+#endif
+        >>
+#else
+        ushort[][][]
+#endif
+        _paths;
 
-        public IReadOnlyList<ushort> this[int a, int b]
+        public IReadOnlyList<ushort> this[ushort a, ushort b]
             => _paths[a][b];
 
-        public ShortestPathLookup(ushort[][][] paths)
+        public ShortestPathLookup(
+#if PoESkillTree_LinkDistancesByID
+        Dictionary<ushort, Dictionary<ushort,
+#if PoESkillTree_EnableExtraGeneratorPath
+#else
+        List<ushort>
+#endif
+        >>
+#else
+        ushort[][][]
+#endif
+        paths)
         {
             _paths = paths;
         }
@@ -93,13 +69,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
     /// </summary>
     public class DistanceCalculator
     {
-        private
-#if PoESkillTree_LinkDistancesByID
-        Dictionary<TwoDInt, uint>
-#else
-        uint[][]
-#endif
-        _distances;
+        private ushort[][] _distances;
 
         private ushort[][][] _paths;
 
@@ -107,16 +77,14 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// The GraphNodes of which distances and paths are cached.
         /// The index in the Array equals their <see cref="GraphNode.DistancesIndex"/>.
         /// </summary>
-#if PoESkillTree_LinkDistancesByID
-        Dictionary<uint, GraphNode>
-#else
-        public GraphNode[]
-#endif
-        _nodes;
+        public GraphNode[] _nodes;
 
-        public int CacheSize { get; private set; }
+        /// <summary>
+        /// Total number of within calculator cache<br></br>
+        /// Node Ids use ushort, so instead limiting path start and end node values as ushort instead of ushort
+        /// </summary>
+        public ushort CacheSize { get; private set; }
 
-#if PoESkillTree_LinkDistancesByID==false
         /// <summary>
         /// Retrieves the path distance from one node to another.
         /// CalculateFully must have been called or an exception will be thrown.
@@ -127,35 +95,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         ///  If the nodes are not connected, 0 will be returned.
         ///  If at least one of the nodes is greater or equals CacheSize, a IndexOutOfRangeException will be thrown.
         /// </remarks>
-        public uint this[int a, int b]
+        public ushort this[ushort a, ushort b]
         {
-//#if PoESkillTree_LinkDistancesByID
-//            get => _distances[new TwoDInt(a, b)];
-//            private set => _distances[a][b] = _distances[b][a] = value;
-//#else
             get => _distances[a][b];
             private set => _distances[a][b] = _distances[b][a] = value;
-//#endif
         }
-#endif
-
-#if PoESkillTree_LinkDistancesByID
-        /// <summary>
-        /// Retrieves the path distance from one node to another.
-        /// CalculateFully must have been called or an exception will be thrown.
-        /// </summary>
-        /// <returns>The length of the path from a to b (equals the amount of edges
-        /// traversed).</returns>
-        /// <remarks>
-        ///  If the nodes are not connected, 0 will be returned.
-        ///  If at least one of the nodes is greater or equals CacheSize, a IndexOutOfRangeException will be thrown.
-        /// </remarks>
-        public uint this[TwoDInt a]
-        {
-            get => _distances[a];
-            private set => _distances[a] = _distances[new TwoDInt(a.Y, a.X)] = value;
-        }
-#endif
 
         public DistanceLookup DistanceLookup
             => new DistanceLookup(CacheSize, _distances);
@@ -173,13 +117,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         ///  If the nodes are not connected, null will be returned.
         ///  If at least one of the nodes is greater or equals CacheSize, a IndexOutOfRangeException will be thrown.
         /// </remarks>
-        public IReadOnlyList<ushort> GetShortestPath(int a, int b)
+        public IReadOnlyList<ushort> GetShortestPath(ushort a, ushort b)
             => _paths[a][b];
 
         /// <summary>
         /// Sets the shortest path between the given two nodes.
         /// </summary>
-        private void SetShortestPath(int a, int b, ushort[] path)
+        private void SetShortestPath(ushort a, ushort b, ushort[] path)
         {
             _paths[a][b] = _paths[b][a] = path;
         }
@@ -187,7 +131,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <summary>
         /// Returns the GraphNode with the specified <see cref="GraphNode.DistancesIndex"/>.
         /// </summary>
-        public GraphNode IndexToNode(int index)
+        public GraphNode IndexToNode(ushort index)
         {
             return _nodes[index];
         }
@@ -203,7 +147,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <summary>
         /// Returns true iff the given nodes are connected.
         /// </summary>
-        public bool AreConnected(int a, int b)
+        public bool AreConnected(ushort a, ushort b)
         {
             return GetShortestPath(a, b) != null;
         }
@@ -214,7 +158,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// between them.
         /// Only the paths and distances from and to <paramref name="into"/> are updated.
         /// </summary>
-        public void MergeInto(int x, int into)
+        public void MergeInto(ushort x, ushort into)
         {
             var path = new HashSet<ushort>(GetShortestPath(x, into));
             this[x, into] = 0;
@@ -223,17 +167,17 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             {
                 if (i == into || i == x) continue;
 
-                var ixPath = GetShortestPath(i, x).Where(n => !path.Contains(n)).ToArray();
-                var iIntoPath = GetShortestPath(i, into).Where(n => !path.Contains(n)).ToArray();
-                if (ixPath.Length < iIntoPath.Length)
+                var XPath = GetShortestPath(i, x).Where(n => !path.Contains(n)).ToArray();
+                var YPath = GetShortestPath(i, into).Where(n => !path.Contains(n)).ToArray();
+                if (XPath.Length < YPath.Length)
                 {
-                    this[i, into] = (uint) ixPath.Length + 1;
-                    SetShortestPath(i, into, ixPath);
+                    this[i, into] = (ushort) XPath.Length + 1;
+                    SetShortestPath(i, into, XPath);
                 }
                 else
                 {
-                    this[i, into] = (uint)iIntoPath.Length + 1;
-                    SetShortestPath(i, into, iIntoPath);
+                    this[i, into] = (ushort)YPath.Length + 1;
+                    SetShortestPath(i, into, YPath);
                 }
             }
         }
@@ -245,21 +189,18 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         public DistanceCalculator(IReadOnlyList<GraphNode> nodes)
         {
             if (nodes == null) throw new ArgumentNullException("nodes");
-            CacheSize = nodes.Count;
-#if PoESkillTree_LinkDistancesByID//Potential fix for index breaking on node removal
 
-#else
+            CacheSize = nodes.Count;
             _nodes = new GraphNode[CacheSize];
-            _distances = new uint[CacheSize][];
+            _distances = new ushort[CacheSize][];
             _paths = new ushort[CacheSize][][];
             for (var i = 0; i < CacheSize; ++i)
             {
                 nodes[i].DistancesIndex = i;
                 _nodes[i] = nodes[i];
-                _distances[i] = new uint[CacheSize];
+                _distances[i] = new ushort[CacheSize];
                 _paths[i] = new ushort[CacheSize][];
             }
-#endif
 
             foreach (var node in nodes)
             {
@@ -276,35 +217,37 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <returns>List of the remaining node. Ordered by their distance index.</returns>
         public List<GraphNode> RemoveNodes(IEnumerable<GraphNode> removedNodes)
         {
-#if PoESkillTree_LinkDistancesByID
-#else
             if (removedNodes == null) throw new ArgumentNullException("removedNodes");
 
             var removed = new bool[CacheSize];
             foreach (var node in removedNodes)
             {
+#if PoESkillTree_LinkDistancesByID
+
+#endif
                 removed[node.DistancesIndex] = true;
                 node.DistancesIndex = -1;
             }
             var remainingNodes = new List<GraphNode>();
-            for (var i = 0; i < CacheSize; ++i)
+            for (ushort i = 0; i < CacheSize; ++i)
             {
                 if (!removed[i])
                     remainingNodes.Add(IndexToNode(i));
             }
 
+#if PoESkillTree_LinkDistancesByID == false
             var oldDistances = _distances;
             var oldPaths = _paths;
             CacheSize = remainingNodes.Count;
-            _distances = new uint[CacheSize][];
+            _distances = new ushort[CacheSize][];
             _paths = new ushort[CacheSize][][];
 
             for (var i = 0; i < CacheSize; ++i)
             {
-                _distances[i] = new uint[CacheSize];
+                _distances[i] = new ushort[CacheSize];
                 _paths[i] = new ushort[CacheSize][];
                 var oldi = remainingNodes[i].DistancesIndex;
-                for (var j = 0; j < CacheSize; j++)
+                for (var j = 0; j < CacheSize; ++j)
                 {
                     var oldj = remainingNodes[j].DistancesIndex;
                     _distances[i][j] = oldDistances[oldi][oldj];
@@ -375,7 +318,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// Adds the distance and shortest path between from and to to the
         /// respective dictionaries if not already present.
         /// </summary>
-        private void AddEdge(GraphNode from, GraphNode to, int distFromStart, IDictionary<ushort, ushort> predecessors)
+        private void AddEdge(GraphNode from, GraphNode to, ushort distFromStart, IDictionary<ushort, ushort> predecessors)
         {
             var length = distFromStart + 1;
             
@@ -384,7 +327,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             if (_paths[i1][i2] != null) return;
 
             var path = length > 0 ? GenerateShortestPath(from.Id, to.Id, predecessors, length) : new ushort[0];
-            this[i1, i2] = (uint) length;
+            this[i1, i2] = (ushort) length;
             SetShortestPath(i1, i2, path);
         }
         
@@ -397,11 +340,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <param name="predecessors">Dictonary with the predecessor of every node</param>
         /// <param name="length">Length of the shortest path</param>
         /// <returns>The shortest path from start to target, not including either. The Array is ordered from target to start</returns>
-        private static ushort[] GenerateShortestPath(ushort start, ushort target, IDictionary<ushort, ushort> predecessors, int length)
+        private static ushort[] GenerateShortestPath(ushort start, ushort target, IDictionary<ushort, ushort> predecessors, ushort length)
         {
             var path = new ushort[length - 1];
             var i = 0;
-            for (var node = predecessors[target]; node != start; node = predecessors[node], i++)
+            for (var node = predecessors[target]; node != start; node = predecessors[node], ++i)
             {
                 path[i] = node;
             }
