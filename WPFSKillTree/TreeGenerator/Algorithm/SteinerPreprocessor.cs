@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -89,10 +89,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                     _nodeStates.FixedTargetKeyedIndices.Remove(node.Id);//Remove from Dictionary if node has invalid index
 #if DEBUG
                 }
-#endif
-#if DEBUG
-                else if(node.DistancesIndex> distanceLookup._nodes.Length)
-                    Debug.WriteLine("Distance index for node is out of range:" + node.DistancesIndex);
 #endif
                 else
                     _nodeStates.FixedTargetKeyedIndices.AddOrUpdate(node.Id, node.DistancesIndex);
@@ -239,28 +235,15 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                         current = current.Adjacent.First(n => n != previous);
                         previous = tmp;
                     }
-#if PoESkillTree_LinkDistancesByID
-                    XYIndex = new TwoDInt(node.DistancesIndex, current.DistancesIndex);
-#endif
                     // Now create an edge if
                     // - current is in the search space
                     // - the edge is not reflexive
                     // - the edge is the shortest path between both nodes
-#if PoESkillTree_LinkDistancesByID
                     if (current.DistancesIndex >= 0 && node != current &&
                         path.SetEquals(_data.DistanceCalculator.GetShortestPath(node.DistancesIndex, current.DistancesIndex)))
-#else
-                    if (current.DistancesIndex >= 0 && node != current &&
-                        path.SetEquals(_data.DistanceCalculator.GetShortestPath(node.DistancesIndex, current.DistancesIndex)))
-#endif
                     {
-#if PoESkillTree_LinkDistancesByID
-                        edgeSet.Add(node.DistancesIndex, current.DistancesIndex,
-                            _data.DistanceCalculator[XYIndex]);
-#else
                         edgeSet.Add(node.DistancesIndex, current.DistancesIndex,
                             _data.DistanceCalculator[node.DistancesIndex, current.DistancesIndex]);
-#endif
                     }
                 }
             }

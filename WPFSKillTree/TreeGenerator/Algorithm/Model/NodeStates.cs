@@ -18,7 +18,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// <summary>
         /// Gets the node indices currently marked as fixed target nodes.
         /// </summary>
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices==false
         IReadOnlyCollection<int> FixedTargetNodeIndices { get; }
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices { get; }
@@ -107,7 +107,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public MCollections.IndexedDictionary<int, int> FixedTargetKeyedIndices;
         public MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices => FixedTargetKeyedIndices.Values;
 
-        //public ushort[] TargetIds;
         public HashSet<ushort> TargetIds;
 #endif
 
