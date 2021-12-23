@@ -99,7 +99,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public IEnumerable<GraphNode> FixedTargetNodes => _fixedTargetNodes;
 
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices==false
         private HashSet<int> _fixedTargetNodeIndices;
 
         public IReadOnlyCollection<int> FixedTargetNodeIndices => _fixedTargetNodeIndices;
