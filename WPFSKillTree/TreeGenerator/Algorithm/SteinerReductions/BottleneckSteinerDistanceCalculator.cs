@@ -2,6 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#if PoESkillTree_UseIntDistanceIndex
+///<summary>
+/// Signed Int type
+///</summary>
+using NodeIDType = System.Int32;
+///<summary>
+/// Signed Int type
+///</summary>
+using NodeDIndexType = System.Int32;
+#else
+///<summary>
+/// Unsigned Short type
+///</summary>
+using NodeIDType = System.UInt16;
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Nullable<System.UInt16>;
+#endif
+
 namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
 {
     /// <summary>
@@ -54,7 +74,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.SteinerReductions
             var smatrix = new uint[nodeCount][];
             var searchSpaceIndices = Enumerable.Range(0, nodeCount).ToList();
             // Calculate values for each node.
-            for (var i = 0; i < nodeCount; i++)
+            for (var i = 0; i < nodeCount; ++i)
             {
                 smatrix[i] = CalcBottleneckSteinerDistancesTo(i, searchSpaceIndices, fixedTargetNodes);
             }

@@ -5,6 +5,18 @@ using System.Linq;
 using PoESkillTree.SkillTreeFiles;
 using System.Diagnostics.CodeAnalysis;
 
+#if PoESkillTree_UseIntDistanceIndex
+///<summary>
+/// Int type
+///</summary>
+using NodeDIndexType = System.Int32;
+#else
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Nullable<System.UInt16>;
+#endif
+
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
     /// <summary>
@@ -14,6 +26,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
     [DebuggerDisplay("{Name}")]
     public class GraphNode: IComparable<GraphNode>
     {
+#if PoESkillTree_UseIntDistanceIndex==false
+        public static NodeDIndexType NullDistanceIndex = null;
+#endif
+
         private readonly ushort _id;
         /// <summary>
         /// Gets the Id of the corresponding SkillNode.
@@ -28,7 +44,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
         /// and other classes.
         /// </summary>
-        public int DistancesIndex { get; set; }
+        public NodeDIndexType DistancesIndex { get; set; }
 
         private List<GraphNode> _adjacent = new List<GraphNode>();
         /// <summary>
@@ -47,8 +63,23 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public GraphNode(ushort id)
         {
-            DistancesIndex = -1;
+            DistancesIndex =
+#if PoESkillTree_UseIntDistanceIndex
+            -1;
+#else
+            null;
+#endif
             _nodes = new List<ushort> {id};
+            _id = id;
+        }
+
+        /// <summary>
+        /// Creates a new GraphNode representing a single skill tree node.
+        /// </summary>
+        public GraphNode(ushort id, NodeDIndexType dIndex)
+        {
+            DistancesIndex = dIndex;
+            _nodes = new List<ushort> { id };
             _id = id;
         }
 
@@ -57,7 +88,12 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public GraphNode(IEnumerable<ushort> nodes)
         {
-            DistancesIndex = -1;
+            DistancesIndex =
+#if PoESkillTree_UseIntDistanceIndex
+            -1;
+#else
+            null;
+#endif
             _nodes = new List<ushort>(nodes);
             if (!_nodes.Any()) throw new ArgumentException("Node enumerable must not be empty", "nodes");
             _id = _nodes.First();

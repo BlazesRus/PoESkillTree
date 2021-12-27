@@ -5,6 +5,26 @@ using System.Linq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
 
+#if PoESkillTree_UseIntDistanceIndex
+///<summary>
+/// Signed Int type
+///</summary>
+using NodeIDType = System.Int32;
+///<summary>
+/// Int 32 type
+///</summary>
+using NodeDIndexType = System.Int32;
+#else
+///<summary>
+/// Unsigned Short type
+///</summary>
+using NodeIDType = System.UInt16;
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Nullable<System.UInt16>;
+#endif
+
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
     /// <summary>
@@ -215,9 +235,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         private GraphEdgeSet ComputeEdges()
         {
             var edgeSet = new GraphEdgeSet(_nodeStates.SearchSpaceSize);
-#if PoESkillTree_LinkDistancesByID
-            TwoDInt XYIndex = new TwoDInt();
-#endif
             // Go through all nodes and their neighbors ...
             foreach (var node in _nodeStates.SearchSpace)
             {

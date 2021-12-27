@@ -1,6 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+#if PoESkillTree_UseIntDistanceIndex
+///<summary>
+/// Signed Int type
+///</summary>
+using NodeIDType = System.Int32;
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Int32;
+#else
+///<summary>
+/// Unsigned Short type
+///</summary>
+using NodeIDType = System.UInt16;
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Nullable<System.UInt16>;
+#endif
+
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
     /// <summary>
@@ -19,7 +39,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// Gets the node indices currently marked as fixed target nodes.
         /// </summary>
 #if PoESkillTree_EnableAlternativeFixedTargetNodeIndices==false
-        IReadOnlyCollection<int> FixedTargetNodeIndices { get; }
+        IReadOnlyCollection<NodeDIndexType> FixedTargetNodeIndices { get; }
 #else
         MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices { get; }
 #endif
@@ -234,10 +254,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
                 {
                     _isFixedTarget[i] = false;
                     _fixedTargetNodes.Remove(node);
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
-                    _fixedTargetNodeIndices.Remove(i);
-#else
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices
                     FixedTargetKeyedIndices.Remove(node.Id);
+#else
+                    _fixedTargetNodeIndices.Remove(i);
 #endif
                 }
                 else
