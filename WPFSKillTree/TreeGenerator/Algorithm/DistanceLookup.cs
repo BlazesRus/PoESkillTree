@@ -34,15 +34,47 @@ using NodeDIndexType = System.Nullable<System.UInt16>;*/
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
 #if PoESkillTree_EnableExtraGeneratorPath
-    public struct GeneratorInfo
+    public class SecondaryPathList : List<ushort>
     {
-#if PoESkillTree_LinkDistancesByID
-#endif
-        
+        UnsignedIDType pathCost;
+        ///// <summary>
+        /////  Total Toggled Calculated Stat CvC
+        ///// </summary>
+        //float CalcStatCvc;
+        ///// <summary>
+        /////  Total Target PseudoStat+Normal Stat CvC
+        ///// </summary>
+        //float NormalStatCvc;
+        ///// <summary>
+        /////  Combination of CalcStatCvc+NormalStatCvc
+        ///// </summary>
+        //float TotalStatCvc;
     }
+    public class SecondaryPathStore : HashSet<SecondaryPathList>
+    {
+        UnsignedIDType pathCost;
+        HashSet<SecondaryPathList> SecondaryPaths;
+    }
+    /// <summary>
+    ///  If PoESkillTree_EnableExtraGeneratorPath is enabled(not implemented yet), <br></br>
+    ///  then value also stores alternative paths between start and end node(plus distance cost and stat score of possible path)
+    /// </summary>
     public class PathList : List<ushort>
     {
         UnsignedIDType pathCost;
+        SecondaryPathStore SecondaryPaths;
+        ///// <summary>
+        /////  Total Toggled Calculated Stat CvC
+        ///// </summary>
+        //float CalcStatCvc;
+        ///// <summary>
+        /////  Total Target PseudoStat+Normal Stat CvC
+        ///// </summary>
+        //float NormalStatCvc;
+        ///// <summary>
+        /////  Combination of CalcStatCvc+NormalStatCvc
+        ///// </summary>
+        //float TotalStatCvc;
     }
 #endif
 
@@ -143,9 +175,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 #endif
 
         /// <summary>
-        ///  StartNodeIndex(X),EndNodeIndex(Y), List of Shortest Path(Value)<br></br>
-        ///  If PoESkillTree_EnableExtraGeneratorPath is enabled(not implemented yet), <br></br>
-        ///  then value also stores alternative paths between start and end node(plus maybe distance cost and stat score of possible path)
+        ///  StartNodeIndex(X),EndNodeIndex(Y), List of Shortest Path(Value)
         /// </summary>
         private
 #if PoESkillTree_LinkDistancesByID
