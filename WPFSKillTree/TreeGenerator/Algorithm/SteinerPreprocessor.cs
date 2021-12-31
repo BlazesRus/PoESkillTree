@@ -173,7 +173,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             // Run every reduction test (each followed by a simple degree reduction test) until they are no longer able
             // to reduce the search space or 10 reduction rounds were executed.
             // (the 10 round limit is never actually reached from what I've seen)
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i < 11; ++i)
             {
                 var edgeElims = 0;
                 var nodeElims = 0;
@@ -187,7 +187,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                     degreeTest.RunTest(ref edgeElims, ref nodeElims);
                 }
 
-                Debug.WriteLine("Eliminations in round {0}:", i + 1);
+                Debug.WriteLine("Eliminations in round {0}:", i);
                 Debug.WriteLine("   removed nodes: " + nodeElims);
                 Debug.WriteLine("   removed edges: " + edgeElims);
 

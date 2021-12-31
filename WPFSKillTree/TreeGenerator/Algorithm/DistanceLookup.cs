@@ -12,10 +12,6 @@ using UnsignedIDType = System.UInt32;
 /// Signed Int type
 ///</summary>
 using NodeIDType = System.Int32;
-/*///<summary>
-/// Signed Int type(Only use with DistanceIndex)
-///</summary>
-using NodeDIndexType = System.Int32;*/
 #else
 ///<summary>
 /// Unsigned Short type
@@ -25,10 +21,6 @@ using UnsignedIDType = System.UInt16;
 /// Unsigned Short type
 ///</summary>
 using NodeIDType = System.UInt16;
-/*///<summary>
-/// Nullable Unsigned Short type(Only use with DistanceIndex)
-///</summary>
-using NodeDIndexType = System.Nullable<System.UInt16>;*/
 #endif
 
 namespace PoESkillTree.TreeGenerator.Algorithm
@@ -270,9 +262,9 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _paths[a][b] = _paths[b][a] = new
 #if PoESkillTree_LinkDistancesByID
 #if PoESkillTree_EnableExtraGeneratorPath
-            PathList
+            PathList();
 #else
-            List<ushort>
+            List<ushort>();
 #endif
 #else
             ushort[0];
@@ -446,14 +438,22 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             var removed = new bool[CacheSize];
             foreach (var node in removedNodes)
             {
+#if PoESkillTree_UseIntDistanceIndex==false
+                if (node.DistancesIndex == null)
+                    continue;
+#endif
 #if PoESkillTree_LinkDistancesByID
 
 #endif
-                removed[node.DistancesIndex] = true;
+                removed[
+#if PoESkillTree_UseIntDistanceIndex==false
+                (int)
+#endif
+                node.DistancesIndex] = true;
 #if PoESkillTree_UseIntDistanceIndex
                 node.DistancesIndex = -1;
 #else
-                node.DistancesIndex = GraphNode.NullDistanceIndex;
+                node.DistancesIndex = null;
 #endif
             }
             var remainingNodes = new List<GraphNode>();

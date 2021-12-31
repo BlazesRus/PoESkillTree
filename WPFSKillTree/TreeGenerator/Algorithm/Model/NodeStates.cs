@@ -10,10 +10,6 @@ using UnsignedIDType = System.UInt32;
 /// Signed Int type
 ///</summary>
 using NodeIDType = System.Int32;
-///<summary>
-/// Signed Int type(Only use with DistanceIndex)
-///</summary>
-using NodeDIndexType = System.Int32;
 #else
 ///<summary>
 /// Unsigned Short type
@@ -23,10 +19,6 @@ using UnsignedIDType = System.UInt16;
 /// Unsigned Short type
 ///</summary>
 using NodeIDType = System.UInt16;
-///<summary>
-/// Nullable Unsigned Short type(Only use with DistanceIndex)
-///</summary>
-using NodeDIndexType = System.Nullable<System.UInt16>;
 #endif
 
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
@@ -47,9 +39,9 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// Gets the node indices currently marked as fixed target nodes.
         /// </summary>
 #if PoESkillTree_EnableAlternativeFixedTargetNodeIndices==false
-        IReadOnlyCollection<NodeDIndexType> FixedTargetNodeIndices { get; }
+        IReadOnlyCollection<NodeIDType> FixedTargetNodeIndices { get; }
 #else
-        MCollections.IndexedDictionary<int, int>.ValueCollection FixedTargetNodeIndices { get; }
+        MCollections.IndexedDictionary<NodeIDType, NodeIDType>.ValueCollection FixedTargetNodeIndices { get; }
 #endif
 
         /// <summary>
@@ -80,7 +72,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// <summary>
         /// Marks the node with index i as to be removed from the search space.
         /// </summary>
-        void MarkNodeAsRemoved(int i);
+        void MarkNodeAsRemoved(NodeIDType i);
 
         /// <summary>
         /// Returns true iff the node with index i was marked as to be removed.
@@ -250,7 +242,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             return _allTargetNodes.Contains(n);
         }
 
-        public void MarkNodeAsRemoved(int i)
+        public void MarkNodeAsRemoved(NodeIDType i)
         {
             _isRemoved[i] = true;
             if (_isTarget[i])
