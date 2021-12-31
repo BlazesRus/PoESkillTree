@@ -318,7 +318,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             var path = new HashSet<ushort>(GetShortestPath(x, into));
             this[x, into] = 0;
             SetShortestPathToDeadEnd(x, into);
-            NodeIDType XSize; NodeIDType YSize;
+            UnsignedIDType XSize; UnsignedIDType YSize;
             for (NodeIDType i = 0; i < CacheSize; ++i)
             {
                 if (i == into || i == x) continue;
@@ -335,19 +335,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 #else
                 .ToArray();
 #endif
-                XSize =
-#if PoESkillTree_UseIntDistanceIndex==false
-                (ushort)
-#endif
+                XSize = (UnsignedIDType)
 #if PoESkillTree_LinkDistancesByID
                 XPath.Count();
 #else
                 XPath.Length;
 #endif
-                YSize =
-#if PoESkillTree_UseIntDistanceIndex==false
-                (ushort)
-#endif
+                YSize = (UnsignedIDType)
 #if PoESkillTree_LinkDistancesByID
                 YPath.Count();
 #else
@@ -553,31 +547,34 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         private void AddEdge(GraphNode from, GraphNode to, NodeIDType distFromStart, IDictionary<ushort, ushort> predecessors)
         {
-            UnsignedIDType length = (UnsignedIDType)(distFromStart+1);
+            NodeIDType length = distFromStart+1;
 
 #if PoESkillTree_UseIntDistanceIndex == false
             if (from.DistancesIndex == null || to.DistancesIndex == null)
                 return;
 #endif
-            UnsignedIDType i1 = (UnsignedIDType) from.DistancesIndex;
-            UnsignedIDType i2 = (UnsignedIDType) to.DistancesIndex;
+            var i1 =
+#if PoESkillTree_UseIntDistanceIndex == false
+            (ushort)
+#endif
+            from.DistancesIndex;
+            var i2 =
+#if PoESkillTree_UseIntDistanceIndex == false
+            (ushort)
+#endif
+            to.DistancesIndex;
             if (_paths[i1][i2] != null) return;
 
             if (distFromStart > 0)
             {
                 var path = GenerateShortestPath(from.Id, to.Id, predecessors, length);
-                this[i1, i2] = (UnsignedIDType)length;
+                this[i1, i2] = (UnsignedIDType) length;
                 SetShortestPath(i1, i2, path);
             }
             else
             {
                 this[i1, i2] = 0;
-                SetShortestPath(i1, i2, new
-#if PoESkillTree_LinkDistancesByID
-                List<ushort>());
-#else
-                ushort[0]);
-#endif
+                SetShortestPathToDeadEnd(i1, i2);
             }
         }
 
@@ -592,17 +589,20 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             if (from.DistancesIndex == null || to.DistancesIndex == null)
                 return;
 #endif
-            UnsignedIDType i1 = (UnsignedIDType)from.DistancesIndex;
-            UnsignedIDType i2 = (UnsignedIDType)to.DistancesIndex;
+            var i1 =
+#if PoESkillTree_UseIntDistanceIndex == false
+            (ushort)
+#endif
+            from.DistancesIndex;
+            var i2 =
+#if PoESkillTree_UseIntDistanceIndex == false
+            (ushort)
+#endif
+            to.DistancesIndex;
             if (_paths[i1][i2] != null) return;
 
             this[i1, i2] = 0;
-            SetShortestPath(i1, i2, new
-#if PoESkillTree_LinkDistancesByID
-            List<ushort>());
-#else
-            ushort[0]);
-#endif
+            SetShortestPathToDeadEnd(i1, i2);
         }
 
         ///// <summary>
