@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Unsigned Int type
 ///</summary>
@@ -284,7 +284,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         public bool AreConnected(GraphNode a, GraphNode b)//=> GetShortestPath(a.DistancesIndex, b.DistancesIndex) != null;
         {
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
             return GetShortestPath(a.DistancesIndex, b.DistancesIndex) != null;
 #else
             return a.DistancesIndex==null||b.DistancesIndex==null?false:GetShortestPath((ushort)a.DistancesIndex, (ushort)b.DistancesIndex) != null;
@@ -377,7 +377,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             if (nodes == null) throw new ArgumentNullException("nodes");
 
             CacheSize = 
-#if PoESkillTree_LinkDistancesByID && PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_LinkDistancesByID && PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             nodes.Count;
@@ -393,13 +393,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             for (NodeIDType i = 0; i < CacheSize; ++i)
             {
                 nodes[
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
                 (int)
 #endif
                 i].DistancesIndex = i;
 #if PoESkillTree_LinkDistancesByID
                 _nodes.Add(i, nodes[
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
                 (int)
 #endif
                  i]);
@@ -438,7 +438,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             var removed = new bool[CacheSize];
             foreach (var node in removedNodes)
             {
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
                 if (node.DistancesIndex == null)
                     continue;
 #endif
@@ -446,11 +446,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
 #endif
                 removed[
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
                 (int)
 #endif
                 node.DistancesIndex] = true;
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
                 node.DistancesIndex = -1;
 #else
                 node.DistancesIndex = null;
@@ -548,22 +548,22 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         private void AddEdge(GraphNode from, GraphNode to, NodeIDType distFromStart, IDictionary<ushort, ushort> predecessors)
         {
             NodeIDType length =
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)//Because of C#'s spec using int operator for ushort operations
 #endif
             (distFromStart + 1);
 
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             if (from.DistancesIndex == null || to.DistancesIndex == null)
                 return;
 #endif
             var i1 =
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             from.DistancesIndex;
             var i2 =
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             to.DistancesIndex;
@@ -589,17 +589,17 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         private void AddEdgeWithNoLength(GraphNode from, GraphNode to, IDictionary<ushort, ushort> predecessors)
         {
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             if (from.DistancesIndex == null || to.DistancesIndex == null)
                 return;
 #endif
             var i1 =
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             from.DistancesIndex;
             var i2 =
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             to.DistancesIndex;

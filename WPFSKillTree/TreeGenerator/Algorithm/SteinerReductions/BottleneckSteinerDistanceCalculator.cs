@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Signed Int type
 ///</summary>

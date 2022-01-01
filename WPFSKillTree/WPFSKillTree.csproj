@@ -21,10 +21,10 @@
     <PackageProjectUrl>https://github.com/BlazesRus/PoESkillTree</PackageProjectUrl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;PoESkillTree_LinkDistancesByID</DefineConstants>
+    <DefineConstants>TRACE;PoESkillTree_LinkDistancesByID;PoESkillTree_UseShortDistanceIndex</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;PoESkillTree_UseIntDistanceIndex</DefineConstants>
+    <DefineConstants>TRACE;</DefineConstants>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Release">
     <Exec Command="$(ProjectDir)build-locale.bat" />

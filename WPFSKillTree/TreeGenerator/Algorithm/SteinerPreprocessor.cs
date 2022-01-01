@@ -5,7 +5,7 @@ using System.Linq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
 
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Unsigned Int type
 ///</summary>
@@ -128,11 +128,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
             // If a fixed target node is not connected to the start node, there obviously is no solution at all.
             if (_nodeStates.FixedTargetNodeIndices.Any(i =>
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
             _data.StartNodeIndex!=null &&
 #endif
             !distanceLookup.AreConnectedById(i,
-#if PoESkillTree_UseIntDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex
             (ushort)
 #endif
             _data.StartNodeIndex)))

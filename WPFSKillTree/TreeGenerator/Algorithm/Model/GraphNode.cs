@@ -5,7 +5,7 @@ using System.Linq;
 using PoESkillTree.SkillTreeFiles;
 using System.Diagnostics.CodeAnalysis;
 
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Int type
 ///</summary>
@@ -60,7 +60,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public GraphNode(ushort id)
         {
             DistancesIndex =
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
             -1;
 #else
             null;
@@ -85,7 +85,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         public GraphNode(IEnumerable<ushort> nodes)
         {
             DistancesIndex =
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
             -1;
 #else
             null;

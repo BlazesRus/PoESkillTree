@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-#if PoESkillTree_UseIntDistanceIndex
+#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Unsigned Int type
 ///</summary>

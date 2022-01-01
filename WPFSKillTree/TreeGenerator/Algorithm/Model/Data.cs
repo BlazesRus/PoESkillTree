@@ -1,4 +1,4 @@
-﻿#if PoESkillTree_UseIntDistanceIndex
+﻿#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Unsigned Int type
 ///</summary>
@@ -73,7 +73,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         {
             get => StartNode.DistancesIndex;
             set => StartNode = DistanceCalculator.IndexToNode(
-#if PoESkillTree_UseIntDistanceIndex == false
+#if PoESkillTree_UseShortDistanceIndex
 #pragma warning disable CS8629 // Nullable value type may be null.
             (ushort)
 #endif
