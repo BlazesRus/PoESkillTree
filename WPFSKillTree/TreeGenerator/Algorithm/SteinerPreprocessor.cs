@@ -127,7 +127,15 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _nodeStates.ComputeFields();
 
             // If a fixed target node is not connected to the start node, there obviously is no solution at all.
-            if (_nodeStates.FixedTargetNodeIndices.Any(i => !distanceLookup.AreConnectedById(i, _data.StartNodeIndex)))
+            if (_nodeStates.FixedTargetNodeIndices.Any(i =>
+#if PoESkillTree_UseIntDistanceIndex==false
+            _data.StartNodeIndex!=null &&
+#endif
+            !distanceLookup.AreConnectedById(i,
+#if PoESkillTree_UseIntDistanceIndex==false
+            (ushort)
+#endif
+            _data.StartNodeIndex)))
             {
                 throw new GraphNotConnectedException();
             }
