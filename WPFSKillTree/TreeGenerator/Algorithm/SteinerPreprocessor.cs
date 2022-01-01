@@ -7,6 +7,10 @@ using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
 
 #if PoESkillTree_UseIntDistanceIndex
 ///<summary>
+/// Unsigned Int type
+///</summary>
+using UnsignedIDType = System.UInt32;
+///<summary>
 /// Signed Int type
 ///</summary>
 using NodeIDType = System.Int32;
@@ -18,12 +22,17 @@ using NodeDIndexType = System.Int32;
 ///<summary>
 /// Unsigned Short type
 ///</summary>
+using UnsignedIDType = System.UInt16;
+///<summary>
+/// Unsigned Short type
+///</summary>
 using NodeIDType = System.UInt16;
 ///<summary>
 /// Nullable Unsigned Short type
 ///</summary>
 using NodeDIndexType = System.Nullable<System.UInt16>;
 #endif
+
 
 namespace PoESkillTree.TreeGenerator.Algorithm
 {
@@ -118,7 +127,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             _nodeStates.ComputeFields();
 
             // If a fixed target node is not connected to the start node, there obviously is no solution at all.
-            if (_nodeStates.FixedTargetNodeIndices.Any(i => !distanceLookup.AreConnected(i, _data.StartNodeIndex)))
+            if (_nodeStates.FixedTargetNodeIndices.Any(i => !distanceLookup.AreConnectedById(i, _data.StartNodeIndex)))
             {
                 throw new GraphNotConnectedException();
             }

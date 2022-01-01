@@ -1,4 +1,32 @@
-﻿namespace PoESkillTree.TreeGenerator.Algorithm.Model
+﻿#if PoESkillTree_UseIntDistanceIndex
+///<summary>
+/// Unsigned Int type
+///</summary>
+using UnsignedIDType = System.UInt32;
+///<summary>
+/// Signed Int type
+///</summary>
+using NodeIDType = System.Int32;
+///<summary>
+/// Int 32 type
+///</summary>
+using NodeDIndexType = System.Int32;
+#else
+///<summary>
+/// Unsigned Short type
+///</summary>
+using UnsignedIDType = System.UInt16;
+///<summary>
+/// Unsigned Short type
+///</summary>
+using NodeIDType = System.UInt16;
+///<summary>
+/// Nullable Unsigned Short type
+///</summary>
+using NodeDIndexType = System.Nullable<System.UInt16>;
+#endif
+
+namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
     /// <summary>
     /// Interface used to provide the reductions in SteinerReductions with the necessary data.
@@ -24,7 +52,7 @@
         /// Gets or sets the index of the start node of the current reduced skill tree. Needs to be changed if the 
         /// start node is merged into another node, which becomes the new start node.
         /// </summary>
-        int StartNodeIndex { get; set; }
+        NodeDIndexType StartNodeIndex { get; set; }
     }
 
     /// <summary>
@@ -41,10 +69,16 @@
         /// </summary>
         public GraphNode StartNode { get; private set; }
 
-        public int StartNodeIndex
+        public NodeDIndexType StartNodeIndex
         {
             get => StartNode.DistancesIndex;
-            set => StartNode = DistanceCalculator.IndexToNode(value);
+            set => StartNode = DistanceCalculator.IndexToNode(
+#if PoESkillTree_UseIntDistanceIndex == false
+#pragma warning disable CS8629 // Nullable value type may be null.
+            (ushort)
+#endif
+            value);
+#pragma warning restore CS8629 // Nullable value type may be null.
         }
 
         public Data(GraphNode startNode)

@@ -294,7 +294,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// <summary>
         /// Returns true iff the given nodes are connected.
         /// </summary>
-        public bool AreConnected(NodeIDType a, NodeIDType b)//=> GetShortestPath(a, b) != null;
+        public bool AreConnectedById(NodeIDType a, NodeIDType b)//=> GetShortestPath(a, b) != null;
         {
             return GetShortestPath(a, b) != null;
         }
@@ -512,7 +512,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
             // The dictionary of the predecessors of the visited nodes.
             var predecessors = new Dictionary<ushort, ushort>();
             // The traversed distance from the starting node in edges.
-            var distFromStart = 0;
+            NodeIDType distFromStart = 0;
 
             while (front.Count > 0)
             {
@@ -547,7 +547,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         private void AddEdge(GraphNode from, GraphNode to, NodeIDType distFromStart, IDictionary<ushort, ushort> predecessors)
         {
-            NodeIDType length = distFromStart+1;
+            NodeIDType length =
+#if PoESkillTree_UseIntDistanceIndex == false
+            (ushort)//Because of C#'s spec using int operator for ushort operations
+#endif
+            (distFromStart + 1);
 
 #if PoESkillTree_UseIntDistanceIndex == false
             if (from.DistancesIndex == null || to.DistancesIndex == null)

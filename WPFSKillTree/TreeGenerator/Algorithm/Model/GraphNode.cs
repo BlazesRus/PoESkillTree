@@ -26,10 +26,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
     [DebuggerDisplay("{Name}")]
     public class GraphNode: IComparable<GraphNode>
     {
-#if PoESkillTree_UseIntDistanceIndex==false
-        public static NodeDIndexType NullDistanceIndex = null;
-#endif
-
         private readonly ushort _id;
         /// <summary>
         /// Gets the Id of the corresponding SkillNode.
