@@ -85,21 +85,28 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 
         public UnsignedIDType this[NodeIDType a, NodeIDType b] => _distances[a][b];
 
-        public DistanceLookup(NodeIDType cacheSize,
 #if PoESkillTree_LinkDistancesByID
-        MCollections.IndexedDictionary<NodeIDType, MCollections.IndexedDictionary<NodeIDType, UnsignedIDType>>
-#else
-        UnsignedIDType[][]
-#endif
-        distances)
+        public DistanceLookup(NodeIDType cacheSize, MCollections.IndexedDictionary<NodeIDType, MCollections.IndexedDictionary<NodeIDType, UnsignedIDType>>distances)
         {
             CacheSize = cacheSize;
             _distances = distances;
         }
+#endif
+
+        public DistanceLookup(NodeIDType cacheSize, UnsignedIDType[][] distances)
+        {
+            CacheSize = cacheSize;
+
+#if PoESkillTree_LinkDistancesByID
+            //Convert Array into Dictionary
+#else
+            _distances = distances;
+#endif
+        }
     }
 #endif
 
-    public readonly struct ShortestPathLookup
+        public readonly struct ShortestPathLookup
     {
         private readonly
 #if PoESkillTree_LinkDistancesByID
@@ -189,7 +196,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         public
 #if PoESkillTree_LinkDistancesByID
-        Dictionary<UnsignedIDType, GraphNode>//Remove value if keyed to null
+        Dictionary<NodeIDType, GraphNode>//Remove value if keyed to null
 #else
         GraphNode[]
 #endif
@@ -403,7 +410,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 (int)
 #endif
                  i]);
-                _distances.Add(i, new MCollections.IndexedDictionary<NodeIDType, NodeIDType>());
+                _distances.Add(i, new MCollections.IndexedDictionary<NodeIDType, UnsignedIDType>());
                 _paths.Add(i, new Dictionary<NodeIDType,
 #if PoESkillTree_EnableExtraGeneratorPath
                  PathList
