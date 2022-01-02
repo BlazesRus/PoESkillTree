@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
+using MCollections;
 
-#if PoESkillTree_UseShortDistanceIndex==false
+#if PoESkillTree_UseShortDistanceIndex == false
 ///<summary>
 /// Unsigned Int type
 ///</summary>
@@ -96,9 +97,17 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         public DistanceLookup(NodeIDType cacheSize, UnsignedIDType[][] distances)
         {
             CacheSize = cacheSize;
-
 #if PoESkillTree_LinkDistancesByID
             //Convert Array into Dictionary
+            _distances = new IndexedDictionary<int, IndexedDictionary<int, uint>>();
+            for (int XIndex=0; XIndex < distances.Length;++XIndex)
+            {
+                _distances.Add(XIndex, new IndexedDictionary<int, uint>());
+                for (int YIndex = 0; YIndex < distances[XIndex].Length; ++YIndex)
+                {
+                    _distances[XIndex].Add(YIndex, distances[XIndex][YIndex]);
+                }
+            }
 #else
             _distances = distances;
 #endif
