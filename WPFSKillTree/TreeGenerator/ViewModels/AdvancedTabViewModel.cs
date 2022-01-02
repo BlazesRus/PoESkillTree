@@ -295,7 +295,7 @@ namespace PoESkillTree.TreeGenerator.ViewModels
         public int TotalPoints
         {
             get => _totalPoints;
-            private set => SetProperty(ref _totalPoints, value);
+            private set => SetProperty(ref _totalPoints, value);//To-Do:Set to update value when both Level and ExtraPoints value changes(instead of only when ExtraPoints changes)
         }
 
         private readonly HashSet<string> _addedAttributes = new HashSet<string>();

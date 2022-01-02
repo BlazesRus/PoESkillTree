@@ -115,7 +115,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
     }
 #endif
 
-        public readonly struct ShortestPathLookup
+    public readonly struct ShortestPathLookup
     {
         private readonly
 #if PoESkillTree_LinkDistancesByID
