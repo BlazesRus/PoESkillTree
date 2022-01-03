@@ -427,6 +427,11 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                  List<ushort>
 #endif
                  >(nodes.Count));
+                for(NodeIDType YIndex = 0; YIndex < CacheSize; ++YIndex)
+                {
+                    _paths[i].Add(YIndex, new List<ushort>());
+                    _distances[i].Add(YIndex, 0);//Initial as empty paths
+                }
 #else
                 _nodes[i] = nodes[i];
                 _distances[i] = new UnsignedIDType[CacheSize];
