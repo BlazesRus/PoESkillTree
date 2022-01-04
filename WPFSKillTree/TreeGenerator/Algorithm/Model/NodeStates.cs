@@ -210,10 +210,10 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
             _isVariableTarget =
                 searchSpaceIndexes.Select(i => _variableTargetNodes.Contains(_searchSpace[i])).ToArray();
             _isTarget = searchSpaceIndexes.Select(i => _isFixedTarget[i] || _isVariableTarget[i]).ToArray();
-            _isRemoved = new bool[_searchSpace.Count];
-#if PoESkillTree_DisableAlternativeFixedTargetNodeIndices
+#if PoESkillTree_EnableAlternativeFixedTargetNodeIndices==false
             _fixedTargetNodeIndices = new HashSet<NodeIDType>(_fixedTargetNodes.Select(n => n.DistancesIndex));
 #endif//Update Distance Indices during DistanceCalculator lookup instead of constantly re-creating if PoESkillTree_DisableAlternativeFixedTargetNodeIndices not set
+            _isRemoved = new bool[_searchSpace.Count];
         }
 
         public bool IsFixedTarget(int i)
