@@ -205,7 +205,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
         /// </summary>
         public
 #if PoESkillTree_LinkDistancesByID
-        Dictionary<NodeIDType, GraphNode>//Remove value if keyed to null
+        MCollections.IndexedSet<GraphNode>//Remove value if keyed to null
 #else
         GraphNode[]
 #endif
@@ -398,7 +398,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 #endif
             nodes.Count;
 #if PoESkillTree_LinkDistancesByID//Potential fix for index breaking on node removal
-            _nodes = new Dictionary<NodeIDType, GraphNode>(nodes.Count);
+            _nodes = new MCollections.IndexedSet<GraphNode>();
             _distances = new MCollections.IndexedDictionary<NodeIDType, MCollections.IndexedDictionary<NodeIDType, UnsignedIDType>>();
             _paths = new Dictionary<NodeIDType, Dictionary<NodeIDType, List<ushort>>>(nodes.Count);
 #else
@@ -414,7 +414,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm
 #endif
                 i].DistancesIndex = i;
 #if PoESkillTree_LinkDistancesByID
-                _nodes.Add(i, nodes[
+                _nodes.Add(nodes[
 #if PoESkillTree_UseShortDistanceIndex
                 (int)
 #endif
@@ -438,7 +438,6 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 _paths[i] = new ushort[CacheSize][];
 #endif
             }
-
             foreach (var node in nodes)
             {
                 Dijkstra(node);
@@ -463,25 +462,43 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 if (node.DistancesIndex == null)
                     continue;
 #endif
-#if PoESkillTree_LinkDistancesByID
-
-#endif
                 removed[
 #if PoESkillTree_UseShortDistanceIndex
                 (int)
 #endif
                 node.DistancesIndex] = true;
-#if PoESkillTree_UseShortDistanceIndex==false
+#if PoESkillTree_LinkDistancesByID == false
+#if PoESkillTree_UseShortDistanceIndex == false
                 node.DistancesIndex = -1;
 #else
                 node.DistancesIndex = null;
+#endif
 #endif
             }
             var remainingNodes = new List<GraphNode>();
             for (NodeIDType i = 0; i < CacheSize; ++i)
             {
+#if PoESkillTree_LinkDistancesByID == false
                 if (!removed[i])
                     remainingNodes.Add(IndexToNode(i));
+#else
+                if (removed[i])//Remove all related paths to node that is removed
+                {
+                    _distances.Remove(i);
+                    _paths.Remove(i);
+                    //Remove YPaths too
+                    foreach(var element in _distances.Values)
+                    {
+                        element.Remove(i);
+                    }
+                    foreach (var element in _paths.Values)
+                    {
+                        element.Remove(i);
+                    }
+                }
+                else
+                    remainingNodes.Add(IndexToNode(i));
+#endif
             }
 
 #if PoESkillTree_LinkDistancesByID == false
@@ -510,6 +527,13 @@ namespace PoESkillTree.TreeGenerator.Algorithm
                 remainingNodes[i].DistancesIndex = i;
                 _nodes[i] = remainingNodes[i];
             }
+#else
+            MCollections.IndexedSet<GraphNode> nodeCopy = new MCollections.IndexedSet<GraphNode>();
+            foreach(var node in remainingNodes)
+            {
+                nodeCopy.Add(node);
+            }
+            _nodes = nodeCopy;
 #endif
 
             return remainingNodes;
