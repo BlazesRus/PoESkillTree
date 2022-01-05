@@ -5,7 +5,6 @@ using System.Linq;
 using PoESkillTree.TreeGenerator.Algorithm.Model;
 using PoESkillTree.TreeGenerator.Algorithm.SteinerReductions;
 
-#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Unsigned Int type
 ///</summary>
@@ -18,20 +17,6 @@ using NodeIDType = System.Int32;
 /// Int 32 type
 ///</summary>
 using NodeDIndexType = System.Int32;
-#else
-///<summary>
-/// Unsigned Short type
-///</summary>
-using UnsignedIDType = System.UInt16;
-///<summary>
-/// Unsigned Short type
-///</summary>
-using NodeIDType = System.UInt16;
-///<summary>
-/// Nullable Unsigned Short type
-///</summary>
-using NodeDIndexType = System.Nullable<System.UInt16>;
-#endif
 
 
 namespace PoESkillTree.TreeGenerator.Algorithm

@@ -5,17 +5,10 @@ using System.Linq;
 using PoESkillTree.SkillTreeFiles;
 using System.Diagnostics.CodeAnalysis;
 
-#if PoESkillTree_UseShortDistanceIndex==false
 ///<summary>
 /// Int type
 ///</summary>
 using NodeDIndexType = System.Int32;
-#else
-///<summary>
-/// Nullable Unsigned Short type
-///</summary>
-using NodeDIndexType = System.Nullable<System.UInt16>;
-#endif
 
 namespace PoESkillTree.TreeGenerator.Algorithm.Model
 {
@@ -40,7 +33,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// Gets or sets the index of the node by which it is represented in <see cref="DistanceLookup"/>
         /// and other classes.
         /// </summary>
-        public NodeDIndexType DistancesIndex { get; set; }
+        public int DistancesIndex { get; set; }
 
         private List<GraphNode> _adjacent = new List<GraphNode>();
         /// <summary>
@@ -59,12 +52,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public GraphNode(ushort id)
         {
-            DistancesIndex =
-#if PoESkillTree_UseShortDistanceIndex==false
-            -1;
-#else
-            null;
-#endif
+            DistancesIndex = -1;
             _nodes = new List<ushort> {id};
             _id = id;
         }
@@ -84,12 +72,7 @@ namespace PoESkillTree.TreeGenerator.Algorithm.Model
         /// </summary>
         public GraphNode(IEnumerable<ushort> nodes)
         {
-            DistancesIndex =
-#if PoESkillTree_UseShortDistanceIndex==false
-            -1;
-#else
-            null;
-#endif
+            DistancesIndex = -1;
             _nodes = new List<ushort>(nodes);
             if (!_nodes.Any()) throw new ArgumentException("Node enumerable must not be empty", "nodes");
             _id = _nodes.First();
